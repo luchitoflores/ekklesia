@@ -43,4 +43,9 @@ def prueba(request):
 	b=12
 	if(a==1):
 		a=a+b
+<<<<<<< HEAD
 >>>>>>> 24dbdc27ed52cc2c7ebc9cfeaca8cd5ba3088b1a
+=======
+	a=5
+	b=1222
+>>>>>>> 666a47ddb63fb56489a934b20f89e297f8c55c18

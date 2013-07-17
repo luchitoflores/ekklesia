@@ -38,3 +38,9 @@ def prueba(request):
 		a=a+b
 	a=5
 	b=1222
+	b=b*a
+
+
+def crearPrueba(request):
+	a=34+45
+	return a

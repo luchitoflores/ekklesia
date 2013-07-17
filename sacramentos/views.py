@@ -30,3 +30,8 @@ def usuarioCreateView(request):
 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 		return render (request, 'usuario/usuario_form.html', ctx)
 
+
+
+
+
+

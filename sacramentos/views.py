@@ -43,6 +43,7 @@ def prueba(request):
 	b=12
 	if(a==1):
 		a=a+b
+<<<<<<< HEAD
 	a=5
 	b=1222
 
@@ -65,4 +66,15 @@ def pruebaconflictos github(request):
 		a=a+b
 	a=5
 	b=1222
+=======
+
+	a=5
+	b=1222
+	b=b*a
+
+
+def crearPrueba(request):
+	a=34+45
+	return a
+>>>>>>> 4ebb01497efbbc64d11f8b7cd524fd6f4a221018
 

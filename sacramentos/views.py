@@ -30,3 +30,9 @@ def usuarioCreateView(request):
 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 		return render (request, 'usuario/usuario_form.html', ctx)
 
+def prueba(request):
+
+	a=1
+	b=12
+	if(a==1):
+		a=a+b

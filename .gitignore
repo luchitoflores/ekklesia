@@ -1,0 +1,4 @@
+# Bitácoras y base de datos #
+#############################
+*.sql
+*.db

@@ -36,3 +36,5 @@ def prueba(request):
 	b=12
 	if(a==1):
 		a=a+b
+	a=5
+	b=1222

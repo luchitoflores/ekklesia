@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="UTF-8">
+	<!-- Siempre se cargan los css y después el javascript -->
+	<link rel="stylesheet" href="/static/css/normalize.css">
+	<link rel="stylesheet" href="/static/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/static/css/bootstrap-responsive.min.css">
+	<link rel="stylesheet" href="/static/css/datepicker.css">
+	<link rel="stylesheet" href="/static/css/jquery-ui.min.css">
+	<link rel="stylesheet" href="/static/css/mycss.css">
+	<link rel="stylesheet" href="/static/css/multi-select.css">
+	{% block extrastyle %}{% endblock %}
+	<script src="/static/js/jquery.min.js"></script>
+	<script src='/static/js/jquery-ui.min.js'></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src='/static/js/datatables.min.js'></script>
+	<script src='/static/js/bootstrap-datepicker.js'></script>
+	<script src='/static/js/bootstrap-tooltip.js'></script>
+	<script src='/static/js/bootstrap-alert.js'></script>
+	<script src='/static/js/jquery.multi-select.js'></script>
+	<script src='/static/js/prefixfree.min.js'></script>
+	<script src='/static/js/spin.min.js'></script>
+	<script src='/static/js/sacramentos.js'></script>
+	
+	<script>
+	$.ajaxSetup({
+		beforeSend: function(xhr, settings) {
+			if(settings.type == "POST"){
+				xhr.setRequestHeader("X-CSRFToken", $('[name="csrfmiddlewaretoken"]').val());
+			}
+		}
+	});
+	</script>
+	{% block extrahead %}{% endblock %}
+	{%block extrascript%}{%endblock%}
+	
+
+</head>
+<body>
+	<div class="container" id='id_container'>
+		<div class="row">
+			<div class="span12">
+				
+
+				{%block pretitle%}{%endblock%}
+
+				<div id='id_title'>
+					{% block content_title %}{% if title %}<h1>{{ title }}</h1>{%else%}<h1>No existe titulo</h1>{% endif %}  {% endblock %}
+				</div>
+
+
+				<div id='id_content'>
+					<article>
+						{%block content%}
+						{%endblock%}
+					</article>
+				</div>
+
+				<!-- Footer -->
+				<div id='id_footer'>
+
+					<footer>{%block footer%}
+						<h5>Diócesis de Loja</h5>
+						<p>Copyright © Todos los derechos reservados</p>
+						{%endblock%}
+					</footer>	
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+	
+</body>
+</html>

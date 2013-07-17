@@ -1,0 +1,75 @@
+{%extends 'base.html'%}
+
+{%block title%}Agregar Feligreses{%endblock%}
+
+{%block content%}
+
+<form id='id_form_usuario_create' class='form-horizontal' method='POST'>
+	{%csrf_token%}
+	<div class="container">
+		<div class="row">
+			<div class='span6'>
+				<div class='control-group'>
+					<label for="id_dni" class='control-label'>{{perfil_form.dni.label}}</label>
+					<div class='controls'>
+						{{perfil_form.dni}}
+					</div>
+				</div>
+				<div class='control-group'>
+					<label for="id_first_name" class='control-label'>{{usuario_form.first_name.label}}</label>
+					<div class='controls'>
+						{{usuario_form.first_name}}
+					</div>
+				</div>
+				<div class='control-group'>
+					<label for="id_last_name" class='control-label'>{{usuario_form.last_name.label}}</label>
+					<div class='controls'>
+						{{usuario_form.last_name}}
+					</div>
+				</div>
+			</div>
+			<div class='span6'>
+				<div class='control-group'>
+					<label for="id_fecha_nacimiento" class='control-label'>{{perfil_form.fecha_nacimiento.label}}</label>
+					<div class='controls'>
+						{{perfil_form.fecha_nacimiento}}
+					</div>
+				</div>
+				<div class='control-group'>
+					<label for="id_lugar_nacimiento" class='control-label'>{{perfil_form.lugar_nacimiento.label}}</label>
+					<div class='controls'>
+						{{perfil_form.lugar_nacimiento}}
+					</div>
+				</div>
+				<div class='control-group'>
+					<label for="id_sexo" class='control-label'>{{perfil_form.sexo.label}}</label>
+					<div class='controls'>
+						{{perfil_form.sexo}}
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+	
+	<div class="form-actions">
+		<input type="submit" value='Enviar' class="btn btn-primary">
+		<input type="submit" value='Cancelar' class="btn btn-primary">
+	</div>
+
+</form>
+
+<div  id="id_confirm_usuario_create" class="modal hide fade"  tabindex="5">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<h3>Mensaje de Confirmación</h3>
+	</div>
+	<div class="modal-body">
+		Feligres creado exitosamente		
+	</div>
+	<div class="modal-footer">
+		<a id='id_aceptar' href="." class="btn btn-danger">Aceptar</a>
+	</div>
+</div>
+
+
+{% endblock%}

@@ -1,0 +1,44 @@
+{% extends 'base_site.html'%}
+
+{%block extrascript%}
+
+{%endblock%}
+
+{%block title%}Crear Libros{%endblock%}
+
+{%block content%}
+
+<form id='id_form_libro' action="." method='POST' class='form-horizontal'>
+	{% csrf_token%}
+	<div class='container'>
+	{% for f in form%}
+	<div class="control-group">
+		<label class='control-label'>
+			{{f.label}}
+		</label>
+		{% if f.name == 'estado' %}
+		{% for r in f%}<div class="controls">{{r}}</div>{% endfor %}
+		{% else %}
+		<div class="controls">
+			{{f}}
+		</div>
+		{% endif %}
+		<div id='prueba' class="controls help-text" >
+			{{f.help_text}}
+			<span class="errors">
+				{{f.errors}}
+			</span>
+		</div>
+	</div>
+
+	{%endfor%}
+	
+<div class="form-actions">
+	<input type="submit" value="Enviar" class='btn btn-primary'>
+	<a href="{%url 'libro_list'%}" class='btn btn-primary'>Cancelar</a>
+</div>
+	
+</div>
+</form>
+
+{%endblock%}

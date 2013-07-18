@@ -4,6 +4,7 @@ $(document).on('ready', inicio);
 function inicio(){
 	usuarioCreate();
 	campos_con_fechas();
+	modelo_tablas('#id_table_libro');
 }
 
 function campos_con_fechas(){

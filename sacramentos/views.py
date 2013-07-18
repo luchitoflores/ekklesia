@@ -5,10 +5,11 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
+from django.contrib.auth.models import User
 
 
 from .forms import UsuarioForm, PerfilUsuarioForm, LibroForm
-from .models import Libro
+from .models import PerfilUsuario,Libro
 
 def usuarioCreateView(request):
 	if request.is_ajax():
@@ -33,6 +34,10 @@ def usuarioCreateView(request):
 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 		return render (request, 'usuario/usuario_form.html', ctx)
 
+class UsuarioListView(ListView):
+	model=User
+	model=PerfilUsuario
+	template_name="usuario/usuario_list.html"
 
 
 def prueba(request):

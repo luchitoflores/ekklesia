@@ -5,39 +5,41 @@
 {%endblock%}
 
 
-{%block title%}Lista de libros{%endblock%}
+{%block title%}Lista de Feligreses{%endblock%}
 
 
 {%block content%}
 
 
-<table id='id_table_libro' class='table table-bordered table-striped'>
+<table id='id_table_feligres' class='table table-bordered table-striped'>
 	<thead>
 		<tr class='alert alert-info'>
-			<th>Numero de Libro</th>
-			<th>Tipo</th>
-			<th>Fecha de Apertura</th>
-			<th>Fecha Cierre</th>
-			<th>Estado</th>
+			
+			<th>Nombres</th>
+			<th>Apellidos</th>
+			<th>Dni</th>
+			<th>Fecha Nacimiento</th>
+			<th>Papa</th>
+			<th>Mama</th>
 		</tr>
 		
 	</thead>
 	<tbody>
 		{% for o in object_list %}
-		<tr >
-			<td><a href="{%url 'libro_update' pk=o.id%}">{{o.numero_libro}}</a></td>
-			<td >{{o.tipo_libro}}</td>
-			<td id='id_fecha_apertura'>{{o.fecha_apertura}}</td>
-			<td id='id_fecha_cierre'>{{o.fecha_cierre}}</td>
-			<td>{{o.estado}}</td>
-			
+		<tr>
+			<td><a href="#"> {{o.user.first_name}}</a></td>
+			<td>{{o.user.last_name}}</td>
+			<td> {{o.dni}}</td>
+			<td>{{o.fecha_nacimiento}}</td>
+			<td>{{o.padre.first_name}} {{o.padre.last_name }}</td>
+			<td>{{o.madre.first_name}} {{o.madre.last_name}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 
 </table>
 
-<a href="{% url 'libro_create' %}" class='btn btn-primary'>Nuevo Libro</a>
+<a href="{% url 'usuario_create' %}" class='btn btn-primary'>Nuevo Feligres</a>
 
 <div class="pagination">
 	<ul>

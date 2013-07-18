@@ -2,6 +2,11 @@ $(document).on('ready', modelo_tablas(valor));
 	/* API method to get paging information */
 
 function modelo_tablas(valor){
+	$('th').each(function(){ 
+	if($(this).text() != ''){
+		$(this).append('  <img src="/static/img/black-unsorted.gif"></img>');
+	}
+});
 	$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
 	{
 		return {
@@ -113,11 +118,11 @@ $(valor).dataTable({
 	"iDisplayLength": 5,
 	'bsort': true,
 	"oLanguage": {
-		"sInfo": "Mostrando _END_ de _TOTAL_  Parroquias",
+		"sInfo": "Mostrando _END_ de _TOTAL_  Elementos",
 		"sLengthMenu": "Mostrar _MENU_ registros",
 		"sSearch": "Buscar:",
 		"sEmptyTable": "No existen datos disponibles en la tabla",
-		"sInfoFiltered": " (Filtrado de _MAX_ Parroquias)",
+		"sInfoFiltered": " (Filtrado de _MAX_ Elementos)",
 		"sZeroRecords": "No existen registros con ese criterio de búsqueda",
 
 		"oPaginate": {
@@ -136,11 +141,7 @@ $(valor).dataTable({
 });
 console.log('ejecutando datatables');
 
-$('th').each(function(){ 
-	if($(this).text() != ''){
-		$(this).append('  <img src="/static/img/black-unsorted.gif"></img>');
-	}
-});
+
 
 }
 	

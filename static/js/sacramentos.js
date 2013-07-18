@@ -3,7 +3,8 @@ $(document).on('ready', inicio);
 
 function inicio(){
 	usuarioCreate();
-	modelo_tablas('#id_table_libro');
+	modelo_tablas('#id_table_feligres, #id_table_libro');
+	//modelo_tablas('#id_table_feligres');
 }
 
 

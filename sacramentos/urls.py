@@ -1,7 +1,8 @@
 from django.conf.urls import include, patterns, url
-from .views import usuarioCreateView,LibroListView,LibroCreateView,LibroUpdateView
+from .views import usuarioCreateView,UsuarioListView,LibroListView,LibroCreateView,LibroUpdateView
 
 urlpatterns = patterns('', 
+	url(r'^usuario/$', UsuarioListView.as_view(), name='usuario_list'),
 	url(r'^usuario/add/$', usuarioCreateView, name='usuario_create'),
 
 	# urls de libro

@@ -1,63 +1,112 @@
 {%extends 'base.html'%}
 
+{%load tags%}
+
 {%block title%}Agregar Feligreses{%endblock%}
 
 {%block content%}
 
-<form id='id_form_usuario_create' class='form-horizontal' method='POST'>
-	{%csrf_token%}
-	<div class="container">
-		<div class="row">
-			<div class='span6'>
-				<div class='control-group'>
-					<label for="id_dni" class='control-label'>{{perfil_form.dni.label}}</label>
-					<div class='controls'>
-						{{perfil_form.dni}}
-					</div>
-				</div>
-				<div class='control-group'>
-					<label for="id_first_name" class='control-label'>{{usuario_form.first_name.label}}</label>
-					<div class='controls'>
-						{{usuario_form.first_name}}
-					</div>
-				</div>
-				<div class='control-group'>
-					<label for="id_last_name" class='control-label'>{{usuario_form.last_name.label}}</label>
-					<div class='controls'>
-						{{usuario_form.last_name}}
-					</div>
-				</div>
-			</div>
-			<div class='span6'>
-				<div class='control-group'>
-					<label for="id_fecha_nacimiento" class='control-label'>{{perfil_form.fecha_nacimiento.label}}</label>
-					<div class='controls'>
-						{{perfil_form.fecha_nacimiento}}
-					</div>
-				</div>
-				<div class='control-group'>
-					<label for="id_lugar_nacimiento" class='control-label'>{{perfil_form.lugar_nacimiento.label}}</label>
-					<div class='controls'>
-						{{perfil_form.lugar_nacimiento}}
-					</div>
-				</div>
-				<div class='control-group'>
-					<label for="id_sexo" class='control-label'>{{perfil_form.sexo.label}}</label>
-					<div class='controls'>
-						{{perfil_form.sexo}}
-					</div>
-				</div>
-			</div>
-		</div>	
+<div class='container'>
+	<div class="row">
+		<div class="offset4 span1">
+			<a href="#" class='btn btn-primary'>
+				<i class="icon-pencil icon-white"></i>
+				<span><strong>Lista</strong></span>
+			</a>
+		</div>
 	</div>
+</div>
+
+<!-- Div para manejar mensajes de error -->
+<div id="id_mensaje">
 	
-	<div class="form-actions">
-		<input type="submit" value='Enviar' class="btn btn-primary">
-		<input type="submit" value='Cancelar' class="btn btn-primary">
+</div>
+
+
+<!-- Pestañas para datos personales, padre y madre -->
+
+
+<ul class='nav nav-tabs'>
+	<li class='active'><a href="#id_datos_personales" data-toggle='tab'>Datos Personales</a></li>
+	<li><a href="#id_datos_padre" data-toggle='tab'>Datos del Padre</a></li>
+	<li><a href="#id_datos_madre" data-toggle='tab'>Datos de la Madre</a></li>
+</ul>
+
+<div class="tab-content">
+	<div id='id_datos_personales' class='tab-pane active'>
+		<form id='id_form_usuario_create' class='form-horizontal' method='POST'>
+			{%csrf_token%}
+			<div class="container">
+				<div class="row">
+					<div class='span6'>
+						<div class='control-group'>
+							<label for="id_dni" class='control-label'>{{perfil_form.dni.label}}</label>
+							<div class='controls'>
+								{{perfil_form.dni}}
+							</div>
+						</div>
+						<div class='control-group'>
+							<label for="id_first_name" class='control-label'>{{usuario_form.first_name.label}}</label>
+							<div class='controls'>
+								{{usuario_form.first_name}}
+							</div>
+							<div id="id_errors_first_name" class='controls invalid'></div>
+						</div>
+						
+						<div class='control-group'>
+							<label for="id_last_name" class='control-label'>{{usuario_form.last_name.label}}</label>
+							<div class='controls'>
+								{{usuario_form.last_name}}
+							</div>
+
+						</div>
+					</div>
+					<div class='span6'>
+						<div class='control-group'>
+							<label for="id_fecha_nacimiento" class='control-label'>{{perfil_form.fecha_nacimiento.label}}</label>
+							<div class='controls'>
+								{{perfil_form.fecha_nacimiento}}
+							</div>
+						</div>
+						<div class='control-group'>
+							<label for="id_lugar_nacimiento" class='control-label'>{{perfil_form.lugar_nacimiento.label}}</label>
+							<div class='controls'>
+								{{perfil_form.lugar_nacimiento}}
+							</div>
+						</div>
+						<div class='control-group'>
+							<label for="id_sexo" class='control-label'>{{perfil_form.sexo.label}}</label>
+							<div class='controls'>
+								{{perfil_form.sexo}}
+							</div>
+						</div>
+					</div>
+				</div>	
+			</div>
+
+			<div class="form-actions">
+				<input type="submit" value='Enviar' class="btn btn-primary">
+				<input type="submit" value='Cancelar' class="btn btn-primary">
+			</div>
+		</form>
 	</div>
 
-</form>
+	<div id="id_datos_padre" class="tab-pane">
+		<form id='id_form_padre' class='form-horizontal'>
+			{%padre%}
+		</form>
+	</div>
 
+	<div id="id_datos_madre" class="tab-pane">
+		<form id='id_form_madre' class='form-horizontal'>
+			{%padre%}
+		</form>
+	</div>
+
+	
+</div>
+
+<!-- Modal para indicar que un usuario ha sid creado-->
 <div  id="id_confirm_usuario_create" class="modal hide fade"  tabindex="5">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -70,6 +119,8 @@
 		<a id='id_aceptar' href="." class="btn btn-danger">Aceptar</a>
 	</div>
 </div>
+
+
 
 
 {% endblock%}

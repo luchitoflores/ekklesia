@@ -8,25 +8,39 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
 
 
+
 from .forms import UsuarioForm, PerfilUsuarioForm, LibroForm
 from .models import PerfilUsuario,Libro
+
+from .models import Libro
+from .forms import (
+	UsuarioForm, PerfilUsuarioForm, PadreForm,
+	LibroForm
+	)
+
+
 
 def usuarioCreateView(request):
 	if request.is_ajax():
 		if request.method == 'POST':
-			bandera = False
+			valido = False
 			usuario_form = UsuarioForm(request.POST)
 			perfil_form = PerfilUsuarioForm(request.POST)
-			# if usuario_form.is_valid() and perfil_form.is_valid():
-			bandera = True
-			usuario = usuario_form.save(commit=False)
-			perfil = perfil_form.save(commit=False)
-			usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
-			usuario.save()
-			perfil.user = usuario
-			perfil.save()
-			
-			ctx = {'respuesta': bandera}
+			if usuario_form.is_valid() and perfil_form.is_valid():
+				valido = True
+				usuario = usuario_form.save(commit=False)
+				perfil = perfil_form.save(commit=False)
+				usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
+				usuario.save()
+				perfil.user = usuario
+				perfil.save()
+				ctx = {'valido': valido}
+
+			else:
+				errores_usuario = usuario_form.errors
+				errores_perfil =  perfil_form.errors
+				ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
+
 			return HttpResponse(json.dumps(ctx), content_type='application/json')
 	else:
 		usuario_form = UsuarioForm()
@@ -39,37 +53,19 @@ class UsuarioListView(ListView):
 	model=PerfilUsuario
 	template_name="usuario/usuario_list.html"
 
+def padre_create_view(request):
+	if request.is_ajax():
+		if request.method == 'POST':
+			usuario_form = UsuarioForm(request.POST)
+			perfil_padre_form = PadreForm(request.POST)
+			if usuario_form.is_valid() and perfil_padre_form.is_valid():
+				pass
+	else: 
+		usuario_form = UsuarioForm()
+		perfil_padre_form = PadreForm()
 
-def prueba(request):
-	a=1
-	b=12
-	if(a==1):
-		a=a+b
-
-	a=5
-	b=1222
-
-
-def prueba2(request):
-	a=1
-	b=12
-	if(a==1):
-		a=a+b
-	a=5
-	b=1222
-
-
-
-
-
-def crearPrueba(request):
-	a=34+45
-	return a
-
-
-def crearPrueba(request):
-	a=34+45
-	return a
+	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_padre_form}
+	return render(request, 'usuario/padre_form.html', ctx) 
 
 
 # Vistas para admin libros

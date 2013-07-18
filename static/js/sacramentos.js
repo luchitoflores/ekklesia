@@ -3,6 +3,7 @@ $(document).on('ready', inicio);
 
 function inicio(){
 	usuarioCreate();
+	modelo_tablas('#id_table_libro');
 }
 
 

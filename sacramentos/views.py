@@ -34,6 +34,7 @@ def usuarioCreateView(request):
 		return render (request, 'usuario/usuario_form.html', ctx)
 
 
+
 def prueba(request):
 	a=1
 	b=12
@@ -92,3 +93,4 @@ class LibroListView(ListView):
 	# 	return queryset
 
 	
+

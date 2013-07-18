@@ -86,7 +86,7 @@
 
 			<div class="form-actions">
 				<input type="submit" value='Enviar' class="btn btn-primary">
-				<input type="submit" value='Cancelar' class="btn btn-primary">
+				<a href="{%url 'usuario_list'%}" class='btn btn-primary'>Cancelar</a>
 			</div>
 		</form>
 	</div>
@@ -131,19 +131,47 @@
 		<form action=""></form> #}-->
 		<table id="id_table_busqueda_usuarios" class="table table-bordered table-striped">
 			<thead>
-				<tr>
+				<tr class='alert alert-info'>
 					<th>Nombres</th>
 					<th>Apellidos</th>
+					<th>Dni</th>
+
 					
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<th colspan='2'>No hay registros</th>
+				{% for o in perfil_form %}
+				<tr >
+					<td><a href="#">{{o.user.first_name}}</a></td>
+					<td >{{o.user.last_name}}</td>
+					<td >{{o.dni}}</td>
+					
 				</tr>
+				{% endfor %}
 			</tbody>
+			
 		</table>
 	</div>
+	<div class="pagination">
+	<ul>
+
+		{% if page_obj.has_previous %}
+		<li><a href="?page={{page_obj.previous_page_number }}">Anterior</a>
+			{% endif %}
+		</li>
+
+		{%for p in lista%}
+		<li><a href="?page={{p}}">{{p}}</a></li>
+		{%endfor%}
+
+		<li>
+			{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+			{% endif %}
+		</li>
+	</ul>
+</div>
+
 	<div class="modal-footer">
 		<a id='id_aceptar' href="." class="btn btn-danger" data-dismiss="modal">Aceptar</a>
 	</div>

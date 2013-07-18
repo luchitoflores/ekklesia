@@ -1,9 +1,8 @@
 from django.conf.urls import include, patterns, url
 
-from .views import usuarioCreateView,UsuarioListView,LibroListView,LibroCreateView,LibroUpdateView
 from .views import (
-	usuarioCreateView, padre_create_view, 
-	LibroCreateView, LibroUpdateView ,LibroListView
+	usuarioCreateView, UsuarioListView,padre_create_view, 
+	LibroCreateView, LibroUpdateView ,LibroListView,LibroUpdateView
 	)
 urlpatterns = patterns('', 
 	

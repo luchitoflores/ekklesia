@@ -139,9 +139,6 @@ $(valor).dataTable({
 	
     
 });
-console.log('ejecutando datatables');
-
-
 
 }
 	

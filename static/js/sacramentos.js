@@ -4,11 +4,10 @@ $(document).on('ready', inicio);
 function inicio(){
 	usuarioCreate();
 
-	modelo_tablas('#id_table_feligres, #id_table_libro');
+	modelo_tablas('#id_table_feligres, #id_table_libro,#id_buscar_padre ,#id_table_busqueda_usuarios');
 	//modelo_tablas('#id_table_feligres');
-
 	campos_con_fechas();
-	modelo_tablas('#id_table_libro');
+
 
 }
 
@@ -16,6 +15,8 @@ function campos_con_fechas(){
 	$('#id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_form_padre #id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_form_madre #id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
+	$('#id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
+	$('#id_fecha_cierre').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	
 }
 

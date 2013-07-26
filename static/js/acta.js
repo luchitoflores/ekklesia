@@ -1,14 +1,47 @@
 function modelo_tablas(valor){
+	$(valor).dataTable({
+		"aLengthMenu": [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, 'Todos']],
+		"sPaginationType": "bootstrap",
+		"iDisplayLength": 5,
+		'bsort': true,
+		"oLanguage": {
+			"sInfo": "Mostrando _START_ a _END_ de _TOTAL_ elementos",
+		//"sInfo": "Got a total of _TOTAL_ entries to show (_START_ to _END_)",
+		"sInfoEmpty":"Mostrando 0 to 0 de 0 Elementos",
+		"sLengthMenu": "Ver _MENU_ registros",
+		"sSearch": "Buscar:",
+		"sEmptyTable": "No existen datos disponibles en la tabla",
+		"sInfoFiltered": " (Filtrado de _MAX_ Elementos)",
+		"sZeroRecords": "No existen registros con ese criterio de búsqueda",
+		"oPaginate": {
+			"sFirst": "",
+			"sLast": "",
+			"sNext": "Siguiente",
+			"sPrevious": "Anterior"}
+		}
+	});
+}
+
+function tablas_estilo_bootstrap(){
+	// Agregar iconos para decir que una tabla se puede ordenar
 	$('th').each(function(){ 
 		if($(this).text() != ''){
 			$(this).append('  <img src="/static/img/black-unsorted.gif"></img>');
 		}
 	});
+
 	
 	/* API method to get paging information */
 	$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings ){
 		return {
 			"iStart":         oSettings._iDisplayStart,	
+
+
+	$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
+	{
+		return {
+			"iStart":         oSettings._iDisplayStart,
+
 			"iEnd":           oSettings.fnDisplayEnd(),
 			"iLength":        oSettings._iDisplayLength,
 			"iTotal":         oSettings.fnRecordsTotal(),
@@ -24,7 +57,13 @@ function modelo_tablas(valor){
 		"sSortAsc": "header headerSortDown",
 		"sSortDesc": "header headerSortUp",
 		"sSortable": "header",
+
 		
+	});
+
+	/* Bootstrap style pagination control */
+
+
 	});
 
 	/* Bootstrap style pagination control */
@@ -47,8 +86,13 @@ function modelo_tablas(valor){
 					'</ul>'
 					);
 				var els = $('a', nPaging);
+
 				$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
 				$(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
+
+				$(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
+				$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
+
 			},
 
 			"fnUpdate": function ( oSettings, fnDraw ) {
@@ -56,6 +100,7 @@ function modelo_tablas(valor){
 				var oPaging = oSettings.oInstance.fnPagingInfo();
 				var an = oSettings.aanFeatures.p;
 				var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
+
 				if ( oPaging.iTotalPages < iListLength) {
 					iStart = 1;
 					iEnd = oPaging.iTotalPages;
@@ -83,6 +128,38 @@ function modelo_tablas(valor){
                   		oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
                   		fnDraw(oSettings);
                   	});
+
+
+				if ( oPaging.iTotalPages < iListLength) {
+					iStart = 1;
+					iEnd = oPaging.iTotalPages;
+				}
+				else if ( oPaging.iPage <= iHalf ) {
+					iStart = 1;
+					iEnd = iListLength;
+				} else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
+					iStart = oPaging.iTotalPages - iListLength + 1;
+					iEnd = oPaging.iTotalPages;
+				} else {
+					iStart = oPaging.iPage - iHalf + 1;
+					iEnd = iStart + iListLength - 1;
+				}
+
+				for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
+                  // Remove the middle elements
+                  $('li:gt(0)', an[i]).filter(':not(:last)').remove();
+
+                  // Add the new list items and their event handlers
+                  for ( j=iStart ; j<=iEnd ; j++ ) {
+                  	sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
+                  	$('<li '+sClass+'><a href="#">'+j+'</a></li>')
+                  	.insertBefore( $('li:last', an[i])[0] )
+                  	.bind('click', function (e) {
+                  		e.preventDefault();
+                  		oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
+                  		fnDraw( oSettings );
+                  	} );
+
                   }
 
                   // Add / remove disabled classes from the static elements
@@ -100,52 +177,62 @@ function modelo_tablas(valor){
               }
           }
       }
-  });
-
-$(valor).dataTable({
-
-	
-	// '<"top"lfit><"bottom"p><"clear">'
-	// "<'row'<'span5'l><'span5'f>r>t<'row'<'span8'i><'span8'p>>
-
-	// "sDom": "<'top' <'row' <'span5' l><'span5 form-search search-query' f>>>t<'bottom' p>",
-
-	//"iDisplayStart": 5,
-	"aLengthMenu": [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, 'Todos']],
-	"sPaginationType": "bootstrap",
-	"iDisplayLength": 5,
-	'bsort': true,
-	
-
-	"oLanguage": {
-		"sInfo": "Mostrando _START_ a _END_ de _TOTAL_ elementos",
-		//"sInfo": "Got a total of _TOTAL_ entries to show (_START_ to _END_)",
-		"sInfoEmpty":"Mostrando 0 to 0 de 0 Elementos",
-		"sLengthMenu": "Ver _MENU_ registros",
-		"sSearch": "Buscar:",
-		"sEmptyTable": "No existen datos disponibles en la tabla",
-		"sInfoFiltered": " (Filtrado de _MAX_ Elementos)",
-		"sZeroRecords": "No existen registros con ese criterio de búsqueda",
-
-		"oPaginate": {
-			"sFirst": "",
-			"sLast": "",
-			"sNext": "Siguiente",
-			"sPrevious": "Anterior",
+  } 
 
 
-		}
-
-	}
-	
-	
-
-});
-
-
-
-
-
+  );
 }
+
+function tablas_busqueda_ajax(identificador_tabla, columnas_tabla, datos){
+	$(identificador_tabla).dataTable({
+		"sDom": "<'top't><'bottom'p><'clear'>",
+		"sPaginationType": "bootstrap",
+		"iDisplayLength": 2,
+		"bPaginate": true,
+		"bInfo": true,
+		"bSorted": true,
+		"bFilter": true,
+		"bLengthChange": true,
+		"aLengthMenu": [[2, 5, 10, -1], [2, 5, 10, "Todos"]],
+		"aaData": datos,
+		"bDestroy": true,
+		"aoColumns" : columnas_tabla,
+		"oLanguage": {
+			"sInfo": "Mostrando _END_ de _TOTAL_  Elementos",
+			"sLengthMenu": "Mostrar _MENU_ registros",
+			"sSearch": "Filtrar:",
+			"sEmptyTable": "No existen datos disponibles en la tabla",
+			"sInfoFiltered": " (Filtrado de _MAX_ Elementos)",
+			"sZeroRecords": "No existen registros con ese criterio de búsqueda",
+			"oPaginate": {
+				"sFirst": "",
+				"sLast": "",
+				"sNext": "Siguiente",
+				"sPrevious": "Anterior"}
+			}
+		}); 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

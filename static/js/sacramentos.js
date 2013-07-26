@@ -1,6 +1,4 @@
 $(document).on('ready', inicio);
-
-
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
 
 function inicio(){
@@ -66,10 +64,9 @@ function radio_button(){
 }
 
 function campos_con_fechas(){
-
 	$('#id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_fecha_sacramento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
-	$('#id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
+	$('#id_form_libro #id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_fecha_cierre').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	
 }
@@ -133,35 +130,41 @@ function prueba(){
 		{ "mData" : "apellidos", "bSortable": true},
 		{ "mData" : "dni", "bSortable": true }];
 		$.get(url, ctx, function(data){
-			console.log(data);
+			console.log('respuesta del servidor: '+ data);
 			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
+			var map = almacenar_busqueda_en_map(data.perfiles);
+			console.log('Mapa: ' +  map);
+			console.log(map);
+			devolver_campos_de_lista(map);
 		});
 	});
 }
 
-function devolver_campos_de_lista(){
+function almacenar_busqueda_en_map(lista){
+	var map = {};
+	$.each(lista, function(index, element){
+		map[element.id] = element; 
+	}); 
+	return map;
+}
 
-	$('a#clic').on('click', function(e){
+function devolver_campos_de_lista(map){
+	$('a#id_click').on('click', function(e){
 		e.preventDefault();
 		$("#id_buscar_padre").modal('hide');
 		console.log('prueba: ' + $(this).attr('name'));
-		var id = $(this).attr('name');
+		var id = $('th').attr('name');
 		console.log(map[id]);
 		var objeto = map[id];
-		console.log(objeto.nombres);
-		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
-		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
-		$('#id_form_padre #id_dni').attr('value', objeto.dni);
-		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
-		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-		$('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
+		// console.log(objeto.nombres);
+		// $('#id_form_padre #id_first_name').attr('value', objeto.nombres);
+		// $('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
+		// $('#id_form_padre #id_dni').attr('value', objeto.dni);
+		// $('#id_form_padre #id_profesion').attr('value', objeto.profesion);
+		// $('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
+		// $('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
 	});
 }
 
 
-function almacenar_busqueda_en_map(lista){
-	$.each(lista, function(index, element){
-		map[element.id] = element; 
-	}); 
-}
 

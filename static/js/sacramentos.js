@@ -1,20 +1,14 @@
 $(document).on('ready', inicio);
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
- 
+
 function inicio(){
 	usuarioCreate();
-
-
+	tablas_estilo_bootstrap();
 	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion');
-	// modelo_tablas('#id_table_libro');
-
-	// modelo_tablas('#id_table_feligres, #id_table_libro,#id_buscar_padre ,#id_table_busqueda_usuarios');
-	//modelo_tablas('#id_table_feligres');
-
 	campos_con_fechas();
-	tabla_busqueda_usuarios();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
+	prueba();
 }
 
 function limpiar_campos(campos){
@@ -78,10 +72,9 @@ function campos_con_fechas(){
 }
 
 function usuarioCreate(){
-
 	$('#id_form_usuario_create').on('submit', function(e){
 		e.preventDefault();
-		json = $('#id_form_usuario_create').serialize()
+		json = $('#id_form_usuario_create').serialize();
 		url = '/usuario/add/';
 		$.post(url, json, function(data, status, jqXHR){
 			if(data.valido){
@@ -116,135 +109,27 @@ function usuarioCreate(){
 				});
 			}
 		});
-
-$('#id_aceptar').on('click',function(e){
-	e.preventDefault();
-	$('#id_confirm_usuario_create').modal('hide');
 });
-
-});
-
 }
 
-function tabla_busqueda_usuarios(){
-	$.fn.dataTableExt.oApi.fnPagingInfo = function ( oSettings )
-	{
-		return {
-			"iStart":         oSettings._iDisplayStart,
-			"iEnd":           oSettings.fnDisplayEnd(),
-			"iLength":        oSettings._iDisplayLength,
-			"iTotal":         oSettings.fnRecordsTotal(),
-			"iFilteredTotal": oSettings.fnRecordsDisplay(),
-			"iPage":          oSettings._iDisplayLength === -1 ?
-			0 : Math.ceil( oSettings._iDisplayStart / oSettings._iDisplayLength ),
-			"iTotalPages":    oSettings._iDisplayLength === -1 ?
-			0 : Math.ceil( oSettings.fnRecordsDisplay() / oSettings._iDisplayLength )
-		};
-	}
+function prueba(){
+	$('#id_form_busqueda').on('submit', function(e){
+		e.preventDefault();
+		var url= '/api/usuario/';
+		var nombres = $('#id_query_nombres').val();
+		var apellidos = $('#id_query_apellidos').val();
+		var cedula = $('#id_query_cedula').val();
+		console.log(nombres);
+		console.log(apellidos);
+		console.log(cedula);
+		mostrar_html("#id_table_busqueda_usuarios");
 
-	$.extend( $.fn.dataTableExt.oStdClasses, {
-		"sSortAsc": "header headerSortDown",
-		"sSortDesc": "header headerSortUp",
-		"sSortable": "header",
-	});
-
-	/* Bootstrap style pagination control */
-	$.extend( $.fn.dataTableExt.oPagination, {
-		"bootstrap": {
-			"fnInit": function( oSettings, nPaging, fnDraw ) {
-				var oLang = oSettings.oLanguage.oPaginate;
-				var fnClickHandler = function ( e ) {
-					e.preventDefault();
-					if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
-						fnDraw( oSettings );
-					}
-				};
-
-				$(nPaging).addClass('pagination').append(
-					'<ul>'+
-					'<li class="prev disabled"><a href="#">&larr; '+oLang.sPrevious+'</a></li>'+
-					'<li class="next disabled"><a href="#">'+oLang.sNext+' &rarr; </a></li>'+
-					'</ul>'
-					);
-				var els = $('a', nPaging);
-				$(els[0]).bind( 'click.DT', { action: "previous" }, fnClickHandler );
-				$(els[1]).bind( 'click.DT', { action: "next" }, fnClickHandler );
-			},
-
-			"fnUpdate": function ( oSettings, fnDraw ) {
-				var iListLength = 5;
-				var oPaging = oSettings.oInstance.fnPagingInfo();
-				var an = oSettings.aanFeatures.p;
-				var i, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
-
-				if ( oPaging.iTotalPages < iListLength) {
-					iStart = 1;
-					iEnd = oPaging.iTotalPages;
-				}
-				else if ( oPaging.iPage <= iHalf ) {
-					iStart = 1;
-					iEnd = iListLength;
-				} else if ( oPaging.iPage >= (oPaging.iTotalPages-iHalf) ) {
-					iStart = oPaging.iTotalPages - iListLength + 1;
-					iEnd = oPaging.iTotalPages;
-				} else {
-					iStart = oPaging.iPage - iHalf + 1;
-					iEnd = iStart + iListLength - 1;
-				}
-
-				for ( i=0, iLen=an.length ; i<iLen ; i++ ) {
-                  // Remove the middle elements
-                  $('li:gt(0)', an[i]).filter(':not(:last)').remove();
-
-                  // Add the new list items and their event handlers
-                  for ( j=iStart ; j<=iEnd ; j++ ) {
-                  	sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
-                  	$('<li '+sClass+'><a href="#">'+j+'</a></li>')
-                  	.insertBefore( $('li:last', an[i])[0] )
-                  	.bind('click', function (e) {
-                  		e.preventDefault();
-                  		oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
-                  		fnDraw( oSettings );
-                  	} );
-                  }
-
-                  // Add / remove disabled classes from the static elements
-                  if ( oPaging.iPage === 0 ) {
-                  	$('li:first', an[i]).addClass('disabled');
-                  } else {
-                  	$('li:first', an[i]).removeClass('disabled');
-                  }
-
-                  if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
-                  	$('li:last', an[i]).addClass('disabled');
-                  } else {
-                  	$('li:last', an[i]).removeClass('disabled');
-                  }
-              }
-          }
-      }
-  } );
-
-$('#id_form_busqueda').on('submit', function(e){
-	e.preventDefault();
-	var url= '/api/usuario/';
-	var nombres = $('#id_query_nombres').val();
-	var apellidos = $('#id_query_apellidos').val();
-	var cedula = $('#id_query_cedula').val();
-	console.log(nombres);
-	console.log(apellidos);
-	console.log(cedula);
-	mostrar_html("#id_table_busqueda_usuarios");
-	
-	var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
-	$.get(url, ctx, function(data){
-		console.log(data);
-		// if (data.bandera){
-			
+		var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
+		$.get(url, ctx, function(data){
+			console.log(data);
 			$("#id_table_busqueda_usuarios").dataTable({
 				"sDom": "<'top't><'bottom'p><'clear'>",
 				"sPaginationType": "bootstrap",
-				// "iDisplayStart": 2,
 				"iDisplayLength": 2,
 				"bPaginate": true,
 				"bInfo": true,
@@ -273,19 +158,33 @@ $('#id_form_busqueda').on('submit', function(e){
 						"sPrevious": "Anterior"}
 					}
 				}); 
-		// } else {
-		// 	ocultar_html('#id_table_busqueda_usuarios, #id_table_busqueda_usuarios_wrapper');
-		// 	$('#id_div_mensaje_error').attr('style', 'display:auto');
-		// 	$('#id_div_mensaje_error img').after('<p>'+data.perfiles+'</p>');
-		// 	// $('#id_div_mensaje_error').slideDown(3000).delay(2000).slideToggle(2000, function(){
-		// 	// 	$('#id_div_mensaje_error p').remove();
-		// 	// });
-		// 	// $('#id_div_mensaje_error p').remove();
-		// 	// alert('No se encontraron Usuarios con ese criterio');
-		// }
-
-		
-	});
+		});
 });
+}
+
+function devolver_campos_de_lista(){
+
+	$('a#clic').on('click', function(e){
+		e.preventDefault();
+		$("#id_buscar_padre").modal('hide');
+		console.log('prueba: ' + $(this).attr('name'));
+		var id = $(this).attr('name');
+		console.log(map[id]);
+		var objeto = map[id];
+		console.log(objeto.nombres);
+		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
+		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
+		$('#id_form_padre #id_dni').attr('value', objeto.dni);
+		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
+		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
+		$('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
+	});
+}
+
+
+function almacenar_busqueda_en_map(lista){
+	$.each(lista, function(index, element){
+		map[element.id] = element; 
+	}); 
 }
 

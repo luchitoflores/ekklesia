@@ -45,29 +45,22 @@ def usuarioCreateView(request):
 		return render (request, 'usuario/usuario_form.html', ctx)
 
 def edit_usuario_view(request,pk):
-	user= get_object_or_404(User, pk=pk)	
 	perfil= get_object_or_404(PerfilUsuario, pk=pk)
+	user= perfil.user	
 	if request.method == 'POST':
-		formUser = UsuarioForm(request.POST,instance=user)
-		formPerfil = PerfilUsuarioForm(request.POST,instance=perfil)
-		if formUser.is_valid() and formPerfil.is_valid():
-			formUser.save()
-			formPerfil.save()
+		usuario_form = UsuarioForm(request.POST,instance=user)
+		perfil_form = PerfilUsuarioForm(request.POST,instance=perfil)
+		if usuario_form.is_valid() and perfil_form.is_valid():
+			usuario_form.save()
+			perfil_form.save()
 			return HttpResponseRedirect('/usuario')
 
 	else:
-		formUser = UsuarioForm(instance=user)
-		formPerfil = PerfilUsuarioForm(instance=perfil)
+		usuario_form = UsuarioForm(instance=user)
+		perfil_form = PerfilUsuarioForm(instance=perfil)
 									
-	ctx = {'form': formUser,'form':formPerfil}
+	ctx = {'usuario_form': usuario_form,'perfil_form':perfil_form}
 	return render(request, 'usuario/usuario_form.html', ctx)
-
-
-
-class UsuarioListView(ListView):
-	model=User
-	model=PerfilUsuario
-	template_name="usuario/usuario_list.html"
 
 def padre_create_view(request):
 	if request.is_ajax():
@@ -96,6 +89,14 @@ def feligres_create_view(request):
 
 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 		return render(request, 'usuario/feligres.html', ctx) 
+
+
+
+class UsuarioListView(ListView):
+	model=User
+	model=PerfilUsuario
+	template_name="usuario/usuario_list.html"
+
 
 
 # Vistas para admin libros

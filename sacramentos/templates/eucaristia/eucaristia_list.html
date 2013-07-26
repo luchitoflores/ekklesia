@@ -6,41 +6,43 @@
 {%endblock%}
 
 
-{%block title%}Lista de Feligreses{%endblock%}
+{%block title%}Sacramento de la Eucaristia{%endblock%}
 
 
 {%block content%}
 
 
-<table id='id_table_feligres' class='table table-bordered table-striped'>
+<table id='id_table_eucaristia' class='table table-bordered table-striped'>
 	<thead>
 		<tr class='alert alert-info'>
 			
-			<th>Nombres</th>
-			<th>Apellidos</th>
-			<th>Dni</th>
+			<th>Acta</th>
+			<th>Eucaristado</th>
 			<th>Fecha Nacimiento</th>
+			<th>Fecha Sacramento</th>
 			<th>Papa</th>
 			<th>Mama</th>
+			
+			
 		</tr>
 		
 	</thead>
 	<tbody>
 		{% for o in object_list %}
 		<tr>
-			<td><a href="#"> {{o.user.first_name}}</a></td>
-			<td>{{o.user.last_name}}</td>
-			<td> {{o.dni}}</td>
-			<td id='id_fecha_nacimiento'>{{o.fecha_nacimiento}}</td>
-			<td>{{o.padre.first_name}} {{o.padre.last_name }}</td>
-			<td>{{o.madre.first_name}} {{o.madre.last_name}}</td>
+			<td><a href="{%url 'eucaristia_update' pk=o.id%}"> {{o.pagina}}</a></td>
+			<td>{{o.feligres.user.first_name}} {{o.feligres.user.last_name}}</td>
+			<td id='id_fecha_nacimiento'>{{o.feligres.fecha_nacimiento}}</td>
+			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
+			<td>{{o.feligres.padre.first_name}} {{o.feligres.padre.last_name}}</td>
+			<td>{{o.feligres.madre.first_name}} {{o.feligres.madre.last_name}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 
 </table>
 
-<a href="{% url 'usuario_create' %}" class='btn btn-primary'>Nuevo Feligres</a>
+<a href="{% url 'eucaristia_create' %}" class='btn btn-primary'>Nueva Eucaristia</a>
 
 <div class="pagination">
 	<ul>

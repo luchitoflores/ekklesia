@@ -35,7 +35,8 @@ class PerfilUsuario(TimeStampedModel):
 	sexo = models.CharField(max_length=10, choices=SEXO_CHOICES)
 	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True)
 	profesion = models.CharField(max_length=50, null=True, blank=True)
-
+	def __unicode__(self):
+		return '%s %s' %(self.user.first_name,self.user.last_name)
 
 
 class Sacramento(TimeStampedModel):
@@ -48,16 +49,20 @@ class Sacramento(TimeStampedModel):
 
     numero_acta = models.PositiveIntegerField()
     pagina = models.PositiveIntegerField()
+   
     tipo_sacramento = models.CharField(max_length=50, choices=TIPO_SACRAMENTO_CHOICES)
     fecha_sacramento = models.DateField()
     lugar_sacramento = models.CharField(max_length=50)
     padrino = models.CharField(max_length= 200)
     madrina = models.CharField(max_length= 200)
     iglesia = models.CharField(max_length=50)
+    class Meta:
+    	abstract=True
 
 
 
 class Bautismo(Sacramento):
+	bautizado=models.ForeignKey(PerfilUsuario, related_name='Bautizado',null=True,blank=True)
 	abuelo_paterno = models.CharField(max_length=200) 
 	abuela_paterna = models.CharField(max_length=200)
 	abuelo_materno = models.CharField(max_length=200)
@@ -65,21 +70,31 @@ class Bautismo(Sacramento):
 	vecinos_paternos = models.CharField(max_length=200)
 	vecinos_maternos = models.CharField(max_length=200)
 
+	def __unicode__(self):
+		return '%s %s' %(self.bautizado.user.first_name,self.bautizado.user.last_name)
+
 
 class Eucaristia(Sacramento):
+	feligres=models.ForeignKey(PerfilUsuario, related_name='Eucaristia',null=True,blank=True)
+	
 	pass
 
 class Confirmacion(Sacramento):
+	confirmado=models.ForeignKey(PerfilUsuario, related_name='Confirmado',null=True,blank=True)
 	obispo = models.CharField(max_length=200)
 
 class Matrimonio(Sacramento):
+	novio=models.OneToOneField(PerfilUsuario, related_name='Novio',null=True,blank=True)
+	novia=models.OneToOneField(PerfilUsuario, related_name='Novia',null=True,blank=True)
 	testigo_novio = models.CharField(max_length=200)
 	testigo_novia = models.CharField(max_length=200)
+	
+		
 
 class NotaMarginal(TimeStampedModel):
 	fecha = models.DateField()
 	descripcion = models.TextField(max_length=300) 
-	sacramento = models.ForeignKey('Sacramento')
+	matrimonio = models.ForeignKey('Matrimonio')
 
 
 

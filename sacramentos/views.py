@@ -7,15 +7,11 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
 
-
-
-from .forms import UsuarioForm, PerfilUsuarioForm, LibroForm
-from .models import PerfilUsuario,Libro
-
-from .models import Libro
+from .models import PerfilUsuario,Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion
 from .forms import (
 	UsuarioForm, PerfilUsuarioForm, PadreForm,
-	LibroForm
+	MatrimonioForm,BautismoForm,EucaristiaForm,ConfirmacionForm,
+	LibroForm,
 	)
 
 
@@ -67,6 +63,20 @@ def padre_create_view(request):
 	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_padre_form}
 	return render(request, 'usuario/padre_form.html', ctx) 
 
+def feligres_create_view(request):
+	
+		if request.method == 'POST':
+			usuario_form = UsuarioForm(request.POST)
+			perfil_form = PerfilUsuarioForm(request.POST)
+			if usuario_form.is_valid() and perfil_form.is_valid():
+				pass
+		else: 
+			usuario_form = UsuarioForm()
+			perfil_form = PerfilUsuarioForm()
+
+		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
+		return render(request, 'usuario/feligres.html', ctx) 
+
 
 # Vistas para admin libros
 
@@ -94,4 +104,75 @@ class LibroListView(ListView):
 	# 	return queryset
 
 	
+# VISTAS PARA ADMIN MATRIMONIO
 
+class MatrimonioCreateView(CreateView):
+	model=Matrimonio
+	form_class=MatrimonioForm
+	template_name='matrimonio/matrimonio_form.html'
+	success_url='/matrimonio/'
+
+
+class MatrimonioUpdateView(UpdateView):
+	model=Matrimonio
+	template_name='matrimonio/matrimonio_form.html'
+	success_url='/matrimonio/'
+
+
+class MatrimonioListView(ListView):
+	model = Matrimonio
+	template_name = 'matrimonio/matrimonio_list.html'
+
+
+# VISTAS PARA ADMIN DE BAUTISMO
+
+class BautismoCreateView(CreateView):
+	model=Bautismo
+	template_name='bautismo/bautismo_form.html'
+	form_class=BautismoForm
+	success_url='/bautismo/'
+
+class BautismoUpdateView(UpdateView):
+	model=Bautismo
+	template_name='bautismo/bautismo_form.html'
+	#form_class=BautismoForm
+	success_url='/bautismo/'
+
+class BautismoListView(ListView):
+	model=Bautismo
+	template_name='bautismo/bautismo_list.html'
+
+
+
+# VISTAS PARA ADMIN DE EUCARISTIA
+
+class EucaristiaCreateView(CreateView):
+	model=Eucaristia
+	template_name='eucaristia/eucaristia_form.html'
+	success_url='/eucaristia/'
+
+
+class EucaristiaUpdateView(UpdateView):
+	model=Eucaristia
+	template_name='eucaristia/eucaristia_form.html'
+	success_url='/eucaristia/'
+
+class EucaristiaListView(ListView):
+	model=Eucaristia
+	template_name='eucaristia/eucaristia_list.html'
+
+# VISTAS PARA ADMIN DE CONFIRMACION
+
+class ConfirmacionCreateView(CreateView):
+	model=Confirmacion
+	template_name='confirmacion/confirmacion_form.html'
+	success_url='/confirmacion/'
+
+class ConfirmacionUpdateView(UpdateView):
+	model=Confirmacion
+	template_name='confirmacion/confirmacion_form.html'
+	success_url='/confirmacion/'
+
+class ConfirmacionListView(ListView):
+	model=Confirmacion
+	template_name='confirmacion/confirmacion_list.html'

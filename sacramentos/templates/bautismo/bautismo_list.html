@@ -6,41 +6,43 @@
 {%endblock%}
 
 
-{%block title%}Lista de Feligreses{%endblock%}
+{%block title%}Actas Bautismales{%endblock%}
 
 
 {%block content%}
 
 
-<table id='id_table_feligres' class='table table-bordered table-striped'>
+<table id='id_table_bautismo' class='table table-bordered table-striped'>
 	<thead>
 		<tr class='alert alert-info'>
 			
-			<th>Nombres</th>
-			<th>Apellidos</th>
-			<th>Dni</th>
+			<th>Acta</th>
+			<th>Bautizado</th>
 			<th>Fecha Nacimiento</th>
+			<th>Fecha Sacramento</th>
 			<th>Papa</th>
 			<th>Mama</th>
+			
+			
 		</tr>
 		
 	</thead>
 	<tbody>
 		{% for o in object_list %}
 		<tr>
-			<td><a href="#"> {{o.user.first_name}}</a></td>
-			<td>{{o.user.last_name}}</td>
-			<td> {{o.dni}}</td>
-			<td id='id_fecha_nacimiento'>{{o.fecha_nacimiento}}</td>
-			<td>{{o.padre.first_name}} {{o.padre.last_name }}</td>
-			<td>{{o.madre.first_name}} {{o.madre.last_name}}</td>
+			<td><a href="{%url 'bautismo_update' pk=o.id%}"> {{o.pagina}}</a></td>
+			<td>{{o.bautizado.user.first_name}} {{o.bautizado.user.last_name}}</td>
+			<td id='id_fecha_nacimiento'>{{o.bautizado.fecha_nacimiento}}</td>
+			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
+			<td>{{o.bautizado.padre.first_name}} {{o.bautizado.padre.last_name}}</td>
+			<td>{{o.bautizado.madre.first_name}} {{o.bautizado.madre.last_name}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>
 
 </table>
 
-<a href="{% url 'usuario_create' %}" class='btn btn-primary'>Nuevo Feligres</a>
+<a href="{% url 'bautismo_create' %}" class='btn btn-primary'>Nueva Acta Bautismal</a>
 
 <div class="pagination">
 	<ul>

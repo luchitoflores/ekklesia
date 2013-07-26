@@ -1,0 +1,69 @@
+{% extends 'base.html'%}
+
+{%block extrascript%}
+<script src='/static/js/acta.js'></script>
+
+{%endblock%}
+
+
+{%block title%}Sacramento de Confirmacion{%endblock%}
+
+
+{%block content%}
+
+
+<table id='id_table_confirmacion' class='table table-bordered table-striped'>
+	<thead>
+		<tr class='alert alert-info'>
+			
+			<th>Acta</th>
+			<th>Confirmado</th>
+			<th>Fecha Nacimiento</th>
+			<th>Fecha Sacramento</th>
+			<th>Papa</th>
+			<th>Mama</th>
+			<th>Obispo</th>
+			
+			
+		</tr>
+		
+	</thead>
+	<tbody>
+		{% for o in object_list %}
+		<tr>
+			<td><a href="{%url 'confirmacion_update' pk=o.id%}"> {{o.pagina}}</a></td>
+			<td>{{o.confirmado.user.first_name}} {{o.confirmado.user.last_name}}</td>
+			<td id='id_fecha_nacimiento'>{{o.confirmado.fecha_nacimiento}}</td>
+			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
+			<td>{{o.confirmado.padre.first_name}} {{o.confirmado.padre.last_name}}</td>
+			<td>{{o.confirmado.madre.first_name}} {{o.confirmado.madre.last_name}}</td>
+			<td>{{o.obispo}}</td>
+		</tr>
+		{% endfor %}
+	</tbody>
+
+</table>
+
+<a href="{% url 'confirmacion_create' %}" class='btn btn-primary'>Nueva Confirmacion</a>
+
+<div class="pagination">
+	<ul>
+
+		{% if page_obj.has_previous %}
+		<li><a href="?page={{page_obj.previous_page_number }}">Anterior</a>
+			{% endif %}
+		</li>
+
+		{%for p in lista%}
+		<li><a href="?page={{p}}">{{p}}</a></li>
+		{%endfor%}
+
+		<li>
+			{% if page_obj.has_next %}
+			<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+			{% endif %}
+		</li>
+	</ul>
+</div>
+
+{%endblock%}

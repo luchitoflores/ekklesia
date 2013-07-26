@@ -1,11 +1,11 @@
 $(document).on('ready', inicio);
-
-
+document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
+ 
 function inicio(){
 	usuarioCreate();
 
-	modelo_tablas('#id_table_feligres, #id_table_libro,#id_buscar_padre ,#id_table_busqueda_usuarios');
-	//modelo_tablas('#id_table_feligres');
+	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion');
+	// modelo_tablas('#id_table_libro');
 	campos_con_fechas();
 
 
@@ -13,9 +13,8 @@ function inicio(){
 
 function campos_con_fechas(){
 	$('#id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
-	$('#id_form_padre #id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
-	$('#id_form_madre #id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
-	$('#id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
+	$('#id_form_sacramento #id_fecha_sacramento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
+	$('#id_form_libro #id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_fecha_cierre').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	
 }

@@ -132,6 +132,36 @@ function tablas_estilo_bootstrap(){
   );
 }
 
+function tablas_busqueda_ajax(identificador_tabla, columnas_tabla, datos){
+	$(identificador_tabla).dataTable({
+		"sDom": "<'top't><'bottom'p><'clear'>",
+		"sPaginationType": "bootstrap",
+		"iDisplayLength": 2,
+		"bPaginate": true,
+		"bInfo": true,
+		"bSorted": true,
+		"bFilter": true,
+		"bLengthChange": true,
+		"aLengthMenu": [[2, 5, 10, -1], [2, 5, 10, "Todos"]],
+		"aaData": datos,
+		"bDestroy": true,
+		"aoColumns" : columnas_tabla,
+		"oLanguage": {
+			"sInfo": "Mostrando _END_ de _TOTAL_  Elementos",
+			"sLengthMenu": "Mostrar _MENU_ registros",
+			"sSearch": "Filtrar:",
+			"sEmptyTable": "No existen datos disponibles en la tabla",
+			"sInfoFiltered": " (Filtrado de _MAX_ Elementos)",
+			"sZeroRecords": "No existen registros con ese criterio de búsqueda",
+			"oPaginate": {
+				"sFirst": "",
+				"sLast": "",
+				"sNext": "Siguiente",
+				"sPrevious": "Anterior"}
+			}
+		}); 
+}
+
 
 
 

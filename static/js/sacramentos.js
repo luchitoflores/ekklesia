@@ -125,41 +125,15 @@ function prueba(){
 		mostrar_html("#id_table_busqueda_usuarios");
 
 		var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
+		var columnas = [
+		{ "mData" : "nombres", "bSortable": true},
+		{ "mData" : "apellidos", "bSortable": true},
+		{ "mData" : "dni", "bSortable": true }];
 		$.get(url, ctx, function(data){
 			console.log(data);
-			$("#id_table_busqueda_usuarios").dataTable({
-				"sDom": "<'top't><'bottom'p><'clear'>",
-				"sPaginationType": "bootstrap",
-				"iDisplayLength": 2,
-				"bPaginate": true,
-				"bInfo": true,
-				"bSorted": true,
-				"bFilter": true,
-				"bLengthChange": true,
-				"aLengthMenu": [[2, 5, 10, -1], [2, 5, 10, "Todos"]],
-				"aaData": data.perfiles,
-				"bDestroy": true,
-				"aoColumns" : [
-				{ "mData" : "nombres", "bSortable": true},
-				{ "mData" : "apellidos", "bSortable": true},
-				{ "mData" : "dni", "bSortable": true }],
-				"oLanguage": {
-					"sInfo": "Mostrando _END_ de _TOTAL_  Elementos",
-					"sLengthMenu": "Mostrar _MENU_ registros",
-					"sSearch": "Filtrar:",
-					"sEmptyTable": "No existen datos disponibles en la tabla",
-					"sInfoFiltered": " (Filtrado de _MAX_ Elementos)",
-					"sZeroRecords": "No existen registros con ese criterio de búsqueda",
-
-					"oPaginate": {
-						"sFirst": "",
-						"sLast": "",
-						"sNext": "Siguiente",
-						"sPrevious": "Anterior"}
-					}
-				}); 
+			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
 		});
-});
+	});
 }
 
 function devolver_campos_de_lista(){

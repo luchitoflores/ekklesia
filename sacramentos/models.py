@@ -35,8 +35,16 @@ class PerfilUsuario(TimeStampedModel):
 	sexo = models.CharField(max_length=10, choices=SEXO_CHOICES)
 	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True)
 	profesion = models.CharField(max_length=50, null=True, blank=True)
+
+
+
 	def __unicode__(self):
-		return '%s %s' %(self.user.first_name,self.user.last_name)
+		return '%s %s' %(self.user.first_name, self.user.last_name) 
+
+	# class Meta:
+	# 	ordering = ('user__last_name', 'user__first_name')
+
+
 
 
 class Sacramento(TimeStampedModel):

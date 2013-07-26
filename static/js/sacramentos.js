@@ -126,23 +126,34 @@ function prueba(){
 
 		var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
 		var columnas = [
-		{ "mData" : "nombres", "bSortable": true},
+		{ "mData" : "link", "bSortable": true},
 		{ "mData" : "apellidos", "bSortable": true},
 		{ "mData" : "dni", "bSortable": true }];
 		$.get(url, ctx, function(data){
-			console.log(data);
+			console.log('respuesta del servidor: '+ data);
 			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
+			var map = almacenar_busqueda_en_map(data.perfiles);
+			console.log('Mapa: ' +  map);
+			console.log(map);
+			devolver_campos_de_lista(map);
 		});
 	});
 }
 
-function devolver_campos_de_lista(){
+function almacenar_busqueda_en_map(lista){
+	var map = {};
+	$.each(lista, function(index, element){
+		map[element.id] = element; 
+	}); 
+	return map;
+}
 
-	$('a#clic').on('click', function(e){
+function devolver_campos_de_lista(map){
+	$('a#id_click').on('click', function(e){
 		e.preventDefault();
-		$("#id_buscar_padre").modal('hide');
-		console.log('prueba: ' + $(this).attr('name'));
-		var id = $(this).attr('name');
+		$("#id_buscar_padre").modal('hide');  //$(this).parents("div:first").html(...);
+		console.log('prueba: ' + $(this).parents('tr').attr('id'));
+		var id =  $(this).parents('tr').attr('id');
 		console.log(map[id]);
 		var objeto = map[id];
 		console.log(objeto.nombres);
@@ -156,9 +167,4 @@ function devolver_campos_de_lista(){
 }
 
 
-function almacenar_busqueda_en_map(lista){
-	$.each(lista, function(index, element){
-		map[element.id] = element; 
-	}); 
-}
 

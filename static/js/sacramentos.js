@@ -1,4 +1,6 @@
 $(document).on('ready', inicio);
+
+
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
  
 function inicio(){
@@ -70,9 +72,10 @@ function radio_button(){
 }
 
 function campos_con_fechas(){
+
 	$('#id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_fecha_sacramento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
-	$('#id_form_libro #id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
+	$('#id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_fecha_cierre').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	
 }

@@ -2,10 +2,10 @@ from django.conf.urls import include, patterns, url
 
 # from sacramentos.rest import api_usuario_list
 from .views import (
-	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,
+	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
 	LibroCreateView, LibroUpdateView ,LibroListView,
 	MatrimonioCreateView,MatrimonioListView,MatrimonioUpdateView,
-	BautismoCreateView,BautismoUpdateView,BautismoListView,
+	BautismoCreateView,BautismoUpdateView,BautismoListView, bautismo_create_view,
 	EucaristiaCreateView,EucaristiaUpdateView,EucaristiaListView,
 	ConfirmacionCreateView,ConfirmacionUpdateView,ConfirmacionListView,
 
@@ -14,6 +14,7 @@ urlpatterns = patterns('',
 	#urls de usuarios
 	url(r'^usuario/$', UsuarioListView.as_view(), name='usuario_list'),
 	url(r'^usuario/add/$', usuarioCreateView, name='usuario_create'),
+	url(r'^usuario/(?P<pk>\d+)/$', edit_usuario_view, name='usuario_update'),
 	url(r'^padre/add/$', padre_create_view, name='padre_create'),
 
 	url(r'^feligres/add/$', feligres_create_view, name='feligres_create'),
@@ -37,7 +38,7 @@ urlpatterns = patterns('',
 
 	#urls de Bautismo
 	url(r'^bautismo/$',BautismoListView.as_view(),name='bautismo_list'),
-	url(r'^bautismo/add/$',BautismoCreateView.as_view(), name='bautismo_create'),
+	url(r'^bautismo/add/$',bautismo_create_view, name='bautismo_create'),
 	url(r'^bautismo/(?P<pk>\d+)/$',BautismoUpdateView.as_view(), name='bautismo_update'),
 
 

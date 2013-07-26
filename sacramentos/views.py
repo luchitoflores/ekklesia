@@ -1,7 +1,7 @@
 # Create your views here.
 import json
 
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
@@ -43,6 +43,26 @@ def usuarioCreateView(request):
 		perfil_form = PerfilUsuarioForm()
 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 		return render (request, 'usuario/usuario_form.html', ctx)
+
+def edit_usuario_view(request,pk):
+	user= get_object_or_404(User, pk=pk)	
+	perfil= get_object_or_404(PerfilUsuario, pk=pk)
+	if request.method == 'POST':
+		formUser = UsuarioForm(request.POST,instance=user)
+		formPerfil = PerfilUsuarioForm(request.POST,instance=perfil)
+		if formUser.is_valid() and formPerfil.is_valid():
+			formUser.save()
+			formPerfil.save()
+			return HttpResponseRedirect('/usuario')
+
+	else:
+		formUser = UsuarioForm(instance=user)
+		formPerfil = PerfilUsuarioForm(instance=perfil)
+									
+	ctx = {'form': formUser,'form':formPerfil}
+	return render(request, 'usuario/usuario_form.html', ctx)
+
+
 
 class UsuarioListView(ListView):
 	model=User
@@ -125,6 +145,31 @@ class MatrimonioListView(ListView):
 
 
 # VISTAS PARA ADMIN DE BAUTISMO
+
+
+def bautismo_create_view(request):
+	if(request.method == 'POST' ):
+		formUser=UsuarioForm(request.POST)
+		formPerfil=PerfilUsuarioForm(request.POST)
+		formBautismo=BautismoForm(request.POST)
+		if((formUser.is_valid() and formPerfil.is_valid()) and formBautismo.is_valid()):
+			user=formUser.save(commit=False)
+			perfil=formPerfil.save(commit=False)
+			bautismo=formBautismo.save(commit=False)
+			user.save()
+			perfil.user=usuario
+			perfil.save()
+			bautismo.bautizado=perfil
+			return HttpResponseRedirect('/bautismo')
+	else:
+		formUser=UsuarioForm()
+		formPerfil=PerfilUsuarioForm()
+		formBautismo=BautismoForm()
+	ctx={'formUser':formUser,'formPerfil':formPerfil,'formBautismo':formBautismo}
+	return render (request,'bautismo/bautismo_form.html',ctx)
+
+
+
 
 class BautismoCreateView(CreateView):
 	model=Bautismo

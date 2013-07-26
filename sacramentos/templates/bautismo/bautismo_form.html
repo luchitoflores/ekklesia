@@ -37,45 +37,45 @@
 				<div class='row'>
 					<div class='span6'>
 						<div class='control-group'>
-							<label for="id_pagina" class='control-label'>{{form.pagina.label}}</label>
+							<label for="id_pagina" class='control-label'>{{formBautismo.pagina.label}}</label>
 							<div class='controls'>
-								{{form.pagina}}
+								{{formBautismo.pagina}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_numero_acta" class='control-label'>{{form.numero_acta.label}}</label>
+							<label for="id_numero_acta" class='control-label'>{{formBautismo.numero_acta.label}}</label>
 							<div class='controls'>
-								{{form.numero_acta}}
+								{{formBautismo.numero_acta}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_tipo_sacramento" class='control-label'>{{form.tipo_sacramento.label}}</label>
+							<label for="id_tipo_sacramento" class='control-label'>{{formBautismo.tipo_sacramento.label}}</label>
 							<div class='controls'>
-								{{form.tipo_sacramento}}
+								{{formBautismo.tipo_sacramento}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{form.fecha_sacramento.label}}</label>
+							<label for="id_fecha_sacramento" class='control-label'>{{formBautismo.fecha_sacramento.label}}</label>
 							<div class='controls'>
-								{{form.fecha_sacramento}}
+								{{formBautismo.fecha_sacramento}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_lugar_sacramento" class='control-label'>{{form.lugar_sacramento.label}}</label>
+							<label for="id_lugar_sacramento" class='control-label'>{{formBautismo.lugar_sacramento.label}}</label>
 							<div class='controls'>
-								{{form.lugar_sacramento}}
+								{{formBautismo.lugar_sacramento}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_padrino" class='control-label'>{{form.padrino.label}}</label>
+							<label for="id_padrino" class='control-label'>{{formBautismo.padrino.label}}</label>
 							<div class='controls'>
-								{{form.padrino}}
+								{{formBautismo.padrino}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_madrina" class='control-label'>{{form.madrina.label}}</label>
+							<label for="id_madrina" class='control-label'>{{formBautismo.madrina.label}}</label>
 							<div class='controls'>
-								{{form.madrina}}
+								{{formBautismo.madrina}}
 							</div>
 						</div>
 						
@@ -83,45 +83,45 @@
 					</div>
 					<div class='span6'>
 						<div class='control-group'>
-							<label for="id_abuelo_paterno" class='control-label'>{{form.abuelo_paterno.label}}</label>
+							<label for="id_abuelo_paterno" class='control-label'>{{formBautismo.abuelo_paterno.label}}</label>
 							<div class='controls'>
-								{{form.abuelo_paterno}}
+								{{formBautismo.abuelo_paterno}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_abuela_paterna" class='control-label'>{{form.abuela_paterna.label}}</label>
+							<label for="id_abuela_paterna" class='control-label'>{{formBautismo.abuela_paterna.label}}</label>
 							<div class='controls'>
-								{{form.abuela_paterna}}
+								{{formBautismo.abuela_paterna}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_abuelo_materno" class='control-label'>{{form.abuelo_materno.label}}</label>
+							<label for="id_abuelo_materno" class='control-label'>{{formBautismo.abuelo_materno.label}}</label>
 							<div class='controls'>
-								{{form.abuelo_materno}}
+								{{formBautismo.abuelo_materno}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_abuela_materna" class='control-label'>{{form.abuela_materna.label}}</label>
+							<label for="id_abuela_materna" class='control-label'>{{formBautismo.abuela_materna.label}}</label>
 							<div class='controls'>
-								{{form.abuela_materna}}
+								{{formBautismo.abuela_materna}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_vecinos_paternos" class='control-label'>{{form.vecinos_paternos.label}}</label>
+							<label for="id_vecinos_paternos" class='control-label'>{{formBautismo.vecinos_paternos.label}}</label>
 							<div class='controls'>
-								{{form.vecinos_paternos}}
+								{{formBautismo.vecinos_paternos}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_vecinos_maternos" class='control-label'>{{form.vecinos_maternos.label}}</label>
+							<label for="id_vecinos_maternos" class='control-label'>{{formBautismo.vecinos_maternos.label}}</label>
 							<div class='controls'>
-								{{form.vecinos_maternos}}
+								{{formBautismo.vecinos_maternos}}
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_iglesia" class='control-label'>{{form.iglesia.label}}</label>
+							<label for="id_iglesia" class='control-label'>{{formBautismo.iglesia.label}}</label>
 							<div class='controls'>
-								{{form.iglesia}}
+								{{formBautismo.iglesia}}
 							</div>
 						</div>
 				
@@ -149,77 +149,7 @@
 
 
 <!-- Modal para indicar que un usuario ha sid creado-->
-<div  id="id_confirm_usuario_create" class="modal hide fade"  tabindex="5">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3>Mensaje de Confirmación</h3>
-	</div>
-	<div class="modal-body">
-		Feligres creado exitosamente		
-	</div>
-	<div class="modal-footer">
-		<a id='id_aceptar' href="." class="btn btn-danger">Aceptar</a>
-	</div>
-</div>
-
-<div id="id_buscar_padre" class="modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3>Búsqueda de Feligreses</h3>
-	</div>
-	<div class="modal-body">
-		
-		<!--<input type="radio" value='Cédula'>
-		<form action=""></form> #}-->
-		<table id="id_table_busqueda_usuarios" class="table table-bordered table-striped">
-			<thead>
-				<tr class='alert alert-info'>
-					<th>Nombres</th>
-					<th>Apellidos</th>
-					<th>Dni</th>
-
-					
-				</tr>
-			</thead>
-			<tbody>
-				{% for o in perfil_form %}
-				<tr >
-					<td><a href="#">{{o.user.first_name}}</a></td>
-					<td >{{o.user.last_name}}</td>
-					<td >{{o.dni}}</td>
-					
-				</tr>
-				{% endfor %}
-			</tbody>
-			
-		</table>
-	</div>
-	<div class="pagination">
-	<ul>
-
-		{% if page_obj.has_previous %}
-		<li><a href="?page={{page_obj.previous_page_number }}">Anterior</a>
-			{% endif %}
-		</li>
-
-		{%for p in lista%}
-		<li><a href="?page={{p}}">{{p}}</a></li>
-		{%endfor%}
-
-		<li>
-			{% if page_obj.has_next %}
-			<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-			{% endif %}
-		</li>
-	</ul>
-</div>
-
-	<div class="modal-footer">
-		<a id='id_aceptar' href="." class="btn btn-danger" data-dismiss="modal">Aceptar</a>
-	</div>
-</div>
-
-
+{%include 'modal.html'%}
 
 
 {% endblock%}

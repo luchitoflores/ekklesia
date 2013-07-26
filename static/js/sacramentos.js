@@ -156,13 +156,13 @@ function devolver_campos_de_lista(map){
 		var id =  $(this).parents('tr').attr('id');
 		console.log(map[id]);
 		var objeto = map[id];
-		console.log(objeto.nombres);
-		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
-		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
-		$('#id_form_padre #id_dni').attr('value', objeto.dni);
-		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
-		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-		$('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
+		// console.log(objeto.nombres);
+		// $('#id_form_padre #id_first_name').attr('value', objeto.nombres);
+		// $('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
+		// $('#id_form_padre #id_dni').attr('value', objeto.dni);
+		// $('#id_form_padre #id_profesion').attr('value', objeto.profesion);
+		// $('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
+		// $('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
 	});
 }
 

@@ -1,7 +1,7 @@
 # Create your views here.
 import json
 
-from django.shortcuts import render
+from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse, Http404
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
@@ -44,10 +44,23 @@ def usuarioCreateView(request):
 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 		return render (request, 'usuario/usuario_form.html', ctx)
 
-class UsuarioListView(ListView):
-	model=User
-	model=PerfilUsuario
-	template_name="usuario/usuario_list.html"
+def edit_usuario_view(request,pk):
+	perfil= get_object_or_404(PerfilUsuario, pk=pk)
+	user= perfil.user	
+	if request.method == 'POST':
+		usuario_form = UsuarioForm(request.POST,instance=user)
+		perfil_form = PerfilUsuarioForm(request.POST,instance=perfil)
+		if usuario_form.is_valid() and perfil_form.is_valid():
+			usuario_form.save()
+			perfil_form.save()
+			return HttpResponseRedirect('/usuario')
+
+	else:
+		usuario_form = UsuarioForm(instance=user)
+		perfil_form = PerfilUsuarioForm(instance=perfil)
+									
+	ctx = {'usuario_form': usuario_form,'perfil_form':perfil_form}
+	return render(request, 'usuario/usuario_form.html', ctx)
 
 def padre_create_view(request):
 	if request.is_ajax():
@@ -76,6 +89,14 @@ def feligres_create_view(request):
 
 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 		return render(request, 'usuario/feligres.html', ctx) 
+
+
+
+class UsuarioListView(ListView):
+	model=User
+	model=PerfilUsuario
+	template_name="usuario/usuario_list.html"
+
 
 
 # Vistas para admin libros
@@ -125,6 +146,31 @@ class MatrimonioListView(ListView):
 
 
 # VISTAS PARA ADMIN DE BAUTISMO
+
+
+def bautismo_create_view(request):
+	if(request.method == 'POST' ):
+		formUser=UsuarioForm(request.POST)
+		formPerfil=PerfilUsuarioForm(request.POST)
+		formBautismo=BautismoForm(request.POST)
+		if((formUser.is_valid() and formPerfil.is_valid()) and formBautismo.is_valid()):
+			user=formUser.save(commit=False)
+			perfil=formPerfil.save(commit=False)
+			bautismo=formBautismo.save(commit=False)
+			user.save()
+			perfil.user=usuario
+			perfil.save()
+			bautismo.bautizado=perfil
+			return HttpResponseRedirect('/bautismo')
+	else:
+		formUser=UsuarioForm()
+		formPerfil=PerfilUsuarioForm()
+		formBautismo=BautismoForm()
+	ctx={'formUser':formUser,'formPerfil':formPerfil,'formBautismo':formBautismo}
+	return render (request,'bautismo/bautismo_form.html',ctx)
+
+
+
 
 class BautismoCreateView(CreateView):
 	model=Bautismo

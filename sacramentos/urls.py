@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 
 	#urls del api rest usuarios
 	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
+	url(r'^api/asignarpadre/$', 'sacramentos.rest.edit_padre_viewapi', name='api_setear_padre'),
 
 	# urls de libro
 	url(r'^libro/$',LibroListView.as_view(),name='libro_list'),

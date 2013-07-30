@@ -2,7 +2,7 @@
 import json
 
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 from .forms import PerfilUsuarioForm, UsuarioForm
 from .models import PerfilUsuario
@@ -92,12 +92,17 @@ def buscar_usuarios(request):
 	return HttpResponse(json.dumps(ctx), content_type='application/json')
 
 
-def edit_padre_viewapi(request, idfeligres, idpadre):
+def edit_padre_viewapi(request):
+	idpadre = request.POST.get('idpadre')
+	idfeligres = request.POST.get('idfeligres')
+	
 	try:
-		padre = PerfilUsuario.objects.get(idpadre=pk)
-		feligres = PerfilUsuario.objects.get(idfeligres=pk)
-		feligres.padre(padre)
+		padre = PerfilUsuario.objects.get(id=idpadre)
+		feligres = PerfilUsuario.objects.get(pk=idfeligres)
+		feligres.padre = padre.user
+		feligres.save()
 		ctx = {'bandera': True}
+		return HttpResponseRedirect('/usuario')
 	except Exception:
 		ctx = {'bandera': False}
 	return HttpResponse(json.dumps(ctx), content_type='applcation/json')

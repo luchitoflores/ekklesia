@@ -2,6 +2,7 @@ $(document).on('ready', inicio);
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
 
 function inicio(){
+	asignar_padre();
 	usuarioCreate();
 	tablas_estilo_bootstrap();
 	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion');
@@ -147,19 +148,20 @@ function devolver_campos_de_lista(map){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
 		e.preventDefault();
-		$("#id_buscar_padre").modal('hide');  //$(this).parents("div:first").html(...);
-		console.log('prueba: ' + $(this).parents('tr').attr('id'));
+		$("#id_buscar_padre").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
-		console.log(map[id]);
 		var objeto = map[id];
 
+
 		console.log(objeto.nombres);
+
+		$('#id_form_padre #id_padre').attr('value', objeto.id);
+
 		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
 		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
 		$('#id_form_padre #id_dni').attr('value', objeto.dni);
 		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
 		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-		// $('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
 		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
 
 	});
@@ -186,12 +188,29 @@ function devolver_campos_bautismo(map){
 	});
 }
 
-function asignar_padre(identificadorform){
-	$(identificadorform).on('click', function(e){
+function asignar_padre(){
+	$('#id_form_padre').on('submit', function(e){
 		e.preventDefault();
+
 		//obtener id del feligres
 		//obtener id del padre
 
+
+
+		var idfeligres = $('#id_perfil').val();
+		var idpadre = $('#id_padre').val();
+		console.log('padre' + idpadre);
+		console.log('feligres'+idfeligres);
+		var ctx = {'idfeligres': idfeligres, 'idpadre': idpadre};
+		var url = '/api/asignarpadre/';
+		$.post(url , ctx, function(data){
+			if(data.bandera==true){
+				console.log(data.bandera);
+				$(location).attr('href','/usuario/');
+			}else{
+				console.log(data.bandera);
+			}
+		});
 
 	});
 }

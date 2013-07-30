@@ -158,9 +158,9 @@ def bautismo_create_view(request):
 			perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
 			user.save()
-			perfil.user=usuario
+			perfil.user=user.id
 			perfil.save()
-			bautismo.bautizado=perfil
+			bautismo.bautizado=perfil.id
 			return HttpResponseRedirect('/bautismo')
 	else:
 		formUser=UsuarioForm()
@@ -172,11 +172,12 @@ def bautismo_create_view(request):
 
 
 
-class BautismoCreateView(CreateView):
-	model=Bautismo
-	template_name='bautismo/bautismo_form.html'
-	form_class=BautismoForm
-	success_url='/bautismo/'
+# class BautismoCreateView(CreateView):
+# 	model=Bautismo
+# 	template_name='bautismo/bautismo_form.html'
+# 	form_class=BautismoForm
+# 	success_url='/bautismo/'
+
 
 class BautismoUpdateView(UpdateView):
 	model=Bautismo

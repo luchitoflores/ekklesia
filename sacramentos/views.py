@@ -2,7 +2,7 @@
 import json
 
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404,HttpResponseRedirect
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
@@ -150,25 +150,25 @@ class MatrimonioListView(ListView):
 
 def bautismo_create_view(request):
 	if(request.method == 'POST' ):
-		formUser=UsuarioForm(request.POST)
+		#formUser=UsuarioForm(request.POST)
 		formPerfil=PerfilUsuarioForm(request.POST)
 		formBautismo=BautismoForm(request.POST)
-		if((formUser.is_valid() and formPerfil.is_valid()) and formBautismo.is_valid()):
-			user=formUser.save(commit=False)
+		if(formPerfil.is_valid() and formBautismo.is_valid()):
+			# user=formUser.save(commit=False)
 			perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
-			user.save()
-			perfil.user=user.id
+			# user.save()
+			# perfil.user=user.id
 			perfil.save()
-			bautismo.bautizado=perfil.id
+			bautismo.bautizado=perfil
+			bautismo.save()
 			return HttpResponseRedirect('/bautismo')
 	else:
-		formUser=UsuarioForm()
+		# formUser=UsuarioForm()
 		formPerfil=PerfilUsuarioForm()
 		formBautismo=BautismoForm()
-	ctx={'formUser':formUser,'formPerfil':formPerfil,'formBautismo':formBautismo}
+	ctx={'formPerfil':formPerfil,'formBautismo':formBautismo}
 	return render (request,'bautismo/bautismo_form.html',ctx)
-
 
 
 

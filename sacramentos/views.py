@@ -59,7 +59,7 @@ def edit_usuario_view(request,pk):
 		usuario_form = UsuarioForm(instance=user)
 		perfil_form = PerfilUsuarioForm(instance=perfil)
 									
-	ctx = {'usuario_form': usuario_form,'perfil_form':perfil_form}
+	ctx = {'usuario_form': usuario_form,'perfil_form':perfil_form, 'perfil':perfil}
 	return render(request, 'usuario/usuario_form.html', ctx)
 
 def padre_create_view(request):

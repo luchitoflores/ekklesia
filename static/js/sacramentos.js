@@ -120,22 +120,15 @@ function prueba(){
 		var nombres = $('#id_query_nombres').val();
 		var apellidos = $('#id_query_apellidos').val();
 		var cedula = $('#id_query_cedula').val();
-		console.log(nombres);
-		console.log(apellidos);
-		console.log(cedula);
 		mostrar_html("#id_table_busqueda_usuarios");
-
 		var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
 		var columnas = [
 		{ "mData" : "link", "bSortable": true},
 		{ "mData" : "apellidos", "bSortable": true},
 		{ "mData" : "dni", "bSortable": true }];
 		$.get(url, ctx, function(data){
-			console.log('respuesta del servidor: '+ data);
 			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
 			var map = almacenar_busqueda_en_map(data.perfiles);
-			console.log('Mapa: ' +  map);
-			console.log(map);
 			devolver_campos_de_lista(map);
 		});
 	});
@@ -151,21 +144,32 @@ function almacenar_busqueda_en_map(lista){
 
 function devolver_campos_de_lista(map){
 	$('a#id_click').on('click', function(e){
+		// alert('estoy aqui');
 		e.preventDefault();
 		$("#id_buscar_padre").modal('hide');  //$(this).parents("div:first").html(...);
 		console.log('prueba: ' + $(this).parents('tr').attr('id'));
 		var id =  $(this).parents('tr').attr('id');
 		console.log(map[id]);
 		var objeto = map[id];
-		console.log(objeto.nombres+' '+objeto.apellidos);
-		$('#id_form_bautizado #id_first_name').attr('value', objeto.nombres);
-		$('#id_form_bautizado #id_last_name').attr('value', objeto.apellidos);
-		$('#id_form_bautizado #id_dni').attr('value', objeto.dni);
-		$('#id_form_bautizado #id_profesion').attr('value', objeto.profesion);
-		$('#id_form_bautizado #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-		$('#id_form_bautizado #id_estado_civil').attr('value', objeto.estado_civil);
-		$('#id_form_bautizado #id_fecha_nacimiento').attr('value', objeto.fecha_nacimiento);
-		$('#id_form_bautizado #id_sexo').attr('value', objeto.sexo);
+
+		console.log(objeto.nombres);
+		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
+		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
+		$('#id_form_padre #id_dni').attr('value', objeto.dni);
+		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
+		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
+		// $('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
+		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
+	});
+}
+
+function asignar_padre(identificadorform){
+	$(identificadorform).on('click', function(e){
+		e.preventDefault();
+		//obtener id del feligres
+		//obtener id del padre
+
+
 	});
 }
 

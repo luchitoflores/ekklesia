@@ -63,7 +63,7 @@ def buscar_usuarios(request):
 		try:
 			perfil = PerfilUsuario.objects.get(dni=cedula)
 			bandera = True
-			lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href="">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, "DT_RowId":perfil.id})
+			lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href=".">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, "DT_RowId":perfil.id})
 			ctx={'perfiles':lista, 'bandera': bandera}
 			
 		except Exception:
@@ -77,7 +77,7 @@ def buscar_usuarios(request):
 			if len(perfiles) > 0:
 				perfiles.distinct().order_by('user__last_name', 'user__first_name' )
 				for perfil in perfiles:
-					lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href="">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, "DT_RowId":perfil.id})
+					lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href=".">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, "DT_RowId":perfil.id})
 				ctx={'perfiles':lista, 'bandera': bandera}
 			else:
 				bandera = False
@@ -91,19 +91,19 @@ def buscar_usuarios(request):
 		ctx={'perfiles':lista, 'bandera': bandera}
 	return HttpResponse(json.dumps(ctx), content_type='application/json')
 
-def buscar_usuario_cedula(request):
-	q = request.GET.get('q', '')
-	if q:
-		try:
-			perfil = PerfilUser.objects.get(dni=q)
-			lista = list()
-			lista.append({'id': perfil.id , 'dni': perfil.dni, 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name })
-			ctx={'perfil':lista}
-			
-		except Exception:
-			ctx={'perfil': False}
-	else:
-		ctx={'perfil':'Debe ingresar un criterio de busqueda'}
 
-	return HttpResponse(json.dumps(ctx), content_type='application/json')
+def edit_padre_viewapi(request, idfeligres, idpadre):
+	try:
+		padre = PerfilUsuario.objects.get(idpadre=pk)
+		feligres = PerfilUsuario.objects.get(idfeligres=pk)
+		feligres.padre(padre)
+		ctx = {'bandera': True}
+	except Exception:
+		ctx = {'bandera': False}
+	return HttpResponse(json.dumps(ctx), content_type='applcation/json')
+
+		
+
+
+
 

@@ -79,7 +79,6 @@ def buscar_usuarios(request):
 	lista = list()
 	bandera = False
 	if q:
-
 		query = reduce(operator.__or__, [Q(user__first_name__icontains=q) | Q(user__last_name__icontains=q) | Q(dni=q) for q in q])
 		perfiles = PerfilUsuario.objects.filter(query).distinct()
 			

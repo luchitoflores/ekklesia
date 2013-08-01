@@ -12,6 +12,7 @@ function inicio(){
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
+	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
 	prueba();
 }
 
@@ -132,6 +133,7 @@ function prueba(){
 			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
 			var map = almacenar_busqueda_en_map(data.perfiles);
 			devolver_campos_de_lista(map);
+			devolver_campos_bautismo(map)
 		});
 	});
 }
@@ -151,19 +153,52 @@ function devolver_campos_de_lista(map){
 		$("#id_buscar_padre").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
 		var objeto = map[id];
+
+
+		console.log(objeto.nombres);
+
 		$('#id_form_padre #id_padre').attr('value', objeto.id);
+
 		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
 		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
 		$('#id_form_padre #id_dni').attr('value', objeto.dni);
 		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
 		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
 		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
+
+	});
+}
+function devolver_campos_bautismo(map){
+	$('a#id_click').on('click', function(e){
+		// alert('estoy aqui');
+		e.preventDefault();
+		$("#id_buscar_padre").modal('hide');  //$(this).parents("div:first").html(...);
+		console.log('prueba: ' + $(this).parents('tr').attr('id'));
+		var id =  $(this).parents('tr').attr('id');
+		console.log(map[id]);
+		var objeto = map[id];
+
+		console.log(objeto.nombres +' '+objeto.apellidos);
+		$('#id_form_bautizado #id_first_name').attr('value', objeto.nombres);
+		$('#id_form_bautizado #id_last_name').attr('value', objeto.apellidos);
+		$('#id_form_bautizado #id_dni').attr('value', objeto.dni);
+		$('#id_form_bautizado #id_profesion').attr('value', objeto.profesion);
+		$('#id_form_bautizado #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
+		// $('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
+		$('#id_form_bautizado #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
+		$('#id_form_bautizado #id_sexo option[value="'+objeto.sexo+'"]').prop('selected', true);
 	});
 }
 
 function asignar_padre(){
 	$('#id_form_padre').on('submit', function(e){
 		e.preventDefault();
+
+		//obtener id del feligres
+		//obtener id del padre
+
+
+
 		var idfeligres = $('#id_perfil').val();
 		var idpadre = $('#id_padre').val();
 		console.log('padre' + idpadre);
@@ -178,6 +213,7 @@ function asignar_padre(){
 				console.log(data.bandera);
 			}
 		});
+
 	});
 }
 

@@ -5,7 +5,7 @@ from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
 	LibroCreateView, LibroUpdateView ,LibroListView,
 	MatrimonioCreateView,MatrimonioListView,MatrimonioUpdateView,
-	BautismoCreateView,BautismoUpdateView,BautismoListView, bautismo_create_view,
+	BautismoUpdateView,BautismoListView, bautismo_create_view,
 	EucaristiaCreateView,EucaristiaUpdateView,EucaristiaListView,
 	ConfirmacionCreateView,ConfirmacionUpdateView,ConfirmacionListView,
 

@@ -27,11 +27,11 @@ class PerfilUsuario(TimeStampedModel):
 		)
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Usuario', null=True, blank=True)
-	dni = models.CharField(max_length=10)
+	dni = models.CharField(max_length=10, null=True, blank=True)
 	padre = models.ForeignKey(User, related_name='Padre', null=True, blank=True)
 	madre = models.ForeignKey(User, related_name='Madre', null=True, blank=True)
-	fecha_nacimiento = models.DateField()
-	lugar_nacimiento = models.CharField(max_length=100)
+	fecha_nacimiento = models.DateField(null=True, blank=True)
+	lugar_nacimiento = models.CharField(max_length=100, null=True, blank=True)
 	sexo = models.CharField(max_length=10, choices=SEXO_CHOICES)
 	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True)
 	profesion = models.CharField(max_length=50, null=True, blank=True)
@@ -85,11 +85,18 @@ class Bautismo(Sacramento):
 class Eucaristia(Sacramento):
 	feligres=models.ForeignKey(PerfilUsuario, related_name='Eucaristia',null=True,blank=True)
 	
-	pass
+	def __unicode__(self):
+		return '%s %s' %(self.feligres.user.first_name,self.feligres.user.last_name)
+
+	
 
 class Confirmacion(Sacramento):
 	confirmado=models.ForeignKey(PerfilUsuario, related_name='Confirmado',null=True,blank=True)
 	obispo = models.CharField(max_length=200)
+
+	def __unicode__(self):
+		return '%s %s' %(self.confirmado.user.first_name,self.confirmado.user.last_name)
+
 
 class Matrimonio(Sacramento):
 	novio=models.OneToOneField(PerfilUsuario, related_name='Novio',null=True,blank=True)
@@ -103,7 +110,9 @@ class NotaMarginal(TimeStampedModel):
 	fecha = models.DateField()
 	descripcion = models.TextField(max_length=300) 
 	matrimonio = models.ForeignKey('Matrimonio')
-
+	
+	def __unicode__(self):
+		return self.descripcion
 
 
 class Libro(TimeStampedModel):
@@ -132,11 +141,16 @@ class Intenciones(TimeStampedModel):
 	oferente = models.CharField(max_length=200)
 	precio = models.PositiveIntegerField()
 
+	def __unicode__(self):
+		return self.intencion
 
 
 class Parroquia(TimeStampedModel):
 	nombre=models.CharField(max_length=100)
 	direccion=models.ForeignKey('Direccion')
+
+	def __unicode__(self):
+		return self.nombre
 
 class Direccion(TimeStampedModel):
 	nombre=models.CharField(max_length=100)
@@ -145,3 +159,6 @@ class Direccion(TimeStampedModel):
 	ciudad=models.CharField(max_length=100)
 	telefono=models.CharField(max_length=100)
 	celular=models.CharField(max_length=100)
+
+	def __unicode__(self):
+		return self.ciudad

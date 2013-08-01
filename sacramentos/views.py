@@ -2,7 +2,8 @@
 import json
 
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse, Http404,HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+
 from django.views.generic import ListView
 from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
@@ -32,6 +33,7 @@ def usuarioCreateView(request):
 				perfil.user = usuario
 				perfil.save()
 				ctx = {'valido': valido}
+				
 
 			else:
 				errores_usuario = usuario_form.errors

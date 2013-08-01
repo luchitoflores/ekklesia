@@ -21,6 +21,7 @@ def usuarioCreateAjax(request):
 
 # Método para crear el padre o madre de un feligres
 def padre_create_ajax(request):
+	sexo = request.POST.get('sexo')
 	if request.method == 'POST':
 		respuesta = False
 		usuario_form = UsuarioForm(request.POST)
@@ -31,6 +32,8 @@ def padre_create_ajax(request):
 			usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
 			usuario.save()
 			perfil.user = usuario
+			if sexo:
+				perfil.sexo = sexo
 			perfil.save()
 			respuesta = True
 			ctx = {'respuesta': respuesta, 'id': perfil.id, 'full_name': perfil.user.get_full_name()}

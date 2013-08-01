@@ -2,8 +2,8 @@ $(document).on('ready', inicio);
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
 
 function inicio(){
-	crear_padre($('#id_form_crear_padre'), '#id_padre', '#id_crear_padre', '#id_crear_padre');
-	crear_padre($('#id_form_crear_madre'), '#id_madre', '#id_crear_padre', '#id_crear_madre');
+	crear_padre($('#id_form_crear_padre'), '#id_padre','#id_crear_padre', 'Masculino');
+	crear_padre($('#id_form_crear_madre'), '#id_madre','#id_crear_madre', 'Femenino');
 	autocomplete('#id_autocomplete');
 	asignar_padre();
 	usuarioCreate();
@@ -271,11 +271,11 @@ function autocomplete(identificador){
 	});
 }
 
-function crear_padre(identificador, idpadre, idmodal){
+function crear_padre(identificador, idpadre, idmodal, sexo){
 	$(identificador).on('submit', function(e){
 		e.preventDefault();
 		var url = '/api/padre/add/';
-		var json = $(this).serialize();
+		var json = $(this).serialize()+'&sexo='+sexo;
 		$.post(url, json , function(data){
 			if(!data.respuesta){
 				console.log(data.errores_usuario);
@@ -283,9 +283,8 @@ function crear_padre(identificador, idpadre, idmodal){
 			}else{
 				$(idpadre).html('<option value="'+ data.id+'">'+data.full_name+'</option>');
 				$(idmodal).modal('hide');
-				console.log(data.id);
 			}
-			
+
 		});
 	});
 }

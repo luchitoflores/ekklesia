@@ -2,6 +2,9 @@ $(document).on('ready', inicio);
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
 
 function inicio(){
+	crear_padre($('#id_form_crear_padre'), '#id_padre', '#id_crear_padre', '#id_crear_padre');
+	crear_padre($('#id_form_crear_madre'), '#id_madre', '#id_crear_padre', '#id_crear_madre');
+	autocomplete('#id_autocomplete');
 	asignar_padre();
 	usuarioCreate();
 	tablas_estilo_bootstrap();
@@ -65,7 +68,6 @@ function radio_button(){
 }
 
 function campos_con_fechas(){
-	$('#id_fecha_nacimiento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_fecha_sacramento').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_form_libro #id_fecha_apertura').attr('data-date-format', 'dd/mm/yyyy').datepicker();
 	$('#id_fecha_cierre').attr('data-date-format', 'dd/mm/yyyy').datepicker();
@@ -179,5 +181,75 @@ function asignar_padre(){
 	});
 }
 
+// function autocomplete(identificador){
+// 	var labels = [];
+// 	var datos = {};
+// 	$(identificador).typeahead({
+// 		source: function(query, process){
+// 			labels = [];
+// 			datos = {};
+// 			var ctx = {'q': query};
+// 			var url = '/api/usuario/';
+// 			$.get(url, ctx, function(data){
+// 				$.each(data.perfiles, function(index, element){
+
+// 					labels.push(element.nombres);
+// 					console.log(element.nombres);
+// 					datos[element.nombres] = element;
+// 					console.log(datos);
+// 				});
+// 				process(labels);
+// 			});
+
+// 		},
+// 		minLength:3,
+// 		highlighter: function(item){
+// 			var p = datos[item];
+// 			var itm = ''
+// 			+ "<div class='typeahead_wrapper'>"
+// 			+ "<div class='typeahead_labels'>"
+// 			+ "<div class='typeahead_primary'>" + p.nombres + ' '+ p.apellidos +"</div>"
+// 			+ "<div class='typeahead_secondary'>" + p.dni + '/' + p.lugar_nacimiento + "</div>"
+// 			+ "</div>"
+// 			+ "</div>";
+// 			return itm;
+// 		}
+// 	});
+// }
 
 
+
+function autocomplete(identificador){
+	$(identificador).select2({
+		placeholder: 'Mensaje' ,
+		minimumInputLength: 1,
+		query: function (query) {
+			var data = {results: []}, i, j, s;
+			for (i = 1; i < 5; i++) {
+				s = "";
+				for (j = 0; j < i; j++) {s = s + query.term;}
+					data.results.push({id: query.term + i, text: s});
+			}
+			query.callback(data);
+		}
+	});
+}
+
+function crear_padre(identificador, idpadre, idmodal){
+	$(identificador).on('submit', function(e){
+		e.preventDefault();
+		var url = '/api/padre/add/';
+		var json = $(this).serialize();
+		$.post(url, json , function(data){
+			if(!data.respuesta){
+				console.log(data.errores_usuario);
+				console.log(data.errores_perfil);
+			}else{
+				$(idpadre).html('<option value="'+ data.id+'">'+data.full_name+'</option>');
+				$(idmodal).modal('hide');
+				console.log(data.id);
+			}
+			
+		});
+	});
+}

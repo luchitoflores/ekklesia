@@ -12,8 +12,8 @@ def padre(context):
 
 @register.inclusion_tag('usuario/feligres.html', takes_context=True)
 def feligres(context):
-	perfil_form = PerfilUsuarioForm
-	usuario_form = UsuarioForm
-	ctx = {'perfil_form':perfil_form,'usuario_form':usuario_form}
+	perfil_form = PadreForm()
+	usuario_form = UsuarioForm()
+	ctx = {'padre_form':perfil_form,'usuariopadre_form':usuario_form}
 	return ctx
 

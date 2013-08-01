@@ -10,6 +10,7 @@
 	<link rel="stylesheet" href="/static/css/bootstrap-responsive.min.css">
 	<link rel="stylesheet" href="/static/css/datepicker.css">
 	<link rel="stylesheet" href="/static/css/jquery-ui.min.css">
+	<link rel="stylesheet" href="/static/css/select2.css">
 	<link rel="stylesheet" href="/static/css/mycss.css">
 	<link rel="stylesheet" href="/static/css/multi-select.css">
 	<link rel="stylesheet" href="/static/css/modelo-tablas.css">
@@ -24,6 +25,7 @@
 	<script src='/static/js/jquery.multi-select.js'></script>
 	<script src='/static/js/prefixfree.min.js'></script>
 	<script src='/static/js/spin.min.js'></script>
+	<script src='/static/js/select2.min.js'></script>
 	<script src='/static/js/sacramentos.js'></script>
 
 	
@@ -50,7 +52,7 @@
 				{%block pretitle%}{%endblock%}
 
 				<div id='id_title'>
-					{% block content_title %}{% if title %}<h1>{{ title }}</h1>{%else%}<h1>No existe titulo</h1>{% endif %}  {% endblock %}
+					<h1>{% block content_title %}{% endblock %}</h1>
 				</div>
 
 

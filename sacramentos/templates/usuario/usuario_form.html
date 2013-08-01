@@ -3,19 +3,9 @@
 {%load tags%}
 
 {%block title%}Agregar Feligreses{%endblock%}
+{%block content_title%}{{block.super}}Agregar Feligreses{%endblock%}
 
 {%block content%}
-
-<div class='container'>
-	<div class="row">
-		<div class="offset4 span1">
-			<a href="#" class='btn btn-primary'>
-				<i class="icon-pencil icon-white"></i>
-				<span><strong>Lista</strong></span>
-			</a>
-		</div>
-	</div>
-</div>
 
 <!-- Div para manejar mensajes de error -->
 <div id="id_mensaje">
@@ -26,86 +16,123 @@
 <!-- Pestañas para datos personales, padre y madre -->
 <ul class='nav nav-tabs'>
 	<li class='active'><a href="#id_datos_personales" data-toggle='tab'>Datos Personales</a></li>
-	<li><a href="#id_datos_padre" data-toggle='tab'>Datos del Padre</a></li>
-	<li><a href="#id_datos_madre" data-toggle='tab'>Datos de la Madre</a></li>
 </ul>
 
 <div class="tab-content">
 	<div id='id_datos_personales' class='tab-pane active'>
-		<form id='id_form_usuario_create' class='form-horizontal' method='POST'>
-			<input id='id_perfil' type="hidden" value="{{perfil.id}}">
-			{%csrf_token%}
+		<form id='id_form_usuario_create' class='form-horizontal'>
+			<!--Input para typeahead de bootstrap
+			<input type='hidden' id='id_autocomplete'>
+			Input para el plugin select2
+			<input type='hidden' id='id_autocomplete'> -->
 			<div class="container">
 				<div class="row">
-					<div class='span6'>
-						<div class='control-group'>
-							<label for="id_dni" class='control-label'>{{perfil_form.dni.label}}</label>
-							<div class='controls'>
+					<div class="span12">
+						<div class="control-group">
+							<label class="control-label">{{perfil_form.dni.label}}</label>
+							<div class="controls">
 								{{perfil_form.dni}}
 							</div>
+							<div class="controls">{{perfil_form.dni.help_text}}</div>
 						</div>
-						<div class='control-group'>
-							<label for="id_first_name" class='control-label'>{{usuario_form.first_name.label}}</label>
-							<div class='controls'>
-								{{usuario_form.first_name}}
-							</div>
-							<div id="id_errors_first_name" class='controls invalid'></div>
-						</div>
-						
-						<div class='control-group'>
-							<label for="id_last_name" class='control-label'>{{usuario_form.last_name.label}}</label>
-							<div class='controls'>
-								{{usuario_form.last_name}}
-							</div>
 
+						{% for f in usuario_form%}
+
+						<div class="control-group">
+							<label class="control-label">{{f.label}}</label>
+							<div class="controls">{{f}}</div>
+							<div class="controls">{{f.help_text}}</div>
+						</div>
+						{%endfor%}
+						{% for f in perfil_form%}
+						{%if f.label != 'Dni' and f.label != 'Sexo' and f.label != 'Padre' and f.label != 'Madre'%}
+						<div class="control-group">
+							<label class="control-label">{{f.label}}</label>
+							<div class="controls">{{f}}</div>
+							<div class="controls">{{f.help_text}}</div>
+						</div>
+						{%endif%}
+
+						{%if f.label == perfil_form.sexo.label%}
+						<label for="" class='control-label'>{{f.label}}</label>
+						<div class="controls nav">
+							{% for radio in perfil_form.sexo %}
+							{{ radio }}
+							{% endfor %}
+						</div>
+						{%endif%}
+						{%if f.label == perfil_form.padre.label or f.label == 'Madre' %}
+						<div class="control-group">
+							<label class="control-label">{{f.label}}</label>
+							<div class="controls">
+								{{f}}
+								<a href="#id_crear_{{f.label|lower}}" class='btn btn-primary' data-toggle='modal'>+</a>
+							</div>
+							<div class="controls">{{f.help_text}}</div>
+						</div>
+						{%endif%}
+
+						{%endfor%}
+
+						<div class="form-actions">
+							<input type="submit" value='Enviar' class="btn btn-primary">
+							<a href="{%url 'usuario_list'%}" class='btn btn-primary'>Cancelar</a>
 						</div>
 					</div>
-					<div class='span6'>
-						<div class='control-group'>
-							<label for="id_fecha_nacimiento" class='control-label'>{{perfil_form.fecha_nacimiento.label}}</label>
-							<div class='controls'>
-								{{perfil_form.fecha_nacimiento}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_lugar_nacimiento" class='control-label'>{{perfil_form.lugar_nacimiento.label}}</label>
-							<div class='controls'>
-								{{perfil_form.lugar_nacimiento}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_sexo" class='control-label'>{{perfil_form.sexo.label}}</label>
-							<div class='controls'>
-								{{perfil_form.sexo}}
-							</div>
-						</div>
-					</div>
-				</div>	
-			</div>
-
-			<div class="form-actions">
-				<input type="submit" value='Enviar' class="btn btn-primary">
-				<a href="{%url 'usuario_list'%}" class='btn btn-primary'>Cancelar</a>
-			</div>
-		</form>
+				</div>
+			</form>
+		</div>
 	</div>
 
-	<div id="id_datos_padre" class="tab-pane">
-		<form id='id_form_padre' class='form-horizontal'>
-			{%padre%}
-		</form>
-	</div>
-
-	<div id="id_datos_madre" class="tab-pane">
-		<form id='id_form_madre' class='form-horizontal'>
-			{%padre%}
-		</form>
-	</div>
-
-	
 </div>
 
 <!-- Inclusion de Modal de Busqueda-->
 {%include 'modal.html'%}
+
+<!-- Modal para crear padre-->
+<div id="id_crear_padre" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<h3>Búsqueda de Feligreses</h3>
+	</div>
+	<div class="modal-body">
+		<form id='id_form_crear_padre' class='form-horizontal' method='POST'>
+			{%feligres%}
+			{% include 'usuario/feligres.html'%}
+			<div class="control-group">
+				<div class='controls'>
+					<input type="submit" value='Enviar' class='btn btn-primary'>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<div class="modal-footer">
+		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+<!-- Modal para crear madre-->
+<div id="id_crear_madre" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<h3>Búsqueda de Feligreses</h3>
+	</div>
+	<div class="modal-body">
+		<form id='id_form_crear_madre' class='form-horizontal' method='POST'>
+			{%feligres%}
+			{% include 'usuario/feligres.html'%}
+			<div class="control-group">
+				<div class='controls'>
+					<input type="submit" value='Enviar' class='btn btn-primary'>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<div class="modal-footer">
+		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
 
 {% endblock%}

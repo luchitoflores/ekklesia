@@ -4,6 +4,7 @@ import json
 from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse, Http404,HttpResponseRedirect
 from django.views.generic import ListView
+from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
 
@@ -147,27 +148,31 @@ class MatrimonioListView(ListView):
 
 # VISTAS PARA ADMIN DE BAUTISMO
 
-
 def bautismo_create_view(request):
+	#fel=PerfilUsuario.objects.get(id=id_fel)
 	if(request.method == 'POST' ):
 		#formUser=UsuarioForm(request.POST)
 		formPerfil=PerfilUsuarioForm(request.POST)
 		formBautismo=BautismoForm(request.POST)
-		if(formPerfil.is_valid() and formBautismo.is_valid()):
-			# user=formUser.save(commit=False)
+		if formBautismo.is_valid() and formPerfil.is_valid():
 			perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
-			# user.save()
-			# perfil.user=user.id
+			bautismo.tipo_sacramento=u'Bautismo'
 			perfil.save()
 			bautismo.bautizado=perfil
+			
 			bautismo.save()
 			return HttpResponseRedirect('/bautismo')
+		else:
+			messages.add_message(request, messages.WARNING, 'Uno o mas campos son incorrectos')
+
+
 	else:
 		# formUser=UsuarioForm()
 		formPerfil=PerfilUsuarioForm()
 		formBautismo=BautismoForm()
-	ctx={'formPerfil':formPerfil,'formBautismo':formBautismo}
+
+	ctx={'formPerfil': formPerfil,'formBautismo':formBautismo}
 	return render (request,'bautismo/bautismo_form.html',ctx)
 
 
@@ -179,11 +184,30 @@ def bautismo_create_view(request):
 # 	success_url='/bautismo/'
 
 
-class BautismoUpdateView(UpdateView):
-	model=Bautismo
-	template_name='bautismo/bautismo_form.html'
-	#form_class=BautismoForm
-	success_url='/bautismo/'
+def bautismo_update_view(request,pk):
+	bautismo= get_object_or_404(Bautismo, pk=pk)
+	perfil= bautismo.bautizado	
+	if request.method == 'POST':
+		usuario_form = PerfilUsuarioForm(request.POST,instance=perfil)
+		bautismo_form = BautismoForm(request.POST,instance=bautismo)
+		if usuario_form.is_valid() and bautismo_form.is_valid():
+			usuario_form.save()
+
+			bautismo_form.save()
+			return HttpResponseRedirect('/bautismo')
+
+	else:
+		usuario_form = UsuarioForm(instance=perfil)
+		bautismo_form = PerfilUsuarioForm(instance=bautismo)
+									
+	ctx = {'usuario_form': usuario_form,'bautismo_form':bautismo_form,'bautizado':bautismo}
+	return render(request, 'bautismo/bautismo_form.html', ctx)
+
+
+# class BautismoUpdateView(UpdateView):
+# 	model=Bautismo
+# 	template_name='bautismo/bautismo_form.html'
+# 	success_url= '/bautismo/'
 
 class BautismoListView(ListView):
 	model=Bautismo

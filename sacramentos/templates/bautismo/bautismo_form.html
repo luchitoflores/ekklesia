@@ -16,140 +16,115 @@
 <!-- Pestañas para datos del feligres, y del bautizo -->
 
 
-<ul class='nav nav-tabs'>
-	<li class='active'><a href="#id_datos_feligres" data-toggle='tab'>Datos del Feligres</a></li>
-	<li><a href="#id_datos_bautismo" data-toggle='tab'>Datos del Sacramento</a></li>
-
-</ul>
-
-<div class="tab-content">
-	<div id='id_datos_feligres' class='tab-pane active'>
-		<form id='id_form_bautizado' class='form-horizontal'>
-			{%feligres%}
-		</form>
-	</div>
-
-
-	<div id="id_datos_bautismo" class="tab-pane">
-		<form id='id_form_bautismo' action="." method='POST' class='form-horizontal'>
-			{% csrf_token%}
-			<div class='container'>
-				<div class='row'>
-					<div class='span6'>
-						<div class='control-group'>
-							<label for="id_pagina" class='control-label'>{{formBautismo.pagina.label}}</label>
-							<div class='controls'>
-								{{formBautismo.pagina}}
-							</div>
+	<form id='id_form_bautismo' action="." method='POST' class='form-horizontal'>
+		{% csrf_token%}
+		<div class='container'>
+			<div class='row'>
+				<div class='span6'>
+					<div class='control-group'>
+						<label for="id_pagina" class='control-label'>{{formBautismo.pagina.label}}</label>
+						<div class='controls'>
+							{{formBautismo.pagina}}
 						</div>
-						<div class='control-group'>
-							<label for="id_numero_acta" class='control-label'>{{formBautismo.numero_acta.label}}</label>
-							<div class='controls'>
-								{{formBautismo.numero_acta}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_tipo_sacramento" class='control-label'>{{formBautismo.tipo_sacramento.label}}</label>
-							<div class='controls'>
-								{{formBautismo.tipo_sacramento}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{formBautismo.fecha_sacramento.label}}</label>
-							<div class='controls'>
-								{{formBautismo.fecha_sacramento}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_lugar_sacramento" class='control-label'>{{formBautismo.lugar_sacramento.label}}</label>
-							<div class='controls'>
-								{{formBautismo.lugar_sacramento}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_padrino" class='control-label'>{{formBautismo.padrino.label}}</label>
-							<div class='controls'>
-								{{formBautismo.padrino}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_madrina" class='control-label'>{{formBautismo.madrina.label}}</label>
-							<div class='controls'>
-								{{formBautismo.madrina}}
-							</div>
-						</div>
-						
-						
 					</div>
-					<div class='span6'>
-						<div class='control-group'>
-							<label for="id_abuelo_paterno" class='control-label'>{{formBautismo.abuelo_paterno.label}}</label>
-							<div class='controls'>
-								{{formBautismo.abuelo_paterno}}
-							</div>
+					<div class='control-group'>
+						<label for="id_numero_acta" class='control-label'>{{formBautismo.numero_acta.label}}</label>
+						<div class='controls'>
+							{{formBautismo.numero_acta}}
 						</div>
-						<div class='control-group'>
-							<label for="id_abuela_paterna" class='control-label'>{{formBautismo.abuela_paterna.label}}</label>
-							<div class='controls'>
-								{{formBautismo.abuela_paterna}}
-							</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_feligres" class='control-label'>{{formBautismo.bautizado.label}}</label>
+						<div class='controls'>
+							{{formBautismo.bautizado}}
 						</div>
-						<div class='control-group'>
-							<label for="id_abuelo_materno" class='control-label'>{{formBautismo.abuelo_materno.label}}</label>
-							<div class='controls'>
-								{{formBautismo.abuelo_materno}}
-							</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_fecha_sacramento" class='control-label'>{{formBautismo.fecha_sacramento.label}}</label>
+						<div class='controls'>
+							{{formBautismo.fecha_sacramento}}
 						</div>
-						<div class='control-group'>
-							<label for="id_abuela_materna" class='control-label'>{{formBautismo.abuela_materna.label}}</label>
-							<div class='controls'>
-								{{formBautismo.abuela_materna}}
-							</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_lugar_sacramento" class='control-label'>{{formBautismo.lugar_sacramento.label}}</label>
+						<div class='controls'>
+							{{formBautismo.lugar_sacramento}}
 						</div>
-						<div class='control-group'>
-							<label for="id_vecinos_paternos" class='control-label'>{{formBautismo.vecinos_paternos.label}}</label>
-							<div class='controls'>
-								{{formBautismo.vecinos_paternos}}
-							</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_padrino" class='control-label'>{{formBautismo.padrino.label}}</label>
+						<div class='controls'>
+							{{formBautismo.padrino}}
 						</div>
-						<div class='control-group'>
-							<label for="id_vecinos_maternos" class='control-label'>{{formBautismo.vecinos_maternos.label}}</label>
-							<div class='controls'>
-								{{formBautismo.vecinos_maternos}}
-							</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_madrina" class='control-label'>{{formBautismo.madrina.label}}</label>
+						<div class='controls'>
+							{{formBautismo.madrina}}
 						</div>
-						<div class='control-group'>
-							<label for="id_iglesia" class='control-label'>{{formBautismo.iglesia.label}}</label>
-							<div class='controls'>
-								{{formBautismo.iglesia}}
-							</div>
+					</div>
+
+
+				</div>
+				<div class='span6'>
+					<div class='control-group'>
+						<label for="id_abuelo_paterno" class='control-label'>{{formBautismo.abuelo_paterno.label}}</label>
+						<div class='controls'>
+							{{formBautismo.abuelo_paterno}}
 						</div>
-				
-				
+					</div>
+					<div class='control-group'>
+						<label for="id_abuela_paterna" class='control-label'>{{formBautismo.abuela_paterna.label}}</label>
+						<div class='controls'>
+							{{formBautismo.abuela_paterna}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_abuelo_materno" class='control-label'>{{formBautismo.abuelo_materno.label}}</label>
+						<div class='controls'>
+							{{formBautismo.abuelo_materno}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_abuela_materna" class='control-label'>{{formBautismo.abuela_materna.label}}</label>
+						<div class='controls'>
+							{{formBautismo.abuela_materna}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_vecinos_paternos" class='control-label'>{{formBautismo.vecinos_paternos.label}}</label>
+						<div class='controls'>
+							{{formBautismo.vecinos_paternos}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_vecinos_maternos" class='control-label'>{{formBautismo.vecinos_maternos.label}}</label>
+						<div class='controls'>
+							{{formBautismo.vecinos_maternos}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_iglesia" class='control-label'>{{formBautismo.iglesia.label}}</label>
+						<div class='controls'>
+							{{formBautismo.iglesia}}
+						</div>
+					</div>
+
+
 				</div>
 				
-			
-	
+
+
 			</div>
 		</div>
 		
-	
-	<div class="form-actions">
-		<input type="submit" value="Enviar" class='btn btn-primary'/>
-		<a href="{%url 'bautismo_list'%}" class='btn btn-primary'>Cancelar</a>
-	</div>
 
-</form>
-</div>
+		<div class="form-actions">
+			<input type="submit" value="Enviar" class='btn btn-primary'/>
+			<a href="{%url 'bautismo_list'%}" class='btn btn-primary'>Cancelar</a>
+		</div>
 
-	
-
-	
-
-
-
-<!-- Modal para indicar que un usuario ha sid creado-->
-{%include 'modal.html'%}
+	</form>
 
 
 {% endblock%}

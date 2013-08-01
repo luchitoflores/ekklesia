@@ -22,6 +22,8 @@
 			<th>Fecha Nacimiento</th>
 			<th>Papa</th>
 			<th>Mama</th>
+			<th>Acciones</th>
+
 		</tr>
 		
 	</thead>
@@ -34,6 +36,8 @@
 			<td id='id_fecha_nacimiento'>{{o.fecha_nacimiento}}</td>
 			<td>{{o.padre.first_name}} {{o.padre.last_name }}</td>
 			<td>{{o.madre.first_name}} {{o.madre.last_name}}</td>
+			<td><a class='id_delete' href="/usuario/{{o.id}}/bautismo/add" role="button"  name='{{o.id_fel}}'>Bautismo</a>
+		</td>
 		</tr>
 		{% endfor %}
 	</tbody>

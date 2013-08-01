@@ -5,7 +5,7 @@ from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
 	LibroCreateView, LibroUpdateView ,LibroListView,
 	MatrimonioCreateView,MatrimonioListView,MatrimonioUpdateView,
-	BautismoUpdateView,BautismoListView, bautismo_create_view,
+	bautismo_update_view, BautismoListView, bautismo_create_view,
 	EucaristiaCreateView,EucaristiaUpdateView,EucaristiaListView,
 	ConfirmacionCreateView,ConfirmacionUpdateView,ConfirmacionListView,
 
@@ -38,9 +38,10 @@ urlpatterns = patterns('',
 
 
 	#urls de Bautismo
+	#url(r'^usuario/(?P<id_fel>\d+)/bautismo/add/$',bautismo_create_view, name='bautismo_create'),
 	url(r'^bautismo/$',BautismoListView.as_view(),name='bautismo_list'),
 	url(r'^bautismo/add/$',bautismo_create_view, name='bautismo_create'),
-	url(r'^bautismo/(?P<pk>\d+)/$',BautismoUpdateView.as_view(), name='bautismo_update'),
+	url(r'^bautismo/(?P<pk>\d+)/$',bautismo_update_view, name='bautismo_update'),
 
 
 	#urls de Eucaristia

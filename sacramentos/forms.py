@@ -42,7 +42,7 @@ class MatrimonioForm(ModelForm):
 class BautismoForm(ModelForm):
 	class Meta():
 		model=Bautismo
-		fields=('numero_acta','pagina','tipo_sacramento','fecha_sacramento','lugar_sacramento','padrino','madrina',
+		fields=('numero_acta','pagina','bautizado','tipo_sacramento','fecha_sacramento','lugar_sacramento','padrino','madrina',
 			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno','abuela_materna','vecinos_paternos','vecinos_maternos')
 
 class EucaristiaForm(ModelForm):

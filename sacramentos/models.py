@@ -81,6 +81,8 @@ class Bautismo(Sacramento):
 	def __unicode__(self):
 		return '%s %s' %(self.bautizado.user.first_name,self.bautizado.user.last_name)
 
+	
+
 
 class Eucaristia(Sacramento):
 	feligres=models.ForeignKey(PerfilUsuario, related_name='Eucaristia',null=True,blank=True)

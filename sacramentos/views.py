@@ -154,27 +154,27 @@ def bautismo_create_view(request):
 	#fel=PerfilUsuario.objects.get(id=id_fel)
 	if(request.method == 'POST' ):
 		#formUser=UsuarioForm(request.POST)
-		formPerfil=PerfilUsuarioForm(request.POST)
+		# formPerfil=PerfilUsuarioForm(request.POST)
 		formBautismo=BautismoForm(request.POST)
-		if formBautismo.is_valid() and formPerfil.is_valid():
-			perfil=formPerfil.save(commit=False)
+		if formBautismo.is_valid():
+			#perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
-			bautismo.tipo_sacramento=u'Bautismo'
-			perfil.save()
-			bautismo.bautizado=perfil
+			bautismo.tipo_sacramento=bautismo.get_tipo_bautismo('Bautismo')
+			#perfil.save()
+			#bautismo.bautizado=perfil
 			
 			bautismo.save()
 			return HttpResponseRedirect('/bautismo')
 		else:
-			messages.add_message(request, messages.WARNING, 'Uno o mas campos son incorrectos')
+			messages.add_message(request, messages.WARNING, {'Bautismo':formBautismo.errors})
 
 
 	else:
 		# formUser=UsuarioForm()
-		formPerfil=PerfilUsuarioForm()
+		#formPerfil=PerfilUsuarioForm()
 		formBautismo=BautismoForm()
 
-	ctx={'formPerfil': formPerfil,'formBautismo':formBautismo}
+	ctx={'formBautismo':formBautismo}
 	return render (request,'bautismo/bautismo_form.html',ctx)
 
 

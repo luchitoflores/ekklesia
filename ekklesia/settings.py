@@ -166,3 +166,6 @@ LOGGING = {
 # Se debe poner el nombre de la aplicacion donde esta el perfil 
 # mas la clase que administra el perfil
 AUTH_PROFILE_MODULE = 'sacramentos.PerfilUsuario'
+
+#Sirve para indicar a donde se debe redirigir cada vez que se logue
+LOGIN_REDIRECT_URL = '/home/'

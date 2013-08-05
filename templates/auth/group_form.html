@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{%block title%}{% if form.field.id %}Editar Grupos{% else %}Añadir Grupos{% endif %}{%endblock%}
+
+{%block extrascript%}
+<script>
+$(function(){
+	$('#id_permissions').multiSelect({
+		selectableHeader: "<div style='background:#006dcc; color:white'>Permisos disponibles</div>",
+		selectionHeader: "<div style='background:#006dcc; color:white'>Permisos elegidos</div>"
+	});
+	console.log('prueba de multiselect');
+	$('#id_select_all').click(function(){
+		$('#id_permissions').multiSelect('select_all');
+		return false;
+	});
+	$('#id_delete_all').click(function(){
+		$('#id_permissions').multiSelect('deselect_all');
+		return false;
+	});
+});
+</script>
+{%endblock%}
+
+{%block content%}
+
+<form action="." method="POST" class="form-horizontal">
+	{%csrf_token%}
+
+	
+	<div class="control-group">
+		{%for f in form%}
+		<label class="control-label">{{f.label}}</label>
+		<div class="controls">{{f}}</div></br>
+		<div class="controls">{{f.help_text}}</div>
+		<div class="controls errors">{{f.errors}}</div>
+		{%endfor%}
+	</div>
+	<a href='#' id='id_select_all'>Seleccionar Todos</a>
+	<a href='#' id='id_delete_all'>Eliminar Todos</a>
+	
+
+	<div class="form-actions">
+		<input type="submit" value="Guardar" class="btn btn-primary">
+		<a href="{%url 'group_list'%}" class='btn btn-primary'>Cancelar</a>
+	</div>
+</form>
+
+{%endblock%}

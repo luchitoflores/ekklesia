@@ -42,7 +42,7 @@ urlpatterns = patterns('',
 	#url(r'^usuario/(?P<id_fel>\d+)/bautismo/add/$',bautismo_create_view, name='bautismo_create'),
 	url(r'^bautismo/$',BautismoListView.as_view(),name='bautismo_list'),
 	url(r'^bautismo/add/$',bautismo_create_view, name='bautismo_create'),
-	url(r'^bautismo/(?P<pk>\d+)/$',bautismo_update_view, name='bautismo_update'),
+	url(r'^bautismo/(?P<pk>\d+)/$','sacramentos.views.bautismo_update_view', name='bautismo_update'),
 
 
 	#urls de Eucaristia

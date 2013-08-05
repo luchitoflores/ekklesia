@@ -11,7 +11,12 @@ Libro, Bautismo, Eucaristia, Confirmacion, Matrimonio, NotaMarginal,
 Intenciones,
 Parroquia, Direccion, 
 )
+def user_unicode(self):
+   	return  u'%s %s' % (self.first_name, self.last_name)
 
+User.__unicode__ = user_unicode
+admin.site.unregister(User)
+admin.site.register(User)
 admin.site.register(PerfilUsuario)
 admin.site.register(Libro)
 admin.site.register(Bautismo)

@@ -159,15 +159,13 @@ def bautismo_create_view(request):
 		if formBautismo.is_valid():
 			#perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
-			#perfil.save()
-			#bautismo.bautizado=perfil
-			
+			tipo_sacramento = 'Bautismo'
+			bautismo.tipo_sacramento = tipo_sacramento
+			# perfil.save()
 			bautismo.save()
 			return HttpResponseRedirect('/bautismo')
 		else:
 			messages.add_message(request, messages.WARNING, {'Bautismo':formBautismo.errors})
-
-
 	else:
 		# formUser=UsuarioForm()
 		#formPerfil=PerfilUsuarioForm()
@@ -184,25 +182,28 @@ def bautismo_create_view(request):
 # 	form_class=BautismoForm
 # 	success_url='/bautismo/'
 
-
 def bautismo_update_view(request,pk):
 	bautismo= get_object_or_404(Bautismo, pk=pk)
-	perfil= bautismo.bautizado	
+	# perfil= bautismo.bautizado	
 	if request.method == 'POST':
-		usuario_form = PerfilUsuarioForm(request.POST,instance=perfil)
 		bautismo_form = BautismoForm(request.POST,instance=bautismo)
-		if usuario_form.is_valid() and bautismo_form.is_valid():
-			usuario_form.save()
-
+		# perfil_form = PerfilUsuarioForm(request.POST,instance=perfil)
+		if bautismo_form.is_valid():
 			bautismo_form.save()
+			# perfil_form.save()
 			return HttpResponseRedirect('/bautismo')
+		else:
+			messages.add_message(request, messages.WARNING, {'Bautismo':bautismo_form.errors})
+
+
 
 	else:
-		usuario_form = UsuarioForm(instance=perfil)
-		bautismo_form = PerfilUsuarioForm(instance=bautismo)
+		bautismo_form = BautismoForm(instance=bautismo)
+		# perfil_form = PerfilUsuarioForm(instance=perfil)
 									
-	ctx = {'usuario_form': usuario_form,'bautismo_form':bautismo_form,'bautizado':bautismo}
+	ctx = {'formBautismo': bautismo_form}
 	return render(request, 'bautismo/bautismo_form.html', ctx)
+
 
 
 # class BautismoUpdateView(UpdateView):

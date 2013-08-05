@@ -46,7 +46,7 @@ class MatrimonioForm(ModelForm):
 		model=Matrimonio
 
 class BautismoForm(ModelForm):
-	bautizado=forms.CharField(widget=forms.TextInput())
+	# bautizado=forms.CharField(widget=forms.TextInput())
 	class Meta():
 		model=Bautismo
 		fields=('numero_acta','pagina','bautizado','fecha_sacramento','lugar_sacramento','padrino','madrina',

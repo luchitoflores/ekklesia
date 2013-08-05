@@ -159,7 +159,6 @@ def bautismo_create_view(request):
 		if formBautismo.is_valid():
 			#perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
-			bautismo.tipo_sacramento=bautismo.get_tipo_bautismo('Bautismo')
 			#perfil.save()
 			#bautismo.bautizado=perfil
 			

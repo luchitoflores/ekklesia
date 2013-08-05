@@ -43,6 +43,7 @@
 						<label for="id_feligres" class='control-label'>{{formBautismo.bautizado.label}}</label>
 						<div class='controls'>
 							{{formBautismo.bautizado}}
+							<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'>Buscar</a>
 						</div>
 					</div>
 					<div class='control-group'>
@@ -133,6 +134,7 @@
 	</form>
 </div>
 </div>
+{%include 'modal.html'%}
 
 
 {% endblock%}

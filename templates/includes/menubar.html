@@ -1,0 +1,53 @@
+<div class="navbar navbar-inverse nav">
+	<div class="navbar-inner" datato>
+		<div class="container">
+			{% if user.is_authenticated%}
+			<ul class="nav">
+				<li ><a  href="/home/"><i class="icon-home icon-white"></i> Inicio</a></li>
+				<li class="divider-vertical"></li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Personas<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Feligrés</a></li>
+						<li><a href="#">Sacerdote</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Libros <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="{%url 'libro_list'%}">Primera Comunion</a></li>
+						<li><a href="#">Confirmación</a></li>
+						<li><a href="#">Intenciones de Misa</a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Sacramentos <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="#">Bautismo</a></li>
+						<li><a href="#">Primera Comunión</a></li>
+						<li><a href="#">Corfirmación</a></li>
+						<li><a href="#">Matrimonio</a></li>
+					</ul>
+				</li>
+				<li><a href="#">Agenda</a></li>
+				<li><a href="#">Intenciones de Misa</a></li>
+			</ul>
+			{%endif%}
+			<div class='pull-right'>
+				<ul class="nav pull-right">
+					{% if user.is_authenticated%}
+
+					<li><a href="">Bienvenido/a, {{ user.first_name }} {{ user.last_name }}.</a></li>
+					<li><a href="{%url 'logout'%}">Cerrar Sesión</a></li>
+
+					{%else%}
+					<li><a href='/login/'>Iniciar Sesión</a></li>
+
+					{%endif%}
+				</ul>
+
+			</div>
+
+		</div>
+	</div>
+</div>

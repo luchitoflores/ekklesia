@@ -4,6 +4,8 @@
 
 {%block title%}Agregar Bautismos{%endblock%}
 
+{%block content_title%}{{block.super}}Agregar Bautismos{%endblock%}
+
 {%block content%}
 
 
@@ -11,11 +13,15 @@
 <div id="id_mensaje">
 	
 </div>
+<ul class='nav nav-tabs'>
+	<li class='active'><a href="#id_datos_personales" data-toggle='tab'>Datos Personales</a></li>
+</ul>
 
 
 <!-- Pestañas para datos del feligres, y del bautizo -->
 
-
+<div class="tab-content">
+	<div id='id_datos_personales' class='tab-pane active'>
 	<form id='id_form_bautismo' action="." method='POST' class='form-horizontal'>
 		{% csrf_token%}
 		<div class='container'>
@@ -37,6 +43,7 @@
 						<label for="id_feligres" class='control-label'>{{formBautismo.bautizado.label}}</label>
 						<div class='controls'>
 							{{formBautismo.bautizado}}
+							<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'>Buscar</a>
 						</div>
 					</div>
 					<div class='control-group'>
@@ -125,6 +132,9 @@
 		</div>
 
 	</form>
+</div>
+</div>
+{%include 'modal.html'%}
 
 
 {% endblock%}

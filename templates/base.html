@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="/static/css/mycss.css">
 	<link rel="stylesheet" href="/static/css/multi-select.css">
 	<link rel="stylesheet" href="/static/css/modelo-tablas.css">
+	<link rel="stylesheet" href="/static/css/font-awesome.min.css">
 	{% block extrastyle %}{% endblock %}
 	<script src="/static/js/jquery.min.js"></script>
 	<script src='/static/js/jquery-ui.min.js'></script>
@@ -50,7 +51,7 @@
 	</nav>
 	<div class="container" id='id_container'>
 		<div class="row">
-			<div class="span12">
+			<div class="span10 offset1">
 				
 
 				{%block pretitle%}{%endblock%}
@@ -82,21 +83,18 @@
 						</div>
 					</aside>
 				</div>
-				<!-- Footer -->
-				<div id='id_footer'>
-
-					<footer>{%block footer%}
-						<h5>Diócesis de Loja</h5>
-						<p>Copyright © Todos los derechos reservados</p>
-						{%endblock%}
-					</footer>	
-
-				</div>
-
-
-
 			</div>
 		</div>
+	</div>
+	<!-- Footer -->
+	<div id='id_footer'>
+
+		<footer>{%block footer%}
+			<h5>Diócesis de Loja</h5>
+			<p>Copyright © Todos los derechos reservados</p>
+			{%endblock%}
+		</footer>	
+
 	</div>
 	
 </body>

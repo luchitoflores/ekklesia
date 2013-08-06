@@ -31,7 +31,7 @@ body
 }
 
 
-span.arrow {
+/*span.arrow {
 	width: 0;
 	height: 0;
 	border-left: 7px solid transparent;
@@ -51,4 +51,4 @@ span.arrow {
 .typeahead_photo { float: left; max-width: 30px; max-height: 30px; margin-right: 5px; }
 .typeahead_labels { float: left; height: 30px; }
 .typeahead_primary { font-weight: bold; }
-.typeahead_secondary { font-size: .8em; margin-top: -5px; }
+.typeahead_secondary { font-size: .8em; margin-top: -5px; }*/

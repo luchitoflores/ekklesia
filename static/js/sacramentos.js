@@ -14,6 +14,9 @@ function inicio(){
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
 	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
 	prueba();
+	seleccionar_cantones('#id_provincia');
+	seleccionar_parroquias('#id_canton');
+	crear_direccion('#id_form_direccion');
 }
 
 function limpiar_campos(campos){
@@ -288,3 +291,71 @@ function crear_padre(identificador, idpadre, idmodal, sexo){
 		});
 	});
 }
+
+
+//Permite crear via ajax una direccion
+function crear_direccion(identificador){
+	$(identificador).on('submit', function(e){
+		e.preventDefault();
+		var url = '/ciudades/direccion/add/'
+		var json = $(this).serialize()
+		$.post(url, json, function(data){
+			if(data.respuesta){
+				$('#id_modal_direccion').modal('hide');
+			} else{
+				console.log('Existen errores');
+				console.log(data.errores);
+			}
+		});
+	})
+}
+
+// Permite elegir los cantones de acuerdo a sus respectivas provincias
+function seleccionar_cantones(identificador){
+	$(identificador).on('change', function(e){
+		$('#id_canton option').remove();
+		$('#id_canton').append('<option>---------</option>')
+		$('#id_canton').prop('disabled', true);
+		$('#id_parroquia option').remove();
+		$('#id_parroquia').append('<option>---------</option>')
+		$('#id_parroquia').prop('disabled', true);
+
+		e.preventDefault();
+		var url = '/api/ciudades/select/';
+		var provincia = $(identificador + ' option:selected').text();
+		var ctx = {'provincia': provincia}
+
+		$.get(url, ctx, function(data){
+			console.log(data.cantones)
+			$.each(data.cantones, function(index, element){
+				$('#id_canton').prop('disabled', false);
+				$('#id_canton').append('<option value="'+element.id+'" >'+element.canton+'</option>')
+			});
+		});
+	})
+}
+
+// Permite elegir los cantones de acuerdo a sus respectivas provincias
+function seleccionar_parroquias(identificador){
+	$(identificador).on('change', function(e){
+		$('#id_parroquia option').remove();
+		$('#id_parroquia').append('<option>---------</option>')
+		$('#id_parroquia').prop('disabled', true);
+
+		e.preventDefault();
+		var url = '/api/ciudades/select/';
+		var canton = $(identificador + ' option:selected').text();
+		var ctx = {'canton': canton}
+
+		$.get(url, ctx, function(data){
+			console.log(data.parroquias)
+			$.each(data.parroquias, function(index, element){
+				$('#id_parroquia').prop('disabled', false);
+				$('#id_parroquia').append('<option value="'+element.id+'" >'+element.parroquia+'</option>')
+			});
+		});
+	})
+}
+
+
+

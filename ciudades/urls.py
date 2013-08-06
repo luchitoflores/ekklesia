@@ -9,7 +9,8 @@ from .views import (
 from django.contrib.auth.decorators import login_required
 from .rest import (ProvinciaCreateRead,ProvinciaCreateReadUpdateDelete,
 	CantonCreateRead,CantonCreateReadUpdateDelete,
-	ParroquiaCreateRead, ParroquiaCreateReadUpdateDelete)
+	ParroquiaCreateRead, ParroquiaCreateReadUpdateDelete,
+	seleccionar_ciudades, direccion_create_view)
 
 
 
@@ -27,10 +28,12 @@ urlpatterns = patterns('ciudades.views',
 	url(r'^ciudades/parroquia/(?P<pk>\d+)/$', ParroquiaUpdate.as_view(), name='parroquiacivil_update'),
 	url(r'^ciudades/parroquia/(?P<pk>\d+)/delete/$', ParroquiaDelete.as_view(), name='parroquiacivil_delete'), 
 	url(r'^ciudades/parroquia/$', ParroquiaList.as_view() , name='parroquiacivil_list'),
+	url(r'^ciudades/direccion/add/$', direccion_create_view),
 	url(r'^api/ciudades/provincia/add$', ProvinciaCreateRead.as_view()),
 	url(r'^api/ciudades/provincia/$', ProvinciaCreateReadUpdateDelete.as_view()),
 	url(r'^api/ciudades/canton/add$', CantonCreateRead.as_view()),
 	url(r'^api/ciudades/canton/$', CantonCreateReadUpdateDelete.as_view()),
 	url(r'^api/ciudades/parroquia/add$', ParroquiaCreateRead.as_view()),
 	url(r'^api/ciudades/parroquia/$', ParroquiaCreateReadUpdateDelete.as_view()),
-	)
+	url(r'^api/ciudades/select/$', seleccionar_ciudades),
+)

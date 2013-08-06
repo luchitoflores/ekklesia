@@ -48,5 +48,5 @@ class Direccion(models.Model):
 	celular=models.CharField(max_length=10)
 
 	def __unicode__(self):
-		return self.parroquia
+		return u'%s.- %s' % (self.id, self.parroquia.nombre)
 

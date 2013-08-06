@@ -1,6 +1,7 @@
 {%extends 'base.html'%}
 
 {%load tags%}
+{%load tags_direccion%}
 
 {%block title%}Agregar Feligreses{%endblock%}
 {%block content_title%}{{block.super}}Agregar Feligreses{%endblock%}
@@ -87,7 +88,7 @@
 	</div>
 </div>
 
-
+<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a>
 
 <!-- Inclusion de Modal de Busqueda-->
 {%include 'modal.html'%}
@@ -137,7 +138,30 @@
 	</div>
 </div>
 
+<!-- Modal para asignar la dirección de un feligrés -->
+<div id="id_modal_direccion" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<h3>Búsqueda de Feligreses</h3>
+	</div>
+	<div class="modal-body">
+		<form id='id_form_direccion' class='form-horizontal' method='POST'>
+			{%direccion%}
+			<div class="control-group">
+				<div class='controls'>
+					<input type="submit" value='Enviar' class='btn btn-primary'>
+				</div>
+			</div>
+		</form>
 
+	</div>
+	<div class="modal-footer">
+		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+
+<!-- codigo copiado de twitter, aun no funciona, es para alert-->
 <div class="alert-messages" id="message-drawer" style="opacity: 1;">
 	<div class="message ">
 		<div class="message-inside">

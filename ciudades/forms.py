@@ -20,5 +20,13 @@ class ParroquiaForm(forms.ModelForm):
 
 #Forms para dirección
 class DireccionForm(ModelForm):
+	CHOICES_DEFAULT = (('', '---------'),)
+	nombre=forms.CharField(label='Nombre', max_length=200, required=True)
+	# provincia=forms.ChoiceField(label='Nombre')
+	# canton=forms.ChoiceField(label='Canton', required=True, widget=forms.Select(attrs={'required':'', 'disabled':''}))
+	# parroquia=forms.ChoiceField(label='Parroquia', widget=forms.Select(attrs={'required':'', 'disabled':''}))
+	telefono=forms.CharField(label='Telefono')
+	celular=forms.CharField(label='Celular')
+	
 	class Meta:
 		model = Direccion

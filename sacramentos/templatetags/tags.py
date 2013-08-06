@@ -3,17 +3,21 @@ from sacramentos.views import padre_create_view
 from sacramentos.forms import UsuarioForm, PadreForm,PerfilUsuarioForm
 register = template.Library()
 
-@register.inclusion_tag('usuario/padre_form.html', takes_context=True)
-def padre(context):
-	perfil_padre_form = PadreForm
-	usuario_form = UsuarioForm
-	ctx = {'perfil_padre_form':perfil_padre_form,'usuario_form':usuario_form}
-	return ctx
+# @register.inclusion_tag('usuario/form_padre.html', takes_context=True)
+# def padre(context):
+# 	form_perfil_padre = PadreForm
+# 	form_usuario = UsuarioForm
+# 	ctx = {'form_perfil_padre':form_perfil_padre,'form_usuario':form_usuario}
+# 	return ctx
 
 @register.inclusion_tag('usuario/feligres.html', takes_context=True)
 def feligres(context):
-	perfil_form = PadreForm()
-	usuario_form = UsuarioForm()
-	ctx = {'padre_form':perfil_form,'usuariopadre_form':usuario_form}
+	form_perfil = PadreForm()
+	form_usuario = UsuarioForm()
+	ctx = {'form_padre':form_perfil,'form_usuariopadre':form_usuario}
 	return ctx
+
+@register.inclusion_tag('direccion/direccion_form.html', takes_context=True)
+def direccion(context):
+	pass
 

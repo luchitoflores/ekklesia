@@ -1,14 +1,14 @@
 {%csrf_token%}
 
 <div class="control-group">
-	<label class="control-label">{{padre_form.dni.label}}</label>
+	<label class="control-label">{{form_padre.dni.label}}</label>
 	<div class="controls">
-		{{padre_form.dni}}
+		{{form_padre.dni}}
 	</div>
-	<div class="controls">{{padre_form.dni.help_text}}</div>
+	<div class="controls">{{form_padre.dni.help_text}}</div>
 </div>
 
-{% for f in usuariopadre_form%}
+{% for f in form_usuariopadre%}
 
 <div class="control-group">
 	<label class="control-label">{{f.label}}</label>
@@ -16,7 +16,7 @@
 	<div class="controls">{{f.help_text}}</div>
 </div>
 {%endfor%}
-{% for f in padre_form%}
+{% for f in form_padre%}
 {%if f.label != 'Dni'%}
 <div class="control-group">
 	<label class="control-label">{{f.label}}</label>

@@ -20,7 +20,8 @@
 
 <div class="tab-content">
 	<div id='id_datos_personales' class='tab-pane active'>
-		<form id='id_form_usuario_create' class='form-horizontal'>
+		<form id='id_form_usuario_create' method='POST' class='form-horizontal'>
+			{%csrf_token%}
 			<!--<select name="" id="id_padre"></select>-->
 			<!--Input para typeahead de bootstrap
 			<input type='hidden' id='id_autocomplete'>

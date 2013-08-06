@@ -1,7 +1,7 @@
-#-*- coding: utf-8 -*-
+# -*- coding:utf-8 -*-
 from django.forms import ModelForm
 from django import forms
-from ciudades.models import *
+from .models import Provincia, Canton, Parroquia, Direccion
 from django.forms.widgets import *
 
 
@@ -17,3 +17,8 @@ class CantonForm(forms.ModelForm):
 class ParroquiaForm(forms.ModelForm):
     class Meta:
         model = Parroquia
+
+#Forms para dirección
+class DireccionForm(ModelForm):
+	class Meta:
+		model = Direccion

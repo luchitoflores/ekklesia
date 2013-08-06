@@ -1,5 +1,4 @@
 from django import template
-from sacramentos.views import padre_create_view
 from sacramentos.forms import UsuarioForm, PadreForm,PerfilUsuarioForm
 register = template.Library()
 

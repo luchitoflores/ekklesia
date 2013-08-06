@@ -1,11 +1,16 @@
+# -*- coding:utf-8 -*-
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django import forms
 from django.forms.widgets import RadioSelect
 
-from .models import PerfilUsuario, Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion
+from .models import (PerfilUsuario, 
+					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
+					Direccion)
 
+
+#forms para manejo de usuarios
 class UsuarioForm(ModelForm):
 	first_name = forms.CharField(required=True, label='Nombres', widget=forms.TextInput(attrs={'required': ''}))
 	last_name = forms.CharField(required=True, label='Apellidos', widget=forms.TextInput(attrs={'required': ''}))
@@ -31,6 +36,8 @@ class PadreForm(ModelForm):
 	class Meta(): 
 		model = PerfilUsuario
 		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil', 'profesion');
+
+# forms para sacramentos
 
 class LibroForm(ModelForm):
 	ESTADO_CHOICES=(
@@ -59,4 +66,10 @@ class EucaristiaForm(ModelForm):
 class ConfirmacionForm(ModelForm):
 	class Meta():
 		model=Confirmacion
+
+
+#Forms para dirección
+class DireccionForm(ModelForm):
+	class Meta:
+		model = Direccion
 

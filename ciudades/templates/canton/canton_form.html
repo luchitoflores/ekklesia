@@ -1,15 +1,10 @@
 {% extends 'base.html'%}
-{%block head%}{%load tags%}{%endblock%}
-
 {% block title%}
 Añadir Cantón
 {%endblock%}
 
 
 {%block content%}
-{%messages_error_tag%}
-
-
 <form action="" method='POST' class='form-horizontal'>
 	{%csrf_token%}
 	{% for f in form %}

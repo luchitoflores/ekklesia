@@ -28,60 +28,60 @@
 			Input para el plugin select2
 			<input type='hidden' id='id_autocomplete'> -->
 			
-				<div class="row">
-					<div class="span10">
-						<div class="control-group">
-							<label class="control-label">{{form_perfil.dni.label}}</label>
-							<div class="controls">
-								{{form_perfil.dni}}
-							</div>
-							<div class="controls">{{form_perfil.dni.help_text}}</div>
+			<div class="row">
+				<div class="span10">
+					<div class="control-group">
+						<label class="control-label">{{form_perfil.dni.label}}</label>
+						<div class="controls">
+							{{form_perfil.dni}}
 						</div>
+						<div class="controls">{{form_perfil.dni.help_text}}</div>
+					</div>
 
-						{% for f in usuario_form%}
+					{% for f in usuario_form%}
 
-						<div class="control-group">
-							<label class="control-label">{{f.label}}</label>
-							<div class="controls">{{f}}</div>
-							<div class="controls">{{f.help_text}}</div>
-						</div>
-						{%endfor%}
-						{% for f in form_perfil%}
-						{%if f.label != 'Dni' and f.label != 'Sexo' and f.label != 'Padre' and f.label != 'Madre'%}
-						<div class="control-group">
-							<label class="control-label">{{f.label}}</label>
-							<div class="controls">{{f}}</div>
-							<div class="controls">{{f.help_text}}</div>
-						</div>
-						{%endif%}
+					<div class="control-group">
+						<label class="control-label">{{f.label}}</label>
+						<div class="controls">{{f}}</div>
+						<div class="controls">{{f.help_text}}</div>
+					</div>
+					{%endfor%}
+					{% for f in form_perfil%}
+					{%if f.label != 'Dni' and f.label != 'Sexo' and f.label != 'Padre' and f.label != 'Madre'%}
+					<div class="control-group">
+						<label class="control-label">{{f.label}}</label>
+						<div class="controls">{{f}}</div>
+						<div class="controls">{{f.help_text}}</div>
+					</div>
+					{%endif%}
 
-						{%if f.label == form_perfil.sexo.label%}
-						<label for="" class='control-label'>{{f.label}}</label>
-						<div class="controls nav">
-							{% for radio in form_perfil.sexo %}
-							{{ radio }}
-							{% endfor %}
+					{%if f.label == form_perfil.sexo.label%}
+					<label for="" class='control-label'>{{f.label}}</label>
+					<div class="controls nav">
+						{% for radio in form_perfil.sexo %}
+						{{ radio }}
+						{% endfor %}
+					</div>
+					{%endif%}
+					{%if f.label == form_perfil.padre.label or f.label == 'Madre' %}
+					<div class="control-group">
+						<label class="control-label">{{f.label}}</label>
+						<div class="controls">
+							{{f}}
+							<a href="#id_crear_{{f.label|lower}}" class='btn btn-primary' data-toggle='modal'>+</a>
 						</div>
-						{%endif%}
-						{%if f.label == form_perfil.padre.label or f.label == 'Madre' %}
-						<div class="control-group">
-							<label class="control-label">{{f.label}}</label>
-							<div class="controls">
-								{{f}}
-								<a href="#id_crear_{{f.label|lower}}" class='btn btn-primary' data-toggle='modal'>+</a>
-							</div>
-							<div class="controls">{{f.help_text}}</div>
-						</div>
-						{%endif%}
+						<div class="controls">{{f.help_text}}</div>
+					</div>
+					{%endif%}
 
-						{%endfor%}
+					{%endfor%}
 
-						<div class="form-actions">
-							<input type="submit" value='Enviar' class="btn btn-primary">
-							<a href="{%url 'usuario_list'%}" class='btn btn-primary'>Cancelar</a>
-						</div>
+					<div class="form-actions">
+						<input type="submit" value='Enviar' class="btn btn-primary">
+						<a href="{%url 'usuario_list'%}" class='btn btn-primary'>Cancelar</a>
 					</div>
 				</div>
+			</div>
 			
 		</form>
 	</div>
@@ -134,6 +134,15 @@
 	</div>
 	<div class="modal-footer">
 		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+
+<div class="alert-messages" id="message-drawer" style="opacity: 1;">
+	<div class="message ">
+		<div class="message-inside">
+			<span class="message-text">Error interno del servidor.</span><a class="dismiss" href="#">×</a>
+		</div>
 	</div>
 </div>
 

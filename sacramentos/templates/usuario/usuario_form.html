@@ -1,6 +1,7 @@
 {%extends 'base.html'%}
 
 {%load tags%}
+{%load tags_direccion%}
 
 {%block title%}Agregar Feligreses{%endblock%}
 {%block content_title%}{{block.super}}Agregar Feligreses{%endblock%}
@@ -20,73 +21,74 @@
 
 <div class="tab-content">
 	<div id='id_datos_personales' class='tab-pane active'>
-		<form id='id_form_usuario_create' class='form-horizontal'>
+		<form id='id_form_usuario_create' method='POST' class='form-horizontal'>
+			{%csrf_token%}
 			<!--<select name="" id="id_padre"></select>-->
 			<!--Input para typeahead de bootstrap
 			<input type='hidden' id='id_autocomplete'>
 			Input para el plugin select2
 			<input type='hidden' id='id_autocomplete'> -->
 			
-				<div class="row">
-					<div class="span10">
-						<div class="control-group">
-							<label class="control-label">{{perfil_form.dni.label}}</label>
-							<div class="controls">
-								{{perfil_form.dni}}
-							</div>
-							<div class="controls">{{perfil_form.dni.help_text}}</div>
+			<div class="row">
+				<div class="span10">
+					<div class="control-group">
+						<label class="control-label">{{form_perfil.dni.label}}</label>
+						<div class="controls">
+							{{form_perfil.dni}}
 						</div>
+						<div class="controls">{{form_perfil.dni.help_text}}</div>
+					</div>
 
-						{% for f in usuario_form%}
+					{% for f in usuario_form%}
 
-						<div class="control-group">
-							<label class="control-label">{{f.label}}</label>
-							<div class="controls">{{f}}</div>
-							<div class="controls">{{f.help_text}}</div>
-						</div>
-						{%endfor%}
-						{% for f in perfil_form%}
-						{%if f.label != 'Dni' and f.label != 'Sexo' and f.label != 'Padre' and f.label != 'Madre'%}
-						<div class="control-group">
-							<label class="control-label">{{f.label}}</label>
-							<div class="controls">{{f}}</div>
-							<div class="controls">{{f.help_text}}</div>
-						</div>
-						{%endif%}
+					<div class="control-group">
+						<label class="control-label">{{f.label}}</label>
+						<div class="controls">{{f}}</div>
+						<div class="controls">{{f.help_text}}</div>
+					</div>
+					{%endfor%}
+					{% for f in form_perfil%}
+					{%if f.label != 'Dni' and f.label != 'Sexo' and f.label != 'Padre' and f.label != 'Madre'%}
+					<div class="control-group">
+						<label class="control-label">{{f.label}}</label>
+						<div class="controls">{{f}}</div>
+						<div class="controls">{{f.help_text}}</div>
+					</div>
+					{%endif%}
 
-						{%if f.label == perfil_form.sexo.label%}
-						<label for="" class='control-label'>{{f.label}}</label>
-						<div class="controls nav">
-							{% for radio in perfil_form.sexo %}
-							{{ radio }}
-							{% endfor %}
+					{%if f.label == form_perfil.sexo.label%}
+					<label for="" class='control-label'>{{f.label}}</label>
+					<div class="controls nav">
+						{% for radio in form_perfil.sexo %}
+						{{ radio }}
+						{% endfor %}
+					</div>
+					{%endif%}
+					{%if f.label == form_perfil.padre.label or f.label == 'Madre' %}
+					<div class="control-group">
+						<label class="control-label">{{f.label}}</label>
+						<div class="controls">
+							{{f}}
+							<a href="#id_crear_{{f.label|lower}}" class='btn btn-primary' data-toggle='modal'>+</a>
 						</div>
-						{%endif%}
-						{%if f.label == perfil_form.padre.label or f.label == 'Madre' %}
-						<div class="control-group">
-							<label class="control-label">{{f.label}}</label>
-							<div class="controls">
-								{{f}}
-								<a href="#id_crear_{{f.label|lower}}" class='btn btn-primary' data-toggle='modal'>+</a>
-							</div>
-							<div class="controls">{{f.help_text}}</div>
-						</div>
-						{%endif%}
+						<div class="controls">{{f.help_text}}</div>
+					</div>
+					{%endif%}
 
-						{%endfor%}
+					{%endfor%}
 
-						<div class="form-actions">
-							<input type="submit" value='Enviar' class="btn btn-primary">
-							<a href="{%url 'usuario_list'%}" class='btn btn-primary'>Cancelar</a>
-						</div>
+					<div class="form-actions">
+						<input type="submit" value='Enviar' class="btn btn-primary">
+						<a href="{%url 'usuario_list'%}" class='btn btn-primary'>Cancelar</a>
 					</div>
 				</div>
+			</div>
 			
 		</form>
 	</div>
 </div>
 
-
+<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a>
 
 <!-- Inclusion de Modal de Busqueda-->
 {%include 'modal.html'%}
@@ -100,7 +102,7 @@
 	<div class="modal-body">
 		<form id='id_form_crear_padre' class='form-horizontal' method='POST'>
 			{%feligres%}
-			{% include 'usuario/feligres.html'%}
+			
 			<div class="control-group">
 				<div class='controls'>
 					<input type="submit" value='Enviar' class='btn btn-primary'>
@@ -123,7 +125,6 @@
 	<div class="modal-body">
 		<form id='id_form_crear_madre' class='form-horizontal' method='POST'>
 			{%feligres%}
-			{% include 'usuario/feligres.html'%}
 			<div class="control-group">
 				<div class='controls'>
 					<input type="submit" value='Enviar' class='btn btn-primary'>
@@ -134,6 +135,38 @@
 	</div>
 	<div class="modal-footer">
 		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+<!-- Modal para asignar la dirección de un feligrés -->
+<div id="id_modal_direccion" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<h3>Búsqueda de Feligreses</h3>
+	</div>
+	<div class="modal-body">
+		<form id='id_form_direccion' class='form-horizontal' method='POST'>
+			{%direccion%}
+			<div class="control-group">
+				<div class='controls'>
+					<input type="submit" value='Enviar' class='btn btn-primary'>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<div class="modal-footer">
+		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
+
+
+<!-- codigo copiado de twitter, aun no funciona, es para alert-->
+<div class="alert-messages" id="message-drawer" style="opacity: 1;">
+	<div class="message ">
+		<div class="message-inside">
+			<span class="message-text">Error interno del servidor.</span><a class="dismiss" href="#">×</a>
+		</div>
 	</div>
 </div>
 

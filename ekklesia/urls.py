@@ -5,6 +5,7 @@ from django.contrib import admin
 from sacramentos import urls as sacramentos_urls 
 from home import urls as home_urls
 from usuarios import urls as usuarios_urls
+from ciudades import urls as ciudades_urls
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -20,4 +21,5 @@ urlpatterns = patterns('',
     url(r'^', include(sacramentos_urls)),
     url(r'^', include(home_urls)),
     url(r'^', include(usuarios_urls)),
+    url(r'^', include(ciudades_urls)),
 )

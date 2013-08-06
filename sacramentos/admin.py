@@ -26,5 +26,4 @@ admin.site.register(Matrimonio)
 admin.site.register(NotaMarginal)
 admin.site.register(Intenciones)
 admin.site.register(Parroquia)
-admin.site.register(Direccion)
 

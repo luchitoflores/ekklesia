@@ -18,51 +18,82 @@ from .forms import (
 
 
 
-def usuarioCreateView(request):
-	if request.is_ajax():
-		if request.method == 'POST':
-			valido = False
-			usuario_form = UsuarioForm(request.POST)
-			perfil_form = PerfilUsuarioForm(request.POST)
-			if usuario_form.is_valid() and perfil_form.is_valid():
-				valido = True
-				usuario = usuario_form.save(commit=False)
-				perfil = perfil_form.save(commit=False)
-				usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
-				usuario.save()
-				perfil.user = usuario
-				perfil.save()
-				ctx = {'valido': valido}
+# def usuarioCreateView(request):
+# 	if request.is_ajax():
+# 		if request.method == 'POST':
+# 			valido = False
+# 			usuario_form = UsuarioForm(request.POST)
+# 			perfil_form = PerfilUsuarioForm(request.POST)
+# 			if usuario_form.is_valid() and perfil_form.is_valid():
+# 				valido = True
+# 				usuario = usuario_form.save(commit=False)
+# 				perfil = perfil_form.save(commit=False)
+# 				usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
+# 				usuario.save()
+# 				perfil.user = usuario
+# 				perfil.save()
+# 				ctx = {'valido': valido}
 				
 
-			else:
-				errores_usuario = usuario_form.errors
-				errores_perfil =  perfil_form.errors
-				ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
+# 			else:
+# 				errores_usuario = usuario_form.errors
+# 				errores_perfil =  perfil_form.errors
+# 				ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
 
-			return HttpResponse(json.dumps(ctx), content_type='application/json')
+# 			return HttpResponse(json.dumps(ctx), content_type='application/json')
+# 	else:
+# 		usuario_form = UsuarioForm()
+# 		perfil_form = PerfilUsuarioForm()
+# 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
+# 		return render (request, 'usuario/usuario_form.html', ctx)
+
+def usuarioCreateView(request):
+	if request.method == 'POST':
+		valido = False
+		form_usuario = UsuarioForm(request.POST)
+		form_perfil = PerfilUsuarioForm(request.POST)
+		if form_usuario.is_valid() and form_perfil.is_valid():
+			valido = True
+			usuario = form_usuario.save(commit=False)
+			perfil = form_perfil.save(commit=False)
+			usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
+			usuario.save()
+			perfil.user = usuario
+			perfil.save()
+			ctx = {'valido': valido}
+			return HttpResponseRedirect('/usuario/')
+			
+		else:
+			errores_usuario = form_usuario.errors
+			errores_perfil =  form_perfil.errors
+			messages.info(request, 'Errores al crear')
+			ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
+
 	else:
-		usuario_form = UsuarioForm()
-		perfil_form = PerfilUsuarioForm()
-		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
+		form_usuario = UsuarioForm()
+		form_perfil = PerfilUsuarioForm()
+		ctx = {'form_usuario': form_usuario, 'form_perfil': form_perfil}
 		return render (request, 'usuario/usuario_form.html', ctx)
 
 def edit_usuario_view(request,pk):
 	perfil= get_object_or_404(PerfilUsuario, pk=pk)
 	user= perfil.user	
 	if request.method == 'POST':
-		usuario_form = UsuarioForm(request.POST,instance=user)
-		perfil_form = PerfilUsuarioForm(request.POST,instance=perfil)
-		if usuario_form.is_valid() and perfil_form.is_valid():
-			usuario_form.save()
-			perfil_form.save()
+		form_usuario = UsuarioForm(request.POST,instance=user)
+		form_perfil = PerfilUsuarioForm(request.POST,instance=perfil)
+		if form_usuario.is_valid() and form_perfil.is_valid():
+			form_usuario.save()
+			form_perfil.save()
 			return HttpResponseRedirect('/usuario')
+		else:
+			messages.info(request, 'Errores al actualizar')
+
 
 	else:
-		usuario_form = UsuarioForm(instance=user)
-		perfil_form = PerfilUsuarioForm(instance=perfil)
+		form_usuario = UsuarioForm(instance=user)
+		form_perfil = PerfilUsuarioForm(instance=perfil)
 									
-	ctx = {'usuario_form': usuario_form,'perfil_form':perfil_form, 'perfil':perfil}
+	ctx = {'form_usuario': form_usuario,'form_perfil':form_perfil, 'perfil':perfil}
 	return render(request, 'usuario/usuario_form.html', ctx)
 
 def padre_create_view(request):

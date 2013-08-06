@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 
+from ciudades.models import Provincia, Canton, Parroquia, Direccion 
+
 # Create your models here.
 
 class TimeStampedModel(models.Model):
@@ -149,18 +151,18 @@ class Intenciones(TimeStampedModel):
 
 class Parroquia(TimeStampedModel):
 	nombre=models.CharField(max_length=100)
-	direccion=models.ForeignKey('Direccion')
+	direccion=models.ForeignKey(Direccion, related_name='direccion')
 
 	def __unicode__(self):
 		return self.nombre
 
-class Direccion(TimeStampedModel):
-	nombre=models.CharField(max_length=100)
-	provincia=models.CharField(max_length=100)
-	canton=models.CharField(max_length=100)
-	ciudad=models.CharField(max_length=100)
-	telefono=models.CharField(max_length=100)
-	celular=models.CharField(max_length=100)
+# class Direccion(TimeStampedModel):
+# 	nombre=models.CharField(max_length=200)
+# 	provincia=models.ForeignKey(Provincia)
+# 	canton=models.ForeignKey(Canton)
+# 	parroquia=models.ForeignKey(Parroquia)
+# 	telefono=models.CharField(max_length=10)
+# 	celular=models.CharField(max_length=10)
 
-	def __unicode__(self):
-		return self.ciudad
+# 	def __unicode__(self):
+# 		return self.parroquia

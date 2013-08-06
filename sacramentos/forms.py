@@ -44,6 +44,8 @@ class LibroForm(ModelForm):
 class MatrimonioForm(ModelForm):
 	class Meta():
 		model=Matrimonio
+		fields=('numero_acta','pagina','fecha_sacramento','lugar_sacramento','padrino','madrina',
+			'iglesia','novio','novia','testigo_novio','testigo_novia')
 
 class BautismoForm(ModelForm):
 	# bautizado=forms.CharField(widget=forms.TextInput())
@@ -55,8 +57,13 @@ class BautismoForm(ModelForm):
 class EucaristiaForm(ModelForm):
 	class Meta():
 		model=Eucaristia
+		fields=('numero_acta','pagina','feligres','fecha_sacramento','lugar_sacramento','padrino',
+			'madrina','iglesia')
 
 class ConfirmacionForm(ModelForm):
 	class Meta():
 		model=Confirmacion
+		fields=('numero_acta','pagina','confirmado','fecha_sacramento','lugar_sacramento','padrino',
+			'madrina','obispo','iglesia')
+
 

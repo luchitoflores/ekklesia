@@ -70,7 +70,7 @@ class Sacramento(TimeStampedModel):
 
 
 class Bautismo(Sacramento):
-	bautizado=models.ForeignKey(PerfilUsuario, related_name='Bautizado',null=True,blank=True)
+	bautizado=models.OneToOneField(PerfilUsuario, related_name='Bautizado',null=True,blank=True)
 	abuelo_paterno = models.CharField(max_length=200) 
 	abuela_paterna = models.CharField(max_length=200)
 	abuelo_materno = models.CharField(max_length=200)
@@ -85,7 +85,7 @@ class Bautismo(Sacramento):
 
 
 class Eucaristia(Sacramento):
-	feligres=models.ForeignKey(PerfilUsuario, related_name='Eucaristia',null=True,blank=True)
+	feligres=models.OneToOneField(PerfilUsuario, related_name='feligres', null=True,blank=True)
 	
 	def __unicode__(self):
 		return '%s %s' %(self.feligres.user.first_name,self.feligres.user.last_name)
@@ -93,7 +93,7 @@ class Eucaristia(Sacramento):
 	
 
 class Confirmacion(Sacramento):
-	confirmado=models.ForeignKey(PerfilUsuario, related_name='Confirmado',null=True,blank=True)
+	confirmado=models.OneToOneField(PerfilUsuario, related_name='Confirmado',null=True,blank=True)
 	obispo = models.CharField(max_length=200)
 
 	def __unicode__(self):

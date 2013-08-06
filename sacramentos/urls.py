@@ -4,10 +4,10 @@ from django.conf.urls import include, patterns, url
 from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
 	LibroCreateView, LibroUpdateView ,LibroListView,
-	MatrimonioCreateView,MatrimonioListView,MatrimonioUpdateView,
+	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,
 	bautismo_update_view, BautismoListView, bautismo_create_view,
-	EucaristiaCreateView,EucaristiaUpdateView,EucaristiaListView,
-	ConfirmacionCreateView,ConfirmacionUpdateView,ConfirmacionListView,
+	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
+	confirmacion_create_view,ConfirmacionUpdateView,ConfirmacionListView,
 
 	)
 urlpatterns = patterns('', 
@@ -34,26 +34,26 @@ urlpatterns = patterns('',
 
 	#urls de matrimonio
 	url(r'^matrimonio/$',MatrimonioListView.as_view(),name='matrimonio_list'),
-	url(r'^matrimonio/add/$',MatrimonioCreateView.as_view(), name='matrimonio_create'),
-	url(r'^matrimonio/(?P<pk>\d+)/$',MatrimonioUpdateView.as_view(), name='matrimonio_update'),
+	url(r'^matrimonio/add/$',matrimonio_create_view, name='matrimonio_create'),
+	url(r'^matrimonio/(?P<pk>\d+)/$',matrimonio_update_view, name='matrimonio_update'),
 
 
 	#urls de Bautismo
 	#url(r'^usuario/(?P<id_fel>\d+)/bautismo/add/$',bautismo_create_view, name='bautismo_create'),
 	url(r'^bautismo/$',BautismoListView.as_view(),name='bautismo_list'),
 	url(r'^bautismo/add/$',bautismo_create_view, name='bautismo_create'),
-	url(r'^bautismo/(?P<pk>\d+)/$','sacramentos.views.bautismo_update_view', name='bautismo_update'),
+	url(r'^bautismo/(?P<pk>\d+)/$',bautismo_update_view, name='bautismo_update'),
 
 
 	#urls de Eucaristia
 	url(r'^eucaristia/$',EucaristiaListView.as_view(),name='eucaristia_list'),
-	url(r'^eucaristia/add/$',EucaristiaCreateView.as_view(), name='eucaristia_create'),
-	url(r'^eucaristia/(?P<pk>\d+)/$',EucaristiaUpdateView.as_view(), name='eucaristia_update'),
+	url(r'^eucaristia/add/$','sacramentos.views.eucaristia_create_view', name='eucaristia_create'),
+	url(r'^eucaristia/(?P<pk>\d+)/$',eucaristia_update_view, name='eucaristia_update'),
 
 
 	#urls de Confirmacion
 	url(r'^confirmacion/$',ConfirmacionListView.as_view(),name='confirmacion_list'),
-	url(r'^confirmacion/add/$',ConfirmacionCreateView.as_view(), name='confirmacion_create'),
+	url(r'^confirmacion/add/$',confirmacion_create_view, name='confirmacion_create'),
 	url(r'^confirmacion/(?P<pk>\d+)/$',ConfirmacionUpdateView.as_view(), name='confirmacion_update'),
 
 

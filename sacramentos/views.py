@@ -130,17 +130,60 @@ class LibroListView(ListView):
 	
 # VISTAS PARA ADMIN MATRIMONIO
 
-class MatrimonioCreateView(CreateView):
-	model=Matrimonio
-	form_class=MatrimonioForm
-	template_name='matrimonio/matrimonio_form.html'
-	success_url='/matrimonio/'
+# class MatrimonioCreateView(CreateView):
+# 	model=Matrimonio
+# 	form_class=MatrimonioForm
+# 	template_name='matrimonio/matrimonio_form.html'
+# 	success_url='/matrimonio/'
+
+def matrimonio_create_view(request):
+	if(request.method=='POST'):
+		form_matrimonio=MatrimonioForm(request.POST)
+		if(form_matrimonio.is_valid()):
+			matrimonio=form_matrimonio.save(commit=False)
+			matrimonio.tipo_sacramento='Matrimonio'
+			novio=matrimonio.novio
+			novia=matrimonio.novia
+			novio.estado_civil='Casado/a'
+			novia.estado_civil='Casado/a'
+			novio.save()
+			novia.save()
+			matrimonio.novio=novio
+			# matrimonio.novia.estado_civil='Casado/a'
+			if(matrimonio.novio.estado_civil=='Casado/a' and matrimonio.novia.estado_civil=='Casado/a'):
+				matrimonio.save()
+				return HttpResponseRedirect('/matrimonio')
+			else:
+				messages.add_message(request, messages.WARNING, {'Matrimonio':'error de estado civil'})
+		else:
+			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors})
+	else:
+		form_matrimonio=MatrimonioForm()
+	ctx={'form_matrimonio':form_matrimonio}
+	return render(request,'matrimonio/matrimonio_form.html',ctx)
 
 
-class MatrimonioUpdateView(UpdateView):
-	model=Matrimonio
-	template_name='matrimonio/matrimonio_form.html'
-	success_url='/matrimonio/'
+# class MatrimonioUpdateView(UpdateView):
+# 	model=Matrimonio
+# 	template_name='matrimonio/matrimonio_form.html'
+# 	success_url='/matrimonio/'
+
+def matrimonio_update_view(request,pk):
+	matrimonio=get_object_or_404(Matrimonio,pk=pk)
+	if request.method == 'POST':
+		form_matrimonio = MatrimonioForm(request.POST,instance=matrimonio)
+		if form_matrimonio.is_valid():
+			form_matrimonio.save()
+			return HttpResponseRedirect('/matrimonio')
+		else:
+			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors})
+
+	else:
+		form_matrimonio= MatrimonioForm(instance=matrimonio)
+									
+	ctx = {'form_matrimonio': form_matrimonio}
+	return render(request, 'matrimonio/matrimonio_form.html', ctx)
+
 
 
 class MatrimonioListView(ListView):
@@ -151,24 +194,18 @@ class MatrimonioListView(ListView):
 # VISTAS PARA ADMIN DE BAUTISMO
 
 def bautismo_create_view(request):
-	#fel=PerfilUsuario.objects.get(id=id_fel)
 	if(request.method == 'POST' ):
-		#formUser=UsuarioForm(request.POST)
-		# formPerfil=PerfilUsuarioForm(request.POST)
 		formBautismo=BautismoForm(request.POST)
 		if formBautismo.is_valid():
 			#perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
 			tipo_sacramento = 'Bautismo'
 			bautismo.tipo_sacramento = tipo_sacramento
-			# perfil.save()
 			bautismo.save()
 			return HttpResponseRedirect('/bautismo')
 		else:
 			messages.add_message(request, messages.WARNING, {'Bautismo':formBautismo.errors})
 	else:
-		# formUser=UsuarioForm()
-		#formPerfil=PerfilUsuarioForm()
 		formBautismo=BautismoForm()
 
 	ctx={'formBautismo':formBautismo}
@@ -182,6 +219,8 @@ def bautismo_create_view(request):
 # 	form_class=BautismoForm
 # 	success_url='/bautismo/'
 
+
+
 def bautismo_update_view(request,pk):
 	bautismo= get_object_or_404(Bautismo, pk=pk)
 	# perfil= bautismo.bautizado	
@@ -194,9 +233,6 @@ def bautismo_update_view(request,pk):
 			return HttpResponseRedirect('/bautismo')
 		else:
 			messages.add_message(request, messages.WARNING, {'Bautismo':bautismo_form.errors})
-
-
-
 	else:
 		bautismo_form = BautismoForm(instance=bautismo)
 		# perfil_form = PerfilUsuarioForm(instance=perfil)
@@ -219,16 +255,50 @@ class BautismoListView(ListView):
 
 # VISTAS PARA ADMIN DE EUCARISTIA
 
-class EucaristiaCreateView(CreateView):
-	model=Eucaristia
-	template_name='eucaristia/eucaristia_form.html'
-	success_url='/eucaristia/'
+# class EucaristiaCreateView(CreateView):
+# 	model=Eucaristia
+# 	template_name='eucaristia/eucaristia_form.html'
+# 	success_url='/eucaristia/'
 
 
-class EucaristiaUpdateView(UpdateView):
-	model=Eucaristia
-	template_name='eucaristia/eucaristia_form.html'
-	success_url='/eucaristia/'
+def eucaristia_create_view(request):
+	if request.method == 'POST':
+		form_eucaristia=EucaristiaForm(request.POST)
+		if form_eucaristia.is_valid():
+			eucaristia=form_eucaristia.save(commit=False)
+			tipo_sacramento='Eucaristia'
+			eucaristia.tipo_sacramento=tipo_sacramento
+			eucaristia.save()
+			return HttpResponseRedirect('/eucaristia')
+		else:
+			messages.add_message(request,messages.WARNING,{'Eucaristia':form_eucaristia.errors})
+	else:
+		form_eucaristia=EucaristiaForm()
+
+	ctx={'form_eucaristia':form_eucaristia}
+	return render(request,'eucaristia/eucaristia_form.html',ctx)
+
+
+# class EucaristiaUpdateView(UpdateView):
+# 	model=Eucaristia
+# 	template_name='eucaristia/eucaristia_form.html'
+# 	success_url='/eucaristia/'
+
+def eucaristia_update_view(request,pk):
+	eucaristia=get_object_or_404(Eucaristia,pk=pk)
+	if(request.method == 'POST'):
+		form_eucaristia=EucaristiaForm(request.POST,instance=eucaristia)
+		if(form_eucaristia.is_valid()):
+			form_eucaristia.save()
+			return HttpResponseRedirect('/eucaristia')
+		else:
+			messages.add_message(request,messages.WARNING,{'Eucaristia':form_eucaristia.errors})
+	else:
+		form_eucaristia=EucaristiaForm(instance=eucaristia)
+	ctx={'form_eucaristia':form_eucaristia}
+	return render(request,'eucaristia/eucaristia_form.html',ctx)
+
+
 
 class EucaristiaListView(ListView):
 	model=Eucaristia
@@ -236,10 +306,28 @@ class EucaristiaListView(ListView):
 
 # VISTAS PARA ADMIN DE CONFIRMACION
 
-class ConfirmacionCreateView(CreateView):
-	model=Confirmacion
-	template_name='confirmacion/confirmacion_form.html'
-	success_url='/confirmacion/'
+# class ConfirmacionCreateView(CreateView):
+# 	model=Confirmacion
+# 	template_name='confirmacion/confirmacion_form.html'
+# 	success_url='/confirmacion/'
+
+def confirmacion_create_view(request):
+	if(request.method=='POST'):
+		form_confirmacion=ConfirmacionForm()
+		if(form_confirmacion.is_valid()):
+			confirmacion=form.confirmacion.save(commit=False)
+			confirmacion.tipo_sacramento='Confirmacion'
+			confirmacion.save()
+			return HttpResponseRedirect('/confirmacion')
+		else:
+			messages.add_message(request,messages.WARNING,{'Confirmacion':form_confirmacion.errors})
+	else:
+		form_confirmacion=ConfirmacionForm()
+	ctx={'form_confirmacion':form_confirmacion}
+	return render(request,'confirmacion/confirmacion_form.html',ctx)
+
+
+
 
 class ConfirmacionUpdateView(UpdateView):
 	model=Confirmacion

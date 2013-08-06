@@ -8,29 +8,23 @@
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Personas<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="#">Feligrés</a></li>
+						<li><a href="{% url 'usuario_list'%}">Feligrés</a></li>
 						<li><a href="#">Sacerdote</a></li>
 					</ul>
 				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Libros <b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="{%url 'libro_list'%}">Primera Comunion</a></li>
-						<li><a href="#">Confirmación</a></li>
-						<li><a href="#">Intenciones de Misa</a></li>
-					</ul>
-				</li>
+				<li><a href="{%url 'libro_list'%}">Libros</a></li>
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Sacramentos <b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="#">Bautismo</a></li>
-						<li><a href="#">Primera Comunión</a></li>
-						<li><a href="#">Corfirmación</a></li>
-						<li><a href="#">Matrimonio</a></li>
+						<li><a href="{% url 'bautismo_list'%}">Bautismo</a></li>
+						<li><a href="{% url 'bautismo_list'%}">Primera Comunión</a></li>
+						<li><a href="{% url 'confirmacion_list'%}">Corfirmación</a></li>
+						<li><a href="{% url 'matrimonio_list'%}">Matrimonio</a></li>
 					</ul>
 				</li>
 				<li><a href="#">Agenda</a></li>
 				<li><a href="#">Intenciones de Misa</a></li>
+				<li><a href="#">Reportes</a></li>
 			</ul>
 			{%endif%}
 			<div class='pull-right'>

@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 from django.conf.urls import include, patterns, url
 from django.views.generic import TemplateView
 
@@ -9,7 +10,7 @@ from .views import (
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
-
+	ParroquiaCreateView, ParroquiaListView, ParroquiaUpdateView,
 	)
 urlpatterns = patterns('', 
 	#urls de usuarios
@@ -58,7 +59,10 @@ urlpatterns = patterns('',
 	url(r'^confirmacion/add/$',confirmacion_create_view, name='confirmacion_create'),
 	url(r'^confirmacion/(?P<pk>\d+)/$',confirmacion_update_view, name='confirmacion_update'),
 
-
+	#urls de parroquia eclesiástica
+	url(r'^parroquia/$', ParroquiaListView.as_view(), name='parroquia_list'),
+	url(r'^parroquia/add/$', ParroquiaCreateView.as_view(), name='parroquia_create'),
+	url(r'^parroquia/(?P<pk>\d+)/$', ParroquiaUpdateView.as_view(), name='parroquia_update'),
 
 
 	)

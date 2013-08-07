@@ -159,6 +159,9 @@ class Parroquia(TimeStampedModel):
 	def __unicode__(self):
 		return self.nombre
 
+	def get_absolute_url(self):
+		return '/parroquia/%s' %(self.id)
+
 # class Direccion(TimeStampedModel):
 # 	nombre=models.CharField(max_length=200)
 # 	provincia=models.ForeignKey(Provincia)

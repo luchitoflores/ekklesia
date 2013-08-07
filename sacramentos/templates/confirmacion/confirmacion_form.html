@@ -2,7 +2,7 @@
 
 {%load tags%}
 
-{%block title%}Sacramento de Confirmacion{%endblock%}
+{%block title%}Agregar Confirmaciones{%endblock%}
 
 {%block content%}
 
@@ -30,7 +30,7 @@
 	</div>-->
 
 
-	<div id="id_datos_confirmacion" class="tab-pane">
+	<div id="id_datos_confirmacion" class="tab-pane active">
 		<form id='id_form_confirmacion' action="." method='POST' class='form-horizontal'>
 			{% csrf_token%}
 			<div class='container'>
@@ -49,9 +49,9 @@
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_tipo_sacramento" class='control-label'>{{form_confirmacion.tipo_sacramento.label}}</label>
+							<label for="id_tipo_sacramento" class='control-label'>{{form_confirmacion.confirmado.label}}</label>
 							<div class='controls'>
-								{{form_confirmacion.tipo_sacramento}}
+								{{form_confirmacion.confirmado}}
 							</div>
 						</div>
 						<div class='control-group'>
@@ -60,13 +60,6 @@
 								{{form_confirmacion.fecha_sacramento}}
 							</div>
 						</div>
-						<div class='control-group'>
-							<label for="id_obispo" class='control-label'>{{form_confirmacion.obispo.label}}</label>
-							<div class='controls'>
-								{{form_confirmacion.obispo}}
-							</div>
-						</div>
-
 						<div class='control-group'>
 							<label for="id_lugar_sacramento" class='control-label'>{{form_confirmacion.lugar_sacramento.label}}</label>
 							<div class='controls'>
@@ -86,6 +79,12 @@
 							</div>
 						</div>
 						<div class='control-group'>
+							<label for="id_obispo" class='control-label'>{{form_confirmacion.obispo.label}}</label>
+							<div class='controls'>
+								{{form_confirmacion.obispo}}
+							</div>
+						</div>
+						<div class='control-group'>
 							<label for="id_iglesia" class='control-label'>{{form_confirmacion.iglesia.label}}</label>
 							<div class='controls'>
 								{{form_confirmacion.iglesia}}
@@ -94,8 +93,7 @@
 						
 					</div>
 					
-				
-			
+						
 	
 			</div>
 		</div>
@@ -117,6 +115,8 @@
 
 <!-- Modal para indicar que un usuario ha sid creado-->
 {%include 'modal.html'%}
+
+</div>
 
 
 

@@ -61,7 +61,7 @@ def usuarioCreateView(request):
 			perfil.user = usuario
 			perfil.save()
 			ctx = {'valido': valido}
-			return HttpResponseRedirect('/usuario/')
+			return HttpResponseRedirect('/usuario')
 			
 		else:
 			errores_usuario = form_usuario.errors
@@ -343,10 +343,10 @@ class EucaristiaListView(ListView):
 # 	success_url='/confirmacion/'
 
 def confirmacion_create_view(request):
-	if(request.method=='POST'):
-		form_confirmacion=ConfirmacionForm()
+	if(request.method == 'POST'):
+		form_confirmacion=ConfirmacionForm(request.POST)
 		if(form_confirmacion.is_valid()):
-			confirmacion=form.confirmacion.save(commit=False)
+			confirmacion=form_confirmacion.save(commit=False)
 			confirmacion.tipo_sacramento='Confirmacion'
 			confirmacion.save()
 			return HttpResponseRedirect('/confirmacion')
@@ -360,10 +360,25 @@ def confirmacion_create_view(request):
 
 
 
-class ConfirmacionUpdateView(UpdateView):
-	model=Confirmacion
-	template_name='confirmacion/confirmacion_form.html'
-	success_url='/confirmacion/'
+# class ConfirmacionUpdateView(UpdateView):
+# 	model=Confirmacion
+# 	template_name='confirmacion/confirmacion_form.html'
+# 	success_url='/confirmacion/'
+
+def confirmacion_update_view(request,pk):
+	confirmacion=get_object_or_404(Confirmacion,pk=pk)
+	if(request.method == 'POST'):
+		form_confirmacion=ConfirmacionForm(request.POST,instance=confirmacion)
+		if(form_confirmacion.is_valid()):
+			form_confirmacion.save()
+			return HttpResponseRedirect('/confirmacion')
+		else:
+			messages.add_message(request,messages.WARNING,{'Confirmacion':form_confirmacion.errors})
+	else:
+		form_confirmacion=ConfirmacionForm(instance=confirmacion)
+	ctx={'form_confirmacion':form_confirmacion}
+	return render(request,'confirmacion/confirmacion_form.html',ctx)
+
 
 class ConfirmacionListView(ListView):
 	model=Confirmacion

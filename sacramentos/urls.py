@@ -7,7 +7,7 @@ from .views import (
 	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
-	confirmacion_create_view,ConfirmacionUpdateView,ConfirmacionListView,
+	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
 
 	)
 urlpatterns = patterns('', 
@@ -54,7 +54,7 @@ urlpatterns = patterns('',
 	#urls de Confirmacion
 	url(r'^confirmacion/$',ConfirmacionListView.as_view(),name='confirmacion_list'),
 	url(r'^confirmacion/add/$',confirmacion_create_view, name='confirmacion_create'),
-	url(r'^confirmacion/(?P<pk>\d+)/$',ConfirmacionUpdateView.as_view(), name='confirmacion_update'),
+	url(r'^confirmacion/(?P<pk>\d+)/$',confirmacion_update_view, name='confirmacion_update'),
 
 
 

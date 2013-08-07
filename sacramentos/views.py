@@ -166,15 +166,19 @@ def libro_create_view(request):
 			libro=form_libro.save(commit=False)
 			estado=libro.estado
 			tipo=libro.tipo_libro
-			consulta=Libro.objects.get(estado=estado,tipo_sacramento=tipo)
-			if(estado!=consulta.estado and tipo!=consulta.tipo_libro) or
-			 (estado!=consulta.estado and tipo=consulta.tipo_libro):
+			consulta=Libro.objects.get(estado=estado,tipo_libro=tipo)
+			if(estado!=consulta.estado and tipo==consulta.tipo_libro): 
 				libro.save()
 				return HttpResponseRedirect('/libro')
-			
 			else:
 				messages.add_message(request,messages.WARNING,{'libro':
 					'Ya existe un libro abierto  Cierrelo, y vuelva a crear'})
+
+			if (estado==consulta.estado and tipo!=consulta.tipo_libro):
+				libro.save()
+				return HttpResponseRedirect('/libro')
+
+			
 
 		else:
 			messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})

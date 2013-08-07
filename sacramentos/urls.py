@@ -1,4 +1,5 @@
 from django.conf.urls import include, patterns, url
+from django.views.generic import TemplateView
 
 # from sacramentos.rest import api_usuario_list
 from .views import (
@@ -31,7 +32,8 @@ urlpatterns = patterns('',
 	url(r'^libro/add/$',libro_create_view, name='libro_create'),
 	url(r'^libro/(?P<pk>\d+)/$',libro_update_view, name='libro_update'),
 
-
+	#urls de sacramentos
+	url(r'^sacramentos/$', TemplateView.as_view(template_name='sacramentos.html'), name='sacramentos'),
 	#urls de matrimonio
 	url(r'^matrimonio/$',MatrimonioListView.as_view(),name='matrimonio_list'),
 	url(r'^matrimonio/add/$',matrimonio_create_view, name='matrimonio_create'),

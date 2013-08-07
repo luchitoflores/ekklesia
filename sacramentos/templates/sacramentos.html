@@ -1,0 +1,63 @@
+{%extends 'base.html'%}
+
+{%block content_title%}
+Sacramentos
+{%endblock%}
+
+{%block content%}
+
+<div class="row">
+	<div class="span10 offset1">
+		<ul class="thumbnails">
+			<li class="span4">
+				<div class='thumbnail'>
+					<div style='text-align: center'>
+						<i class='icon-sun icon-4x' style='color: yellow'></i>
+						<h2>Bautismo</h2>
+					</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque</p>
+					<p><a href="{%url 'bautismo_list'%}" class='btn btn-primary'>Ir</a></p>
+				</div>
+			</li>
+			<li class="span4">
+				<div class='thumbnail'>
+					<div style='text-align: center'>
+						<i class='icon-circle icon-4x' style='color: darkgray'></i>
+						<h2>Primera Comunión</h2>
+					</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque</p>
+					<p><a href="{%url 'eucaristia_list'%}" class='btn btn-primary'>Ir</a></p>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="span10 offset1">
+		<ul class="thumbnails">
+			<li class="span4">
+				<div class='thumbnail'>
+					<div style='text-align: center'>
+						<i class='icon-fire icon-4x' style='color:red'></i>
+						<h2>Confirmación</h2>
+					</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque</p>
+					<p><a href="{%url 'confirmacion_list'%}" class='btn btn-primary'>Ir</a></p>
+				</div>
+			</li>
+			<li class="span4">
+				<div class='thumbnail'>
+					<div style='text-align: center'>
+						<i class='icon-bell icon-3x icon-rotate-45' ></i>
+						<i class='icon-bell icon-3x icon-rotate-135'></i>
+						<h2>Matrimonio</h2>
+					</div>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Atque</p>
+					<p><a href="{%url 'matrimonio_list'%}" class='btn btn-primary'>Ir</a></p>
+				</div>
+			</li>
+		</ul>
+	</div>
+</div>
+
+{%endblock%}

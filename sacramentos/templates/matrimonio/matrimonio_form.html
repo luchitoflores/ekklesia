@@ -19,7 +19,7 @@
 <ul class='nav nav-tabs'>
 	<!--<li class='active'><a href="#id_datos_novio" data-toggle='tab'>Novio</a></li>
 	<li ><a href="#id_datos_novia" data-toggle='tab'>Novia</a></li>-->
-	<li><a href="#id_datos_matrimonio" data-toggle='tab'>Datos del Sacramento</a></li>
+	<li class='active'><a href="#id_datos_matrimonio" data-toggle='tab'>Datos del Sacramento</a></li>
 
 </ul>
 
@@ -86,6 +86,12 @@
 					</div>
 					<div class='span6'>
 						<div class='control-group'>
+							<label for="id_iglesia" class='control-label'>{{form_matrimonio.iglesia.label}}</label>
+							<div class='controls'>
+								{{form_matrimonio.iglesia}}
+							</div>
+						</div>
+						<div class='control-group'>
 							<label for="id_padrino" class='control-label'>{{form_matrimonio.padrino.label}}</label>
 							<div class='controls'>
 								{{form_matrimonio.padrino}}
@@ -110,12 +116,7 @@
 							</div>
 						</div>
 							
-						<div class='control-group'>
-							<label for="id_iglesia" class='control-label'>{{form_matrimonio.iglesia.label}}</label>
-							<div class='controls'>
-								{{form_matrimonio.iglesia}}
-							</div>
-						</div>
+						
 				
 				
 				</div>

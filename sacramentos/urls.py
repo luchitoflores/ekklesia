@@ -3,7 +3,7 @@ from django.conf.urls import include, patterns, url
 # from sacramentos.rest import api_usuario_list
 from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
-	LibroCreateView, LibroUpdateView ,LibroListView,
+	libro_create_view, libro_update_view ,LibroListView,
 	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
@@ -28,8 +28,8 @@ urlpatterns = patterns('',
 
 	# urls de libro
 	url(r'^libro/$',LibroListView.as_view(),name='libro_list'),
-	url(r'^libro/add/$',LibroCreateView.as_view(), name='libro_create'),
-	url(r'^libro/(?P<pk>\d+)/$',LibroUpdateView.as_view(), name='libro_update'),
+	url(r'^libro/add/$',libro_create_view, name='libro_create'),
+	url(r'^libro/(?P<pk>\d+)/$',libro_update_view, name='libro_update'),
 
 
 	#urls de matrimonio

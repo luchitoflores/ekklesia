@@ -1,7 +1,7 @@
 {% extends 'base.html'%}
 
 {%block extrascript%}
-	
+
 {%endblock%}
 
 {%block title%}Crear Libros{%endblock%}
@@ -11,34 +11,36 @@
 <form id='id_form_libro' action="." method='POST' class='form-horizontal'>
 	{% csrf_token%}
 	<div class='container'>
-	{% for f in form%}
-	<div class="control-group">
-		<label class='control-label'>
-			{{f.label}}
-		</label>
-		{% if f.name == 'estado' %}
-		{% for r in f%}<div class="controls">{{r}}</div>{% endfor %}
-		{% else %}
-		<div class="controls">
-			{{f}}
+		{% for f in form_libro%}
+		<div class="control-group">
+			<label class='control-label'>
+				{{f.label}}
+			</label>
+			{% if f.name == 'estado' %}
+			{% for r in f%}
+			<div class="controls">{{r}}</div>
+			{% endfor %}
+			{% else %}
+			<div class="controls">
+				{{f}}
+			</div>
+			{% endif %}
+			<div id='prueba' class="controls help-text" >
+				{{f.help_text}}
+				<span class="errors">
+					{{f.errors}}
+				</span>
+			</div>
 		</div>
-		{% endif %}
-		<div id='prueba' class="controls help-text" >
-			{{f.help_text}}
-			<span class="errors">
-				{{f.errors}}
-			</span>
-		</div>
+		{%endfor%}
+	</div>
+	<div class="form-actions">
+		<input type="submit" value="Enviar" class='btn btn-primary'/>
+		<a href="{%url 'libro_list'%}" class='btn btn-primary'>Cancelar</a>
 	</div>
 
-	{%endfor%}
 	
-<div class="form-actions">
-	<input type="submit" value="Enviar" class='btn btn-primary'>
-	<a href="{%url 'libro_list'%}" class='btn btn-primary'>Cancelar</a>
-</div>
-	
-</div>
 </form>
+
 
 {%endblock%}

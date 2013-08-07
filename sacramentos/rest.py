@@ -19,7 +19,7 @@ def usuarioCreateAjax(request):
 			perfil_form.save()
 			bandera = True
 
-# Método para crear el padre o madre de un feligres
+# Método para crear el padre o madre de un feligres - está funcionando
 def padre_create_ajax(request):
 	sexo = request.POST.get('sexo')
 	if request.method == 'POST':
@@ -29,14 +29,14 @@ def padre_create_ajax(request):
 		if usuario_form.is_valid() and perfil_form.is_valid():
 			perfil = perfil_form.save(commit=False)
 			usuario = usuario_form.save(commit=False)
-			usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
+			usuario.username = '%s' % perfil.dni
 			usuario.save()
 			perfil.user = usuario
 			if sexo:
 				perfil.sexo = sexo
 			perfil.save()
 			respuesta = True
-			ctx = {'respuesta': respuesta, 'id': perfil.id, 'full_name': perfil.user.get_full_name()}
+			ctx = {'respuesta': respuesta, 'id': perfil.user.id, 'full_name': perfil.user.get_full_name()}
 		else:
 			errores_usuario = usuario_form.errors
 			errores_perfil =  perfil_form.errors

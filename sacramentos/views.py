@@ -47,6 +47,24 @@ from .forms import (
 # 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
 # 		return render (request, 'usuario/usuario_form.html', ctx)
 
+
+def crear_username(username):
+	users =  User.objects.filter(username__startswith='admin').order_by('-username')[0]
+	# for i
+	# valor_original = user_name_original
+	# username = user_name
+	# try:
+	# 	usuario = User.objects.get(username=user_name)
+	# 	username = user_name_original + str(i)
+	# 	print '%s: %s' % ('Username', username)
+	# 	contador = int(i) + int(1)
+	# 	print type(contador)
+	# 	print u'%s %s' %('Contador: ', contador)
+	# 	crear_username(valor_original, username, contador)
+	# except:
+	# 	return username
+	# return username
+
 def usuarioCreateView(request):
 	if request.method == 'POST':
 		valido = False
@@ -56,7 +74,7 @@ def usuarioCreateView(request):
 			valido = True
 			usuario = form_usuario.save(commit=False)
 			perfil = form_perfil.save(commit=False)
-			usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
+			usuario.username = perfil.dni
 			usuario.save()
 			perfil.user = usuario
 			perfil.save()
@@ -66,9 +84,10 @@ def usuarioCreateView(request):
 		else:
 			errores_usuario = form_usuario.errors
 			errores_perfil =  form_perfil.errors
-			messages.info(request, 'Errores al crear')
+			messages.info(request, errores_usuario)
+			messages.info(request, errores_perfil)
 			ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
-
+			return render (request, 'usuario/usuario_form.html', ctx)
 	else:
 		form_usuario = UsuarioForm()
 		form_perfil = PerfilUsuarioForm()

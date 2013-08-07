@@ -139,6 +139,9 @@ class Libro(TimeStampedModel):
 	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
 	numero_maximo_actas=models.PositiveIntegerField()
 
+	def __unicode__(self):
+		return '%d %s' %(self.numero_libro,self.tipo_libro)
+
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200)
 	fecha_celebracion = models.DateTimeField()

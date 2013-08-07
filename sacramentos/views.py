@@ -135,17 +135,56 @@ class UsuarioListView(ListView):
 
 # Vistas para admin libros
 
-class LibroCreateView(CreateView):
-	model = Libro
-	form_class = LibroForm
-	template_name = 'libro/libro_form.html'
-	success_url= '/libro/'
+# class LibroCreateView(CreateView):
+# 	model = Libro
+# 	form_class = LibroForm
+# 	template_name = 'libro/libro_form.html'
+# 	success_url= '/libro/'
+def libro_create_view(request):
+	if(request.method=='POST'):
+		form_libro=LibroForm(request.POST)
+		if(form_libro.is_valid()):
+			libro=form_libro.save(commit=False)
+			estado=libro.estado
+			tipo=libro.tipo_libro
+			consulta=Libro.objects.get(estado=estado,tipo_sacramento=tipo)
+			if(estado!=consulta.estado and tipo!=consulta.tipo_libro) or
+			 (estado!=consulta.estado and tipo=consulta.tipo_libro):
+				libro.save()
+				return HttpResponseRedirect('/libro')
+			
+			else:
+				messages.add_message(request,messages.WARNING,{'libro':
+					'Ya existe un libro abierto  Cierrelo, y vuelva a crear'})
 
-class LibroUpdateView(UpdateView):
-	model = Libro
-	form_class=LibroForm
-	template_name = 'libro/libro_form.html'
-	success_url = '/libro/'
+		else:
+			messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})
+	else:
+		form_libro=LibroForm()
+	ctx={'form_libro':form_libro}
+	return render(request,'libro/libro_form.html',ctx)
+
+
+# class LibroUpdateView(UpdateView):
+# 	model = Libro
+# 	form_class=LibroForm
+# 	template_name = 'libro/libro_form.html'
+# 	success_url = '/libro/'
+
+def libro_update_view(request,pk):
+	libro=get_object_or_404(Libro,pk=pk)
+	if(request.method=='POST'):
+		form_libro=LibroForm(request.POST,instance=libro)
+		if(form_libro.is_valid()):
+			form_libro.save()
+			return HttpResponseRedirect('/libro')
+		else:
+			messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})
+	else:
+		form_libro=LibroForm(instance=libro)
+	ctx={'form_libro':form_libro}
+	return render(request,'libro/libro_form.html',ctx)
+
 
 class LibroListView(ListView):
 	model = Libro

@@ -1,8 +1,20 @@
 {%extends 'base.html'%}
-
 {%load tags%}
 
-{%block title%}Agregar Confirmaciones{%endblock%}
+{%block title%}
+{%if object.id%}
+Editar Confirmacion 
+{%else%}
+Agregar Confirmacion
+{%endif%}
+{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Confirmacion 
+{%else%}
+Agregar Confirmacion 
+{%endif%}
+{%endblock%}
 
 {%block content%}
 

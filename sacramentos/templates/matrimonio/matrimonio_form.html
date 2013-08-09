@@ -1,8 +1,21 @@
 {%extends 'base.html'%}
-
 {%load tags%}
 
-{%block title%}Agregar Matrimonios{%endblock%}
+{%block title%}
+{%if object.id%}
+Editar Matrimonio 
+{%else%}
+Agregar Matrimonio
+{%endif%}
+{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Matrimonio 
+{%else%}
+Agregar Matrimonio 
+{%endif%}
+{%endblock%}
+
 
 {%block content%}
 

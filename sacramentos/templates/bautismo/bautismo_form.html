@@ -1,10 +1,21 @@
 {%extends 'base.html'%}
-
 {%load tags%}
 
-{%block title%}Agregar Bautismos{%endblock%}
+{%block title%}
+{%if object.id%}
+Editar Bautismo 
+{%else%}
+Agregar Bautismo
+{%endif%}
+{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Bautismo
+{%else%}
+Agregar Bautismo
+{%endif%}
+{%endblock%}
 
-{%block content_title%}{{block.super}}Agregar Bautismos{%endblock%}
 
 {%block content%}
 

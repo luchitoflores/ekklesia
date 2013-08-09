@@ -170,6 +170,8 @@ class EucaristiaForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
+	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
+		queryset=Libro.objects.filter(tipo_libro='Eucaristia',estado='Abierto'))
 	class Meta():
 		model=Eucaristia
 		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento','lugar_sacramento','padrino',
@@ -188,6 +190,8 @@ class ConfirmacionForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	obispo = forms.CharField(required=True,label='Celebrante',
 		widget=forms.TextInput(attrs={'required':''}))
+	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
+		queryset=Libro.objects.filter(tipo_libro='Confirmacion',estado='Abierto'))
 	class Meta():
 		model=Confirmacion
 		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento','lugar_sacramento','padrino',

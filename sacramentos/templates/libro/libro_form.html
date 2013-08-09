@@ -1,10 +1,18 @@
 {% extends 'base.html'%}
-
-{%block extrascript%}
-
+{%block title%}
+{%if object.id%}
+Editar Libro 
+{%else%}
+Agregar Libro
+{%endif%}
 {%endblock%}
-
-{%block title%}Crear Libros{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Libro 
+{%else%}
+Agregar Libro 
+{%endif%}
+{%endblock%}
 
 {%block content%}
 

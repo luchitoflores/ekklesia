@@ -6,7 +6,7 @@ from django.conf import settings
 
 
 from ciudades.models import Direccion 
-from sacramentos.managers import LibroManager, PersonaManager
+from sacramentos.managers import LibroManager, PersonaManager,BautismoManager
 # Create your models here.
 
 class TimeStampedModel(models.Model):
@@ -113,6 +113,7 @@ class Bautismo(Sacramento):
 	abuela_materna = models.CharField(max_length=200)
 	vecinos_paternos = models.CharField(max_length=200)
 	vecinos_maternos = models.CharField(max_length=200)
+	objects=BautismoManager()
 	def __unicode__(self):
 		return '%s %s' %(self.bautizado.user.first_name,self.bautizado.user.last_name)
 

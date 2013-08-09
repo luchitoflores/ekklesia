@@ -147,7 +147,7 @@ class BautismoForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
-	libro=forms.ModelChoiceField(required=True,label='Libross',queryset=Libro.objects.none())
+	libro=forms.ModelChoiceField(required=True,label='Libros',queryset=Libro.objects.libro_activo())
 	class Meta():
 		model=Bautismo
 		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento','lugar_sacramento','padrino','madrina',

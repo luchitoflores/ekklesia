@@ -1,5 +1,6 @@
 function modelo_tablas(valor){
 	$(valor).dataTable({
+		"sDom": "<'top' <'row-fluid' <'span5' l><'span5' f>>>t<'bottom' p>",
 		"aLengthMenu": [[5, 10, 25, 50, 100, -1], [5, 10, 25, 50, 100, 'Todos']],
 		"sPaginationType": "bootstrap",
 		"iDisplayLength": 5,

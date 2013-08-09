@@ -9,7 +9,7 @@ class LibroManager(models.Manager):
 	#  	return self.models.objects.filter(parroquia=self)
 
 	def libro_activo(self):
-		return self.model.objects.filter(tipo_libro='b',estado='Abierto')
+		return self.model.objects.filter(tipo_libro='Bautismo',estado='Abierto')
 
 
 class ParroquiaManager(models.Manager):

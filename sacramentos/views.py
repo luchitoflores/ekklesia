@@ -3,6 +3,7 @@ import json
 
 from django.shortcuts import render,get_object_or_404
 from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.core.exceptions import ObjectDoesNotExist
 
 from django.views.generic import ListView
 from django.contrib import messages
@@ -166,19 +167,34 @@ def libro_create_view(request):
 			libro=form_libro.save(commit=False)
 			estado=libro.estado
 			tipo=libro.tipo_libro
-			consulta=Libro.objects.get(estado=estado,tipo_libro=tipo)
-			if(estado!=consulta.estado and tipo==consulta.tipo_libro): 
+
+			try:
+
+				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo)
+				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
+					if libro.fecha_cierre_mayor():
+
+						libro.save()
+						return HttpResponseRedirect('/libro')
+					else:
+						messages.add_message(request,messages.WARNING,
+						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+
+				elif(estado != consulta.estado and tipo==consulta.tipo_libro):
+					if libro.fecha_cierre_mayor():
+						libro.save()
+						return HttpResponseRedirect('/libro')
+					else:
+						messages.add_message(request,messages.WARNING,
+						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+				else:
+					messages.add_message(request,messages.WARNING,
+						{'Libro':'Ya existe un libro abierto, cierrelo y vuela a crear'})
+
+			except ObjectDoesNotExist:
 				libro.save()
 				return HttpResponseRedirect('/libro')
-			else:
-				messages.add_message(request,messages.WARNING,{'libro':
-					'Ya existe un libro abierto  Cierrelo, y vuelva a crear'})
-
-			if (estado==consulta.estado and tipo!=consulta.tipo_libro):
-				libro.save()
-				return HttpResponseRedirect('/libro')
-
-			
+				
 
 		else:
 			messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})
@@ -199,8 +215,39 @@ def libro_update_view(request,pk):
 	if(request.method=='POST'):
 		form_libro=LibroForm(request.POST,instance=libro)
 		if(form_libro.is_valid()):
-			form_libro.save()
-			return HttpResponseRedirect('/libro')
+			libro=form_libro.save(commit=False)
+			estado=libro.estado
+			tipo=libro.tipo_libro
+
+			try:
+
+				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo)
+				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
+					if libro.fecha_cierre_mayor():
+
+						libro.save()
+						return HttpResponseRedirect('/libro')
+					else:
+						messages.add_message(request,messages.WARNING,
+						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+
+				elif(estado != consulta.estado and tipo==consulta.tipo_libro):
+					if libro.fecha_cierre_mayor():
+
+						libro.save()
+						return HttpResponseRedirect('/libro')
+					else:
+						messages.add_message(request,messages.WARNING,
+						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+				else:
+					messages.add_message(request,messages.WARNING,
+						{'Libro':'Ya existe un libro abierto, cierrelo y vuela a crear'})
+
+			except ObjectDoesNotExist:
+				libro.save()
+				return HttpResponseRedirect('/libro')
+				
+
 		else:
 			messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})
 	else:

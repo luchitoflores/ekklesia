@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
@@ -139,8 +140,17 @@ class Libro(TimeStampedModel):
 	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
 	numero_maximo_actas=models.PositiveIntegerField()
 
+	def fecha_cierre_mayor(self):
+		if (self.fecha_apertura < self.fecha_cierre):
+			return True
+		else:
+			return False
+
+
 	def __unicode__(self):
 		return '%d %s' %(self.numero_libro,self.tipo_libro)
+
+	
 
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200)

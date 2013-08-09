@@ -8,7 +8,7 @@ from django.forms.widgets import RadioSelect
 
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
-					Direccion)
+					Direccion, Intenciones)
 
 
 class DivErrorList(ErrorList):
@@ -206,3 +206,14 @@ class DireccionForm(ModelForm):
 	class Meta:
 		model = Direccion
 
+
+#Form para Intenciones de Misa - Funcionando
+class IntencionForm(ModelForm):
+	class Meta:
+		model = Intenciones
+		widgets = {
+			'intencion': forms.TextInput(attrs={'required':''}),
+			'fecha_celebracion': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy','type': 'datetime-local'}),
+			'oferente': forms.TextInput(attrs={'required':''}),
+			'precio': forms.TextInput(attrs={'required':''})
+		}

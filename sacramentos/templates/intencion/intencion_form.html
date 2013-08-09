@@ -1,0 +1,31 @@
+{% extends 'base.html'%}
+
+{%block title%}{%if object.id%}Editar Intenciones de Misa{%else%}Agregar Intenciones de Misa{%endif%}{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Intenciones de Misa
+{%else%}
+Agregar Intenciones de Misa
+{%endif%}
+{%endblock%}
+
+{%block content%}
+
+<form action="." method='POST'>
+	{%csrf_token%}
+	{%for f in form%}
+
+	<div class="control-group">
+		<label for="" class="control-label">{{f.label}}</label>
+		<div class="controls">
+			{{f}}
+		</div>
+	</div>
+	{%endfor%}
+	<div class="form-actions">
+		<input class='btn btn-primary' type="submit" value='Enviar'>
+		<a href="{%url 'intencion_list'%}" class='btn btn-primary'>Cancelar</a>
+	</div>
+</form>
+
+{%endblock%}

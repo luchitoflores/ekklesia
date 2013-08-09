@@ -1,0 +1,28 @@
+{%extends 'base.html'%}
+{%block title%}Lista de Intenciones de Misa{%endblock%}
+{%block content_title%}
+Lista de Intenciones de Misa
+{%endblock%}
+
+{%block content%}
+<table id='id_table_parroquia' class='table table-bordered table-striped'>
+	<thead>
+		<tr>
+			<th>Nombre</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		{%for o in object_list%}
+		<tr>
+			<td>
+				<a href="{{o.get_absolute_url}}">{{o.nombre}}</a>
+			</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+</table>
+
+<a href="{%url 'intencion_create'%}" class='btn btn-primary'>Registrar intenciones de misa</a>
+
+{%endblock%}

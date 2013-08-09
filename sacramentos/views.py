@@ -12,7 +12,7 @@ from django.views.generic.edit import CreateView, UpdateView
 
 from .models import (PerfilUsuario,
 	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,
-	Parroquia)
+	Parroquia, Intenciones)
 
 from .forms import (
 	UsuarioForm, PerfilUsuarioForm, PadreForm,
@@ -516,3 +516,19 @@ class ParroquiaListView(ListView):
 class ParroquiaUpdateView(UpdateView):
 	model= Parroquia
 	template_name = 'parroquia/parroquia_form.html'
+
+
+
+#Vistas para administar intenciones de misa
+class IntencionCreateView(CreateView):
+	model = Intenciones
+	template_name = 'intencion/intencion_form.html'
+	success_url = '/intencion/'
+
+class IntencionListView(ListView):
+	model= Intenciones
+	template_name = 'intencion/intencion_list.html'
+
+class IntencionUpdateView(UpdateView):
+	model= Intenciones
+	template_name = 'intencion/intencion_form.html'

@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -14,6 +15,35 @@ class TimeStampedModel(models.Model):
 	class Meta:
 		abstract = True
 
+class Libro(TimeStampedModel):
+	TIPO_LIBRO_CHOICES = (
+            ('Bautismo','Bautismo'),
+            ('Eucaristia','Eucaristia'), 
+            ('Confirmacion','Confirmacion'),
+            ('Matrimonio','Matrimonio'),
+            ('Intenciones','Intenciones')          
+    	)
+
+	ESTADO_CHOICES=(
+		('Abierto','Abierto'),
+		('Cerrado','Cerrado'),
+		)
+	numero_libro=models.PositiveIntegerField()
+	tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES)
+	fecha_apertura=models.DateField()
+	fecha_cierre=models.DateField()
+	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
+	numero_maximo_actas=models.PositiveIntegerField()
+
+	def fecha_cierre_mayor(self):
+		if (self.fecha_apertura < self.fecha_cierre):
+			return True
+		else:
+			return False
+
+
+	def __unicode__(self):
+		return '%d %s' %(self.numero_libro,self.tipo_libro)
 
 class PerfilUsuario(TimeStampedModel):
 
@@ -39,8 +69,6 @@ class PerfilUsuario(TimeStampedModel):
 	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True)
 	profesion = models.CharField(max_length=50, null=True, blank=True)
 
-
-
 	def __unicode__(self):
 		return '%s %s' %(self.user.first_name, self.user.last_name) 
 
@@ -57,30 +85,29 @@ class Sacramento(TimeStampedModel):
             ('Confirmacion','Confirmacion'),
             ('Matrimonio','Matrimonio')           
     	)
-
     numero_acta = models.PositiveIntegerField()
     pagina = models.PositiveIntegerField()
-   
     tipo_sacramento = models.CharField(max_length=50, choices=TIPO_SACRAMENTO_CHOICES)
     fecha_sacramento = models.DateField()
     lugar_sacramento = models.CharField(max_length=50)
     padrino = models.CharField(max_length= 200)
     madrina = models.CharField(max_length= 200)
     iglesia = models.CharField(max_length=50)
-    class Meta:
-    	abstract=True
+    libro=models.ForeignKey(Libro, related_name='Libro')
+
+    
 
 
 
 class Bautismo(Sacramento):
+	
 	bautizado=models.OneToOneField(PerfilUsuario, related_name='Bautizado',null=True,blank=True)
-	abuelo_paterno = models.CharField(max_length=200) 
+	abuelo_paterno = models.CharField(max_length=200)
 	abuela_paterna = models.CharField(max_length=200)
 	abuelo_materno = models.CharField(max_length=200)
 	abuela_materna = models.CharField(max_length=200)
 	vecinos_paternos = models.CharField(max_length=200)
 	vecinos_maternos = models.CharField(max_length=200)
-
 	def __unicode__(self):
 		return '%s %s' %(self.bautizado.user.first_name,self.bautizado.user.last_name)
 
@@ -120,35 +147,7 @@ class NotaMarginal(TimeStampedModel):
 		return self.descripcion
 
 
-class Libro(TimeStampedModel):
-	TIPO_LIBRO_CHOICES = (
-            ('Bautismo','Bautismo'),
-            ('Eucaristia','Eucaristia'), 
-            ('Confirmacion','Confirmacion'),
-            ('Matrimonio','Matrimonio'),
-            ('Intenciones','Intenciones')          
-    	)
 
-	ESTADO_CHOICES=(
-		('Abierto','Abierto'),
-		('Cerrado','Cerrado'),
-		)
-	numero_libro=models.PositiveIntegerField()
-	tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES)
-	fecha_apertura=models.DateField()
-	fecha_cierre=models.DateField()
-	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
-	numero_maximo_actas=models.PositiveIntegerField()
-
-	def fecha_cierre_mayor(self):
-		if (self.fecha_apertura < self.fecha_cierre):
-			return True
-		else:
-			return False
-
-
-	def __unicode__(self):
-		return '%d %s' %(self.numero_libro,self.tipo_libro)
 
 	
 

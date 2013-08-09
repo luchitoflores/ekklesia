@@ -45,6 +45,12 @@
 				<div class='row'>
 					<div class='span6'>
 						<div class='control-group'>
+							<label for="id_libro" class='control-label'>{{form_matrimonio.libro.label}}</label>
+							<div class='controls'>
+								{{form_matrimonio.libro}}
+							</div>
+						</div>
+						<div class='control-group'>
 							<label for="id_pagina" class='control-label'>{{form_matrimonio.pagina.label}}</label>
 							<div class='controls'>
 								{{form_matrimonio.pagina}}
@@ -74,17 +80,16 @@
 								{{form_matrimonio.fecha_sacramento}}
 							</div>
 						</div>
+							
+						
+					</div>
+					<div class='span6'>
 						<div class='control-group'>
 							<label for="id_lugar_sacramento" class='control-label'>{{form_matrimonio.lugar_sacramento.label}}</label>
 							<div class='controls'>
 								{{form_matrimonio.lugar_sacramento}}
 							</div>
 						</div>
-						
-						
-						
-					</div>
-					<div class='span6'>
 						<div class='control-group'>
 							<label for="id_iglesia" class='control-label'>{{form_matrimonio.iglesia.label}}</label>
 							<div class='controls'>
@@ -115,33 +120,33 @@
 								{{form_matrimonio.testigo_novia}}
 							</div>
 						</div>
-							
+
 						
-				
-				
+
+
+					</div>
+
+
+
 				</div>
-				
-			
-	
 			</div>
-		</div>
-		
-	
-	<div class="form-actions">
-		<input type="submit" value="Enviar" class='btn btn-primary'/>
-		<a href="{%url 'matrimonio_list'%}" class='btn btn-primary'>Cancelar</a>
+
+
+			<div class="form-actions">
+				<input type="submit" value="Enviar" class='btn btn-primary'/>
+				<a href="{%url 'matrimonio_list'%}" class='btn btn-primary'>Cancelar</a>
+			</div>
+
+		</form>
 	</div>
 
-</form>
-</div>
-
 	
 
 	
 
-<!-- MODAL DE BUSQUEDA-->
+	<!-- MODAL DE BUSQUEDA-->
 
-<!-- Modal para indicar que un usuario ha sid creado-->
+	<!-- Modal para indicar que un usuario ha sid creado-->
 
-{%include 'modal.html'%}
-{% endblock%}
+	{%include 'modal.html'%}
+	{% endblock%}

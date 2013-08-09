@@ -92,8 +92,13 @@ class MatrimonioForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	class Meta():
 		model=Matrimonio
-		fields=('numero_acta','pagina','fecha_sacramento','lugar_sacramento','padrino','madrina',
+		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','padrino','madrina',
 			'iglesia','novio','novia','testigo_novio','testigo_novia')
+
+	# def __init__(self,*args,**kwargs):
+	# 	super(LibroForm,self).__init__(*args,**kwargs)
+	# 	if (libro.tipo_libro=='Bautismo'):
+	# 		self.fields['libro'].queryset = User.objects.filter(tipo_libro='Bautismo')
 
 class BautismoForm(ModelForm):
 	# bautizado=forms.CharField(widget=forms.TextInput())
@@ -107,9 +112,10 @@ class BautismoForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
+	libro=forms.ModelChoiceField(required=True,label='Libross',queryset=Libro.objects.none())
 	class Meta():
 		model=Bautismo
-		fields=('numero_acta','pagina','bautizado','fecha_sacramento','lugar_sacramento','padrino','madrina',
+		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento','lugar_sacramento','padrino','madrina',
 			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno','abuela_materna','vecinos_paternos','vecinos_maternos')
 
 class EucaristiaForm(ModelForm):
@@ -125,7 +131,7 @@ class EucaristiaForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	class Meta():
 		model=Eucaristia
-		fields=('numero_acta','pagina','feligres','fecha_sacramento','lugar_sacramento','padrino',
+		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento','lugar_sacramento','padrino',
 			'madrina','iglesia')
 
 class ConfirmacionForm(ModelForm):
@@ -143,7 +149,7 @@ class ConfirmacionForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	class Meta():
 		model=Confirmacion
-		fields=('numero_acta','pagina','confirmado','fecha_sacramento','lugar_sacramento','padrino',
+		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento','lugar_sacramento','padrino',
 			'madrina','obispo','iglesia')
 
 

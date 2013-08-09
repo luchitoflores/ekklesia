@@ -17,8 +17,26 @@ function inicio(){
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
+	poner_fecha_defecto('#id_fecha_apertura')
 }
 
+function poner_fecha_defecto(id){
+	var date= new Date();
+	var day = date.getDate();
+	var month = date.getMonth() + 1;
+	var year = date.getFullYear();
+
+	if (month < 10){
+		month = "0" + month;
+		
+	} 
+	if (day < 10) {
+		day = "0" + day;
+	}
+
+	var today = year + "-" + month + "-" + day;  
+	$(id).attr('value',today);
+}
 function limpiar_campos(campos){
 	$(campos).val('');
 }

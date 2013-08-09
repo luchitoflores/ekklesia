@@ -19,6 +19,7 @@ from .forms import (
 	MatrimonioForm,BautismoForm,EucaristiaForm,ConfirmacionForm,
 	LibroForm,
 	DivErrorList,
+	IntencionForm
 	)
 
 
@@ -522,6 +523,7 @@ class ParroquiaUpdateView(UpdateView):
 #Vistas para administar intenciones de misa
 class IntencionCreateView(CreateView):
 	model = Intenciones
+	form_class = IntencionForm
 	template_name = 'intencion/intencion_form.html'
 	success_url = '/intencion/'
 
@@ -532,3 +534,5 @@ class IntencionListView(ListView):
 class IntencionUpdateView(UpdateView):
 	model= Intenciones
 	template_name = 'intencion/intencion_form.html'
+	form_class = IntencionForm
+	success_url = '/intencion/'

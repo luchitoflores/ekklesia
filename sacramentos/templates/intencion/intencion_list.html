@@ -8,7 +8,9 @@ Lista de Intenciones de Misa
 <table id='id_table_parroquia' class='table table-bordered table-striped'>
 	<thead>
 		<tr>
-			<th>Nombre</th>
+			<th>Intención</th>
+			<th>Fecha</th>
+			<th>Oferente</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -16,8 +18,10 @@ Lista de Intenciones de Misa
 		{%for o in object_list%}
 		<tr>
 			<td>
-				<a href="{{o.get_absolute_url}}">{{o.nombre}}</a>
+				<a href="{{o.get_absolute_url}}">{{o.intencion}}</a>
 			</td>
+			<td>{{o.fecha_celebracion}}</td>
+			<td>{{o.oferente}}</td>
 		</tr>
 		{%endfor%}
 	</tbody>

@@ -1,4 +1,6 @@
+# -*- coding:utf-8 -*-
 from django.conf.urls import include, patterns, url
+from django.views.generic import TemplateView
 
 # from sacramentos.rest import api_usuario_list
 from .views import (
@@ -8,7 +10,7 @@ from .views import (
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
-
+	ParroquiaCreateView, ParroquiaListView, ParroquiaUpdateView,
 	)
 urlpatterns = patterns('', 
 	#urls de usuarios
@@ -31,7 +33,8 @@ urlpatterns = patterns('',
 	url(r'^libro/add/$',libro_create_view, name='libro_create'),
 	url(r'^libro/(?P<pk>\d+)/$',libro_update_view, name='libro_update'),
 
-
+	#urls de sacramentos
+	url(r'^sacramentos/$', TemplateView.as_view(template_name='sacramentos.html'), name='sacramentos'),
 	#urls de matrimonio
 	url(r'^matrimonio/$',MatrimonioListView.as_view(),name='matrimonio_list'),
 	url(r'^matrimonio/add/$',matrimonio_create_view, name='matrimonio_create'),
@@ -56,7 +59,10 @@ urlpatterns = patterns('',
 	url(r'^confirmacion/add/$',confirmacion_create_view, name='confirmacion_create'),
 	url(r'^confirmacion/(?P<pk>\d+)/$',confirmacion_update_view, name='confirmacion_update'),
 
-
+	#urls de parroquia eclesiástica
+	url(r'^parroquia/$', ParroquiaListView.as_view(), name='parroquia_list'),
+	url(r'^parroquia/add/$', ParroquiaCreateView.as_view(), name='parroquia_create'),
+	url(r'^parroquia/(?P<pk>\d+)/$', ParroquiaUpdateView.as_view(), name='parroquia_update'),
 
 
 	)

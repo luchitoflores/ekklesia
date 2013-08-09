@@ -8,7 +8,7 @@ function inicio(){
 	asignar_padre();
 	// usuarioCreate();
 	tablas_estilo_bootstrap();
-	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion');
+	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia');
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');

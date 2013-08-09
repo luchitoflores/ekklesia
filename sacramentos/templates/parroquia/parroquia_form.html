@@ -1,0 +1,22 @@
+{% extends 'base.html'%}
+
+{%block content%}
+
+<form action="." method='POST'>
+	{%csrf_token%}
+	{%for f in form%}
+
+	<div class="control-group">
+		<label for="" class="control-label">{{f.label}}</label>
+		<div class="controls">
+			{{f}}
+		</div>
+	</div>
+	{%endfor%}
+	<div class="form-actions">
+		<input class='btn btn-primary' type="submit" value='Enviar'>
+		<a href="{%url 'parroquia_list'%}" class='btn btn-primary'>Cancelar</a>
+	</div>
+</form>
+
+{%endblock%}

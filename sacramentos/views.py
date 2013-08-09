@@ -10,7 +10,10 @@ from django.contrib import messages
 from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
 
-from .models import PerfilUsuario,Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion
+from .models import (PerfilUsuario,
+	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,
+	Parroquia)
+
 from .forms import (
 	UsuarioForm, PerfilUsuarioForm, PadreForm,
 	MatrimonioForm,BautismoForm,EucaristiaForm,ConfirmacionForm,
@@ -492,3 +495,19 @@ def confirmacion_update_view(request,pk):
 class ConfirmacionListView(ListView):
 	model=Confirmacion
 	template_name='confirmacion/confirmacion_list.html'
+
+
+
+#Vistas para crear una parroquia
+class ParroquiaCreateView(CreateView):
+	model = Parroquia
+	template_name = 'parroquia/parroquia_form.html'
+	success_url = '/parroquia/'
+
+class ParroquiaListView(ListView):
+	model= Parroquia
+	template_name = 'parroquia/parroquia_list.html'
+
+class ParroquiaUpdateView(UpdateView):
+	model= Parroquia
+	template_name = 'parroquia/parroquia_form.html'

@@ -11,6 +11,7 @@ from .views import (
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
 	ParroquiaCreateView, ParroquiaListView, ParroquiaUpdateView,
+	IntencionCreateView, IntencionListView, IntencionUpdateView,
 	)
 urlpatterns = patterns('', 
 	#urls de usuarios
@@ -63,6 +64,11 @@ urlpatterns = patterns('',
 	url(r'^parroquia/$', ParroquiaListView.as_view(), name='parroquia_list'),
 	url(r'^parroquia/add/$', ParroquiaCreateView.as_view(), name='parroquia_create'),
 	url(r'^parroquia/(?P<pk>\d+)/$', ParroquiaUpdateView.as_view(), name='parroquia_update'),
+
+	#urls para intenciones de misa
+	url(r'^intencion/$', IntencionListView.as_view(), name='intencion_list'),
+	url(r'^intencion/add/$', IntencionCreateView.as_view(), name='intencion_create'),
+	url(r'^intencion/(?P<pk>\d+)/$', IntencionUpdateView.as_view(), name='intencion_update'),
 
 
 	)

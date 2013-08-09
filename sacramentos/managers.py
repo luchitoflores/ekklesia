@@ -17,10 +17,10 @@ class ParroquiaManager(models.Manager):
 
 class PersonaManager(models.Manager):
 	def male(self):
-		return self.model.objects.filter(sexo='Masculino')
+		return self.model.objects.filter(sexo='m')
 
 	def female(self):
-		return self.model.objects.filter(sexo='Femenino')
+		return self.model.objects.filter(sexo='f')
 
 class BautismoManager(models.Manager):
 	# def libro_activo(self):

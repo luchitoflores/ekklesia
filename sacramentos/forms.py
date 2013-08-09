@@ -12,8 +12,10 @@ from .models import (PerfilUsuario,
 
 #forms para manejo de usuarios
 class UsuarioForm(ModelForm):
-	first_name = forms.CharField(required=True, label='Nombres', widget=forms.TextInput(attrs={'required': ''}))
-	last_name = forms.CharField(required=True, label='Apellidos', widget=forms.TextInput(attrs={'required': ''}))
+	first_name = forms.CharField(required=True, label='Nombres', 
+		widget=forms.TextInput(attrs={'required': ''}))
+	last_name = forms.CharField(required=True, label='Apellidos', 
+		widget=forms.TextInput(attrs={'required': ''}))
 
 	class Meta():
 		model = User
@@ -98,7 +100,7 @@ class MatrimonioForm(ModelForm):
 	# def __init__(self,*args,**kwargs):
 	# 	super(LibroForm,self).__init__(*args,**kwargs)
 	# 	if (libro.tipo_libro=='Bautismo'):
-	# 		self.fields['libro'].queryset = User.objects.filter(tipo_libro='Bautismo')
+	# 		self.fields['libro'].queryset = User.objects.filter(tipo_libro='Matrimonio')
 
 class BautismoForm(ModelForm):
 	# bautizado=forms.CharField(widget=forms.TextInput())

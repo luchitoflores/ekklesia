@@ -153,8 +153,13 @@ class NotaMarginal(TimeStampedModel):
 
 
 
-class Libro():
-	
+class Libro(TimeStampedModel):
+ 	TIPO_LIBRO_CHOICES = (
+            ('b','Bautismo'),
+            ('e','Eucaristia'), 
+            ('c','Confirmacion'),
+            ('m','Matrimonio')           
+    	)
 	ESTADO_CHOICES=(
 		('Abierto','Abierto'),
 		('Cerrado','Cerrado'),

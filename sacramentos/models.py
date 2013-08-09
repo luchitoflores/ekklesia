@@ -4,8 +4,9 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from django.conf import settings
 
-from ciudades.models import Provincia, Canton, Parroquia, Direccion 
 
+from ciudades.models import Direccion 
+from sacramentos.managers import LibroManager, PersonaManager
 # Create your models here.
 
 class TimeStampedModel(models.Model):
@@ -46,17 +47,18 @@ class Libro(TimeStampedModel):
 		return '%d %s' %(self.numero_libro,self.tipo_libro)
 
 class PerfilUsuario(TimeStampedModel):
-
+	# p.f00_size
+	# p.get_foo_size_display()
 	SEXO_CHOICES = (
-		('Masculino', 'Masculino'), 
-		('Femenino','Femenino')
+		('m', 'Masculino'), 
+		('f','Femenino')
 		)	
 
 	ESTADO_CIVIL_CHOICES    = (
-		('Soltero/a','Soltero/a'),
-		('Casado/a','Casado/a'),
-		('Divorciado/a','Divorciado/a'),
-		('Viudo/a','Viudo/a')
+		('s','Soltero/a'),
+		('c','Casado/a'),
+		('d','Divorciado/a'),
+		('v','Viudo/a')
 		)
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Usuario', null=True, blank=True)
@@ -69,6 +71,9 @@ class PerfilUsuario(TimeStampedModel):
 	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True)
 	profesion = models.CharField(max_length=50, null=True, blank=True)
 
+	objects = PersonaManager()
+
+
 	def __unicode__(self):
 		return '%s %s' %(self.user.first_name, self.user.last_name) 
 
@@ -80,10 +85,10 @@ class PerfilUsuario(TimeStampedModel):
 
 class Sacramento(TimeStampedModel):
     TIPO_SACRAMENTO_CHOICES = (
-            ('Bautismo','Bautismo'),
-            ('Eucaristia','Eucaristia'), 
-            ('Confirmacion','Confirmacion'),
-            ('Matrimonio','Matrimonio')           
+            ('b','Bautismo'),
+            ('e','Eucaristia'), 
+            ('c','Confirmacion'),
+            ('m','Matrimonio')           
     	)
     numero_acta = models.PositiveIntegerField()
     pagina = models.PositiveIntegerField()
@@ -147,6 +152,32 @@ class NotaMarginal(TimeStampedModel):
 		return self.descripcion
 
 
+
+class Libro():
+	
+	ESTADO_CHOICES=(
+		('Abierto','Abierto'),
+		('Cerrado','Cerrado'),
+		)
+	numero_libro=models.PositiveIntegerField()
+	tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES)
+	fecha_apertura=models.DateField()
+	fecha_cierre=models.DateField()
+	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
+	numero_maximo_actas=models.PositiveIntegerField()
+	parroquia = models.ForeignKey('Parroquia')
+
+	objects = LibroManager()
+
+	def fecha_cierre_mayor(self):
+		if (self.fecha_apertura < self.fecha_cierre):
+			return True
+		else:
+			return False
+
+
+	def __unicode__(self):
+		return '%d %s' %(self.numero_libro,self.tipo_libro)
 
 
 	

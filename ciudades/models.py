@@ -40,7 +40,7 @@ class Parroquia(models.Model):
 
 
 class Direccion(models.Model):
-	nombre=models.CharField(max_length=200)
+	nombre=models.CharField('Domicilio', max_length=200)
 	provincia=models.ForeignKey(Provincia)
 	canton=models.ForeignKey(Canton)
 	parroquia=models.ForeignKey(Parroquia, related_name='parroquia_civil')
@@ -48,5 +48,5 @@ class Direccion(models.Model):
 	celular=models.CharField(max_length=10)
 
 	def __unicode__(self):
-		return u'%s.- %s' % (self.id, self.parroquia.nombre)
+		return u'%s.- %s - %s' % (self.id, self.parroquia.nombre, self.nombre)
 

@@ -2,9 +2,16 @@
 
 {%load tags%}
 {%load tags_direccion%}
+{%load tags_html%}
 
-{%block title%}Agregar Feligreses{%endblock%}
-{%block content_title%}{{block.super}}Agregar Feligreses{%endblock%}
+{%block title%}{%if form_perfil.id%}Agregar Feligrés{%endif%}{%endblock%}
+{%block content_title%}
+{%if perfil%} 
+Editar Feligres
+{%else%}
+Agregar Feligrés
+{%endif%}
+{%endblock%}
 
 {%block content%}
 
@@ -14,16 +21,16 @@
 </div>
 
 
-<!-- Pestañas para datos personales, padre y madre -->
+<!-- Pestañas para datos personales, padre y madre 
 <ul class='nav nav-tabs'>
 	<li class='active'><a href="#id_datos_personales" data-toggle='tab'>Datos Personales</a></li>
 </ul>
-
+-->
 <div class="tab-content">
-	<div id='id_datos_personales' class='tab-pane active'>
-		<form id='id_form_usuario_create' method='POST' class='form-horizontal'>
-			{%csrf_token%}
-			<!--<select name="" id="id_padre"></select>-->
+	<!--<div id='id_datos_personales' class='tab-pane active'>-->
+	<form id='id_form_usuario_create' method='POST' class='form-horizontal'>
+		{%csrf_token%}
+		<!--<select name="" id="id_padre"></select>-->
 			<!--Input para typeahead de bootstrap
 			<input type='hidden' id='id_autocomplete'>
 			Input para el plugin select2
@@ -31,51 +38,105 @@
 			
 			<div class="row">
 				<div class="span10">
-					<div class="control-group">
-						<label class="control-label">{{form_perfil.dni.label}}</label>
-						<div class="controls">
-							{{form_perfil.dni}}
+					<fieldset class='scheduler-border'>
+						<legend class='scheduler-border'>Datos Personales</legend>
+						<div class="control-group">
+							{{form_usuario.first_name|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_usuario.first_name}}
+							</div>
+							<div class="controls">{{form_usuario.first_name.help_text}}</div>
 						</div>
-						<div class="controls">{{form_perfil.dni.help_text}}</div>
-					</div>
-
-					{% for f in form_usuario%}
-
-					<div class="control-group">
-						<label class="control-label">{{f.label}}</label>
-						<div class="controls">{{f}}</div>
-						<div class="controls">{{f.help_text}}</div>
-					</div>
-					{%endfor%}
-					{% for f in form_perfil%}
-					{%if f.label != 'Dni' and f.label != 'Sexo' and f.label != 'Padre' and f.label != 'Madre'%}
-					<div class="control-group">
-						<label class="control-label">{{f.label}}</label>
-						<div class="controls">{{f}}</div>
-						<div class="controls">{{f.help_text}}</div>
-					</div>
-					{%endif%}
-
-					{%if f.label == form_perfil.sexo.label%}
-					<label for="" class='control-label'>{{f.label}}</label>
-					<div class="controls nav">
-						{% for radio in form_perfil.sexo %}
-						{{ radio }}
-						{% endfor %}
-					</div>
-					{%endif%}
-					{%if f.label == form_perfil.padre.label or f.label == 'Madre' %}
-					<div class="control-group">
-						<label class="control-label">{{f.label}}</label>
-						<div class="controls">
-							{{f}}
-							<a href="#id_crear_{{f.label|lower}}" class='btn btn-primary' data-toggle='modal'>+</a>
+						<div class="control-group">
+							{{form_usuario.last_name|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_usuario.last_name}}
+							</div>
+							<div class="controls">{{form_usuario.last_name.help_text}}</div>
 						</div>
-						<div class="controls">{{f.help_text}}</div>
-					</div>
-					{%endif%}
+						<div class="row">
+							<div class="span4">
+								<div class="control-group">
+									{{form_perfil.sexo|label_with_classes:'control-label'}}
+									<div class="controls">
+										{% for radio in form_perfil.sexo %}
+										{{ radio }}
+										{% endfor %}
+									</div>
+									<div class="controls">{{form_perfil.sexo.help_text}}</div>
+								</div>
+								<div class="control-group">
+									{{form_perfil.dni|label_with_classes:'control-label'}}
+									<div class="controls">
+										{{form_perfil.dni}}
+									</div>
+									<div class="controls">{{form_perfil.dni.help_text}}</div>
+								</div>
 
-					{%endfor%}
+							</div>
+							<div class="span4">
+								<div class="control-group">
+									{{form_perfil.estado_civil|label_with_classes:'control-label'}}
+									<div class="controls">
+										{{form_perfil.estado_civil}}
+									</div>
+									<div class="controls">
+										{{form_perfil.estado_civil.help_text}}
+									</div>
+								</div>
+								<div class="control-group">
+									{{form_perfil.profesion|label_with_classes:'control-label'}}
+									<div class="controls">
+										{{form_perfil.profesion}}
+									</div>
+									<div class="controls">
+										{{form_perfil.profesion.help_text}}
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</fieldset>
+					
+					<fieldset class='scheduler-border'>
+						<legend class='scheduler-border'>Datos de Nacimiento</legend>
+						<div class="control-group">
+							{{form_perfil.fecha_nacimiento|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_perfil.fecha_nacimiento}}
+							</div>
+							<div class="controls">{{form_perfil.fecha_nacimiento.help_text}}</div>
+						</div>
+						<div class="control-group">
+							{{form_perfil.lugar_nacimiento|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_perfil.lugar_nacimiento}}
+							</div>
+							<div class="controls">{{form_perfil.lugar_nacimiento.help_text}}</div>
+						</div>
+					</fieldset>
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border">Información sobre los padres</legend>
+						<div class="control-group">
+							{{form_perfil.padre|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_perfil.padre}}
+								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'>+</a>
+							</div>
+							<div class="controls">{{form_perfil.padre.help_text}}</div>
+						</div>
+						<div class="control-group">
+							{{form_perfil.madre|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_perfil.madre}}
+								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								<a href="#id_crear_madre" class='btn btn-primary' data-toggle='modal'>+</a>
+							</div>
+							<div class="controls">{{form_perfil.madre.help_text}}</div>
+						</div>
+					</fieldset>
+					
 
 					<div class="form-actions">
 						<input type="submit" value='Enviar' class="btn btn-primary">
@@ -83,85 +144,85 @@
 					</div>
 				</div>
 			</div>
-			
+
 		</form>
+
 	</div>
-</div>
 
-<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a>
+	<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a>
 
-<!-- Inclusion de Modal de Busqueda-->
-{%include 'modal.html'%}
+	<!-- Inclusion de Modal de Busqueda-->
+	{%include 'modal.html'%}
 
-<!-- Modal para crear padre-->
-<div id="id_crear_padre" class="modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3>Búsqueda de Feligreses</h3>
-	</div>
-	<div class="modal-body">
-		<form id='id_form_crear_padre' class='form-horizontal' method='POST'>
-			{%feligres%}
-			
-			<div class="control-group">
-				<div class='controls'>
-					<input type="submit" value='Enviar' class='btn btn-primary'>
+	<!-- Modal para crear padre-->
+	<div id="id_crear_padre" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+			<h3>Búsqueda de Feligreses</h3>
+		</div>
+		<div class="modal-body">
+			<form id='id_form_crear_padre' class='form-horizontal' method='POST'>
+				{%feligres%}
+
+				<div class="control-group">
+					<div class='controls'>
+						<input type="submit" value='Enviar' class='btn btn-primary'>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
 
+		</div>
+		<div class="modal-footer">
+			<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+		</div>
 	</div>
-	<div class="modal-footer">
-		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
-	</div>
-</div>
 
-<!-- Modal para crear madre-->
-<div id="id_crear_madre" class="modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3>Búsqueda de Feligreses</h3>
-	</div>
-	<div class="modal-body">
-		<form id='id_form_crear_madre' class='form-horizontal' method='POST'>
-			{%feligres%}
-			<div class="control-group">
-				<div class='controls'>
-					<input type="submit" value='Enviar' class='btn btn-primary'>
+	<!-- Modal para crear madre-->
+	<div id="id_crear_madre" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+			<h3>Búsqueda de Feligreses</h3>
+		</div>
+		<div class="modal-body">
+			<form id='id_form_crear_madre' class='form-horizontal' method='POST'>
+				{%feligres%}
+				<div class="control-group">
+					<div class='controls'>
+						<input type="submit" value='Enviar' class='btn btn-primary'>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
 
+		</div>
+		<div class="modal-footer">
+			<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+		</div>
 	</div>
-	<div class="modal-footer">
-		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
-	</div>
-</div>
 
-<!-- Modal para asignar la dirección de un feligrés -->
-<div id="id_modal_direccion" class="modal hide fade">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-		<h3>Búsqueda de Feligreses</h3>
-	</div>
-	<div class="modal-body">
-		<form id='id_form_direccion' class='form-horizontal' method='POST'>
-			{%direccion%}
-			<div class="control-group">
-				<div class='controls'>
-					<input type="submit" value='Enviar' class='btn btn-primary'>
+	<!-- Modal para asignar la dirección de un feligrés -->
+	<div id="id_modal_direccion" class="modal hide fade">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+			<h3>Búsqueda de Feligreses</h3>
+		</div>
+		<div class="modal-body">
+			<form id='id_form_direccion' class='form-horizontal' method='POST'>
+				{%direccion%}
+				<div class="control-group">
+					<div class='controls'>
+						<input type="submit" value='Enviar' class='btn btn-primary'>
+					</div>
 				</div>
-			</div>
-		</form>
+			</form>
 
+		</div>
+		<div class="modal-footer">
+			<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+		</div>
 	</div>
-	<div class="modal-footer">
-		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
-	</div>
-</div>
 
 
-<!-- codigo copiado de twitter, aun no funciona, es para alert-->
+<!-- codigo copiado de twitter, aun no funciona, es para alert
 <div class="alert-messages" id="message-drawer" style="opacity: 1;">
 	<div class="message ">
 		<div class="message-inside">
@@ -169,5 +230,6 @@
 		</div>
 	</div>
 </div>
+-->
 
 {% endblock%}

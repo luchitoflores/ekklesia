@@ -1,14 +1,14 @@
 # Create your views here.
 import json
 
-from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django import forms
 from django.core.exceptions import ObjectDoesNotExist
-
-from django.views.generic import ListView
 from django.contrib import messages
-from django.views.generic.edit import CreateView, UpdateView
 from django.contrib.auth.models import User
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.shortcuts import render,get_object_or_404
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, UpdateView
 
 from .models import (PerfilUsuario,
 	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,
@@ -18,6 +18,7 @@ from .forms import (
 	UsuarioForm, PerfilUsuarioForm, PadreForm,
 	MatrimonioForm,BautismoForm,EucaristiaForm,ConfirmacionForm,
 	LibroForm,
+	DivErrorList,
 	)
 
 
@@ -73,7 +74,7 @@ def usuarioCreateView(request):
 	if request.method == 'POST':
 		valido = False
 		form_usuario = UsuarioForm(request.POST)
-		form_perfil = PerfilUsuarioForm(request.POST)
+		form_perfil = PerfilUsuarioForm(request.POST, error_class=DivErrorList)
 		if form_usuario.is_valid() and form_perfil.is_valid():
 			valido = True
 			usuario = form_usuario.save(commit=False)
@@ -90,11 +91,14 @@ def usuarioCreateView(request):
 			errores_perfil =  form_perfil.errors
 			messages.info(request, errores_usuario)
 			messages.info(request, errores_perfil)
-			ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
+			# ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
+			ctx = {'form_usuario': form_usuario, 'form_perfil': form_perfil}
 			return render (request, 'usuario/usuario_form.html', ctx)
 	else:
-		form_usuario = UsuarioForm()
-		form_perfil = PerfilUsuarioForm()
+		form_usuario = UsuarioForm(label_suffix=':', error_class=DivErrorList)
+		form_perfil = PerfilUsuarioForm(label_suffix=':')
+		# form_perfil.fields['madre'] = forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), required=False, empty_label='--- Seleccione ---')
+		# form_perfil.fields['padre'] = forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), required=False, empty_label='--- Seleccione ---')
 		ctx = {'form_usuario': form_usuario, 'form_perfil': form_perfil}
 		return render (request, 'usuario/usuario_form.html', ctx)
 
@@ -110,13 +114,14 @@ def edit_usuario_view(request,pk):
 			return HttpResponseRedirect('/usuario')
 		else:
 			messages.info(request, 'Errores al actualizar')
+			ctx = {'form_usuario': form_usuario,'form_perfil':form_perfil, 'perfil':perfil}
 
 
 	else:
 		form_usuario = UsuarioForm(instance=user)
 		form_perfil = PerfilUsuarioForm(instance=perfil)
 									
-	ctx = {'form_usuario': form_usuario,'form_perfil':form_perfil, 'perfil':perfil}
+	ctx = {'form_usuario': form_usuario,'form_perfil':form_perfil, 'perfil':perfil.id}
 	return render(request, 'usuario/usuario_form.html', ctx)
 
 def padre_create_view(request):

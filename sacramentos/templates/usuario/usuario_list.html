@@ -7,6 +7,9 @@
 
 
 {%block title%}Lista de Feligreses{%endblock%}
+{%block content_title%}
+Lista de Feligreses
+{%endblock%}
 
 
 {%block content%}
@@ -37,7 +40,7 @@
 			<td>{{o.padre.first_name}} {{o.padre.last_name }}</td>
 			<td>{{o.madre.first_name}} {{o.madre.last_name}}</td>
 			<td><a class='id_delete' href="/usuario/{{o.id}}/bautismo/add" role="button"  name='{{o.id_fel}}'>Bautismo</a>
-		</td>
+			</td>
 		</tr>
 		{% endfor %}
 	</tbody>

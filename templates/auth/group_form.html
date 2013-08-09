@@ -1,6 +1,19 @@
 {% extends 'base.html' %}
 
-{%block title%}{% if form.field.id %}Editar Grupos{% else %}Añadir Grupos{% endif %}{%endblock%}
+{%block title%}
+{%if object.id%}
+Editar Grupo 
+{%else%}
+Agregar Grupo
+{%endif%}
+{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Grupo 
+{%else%}
+Agregar Grupo 
+{%endif%}
+{%endblock%}
 
 {%block extrascript%}
 <script>

@@ -1,8 +1,20 @@
 {%extends 'base.html'%}
-
 {%load tags%}
 
-{%block title%}Agregar Eucaristias{%endblock%}
+{%block title%}
+{%if object.id%}
+Editar Primera Comunión 
+{%else%}
+Agregar Primera Comunión
+{%endif%}
+{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Primera Comunión 
+{%else%}
+Agregar Primera Comunión 
+{%endif%}
+{%endblock%}
 
 {%block content%}
 

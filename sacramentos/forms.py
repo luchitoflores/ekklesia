@@ -113,6 +113,10 @@ class LibroForm(ModelForm):
 class MatrimonioForm(ModelForm):
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': ''}))
+	novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
+		required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
+	novia=forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), 
+		required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
@@ -147,7 +151,7 @@ class BautismoForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
-	libro=forms.ModelChoiceField(required=True,label='Libros',queryset=Libro.objects.libro_activo())
+	# libro=forms.ModelChoiceField(empty_label=None,label='Libro')
 	class Meta():
 		model=Bautismo
 		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento','lugar_sacramento','padrino','madrina',

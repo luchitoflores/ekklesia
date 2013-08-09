@@ -1,5 +1,14 @@
 {% extends 'base.html'%}
 
+{%block title%}{%if object.id%}Editar Parroquia{%else%}Agregar Parroquia{%endif%}{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Parroquia
+{%else%}
+Agregar Parroquia
+{%endif%}
+{%endblock%}
+
 {%block content%}
 
 <form action="." method='POST'>

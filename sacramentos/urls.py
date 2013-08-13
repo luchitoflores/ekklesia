@@ -19,16 +19,8 @@ urlpatterns = patterns('',
 	url(r'^usuario/add/$', usuarioCreateView, name='usuario_create'),
 	url(r'^usuario/(?P<pk>\d+)/$', edit_usuario_view, name='usuario_update'),
 	url(r'^padre/add/$', padre_create_view, name='padre_create'),
-
 	url(r'^feligres/add/$', feligres_create_view, name='feligres_create'),
 	
-
-
-	#urls del api rest usuarios
-	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
-	url(r'^api/asignarpadre/$', 'sacramentos.rest.edit_padre_viewapi', name='api_setear_padre'),
-	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', name='api_create_padre'),
-
 	# urls de libro
 	url(r'^libro/$',LibroListView.as_view(),name='libro_list'),
 	url(r'^libro/add/$',libro_create_view, name='libro_create'),
@@ -70,5 +62,7 @@ urlpatterns = patterns('',
 	url(r'^intencion/add/$', IntencionCreateView.as_view(), name='intencion_create'),
 	url(r'^intencion/(?P<pk>\d+)/$', IntencionUpdateView.as_view(), name='intencion_update'),
 
-
+	#urls del api rest usuarios
+	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
+	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', name='api_create_padre'),
 	)

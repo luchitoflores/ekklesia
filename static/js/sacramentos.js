@@ -13,7 +13,7 @@ function inicio(){
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
 	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
-	prueba();
+	cargar_tabla_usuarios_en_modal();
 	verificar_select_seleccionado();
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
@@ -144,7 +144,9 @@ function campos_con_fechas(){
 // });
 // }
 
-function prueba(){
+
+//Muestra una tabla en un modal con los datos de feligreses después de una búsqueda
+function cargar_tabla_usuarios_en_modal(){
 	$('#id_form_busqueda').on('submit', function(e){
 		e.preventDefault();
 		var url= '/api/usuario/';
@@ -174,6 +176,25 @@ function almacenar_busqueda_en_map(lista){
 	return map;
 }
 
+// function devolver_campos_de_lista(map){
+// 	$('a#id_click').on('click', function(e){
+// 		// alert('estoy aqui');
+// 		e.preventDefault();
+// 		$("#id_buscar_padre").modal('hide');  		
+// 		var id =  $(this).parents('tr').attr('id');
+// 		var objeto = map[id];
+// 		console.log(objeto.nombres);
+// 		$('#id_form_padre #id_padre').attr('value', objeto.id);
+// 		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
+// 		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
+// 		$('#id_form_padre #id_dni').attr('value', objeto.dni);
+// 		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
+// 		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
+// 		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
+
+// 	});
+// }
+
 function devolver_campos_de_lista(map){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
@@ -181,21 +202,19 @@ function devolver_campos_de_lista(map){
 		$("#id_buscar_padre").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
 		var objeto = map[id];
-
-
-		console.log(objeto.nombres);
-
-		$('#id_form_padre #id_padre').attr('value', objeto.id);
-
-		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
-		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
-		$('#id_form_padre #id_dni').attr('value', objeto.dni);
-		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
-		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
-
+		console.log(objeto.sexo);
+		if(objeto.sexo =='Masculino'){
+			$('#id_padre option').remove();
+			$('#id_padre').append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+		} 
+		if (objeto.sexo =='Femenino') {
+			$('#id_madre option').remove();
+			$('#id_madre').append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+		}
 	});
 }
+
+
 function devolver_campos_bautismo(map){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
@@ -221,12 +240,8 @@ function devolver_campos_bautismo(map){
 function asignar_padre(){
 	$('#id_form_padre').on('submit', function(e){
 		e.preventDefault();
-
 		//obtener id del feligres
 		//obtener id del padre
-
-
-
 		var idfeligres = $('#id_perfil').val();
 		var idpadre = $('#id_padre').val();
 		console.log('padre' + idpadre);
@@ -282,23 +297,7 @@ function autocomplete(identificador){
 }
 
 
-
-// function autocomplete(identificador){
-// 	$(identificador).select2({
-// 		placeholder: 'Mensaje' ,
-// 		minimumInputLength: 1,
-// 		query: function (query) {
-// 			var data = {results: []}, i, j, s;
-// 			for (i = 1; i < 5; i++) {
-// 				s = "";
-// 				for (j = 0; j < i; j++) {s = s + query.term;}
-// 					data.results.push({id: query.term + i, text: s});
-// 			}
-// 			query.callback(data);
-// 		}
-// 	});
-// }
-
+//  Esta función llama a un modal para crear un padre para un feligrés
 function crear_padre(identificador, idpadre, idmodal, sexo){
 	$(identificador).on('submit', function(e){
 		e.preventDefault();

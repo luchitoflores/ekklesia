@@ -9,6 +9,13 @@ from ciudades.models import Direccion
 from sacramentos.managers import LibroManager, PersonaManager,BautismoManager
 # Create your models here.
 
+def user_new_unicode(self):
+    return self.username if self.get_full_name() == "" else self.get_full_name()
+
+# Replace the __unicode__ method in the User class with out new implementation
+User.__unicode__ = user_new_unicode 
+
+
 class TimeStampedModel(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	modified = models.DateTimeField(auto_now=True)
@@ -75,7 +82,10 @@ class PerfilUsuario(TimeStampedModel):
 
 
 	def __unicode__(self):
-		return '%s %s' %(self.user.first_name, self.user.last_name) 
+		if self.user.first_name == None and self.user.last_name == None:
+			return self.user.username 
+		else:
+			return '%s %s' %(self.user.first_name, self.user.last_name) 
 
 	# class Meta:
 	# 	ordering = ('user__last_name', 'user__first_name')

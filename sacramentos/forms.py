@@ -54,12 +54,12 @@ class PerfilUsuarioForm(ModelForm):
 
 	sexo = forms.TypedChoiceField(label=u'Sexo', choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
 	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', choices=ESTADO_CIVIL_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
-	padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
-	madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
+	# padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), empty_label='--- Seleccione ---')
+	# madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), empty_label='--- Seleccione ---')
 		
 	class Meta():
 		model = PerfilUsuario
-		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion');
+		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion', 'padre', 'madre');
 		widgets = {
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
 			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),

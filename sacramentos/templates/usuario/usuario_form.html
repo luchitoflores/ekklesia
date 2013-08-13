@@ -128,8 +128,8 @@ Agregar Feligrés
 							{{form_perfil.padre|label_with_classes:'control-label'}}
 							<div class="controls">
 								{{form_perfil.padre}}
-								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
-								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'>+</a>
+								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'>Crear Padre</a>
 							</div>
 							<div class="controls">{{form_perfil.padre.help_text}}</div>
 						</div>
@@ -137,8 +137,8 @@ Agregar Feligrés
 							{{form_perfil.madre|label_with_classes:'control-label'}}
 							<div class="controls">
 								{{form_perfil.madre}}
-								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
-								<a href="#id_crear_madre" class='btn btn-primary' data-toggle='modal'>+</a>
+								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								<a href="#id_crear_madre" class='btn btn-primary' data-toggle='modal'>Crear Madre</a>
 							</div>
 							<div class="controls">{{form_perfil.madre.help_text}}</div>
 						</div>
@@ -156,7 +156,7 @@ Agregar Feligrés
 
 	</div>
 
-	<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a>
+	<!--<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a> -->
 
 	<!-- Inclusion de Modal de Busqueda-->
 	{%include 'modal.html'%}
@@ -206,7 +206,7 @@ Agregar Feligrés
 		</div>
 	</div>
 
-	<!-- Modal para asignar la dirección de un feligrés -->
+	<!-- Modal para asignar la dirección de un feligrés 
 	<div id="id_modal_direccion" class="modal hide fade">
 		<div class="modal-header">
 			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
@@ -228,7 +228,7 @@ Agregar Feligrés
 		</div>
 	</div>
 
-
+-->
 <!-- codigo copiado de twitter, aun no funciona, es para alert
 <div class="alert-messages" id="message-drawer" style="opacity: 1;">
 	<div class="message ">

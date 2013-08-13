@@ -76,6 +76,17 @@ class PadreForm(ModelForm):
 		model = PerfilUsuario
 		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil', 'profesion');
 
+
+class SacerdoteForm(ModelForm):
+	fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento',
+		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento')
+	class Meta(): 
+		model = PerfilUsuario
+		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento');
+
+
+
 # forms para sacramentos
 
 class LibroForm(ModelForm):

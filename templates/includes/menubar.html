@@ -9,8 +9,7 @@
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Personas<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="{% url 'usuario_list'%}">Feligrés</a></li>
-						<li><a href="#">Sacerdote</a></li>
+						<li><a href="{% url 'sacerdote_list'%}">Sacerdotes</a></li>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -53,13 +52,7 @@
 			<ul class="nav">
 				<li ><a  href="/home/"><i class="icon-home icon-white"></i> Inicio</a></li>
 				<li class="divider-vertical"></li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Personas<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="{% url 'usuario_list'%}">Feligrés</a></li>
-						<li><a href="#">Sacerdote</a></li>
-					</ul>
-				</li>
+				<li><a href="{% url 'usuario_list'%}">Feligrés</a></li>
 				<li><a href="{%url 'libro_list'%}">Libros</a></li>
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Sacramentos <b class="caret"></b></a>

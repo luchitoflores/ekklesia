@@ -5,13 +5,14 @@ from django.views.generic import TemplateView
 # from sacramentos.rest import api_usuario_list
 from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
+	sacerdote_create_view, SacerdoteListView,  
 	libro_create_view, libro_update_view ,LibroListView,
 	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
 	parroquia_create_view, parroquia_update_view, ParroquiaListView,
-	IntencionCreateView, IntencionListView, IntencionUpdateView,
+	intencion_create_view, IntencionListView, IntencionUpdateView,
 	)
 urlpatterns = patterns('', 
 	#urls de usuarios
@@ -20,6 +21,9 @@ urlpatterns = patterns('',
 	url(r'^usuario/(?P<pk>\d+)/$', edit_usuario_view, name='usuario_update'),
 	url(r'^padre/add/$', padre_create_view, name='padre_create'),
 	url(r'^feligres/add/$', feligres_create_view, name='feligres_create'),
+	url(r'^sacerdote/add/$', sacerdote_create_view, name='sacerdote_create'),
+	url(r'^sacerdote/$', SacerdoteListView.as_view(), name='sacerdote_list'),
+
 	
 	# urls de libro
 	url(r'^libro/$',LibroListView.as_view(),name='libro_list'),
@@ -59,7 +63,7 @@ urlpatterns = patterns('',
 
 	#urls para intenciones de misa
 	url(r'^intencion/$', IntencionListView.as_view(), name='intencion_list'),
-	url(r'^intencion/add/$', IntencionCreateView.as_view(), name='intencion_create'),
+	url(r'^intencion/add/$', intencion_create_view, name='intencion_create'),
 	url(r'^intencion/(?P<pk>\d+)/$', IntencionUpdateView.as_view(), name='intencion_update'),
 
 	#urls del api rest usuarios

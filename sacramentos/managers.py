@@ -22,8 +22,15 @@ class PersonaManager(models.Manager):
 	def female(self):
 		return self.model.objects.filter(sexo='f')
 
+	def todos(self):
+		return self.model.objects.all()
+
 class BautismoManager(models.Manager):
 	# def libro_activo(self):
 	# 	return self.model.objects.filter(libro__tipo_libro='Bautismo')
+	pass
+
+class NotaMarginalManager(models.Manager):
+	
 	pass
 

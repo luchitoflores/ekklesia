@@ -2,13 +2,16 @@ $(document).on('ready', inicio);
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
 
 function inicio(){
-	crear_padre($('#id_form_crear_padre'), '#id_padre','#id_crear_padre', 'Masculino');
-	crear_padre($('#id_form_crear_madre'), '#id_madre','#id_crear_madre', 'Femenino');
+	
+	crear_padre($('#id_form_crear_padre'), '#id_padre','#id_crear_padre', 'm');
+	crear_padre($('#id_form_crear_madre'), '#id_madre','#id_crear_madre', 'f');
+	// crear_nota($('#id_form_crear_nota'), '#id_fecha','#id_descripcion', '#id_crear_nota');
 	autocomplete('#id_padre');
 	asignar_padre();
 	// usuarioCreate();
+	crear_nota_marginal($('#id_form_crear_nota'),'#id_crear_nota');
 	tablas_estilo_bootstrap();
-	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil');
+	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_nota');
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
@@ -21,11 +24,36 @@ function inicio(){
 	poner_fecha_defecto('#id_fecha_apertura')
 }
 
+function crear_nota_marginal(id_form,id_modal){
+	$(id_form).on('submit', function(e){
+		e.preventDefault();
+		var id=$('#id_hidden').val();
+		var url = '/api/nota/add/';
+		var json = $(this).serialize()+"&id="+id+"";
+		$.post(url, json, function(data){
+			if(data.respuesta){
+				$(id_modal).modal('hide');
+				console.log(data.tabla);
+				$('tbody tr').remove();
+				$.each(data.tabla,function(index,element){
+					$('tbody').append(element.tabla);
+
+
+				});
+			} else{
+				console.log('Existen errores');
+				console.log(data.errores);
+			}
+		});
+	})
+}
+
 $(document).ajaxStart(function(){
 	$('#spinner').show();
 }).ajaxStop(function(){
 	$('#spinner').hide();
 });
+
 
 function poner_fecha_defecto(id){
 	var date= new Date();
@@ -95,6 +123,24 @@ function radio_button(){
 		}
 	});
 }
+
+// function crear_nota(identificador, idnota,idnota2, idmodal){
+// 	$(identificador).on('submit', function(e){
+// 		e.preventDefault();
+// 		var url = '/api/nota/add/';
+// 		var json = $(this).serialize();
+// 		$.post(url, json , function(data){
+// 			if(!data.respuesta){
+// 				console.log(data.errores_nota);
+// 			}else{
+// 				$(idnota).html('< value="'+ data.fecha+'">'+'>');
+// 				$(idnota2).html('< value="'+ data.descripcion+'">');
+// 				$(idmodal).modal('hide');
+// 			}
+
+// 		});
+// 	});
+// }
 
 function campos_con_fechas(){
 	// $('#id_fecha_sacramento').attr('data-date-format', 'dd/mm/yyyy').datepicker();

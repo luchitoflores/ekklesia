@@ -163,26 +163,3 @@ function tablas_busqueda_ajax(identificador_tabla, columnas_tabla, datos){
 		}); 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

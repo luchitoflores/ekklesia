@@ -28,109 +28,82 @@ Agregar Primera Comunión
 <!-- Pestañas para datos del feligres, y del bautizo -->
 
 
-<ul class='nav nav-tabs'>
-	<!--<li class='active'><a href="#id_datos_feligres" data-toggle='tab'>Datos del Feligres</a></li>-->
-	<li class='active'><a href="#id_datos_comunion" data-toggle='tab'>Datos del Sacramento</a></li>
-
-</ul>
-
-<div class="tab-content">
-	<!--<div id='id_datos_feligres' class='tab-pane active'>
-		<form id='id_form_feligres' class='form-horizontal'>
-			{%feligres%}
-		</form>
-	</div>-->
-
-
-	<div id="id_datos_comunion" class="tab-pane active">
-		<form id='id_form_comunion' action="." method='POST' class='form-horizontal'>
-			{% csrf_token%}
-			<div class='container'>
-				<div class='row'>
-					<div class='span6'>
-						<div class='control-group'>
-							<label for="id_libro" class='control-label'>{{form_eucaristia.libro.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.libro}}
-							</div>
+<form id='id_form_comunion' action="." method='POST' class='form-horizontal'>
+	{% csrf_token%}
+	
+		<div class='row'>
+			<div class='span10'>
+				<fieldset class='scheduler-border'>
+					<legend class='scheduler-border'>Datos Personales</legend>
+					<div class='control-group'>
+						<label for="id_libro" class='control-label'>{{form_eucaristia.libro.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.libro}}
 						</div>
-						<div class='control-group'>
-							<label for="id_pagina" class='control-label'>{{form_eucaristia.pagina.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.pagina}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_numero_acta" class='control-label'>{{form_eucaristia.numero_acta.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.numero_acta}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_tipo_sacramento" class='control-label'>{{form_eucaristia.feligres.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.feligres}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{form_eucaristia.fecha_sacramento.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.fecha_sacramento}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_lugar_sacramento" class='control-label'>{{form_eucaristia.lugar_sacramento.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.lugar_sacramento}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_padrino" class='control-label'>{{form_eucaristia.padrino.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.padrino}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_madrina" class='control-label'>{{form_eucaristia.madrina.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.madrina}}
-							</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_iglesia" class='control-label'>{{form_eucaristia.iglesia.label}}</label>
-							<div class='controls'>
-								{{form_eucaristia.iglesia}}
-							</div>
-						</div>
-						
 					</div>
-					
-				
-			
-	
+					<div class='control-group'>
+						<label for="id_pagina" class='control-label'>{{form_eucaristia.pagina.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.pagina}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_numero_acta" class='control-label'>{{form_eucaristia.numero_acta.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.numero_acta}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_tipo_sacramento" class='control-label'>{{form_eucaristia.feligres.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.feligres}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_fecha_sacramento" class='control-label'>{{form_eucaristia.fecha_sacramento.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.fecha_sacramento}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_lugar_sacramento" class='control-label'>{{form_eucaristia.lugar_sacramento.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.lugar_sacramento}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_padrino" class='control-label'>{{form_eucaristia.padrino.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.padrino}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_madrina" class='control-label'>{{form_eucaristia.madrina.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.madrina}}
+						</div>
+					</div>
+					<div class='control-group'>
+						<label for="id_iglesia" class='control-label'>{{form_eucaristia.iglesia.label}}</label>
+						<div class='controls'>
+							{{form_eucaristia.iglesia}}
+						</div>
+					</div>
+
+				</fieldset>
+				<div class="form-actions">
+					<input type="submit" value="Enviar" class='btn btn-primary'/>
+					<a href="{%url 'eucaristia_list'%}" class='btn btn-primary'>Cancelar</a>
+				</div>
+
 			</div>
-		</div>
-		
-	
-	<div class="form-actions">
-		<input type="submit" value="Enviar" class='btn btn-primary'/>
-		<a href="{%url 'eucaristia_list'%}" class='btn btn-primary'>Cancelar</a>
-	</div>
-
-</form>
-</div>
 
 	
 
-	
-
+	</form>
 
 
 <!-- Modal para indicar que un usuario ha sid creado-->
 {%include 'modal.html'%}
-
-</div>
-
-
 
 {% endblock%}

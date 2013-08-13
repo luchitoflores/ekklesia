@@ -8,17 +8,24 @@ function inicio(){
 	asignar_padre();
 	// usuarioCreate();
 	tablas_estilo_bootstrap();
-	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia');
+	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil');
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
 	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
 	prueba();
+	verificar_select_seleccionado();
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
 	poner_fecha_defecto('#id_fecha_apertura')
 }
+
+$(document).ajaxStart(function(){
+	$('#spinner').show();
+}).ajaxStop(function(){
+	$('#spinner').hide();
+});
 
 function poner_fecha_defecto(id){
 	var date= new Date();
@@ -332,7 +339,6 @@ function crear_direccion(identificador){
 function seleccionar_cantones(identificador){
 	$(identificador).on('change', function(e){
 		$('#id_canton option').remove();
-		$('#id_canton').append('<option>---------</option>')
 		$('#id_canton').prop('disabled', true);
 		$('#id_parroquia option').remove();
 		$('#id_parroquia').append('<option>---------</option>')
@@ -346,20 +352,19 @@ function seleccionar_cantones(identificador){
 		$.get(url, ctx, function(data){
 			console.log(data.cantones)
 			$.each(data.cantones, function(index, element){
+				console.log(element);
 				$('#id_canton').prop('disabled', false);
-				$('#id_canton').append('<option value="'+element.id+'" >'+element.canton+'</option>')
+				$('#id_canton').append(element.option)
 			});
 		});
 	})
 }
 
-// Permite elegir los cantones de acuerdo a sus respectivas provincias
+// Permite elegir las parroquias de acuerdo a sus respectivos cantones
 function seleccionar_parroquias(identificador){
 	$(identificador).on('change', function(e){
 		$('#id_parroquia option').remove();
-		$('#id_parroquia').append('<option>---------</option>')
 		$('#id_parroquia').prop('disabled', true);
-
 		e.preventDefault();
 		var url = '/api/ciudades/select/';
 		var canton = $(identificador + ' option:selected').text();
@@ -369,11 +374,21 @@ function seleccionar_parroquias(identificador){
 			console.log(data.parroquias)
 			$.each(data.parroquias, function(index, element){
 				$('#id_parroquia').prop('disabled', false);
-				$('#id_parroquia').append('<option value="'+element.id+'" >'+element.parroquia+'</option>')
+				$('#id_parroquia').append(element.option)
 			});
 		});
 	})
 }
+
+// Permite verificar si un select tiene algun valor seleccionado
+function verificar_select_seleccionado(){
+	if($("#id_provincia option:selected").text()!= '-- Seleccione --'){
+		$('#id_canton').prop('disabled', false);
+		$('#id_parroquia').prop('disabled', false);
+	}
+}
+
+
 
 
 

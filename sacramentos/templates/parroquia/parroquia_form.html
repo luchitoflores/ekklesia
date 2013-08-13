@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{%load tags_html%}
 
 {%block title%}{%if object.id%}Editar Parroquia{%else%}Agregar Parroquia{%endif%}{%endblock%}
 {%block content_title%}
@@ -11,17 +12,32 @@ Agregar Parroquia
 
 {%block content%}
 
-<form action="." method='POST'>
+<form action="." method='POST' class="form-horizontal">
 	{%csrf_token%}
-	{%for f in form%}
+	
 
 	<div class="control-group">
-		<label for="" class="control-label">{{f.label}}</label>
+		{{form_parroquia.nombre|label_with_classes:'control-label'}}
 		<div class="controls">
+			{{form_parroquia.nombre}}
+		</div>
+		<div class="controls">
+			{{form_parroquia.errors}}
+		</div>
+	</div>
+
+	{%for f in form_direccion%}
+	<div class='control-group'>
+		{{f|label_with_classes:'control-label'}}
+		<div class='controls'>
 			{{f}}
+		</div>
+		<div class='controls'>
+			{{f.errors}}
 		</div>
 	</div>
 	{%endfor%}
+	
 	<div class="form-actions">
 		<input class='btn btn-primary' type="submit" value='Enviar'>
 		<a href="{%url 'parroquia_list'%}" class='btn btn-primary'>Cancelar</a>

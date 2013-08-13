@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 # Create your views here.
 import json
 
@@ -19,8 +20,12 @@ from .forms import (
 	MatrimonioForm,BautismoForm,EucaristiaForm,ConfirmacionForm,
 	LibroForm,
 	DivErrorList,
-	IntencionForm
+	IntencionForm,
+	ParroquiaForm
 	)
+
+from ciudades.forms import DireccionForm
+from ciudades.models import Canton, Provincia, Parroquia as ParroquiaCivil
 
 
 
@@ -505,18 +510,61 @@ class ConfirmacionListView(ListView):
 
 
 #Vistas para crear una parroquia
-class ParroquiaCreateView(CreateView):
-	model = Parroquia
+def parroquia_create_view(request):
 	template_name = 'parroquia/parroquia_form.html'
 	success_url = '/parroquia/'
+	if request.method== 'POST':
+		form_parroquia = ParroquiaForm(request.POST)
+		form_direccion = DireccionForm(request.POST)
+		if form_parroquia.is_valid() and form_direccion.is_valid():
+			parroquia = form_parroquia.save(commit=False)
+			direccion = form_direccion.save()
+			parroquia.direccion = direccion
+			parroquia.save()
+			return HttpResponseRedirect(success_url)
+		else:
+			ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
+			messages.info(request, ctx)
+			messages.info(request, 'errores')
+			return render(request, template_name, ctx)
+	else:
+		form_parroquia = ParroquiaForm()
+		form_direccion = DireccionForm()
+		ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
+		return render(request, template_name, ctx)
+
+	
 
 class ParroquiaListView(ListView):
 	model= Parroquia
 	template_name = 'parroquia/parroquia_list.html'
 
-class ParroquiaUpdateView(UpdateView):
-	model= Parroquia
+def parroquia_update_view(request, pk):
 	template_name = 'parroquia/parroquia_form.html'
+	success_url = '/parroquia/'
+	parroquia = Parroquia.objects.get(pk=pk)
+	direccion = parroquia.direccion
+	
+	if request.method == 'POST':
+		form_parroquia = ParroquiaForm(request.POST, instance=parroquia)
+		form_direccion = DireccionForm(request.POST, instance=direccion)
+		if form_parroquia.is_valid() and form_direccion.is_valid():
+			form_parroquia.save()
+			form_direccion.save()
+			# parroquia = form_parroquia.save(commit=False)
+			# direccion = form_direccion.save()
+			# parroquia.direccion = direccion
+			# parroquia.save()
+			return HttpResponseRedirect(success_url)
+		else:
+			ctx = {'form_parroquia':form_parroquia, 'form_direccion':form_direccion}
+			messages.info(request, ctx)
+			return render(request, template_name, ctx)
+	else:
+		form_parroquia = ParroquiaForm(instance=parroquia)
+		form_direccion = DireccionForm(instance=direccion)
+		ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
+		return render(request, template_name, ctx)
 
 
 
@@ -527,6 +575,13 @@ class IntencionCreateView(CreateView):
 	template_name = 'intencion/intencion_form.html'
 	success_url = '/intencion/'
 
+	def form_invalid(self, form):
+		messages.error(self.request, 'Uno o más errores')
+		return super(IntencionCreateView, self).form_invalid(form)
+
+
+
+	
 class IntencionListView(ListView):
 	model= Intenciones
 	template_name = 'intencion/intencion_list.html'

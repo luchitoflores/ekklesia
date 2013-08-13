@@ -1,4 +1,6 @@
+# -*- coding:utf-8 -*-
 import json
+# from django import forms
 from django.http import HttpResponse, HttpResponseRedirect
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from ciudades.models import (
@@ -29,6 +31,7 @@ class ParroquiaCreateReadUpdateDelete(ListCreateAPIView):
 
 
 def seleccionar_ciudades(request):
+	form_direccion = DireccionForm()
 	provincia = request.GET.get('provincia')
 	canton = request.GET.get('canton') 
 	lista = list()
@@ -36,16 +39,19 @@ def seleccionar_ciudades(request):
 		if request.method == 'GET':
 			if request.GET.get('provincia'):
 				cantones = Canton.objects.filter(provincia__nombre=provincia)
+				# form_direccion.fields['canton'] = forms.ModelChoiceField(queryset=Canton.objects.filter(provincia__nombre=provincia), empty_label='--- Seleccione ---')
+				lista.append({'option': u'<option value="">--Seleccione--</option>'})
 				for canton in cantones:
-					lista.append({'id':canton.id, 'canton':canton.nombre})
+					lista.append({'option':u'<option value="%s">%s</option>'%(canton.id, canton.nombre)})
 				ctx = {'cantones':lista}
 				return HttpResponse(json.dumps(ctx), content_type='application/json')
 
 
 			if request.GET.get('canton'):
 				parroquias = Parroquia.objects.filter(canton__nombre=canton)
+				lista.append({'option': u'<option value="">--Seleccione--</option>'})
 				for parroquia in parroquias:
-					lista.append({'id':parroquia.id, 'parroquia':parroquia.nombre})
+					lista.append({'option':u'<option value="%s">%s</option>'%(parroquia.id, parroquia.nombre)})
 				ctx = {'parroquias':lista}
 				return HttpResponse(json.dumps(ctx), content_type='application/json')
 

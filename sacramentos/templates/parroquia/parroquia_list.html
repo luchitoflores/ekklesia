@@ -9,6 +9,9 @@ Lista de Parroquias Eclesiásticas
 	<thead>
 		<tr>
 			<th>Nombre</th>
+			<th>Direccion</th>
+			<th>Telefono</th>
+			<th>Celular</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -18,6 +21,9 @@ Lista de Parroquias Eclesiásticas
 			<td>
 				<a href="{{o.get_absolute_url}}">{{o.nombre}}</a>
 			</td>
+			<td>{{o.direccion.domicilio}}</td>
+			<td>{{o.direccion.telefono}}</td>
+			<td>{{o.direccion.celular}}</td>
 		</tr>
 		{%endfor%}
 	</tbody>

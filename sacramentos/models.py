@@ -200,8 +200,8 @@ class Intenciones(TimeStampedModel):
 
 
 class Parroquia(TimeStampedModel):
-	nombre=models.CharField(max_length=100)
-	direccion=models.ForeignKey(Direccion, related_name='direccion')
+	nombre=models.CharField('Nombre de la Parroquia',max_length=100)
+	direccion=models.ForeignKey(Direccion, related_name='direccion', verbose_name=u'Prueba')
 
 	def __unicode__(self):
 		return self.nombre

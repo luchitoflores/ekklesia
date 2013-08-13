@@ -33,11 +33,10 @@ Agregar Feligrés
 	<li class='active'><a href="#id_datos_personales" data-toggle='tab'>Datos Personales</a></li>
 </ul>
 -->
-<div class="tab-content">
-	<!--<div id='id_datos_personales' class='tab-pane active'>-->
-	<form id='id_form_usuario_create' method='POST' class='form-horizontal'>
-		{%csrf_token%}
-		<!--<select name="" id="id_padre"></select>-->
+<!--<div id='id_datos_personales' class='tab-pane active'>-->
+<form id='id_form_usuario_create' method='POST' class='form-horizontal'>
+	{%csrf_token%}
+	<!--<select name="" id="id_padre"></select>-->
 			<!--Input para typeahead de bootstrap
 			<input type='hidden' id='id_autocomplete'>
 			Input para el plugin select2
@@ -154,79 +153,79 @@ Agregar Feligrés
 
 		</form>
 
-	</div>
 
-	<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a>
 
-	<!-- Inclusion de Modal de Busqueda-->
-	{%include 'modal.html'%}
+		<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a>
 
-	<!-- Modal para crear padre-->
-	<div id="id_crear_padre" class="modal hide fade">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-			<h3>Búsqueda de Feligreses</h3>
-		</div>
-		<div class="modal-body">
-			<form id='id_form_crear_padre' class='form-horizontal' method='POST'>
-				{%feligres%}
+		<!-- Inclusion de Modal de Busqueda-->
 
-				<div class="control-group">
-					<div class='controls'>
-						<input type="submit" value='Enviar' class='btn btn-primary'>
+
+		<!-- Modal para crear padre-->
+		<div id="id_crear_padre" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3>Búsqueda de Feligreses</h3>
+			</div>
+			<div class="modal-body">
+				<form id='id_form_crear_padre' class='form-horizontal' method='POST'>
+					{%feligres%}
+
+					<div class="control-group">
+						<div class='controls'>
+							<input type="submit" value='Enviar' class='btn btn-primary'>
+						</div>
 					</div>
-				</div>
-			</form>
+				</form>
 
+			</div>
+			<div class="modal-footer">
+				<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+			</div>
 		</div>
-		<div class="modal-footer">
-			<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
-		</div>
-	</div>
 
-	<!-- Modal para crear madre-->
-	<div id="id_crear_madre" class="modal hide fade">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-			<h3>Búsqueda de Feligreses</h3>
-		</div>
-		<div class="modal-body">
-			<form id='id_form_crear_madre' class='form-horizontal' method='POST'>
-				{%feligres%}
-				<div class="control-group">
-					<div class='controls'>
-						<input type="submit" value='Enviar' class='btn btn-primary'>
+		<!-- Modal para crear madre-->
+		<div id="id_crear_madre" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3>Búsqueda de Feligreses</h3>
+			</div>
+			<div class="modal-body">
+				<form id='id_form_crear_madre' class='form-horizontal' method='POST'>
+					{%feligres%}
+					<div class="control-group">
+						<div class='controls'>
+							<input type="submit" value='Enviar' class='btn btn-primary'>
+						</div>
 					</div>
-				</div>
-			</form>
+				</form>
 
+			</div>
+			<div class="modal-footer">
+				<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+			</div>
 		</div>
-		<div class="modal-footer">
-			<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
-		</div>
-	</div>
 
-	<!-- Modal para asignar la dirección de un feligrés -->
-	<div id="id_modal_direccion" class="modal hide fade">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-			<h3>Búsqueda de Feligreses</h3>
-		</div>
-		<div class="modal-body">
-			<form id='id_form_direccion' class='form-horizontal' method='POST'>
-				{%direccion%}
-				<div class="control-group">
-					<div class='controls'>
-						<input type="submit" value='Enviar' class='btn btn-primary'>
+		<!-- Modal para asignar la dirección de un feligrés -->
+		<div id="id_modal_direccion" class="modal hide fade">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+				<h3>Búsqueda de Feligreses</h3>
+			</div>
+			<div class="modal-body">
+				<form id='id_form_direccion' class='form-horizontal' method='POST'>
+					{%direccion%}
+					<div class="control-group">
+						<div class='controls'>
+							<input type="submit" value='Enviar' class='btn btn-primary'>
+						</div>
 					</div>
-				</div>
-			</form>
+				</form>
 
+			</div>
+			<div class="modal-footer">
+				<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+			</div>
 		</div>
-		<div class="modal-footer">
-			<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
-		</div>
-	</div>
 
 
 <!-- codigo copiado de twitter, aun no funciona, es para alert

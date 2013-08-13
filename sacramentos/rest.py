@@ -5,8 +5,8 @@ import operator
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 
-from .forms import PerfilUsuarioForm, UsuarioForm, PadreForm
-from .models import PerfilUsuario
+from .forms import PerfilUsuarioForm, UsuarioForm, PadreForm,NotaMarginalForm
+from .models import PerfilUsuario,NotaMarginal,Bautismo
 
 # Método para crear un feligres
 def usuarioCreateAjax(request):
@@ -18,6 +18,8 @@ def usuarioCreateAjax(request):
 			usuario_form.save()
 			perfil_form.save()
 			bandera = True
+
+
 
 # Método para crear el padre o madre de un feligres - está funcionando
 def padre_create_ajax(request):
@@ -36,13 +38,74 @@ def padre_create_ajax(request):
 				perfil.sexo = sexo
 			perfil.save()
 			respuesta = True
-			ctx = {'respuesta': respuesta, 'id': perfil.user.id, 'full_name': perfil.user.get_full_name()}
+			ctx = {'respuesta': respuesta, 'id': perfil.user.id, 
+			'full_name': perfil.user.get_full_name()}
 		else:
 			errores_usuario = usuario_form.errors
 			errores_perfil =  perfil_form.errors
-			ctx = {'respuesta': False, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
+			ctx = {'respuesta': False, 'errores_usuario':errores_usuario,
+			 'errores_perfil': errores_perfil}
 
 	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
+# vista para crear una nota marginal con modal.....
+
+def nota_marginal_create_ajax(request):
+	
+	if request.method == 'POST':
+		respuesta = False
+		form_nota = NotaMarginalForm(request.POST)
+		bautismo_id=request.POST.get('id')
+
+		if bautismo_id!=None and form_nota.is_valid():
+			bautismo=Bautismo.objects.get(pk=bautismo_id)
+			nota=form_nota.save(commit=False)
+			nota.bautismo=bautismo
+			nota.save()
+			respuesta = True
+			notas=NotaMarginal.objects.filter(bautismo=bautismo).order_by('-fecha')
+			lista=list()
+			for nota in notas:
+				lista.append({'tabla':'<tr><th> %s</th><th> %s</th></tr>'%(nota.fecha ,nota.descripcion)})
+			ctx = {'respuesta': respuesta, 'tabla':lista}
+		else:
+			errores_nota = form_nota.errors
+			ctx = {'respuesta': False, 'errores_nota':errores_nota}
+
+	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
+def buscar_nota_marginal(request):
+	# q= request.GET.get('q').split()
+	id_no = request.GET.get('pk')
+	lista = list()
+	bandera = False
+	if q:
+		
+		notas = NotaMarginal.objects.filter(query).distinct()
+			
+		# perfiles = PerfilUsuario.objects.filter(
+		# 	Q(user__first_name__icontains=q) |
+		# 	Q(user__last_name__icontains=q) |
+		# 	Q(dni=q) |
+		# 	Q(lugar_nacimiento=q)
+		# 	)
+			
+		if len(perfiles) > 0:
+			perfiles.distinct().order_by('user__last_name', 'user__first_name' )
+			for perfil in perfiles:
+				lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href=".">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, "DT_RowId":perfil.id})
+			ctx={'perfiles':lista, 'bandera': bandera}
+		else:
+			bandera = False
+			ctx={'perfiles':lista, 'bandera': bandera}
+	else:
+		bandera=False
+		ctx={'perfiles':lista, 'bandera': bandera}
+	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
 
 # def api_usuario_list(request):
 # 	sEcho = request.GET['sEcho']
@@ -144,6 +207,8 @@ def buscar_usuarios(request):
 # 		bandera=False
 # 		ctx={'perfiles':lista, 'bandera': bandera}
 # 	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
 
 
 def edit_padre_viewapi(request):

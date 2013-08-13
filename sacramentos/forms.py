@@ -8,7 +8,7 @@ from django.forms.widgets import RadioSelect
 
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
-					Direccion, Intenciones)
+					Direccion, Intenciones,NotaMarginal)
 
 
 class DivErrorList(ErrorList):
@@ -50,18 +50,26 @@ class PerfilUsuarioForm(ModelForm):
 		('v','Viudo/a')
 		)
 	# fecha_nacimiento = forms.CharField(required=True, label=u'Fecha de Nacimiento', 
-	#  	widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+	#  	widget=forms.TextInput(attrs={'required':'', 'data-date-format': 
+		# 'dd/mm/yyyy', 'type':'date'}))
 
-	sexo = forms.TypedChoiceField(label=u'Sexo', choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
-	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', choices=ESTADO_CIVIL_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
-	padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
-	madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
+	sexo = forms.TypedChoiceField(label=u'Sexo', choices=SEXO_CHOICES, required=True, 
+		widget=forms.Select(attrs={'required':''}))
+	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', 
+		choices=ESTADO_CIVIL_CHOICES, required=True, 
+		widget=forms.Select(attrs={'required':''}))
+	padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), required=False, 
+		empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
+	madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), required=False, 
+		empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
 		
 	class Meta():
 		model = PerfilUsuario
-		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion');
+		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' 
+			,'profesion');
 		widgets = {
-			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
+				'dd/mm/yyyy', 'type':'date'}),
 			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
 			'dni': forms.TextInput(attrs={'required':''}),
 			# 'estado_civil': forms.Select(attrs={'required':''}),
@@ -74,7 +82,8 @@ class PadreForm(ModelForm):
 	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento')
 	class Meta(): 
 		model = PerfilUsuario
-		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil', 'profesion');
+		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
+		 'profesion');
 
 # forms para sacramentos
 
@@ -100,13 +109,14 @@ class LibroForm(ModelForm):
 	estado=forms.ChoiceField(required=True,choices=ESTADO_CHOICES,label='Estado', 
 		widget=RadioSelect(attrs={'required':''}))
 	fecha_apertura = forms.CharField(required=True, label=u'Fecha de Apertura', 
-		widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'
-			}))
+		widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
 	fecha_cierre = forms.CharField(required=True, label=u'Fecha de Cierre', 
 		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'
 			}))
 	numero_maximo_actas=forms.IntegerField(required=True, label='Maximo Actas', 
-		widget=forms.TextInput(attrs={'required': '','type':'number','value':'35','max':'40'}))
+		widget=forms.TextInput(attrs={'required': '','type':'number','value':'35',
+			'max':'40'}))
 	
 	class Meta():
 		model=Libro
@@ -115,13 +125,16 @@ class MatrimonioForm(ModelForm):
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
-		required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
+		required=True, empty_label='--- Seleccione ---', 
+		widget=forms.Select(attrs={'required':''}))
 	novia=forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), 
-		required=False, empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
+		required=True, empty_label='--- Seleccione ---', 
+		widget=forms.Select(attrs={'required':''}))
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
@@ -134,22 +147,20 @@ class MatrimonioForm(ModelForm):
 		queryset=Libro.objects.filter(tipo_libro='Matrimonio',estado='Abierto'))
 	class Meta():
 		model=Matrimonio
-		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','padrino','madrina',
-			'iglesia','novio','novia','testigo_novio','testigo_novia')
+		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento',
+			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
 
-	# def __init__(self,*args,**kwargs):
-	# 	super(LibroForm,self).__init__(*args,**kwargs)
-	# 	if (libro.tipo_libro=='Bautismo'):
-	# 		self.fields['libro'].queryset = User.objects.filter(tipo_libro='Matrimonio')
 
 class BautismoForm(ModelForm):
-	# bautizado=forms.CharField(widget=forms.TextInput())
+	bautizado=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
+	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}))
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
@@ -158,34 +169,44 @@ class BautismoForm(ModelForm):
 		queryset=Libro.objects.filter(tipo_libro='Bautismo',estado='Abierto'))
 	class Meta():
 		model=Bautismo
-		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento','lugar_sacramento','padrino','madrina',
-			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno','abuela_materna','vecinos_paternos','vecinos_maternos')
+		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento',
+			'lugar_sacramento','padrino','madrina',
+			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno',
+			'abuela_materna','vecinos_paternos','vecinos_maternos')
 
 class EucaristiaForm(ModelForm):
+	feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
+	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}))
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.filter(tipo_libro='Eucaristia',estado='Abierto'))
+
 	class Meta():
 		model=Eucaristia
-		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento','lugar_sacramento','padrino',
+		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento',
+			'lugar_sacramento','padrino',
 			'madrina','iglesia')
 
 class ConfirmacionForm(ModelForm):
+	confirmado=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
+	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}))
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
@@ -196,8 +217,9 @@ class ConfirmacionForm(ModelForm):
 		queryset=Libro.objects.filter(tipo_libro='Confirmacion',estado='Abierto'))
 	class Meta():
 		model=Confirmacion
-		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento','lugar_sacramento','padrino',
-			'madrina','obispo','iglesia')
+		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento',
+			'lugar_sacramento',
+			'padrino','madrina','obispo','iglesia')
 
 
 
@@ -213,7 +235,21 @@ class IntencionForm(ModelForm):
 		model = Intenciones
 		widgets = {
 			'intencion': forms.TextInput(attrs={'required':''}),
-			'fecha_celebracion': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy','type': 'datetime-local'}),
+			'fecha_celebracion': forms.TextInput(attrs={'required':'',
+			'data-date-format': 'dd/mm/yyyy','type': 'datetime-local'}),
 			'oferente': forms.TextInput(attrs={'required':''}),
 			'precio': forms.TextInput(attrs={'required':''})
 		}
+
+# Forms para Notas Marginals
+
+class NotaMarginalForm(ModelForm):
+	fecha = forms.CharField(required=True,label='Fecha',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
+	descripcion=forms.CharField(required=True,label='Descripcion',
+		widget=forms.Textarea(attrs={'required':''}))
+	class Meta():
+		model= NotaMarginal
+		fields=('fecha','descripcion')
+		

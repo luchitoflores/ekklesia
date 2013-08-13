@@ -11,13 +11,13 @@ from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
 from .models import (PerfilUsuario,
-	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,
+	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,NotaMarginal,
 	Parroquia, Intenciones)
 
 from .forms import (
 	UsuarioForm, PerfilUsuarioForm, PadreForm,
 	MatrimonioForm,BautismoForm,EucaristiaForm,ConfirmacionForm,
-	LibroForm,
+	LibroForm,NotaMarginalForm,
 	DivErrorList,
 	IntencionForm
 	)
@@ -288,8 +288,10 @@ class LibroListView(ListView):
 def matrimonio_create_view(request):
 	if(request.method=='POST'):
 		form_matrimonio=MatrimonioForm(request.POST)
-		if(form_matrimonio.is_valid()):
+		form_nota=NotaMarginalForm(request.POST)
+		if(form_matrimonio.is_valid() and form_nota.is_valid()):
 			matrimonio=form_matrimonio.save(commit=False)
+			nota=form_nota.save(commit=False)
 			matrimonio.tipo_sacramento='Matrimonio'
 			novio=matrimonio.novio
 			novia=matrimonio.novia
@@ -298,17 +300,22 @@ def matrimonio_create_view(request):
 			novio.save()
 			novia.save()
 			matrimonio.novio=novio
-			# matrimonio.novia.estado_civil='Casado/a'
+			matrimonio.novia=novia
+
 			if(matrimonio.novio.estado_civil=='Casado/a' and matrimonio.novia.estado_civil=='Casado/a'):
+				nota.save()
+				matrimonio.nota_marginal=nota
 				matrimonio.save()
 				return HttpResponseRedirect('/matrimonio')
 			else:
 				messages.add_message(request, messages.WARNING, {'Matrimonio':'error de estado civil'})
 		else:
-			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors})
+			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors,
+				'Nota MArginal':form_nota.errors})
 	else:
 		form_matrimonio=MatrimonioForm()
-	ctx={'form_matrimonio':form_matrimonio}
+		form_nota=NotaMarginalForm()
+	ctx={'form_matrimonio':form_matrimonio,'form_nota':form_nota}
 	return render(request,'matrimonio/matrimonio_form.html',ctx)
 
 
@@ -319,18 +326,24 @@ def matrimonio_create_view(request):
 
 def matrimonio_update_view(request,pk):
 	matrimonio=get_object_or_404(Matrimonio,pk=pk)
+	nota=matrimonio.nota_marginal
 	if request.method == 'POST':
 		form_matrimonio = MatrimonioForm(request.POST,instance=matrimonio)
-		if form_matrimonio.is_valid():
+		form_nota=NotaMarginalForm(request.POST,instance=nota)
+		if form_matrimonio.is_valid() and form_nota.is_valid():
 			form_matrimonio.save()
+			form_nota.save()
 			return HttpResponseRedirect('/matrimonio')
 		else:
-			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors})
+			messages.add_message(request, messages.WARNING, {
+				'Matrimonio':form_matrimonio.errors,
+				'Nota MArginal':form_nota.errors})
 
 	else:
 		form_matrimonio= MatrimonioForm(instance=matrimonio)
+		form_nota=NotaMarginalForm(instance=nota)
 									
-	ctx = {'form_matrimonio': form_matrimonio,'object':matrimonio}
+	ctx = {'form_matrimonio': form_matrimonio,'form_nota':form_nota,'object':matrimonio}
 	return render(request, 'matrimonio/matrimonio_form.html', ctx)
 
 
@@ -345,22 +358,28 @@ class MatrimonioListView(ListView):
 def bautismo_create_view(request):
 	if(request.method == 'POST' ):
 		formBautismo=BautismoForm(request.POST)
-		if formBautismo.is_valid():
+		# form_nota=NotaMarginalForm(request.POST)
+		if (formBautismo.is_valid()):
 			#perfil=formPerfil.save(commit=False)
 			bautismo=formBautismo.save(commit=False)
-			tipo_sacramento = 'Bautismo'
-			bautismo.tipo_sacramento = tipo_sacramento
+			# nota=form_nota.save(commit=False)
+			bautismo.tipo_sacramento =  u'Bautismo'
+			# nota.save()
+			# bautismo.nota_marginal=nota
 			bautismo.save()
+			
 			return HttpResponseRedirect('/bautismo')
 		else:
 			messages.add_message(request, messages.WARNING, {'Bautismo':formBautismo.errors})
 	else:
 		formBautismo=BautismoForm()
-
+		# form_nota=NotaMarginalForm()
 	ctx={'formBautismo':formBautismo}
 	return render (request,'bautismo/bautismo_form.html',ctx)
 
+def mostrar():
 
+	return self.model.objects.filter()
 
 # class BautismoCreateView(CreateView):
 # 	model=Bautismo
@@ -372,21 +391,25 @@ def bautismo_create_view(request):
 
 def bautismo_update_view(request,pk):
 	bautismo= get_object_or_404(Bautismo, pk=pk)
-	# perfil= bautismo.bautizado	
+	actas=NotaMarginal.objects.filter(bautismo=bautismo)
 	if request.method == 'POST':
 		bautismo_form = BautismoForm(request.POST,instance=bautismo)
-		# perfil_form = PerfilUsuarioForm(request.POST,instance=perfil)
+		# form_nota=NotaMarginalForm(request.POST,instance=nota)
 		if bautismo_form.is_valid():
 			bautismo_form.save()
-			# perfil_form.save()
+			# form_nota.save()
 			return HttpResponseRedirect('/bautismo')
 		else:
-			messages.add_message(request, messages.WARNING, {'Bautismo':bautismo_form.errors})
+			messages.error(request, 'error')
+			ctx = {'formBautismo': bautismo_form,'actas':actas,'object':bautismo}
+			return render(request, 'bautismo/bautismo_form.html', ctx)
+			
 	else:
 		bautismo_form = BautismoForm(instance=bautismo)
-		# perfil_form = PerfilUsuarioForm(instance=perfil)
+		
+		# form_nota=NotaMarginalForm(instance=nota)
 									
-	ctx = {'formBautismo': bautismo_form,'object':bautismo}
+	ctx = {'formBautismo': bautismo_form,'actas':actas,'object':bautismo}
 	return render(request, 'bautismo/bautismo_form.html', ctx)
 
 

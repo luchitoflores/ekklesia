@@ -42,7 +42,6 @@ class Libro(TimeStampedModel):
 		else:
 			return False
 
-
 	def __unicode__(self):
 		return '%d %s' %(self.numero_libro,self.tipo_libro)
 
@@ -85,10 +84,10 @@ class PerfilUsuario(TimeStampedModel):
 
 class Sacramento(TimeStampedModel):
     TIPO_SACRAMENTO_CHOICES = (
-            ('b','Bautismo'),
-            ('e','Eucaristia'), 
-            ('c','Confirmacion'),
-            ('m','Matrimonio')           
+            ('Bautismo','Bautismo'),
+            ('Eucaristia','Eucaristia'), 
+            ('Confirmacion','Confirmacion'),
+            ('Matrimonio','Matrimonio')           
     	)
     numero_acta = models.PositiveIntegerField()
     pagina = models.PositiveIntegerField()
@@ -101,11 +100,7 @@ class Sacramento(TimeStampedModel):
     libro=models.ForeignKey(Libro, related_name='Libro')
 
     
-
-
-
 class Bautismo(Sacramento):
-	
 	bautizado=models.OneToOneField(PerfilUsuario, related_name='Bautizado',null=True,blank=True)
 	abuelo_paterno = models.CharField(max_length=200)
 	abuela_paterna = models.CharField(max_length=200)
@@ -114,6 +109,9 @@ class Bautismo(Sacramento):
 	vecinos_paternos = models.CharField(max_length=200)
 	vecinos_maternos = models.CharField(max_length=200)
 	objects=BautismoManager()
+
+
+
 	def __unicode__(self):
 		return '%s %s' %(self.bautizado.user.first_name,self.bautizado.user.last_name)
 
@@ -147,8 +145,8 @@ class Matrimonio(Sacramento):
 class NotaMarginal(TimeStampedModel):
 	fecha = models.DateField()
 	descripcion = models.TextField(max_length=300) 
-	
-	
+	bautismo= models.ForeignKey("Bautismo",related_name='Bautismo',null=True,blank=True)
+	matrimonio=models.ForeignKey("Matrimonio",related_name='Matrimonio',null=True,blank=True)
 	def __unicode__(self):
 		return self.descripcion
 

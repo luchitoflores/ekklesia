@@ -30,7 +30,7 @@ Agregar Bautismo
 <!-- Pestañas para datos del feligres, y del bautizo -->
 
 
-<input id='id_hidden' type="hidden" value='{{object.id}}'>
+
 <form id='id_form_bautismo' method='POST' class='form-horizontal'>
 	{% csrf_token%}
 	
@@ -77,7 +77,7 @@ Agregar Bautismo
 							<label for="id_feligres" class='control-label'>{{formBautismo.bautizado.label}}</label>
 							<div class='controls'>
 								{{formBautismo.bautizado}}
-								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'>Buscar</a>
 							</div>
 						</div>
 					</div>
@@ -164,27 +164,24 @@ Agregar Bautismo
 
 			<fieldset class='scheduler-border'>
 				<legend class='scheduler-border'><a href="#id_crear_nota" data-toggle='modal'>Nota Marginal</a></legend>
-				
-				<table id='id_table_nota' class='table table-bordered table-striped'>
-					<thead>
-						<tr class='alert alert-info'>
-							<th>Fecha</th>
-							<th>Descripcion</th>
-						</tr>
-
-					</thead>
-					<tbody>
-						{% for o in actas %}
-						<tr>
-							<td> {{o.fecha}}</td>
-							<td>{{o.descripcion}}</td>
-						</tr>
-
-						{% endfor %}
-					</tbody>
-				</table>
+				<div class='control-group'>
+					<label for="id_fecha_nota" class='control-label'>{{form_nota.fecha.label}}</label>
+					<div class='controls'>
+						{{form_nota.fecha}}
+					</div>
+				</div>
+				<div class='control-group'>
+					<label for="id_descripcion" class='control-label'>{{form_nota.descripcion.label}}</label>
+					<div class='controls'>
+						{{form_nota.descripcion}}
+					</div>
+				</div>
 			</fieldset>
+
+			
+
 		</div>
+
 	</div>
 	<div class="form-actions">
 		<input type="submit" value="Enviar" class='btn btn-primary'>
@@ -205,7 +202,7 @@ Agregar Bautismo
 
 			<div class="control-group">
 				<div class='controls'>
-					<input id='crear'type="submit"  value='Enviar' class='btn btn-primary'>
+					<input type="submit"  value='Enviar' class='btn btn-primary'>
 				</div>
 			</div>
 		</form>

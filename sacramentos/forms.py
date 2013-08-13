@@ -84,8 +84,8 @@ class LibroForm(ModelForm):
 		('Bautismo','Bautismo'),
         ('Eucaristia','Eucaristia'), 
         ('Confirmacion','Confirmacion'),
-        ('Mtrimonio','Matrimonio'),
-        ('Intenciones','Intenciones')          
+        ('Matrimonio','Matrimonio'),
+                 
     )
 	ESTADO_CHOICES=(
 		('Abierto','Abierto'),
@@ -130,6 +130,8 @@ class MatrimonioForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	testigo_novia= forms.CharField(required=True,label='Testiga',
 		widget=forms.TextInput(attrs={'required':''}))
+	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
+		queryset=Libro.objects.filter(tipo_libro='Matrimonio',estado='Abierto'))
 	class Meta():
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','padrino','madrina',
@@ -216,5 +218,6 @@ class IntencionForm(ModelForm):
 			'oferente': forms.TextInput(attrs={'required':''}),
 			'precio': forms.TextInput(attrs={'required':''})
 		}
+
 	
 	# 'fecha_celebracion': forms.TextInput(attrs={'required':'', 'type': 'datetime-local', 'step' :"7200"}),

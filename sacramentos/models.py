@@ -147,7 +147,7 @@ class Matrimonio(Sacramento):
 class NotaMarginal(TimeStampedModel):
 	fecha = models.DateField()
 	descripcion = models.TextField(max_length=300) 
-	matrimonio = models.ForeignKey('Matrimonio')
+	
 	
 	def __unicode__(self):
 		return self.descripcion
@@ -159,9 +159,8 @@ class Libro(TimeStampedModel):
  		('Bautismo','Bautismo'),
         ('Eucaristia','Eucaristia'), 
         ('Confirmacion','Confirmacion'),
-        ('Mtrimonio','Matrimonio'),
-        ('Intenciones','Intenciones')    
-            )
+        ('Matrimonio','Matrimonio'),
+       )
 	ESTADO_CHOICES=(
 		('Abierto','Abierto'),
 		('Cerrado','Cerrado'),

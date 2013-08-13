@@ -266,7 +266,7 @@ def libro_update_view(request,pk):
 			messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})
 	else:
 		form_libro=LibroForm(instance=libro)
-	ctx={'form_libro':form_libro}
+	ctx={'form_libro':form_libro,'object':libro}
 	return render(request,'libro/libro_form.html',ctx)
 
 
@@ -335,7 +335,7 @@ def matrimonio_update_view(request,pk):
 	else:
 		form_matrimonio= MatrimonioForm(instance=matrimonio)
 									
-	ctx = {'form_matrimonio': form_matrimonio}
+	ctx = {'form_matrimonio': form_matrimonio,'object':matrimonio}
 	return render(request, 'matrimonio/matrimonio_form.html', ctx)
 
 
@@ -391,7 +391,7 @@ def bautismo_update_view(request,pk):
 		bautismo_form = BautismoForm(instance=bautismo)
 		# perfil_form = PerfilUsuarioForm(instance=perfil)
 									
-	ctx = {'formBautismo': bautismo_form}
+	ctx = {'formBautismo': bautismo_form,'object':bautismo}
 	return render(request, 'bautismo/bautismo_form.html', ctx)
 
 
@@ -449,7 +449,7 @@ def eucaristia_update_view(request,pk):
 			messages.add_message(request,messages.WARNING,{'Eucaristia':form_eucaristia.errors})
 	else:
 		form_eucaristia=EucaristiaForm(instance=eucaristia)
-	ctx={'form_eucaristia':form_eucaristia}
+	ctx={'form_eucaristia':form_eucaristia, 'object':eucaristia}
 	return render(request,'eucaristia/eucaristia_form.html',ctx)
 
 
@@ -499,7 +499,7 @@ def confirmacion_update_view(request,pk):
 			messages.add_message(request,messages.WARNING,{'Confirmacion':form_confirmacion.errors})
 	else:
 		form_confirmacion=ConfirmacionForm(instance=confirmacion)
-	ctx={'form_confirmacion':form_confirmacion}
+	ctx={'form_confirmacion':form_confirmacion,'object':confirmacion}
 	return render(request,'confirmacion/confirmacion_form.html',ctx)
 
 

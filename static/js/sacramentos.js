@@ -11,11 +11,7 @@ function inicio(){
 	// usuarioCreate();
 	crear_nota_marginal($('#id_form_crear_nota'),'#id_crear_nota');
 	tablas_estilo_bootstrap();
-<<<<<<< HEAD
-	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_nota');
-=======
-	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil');
->>>>>>> 207bea9bb1a6a6f36656f7bdf62e8a2a7811db76
+	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_nota');
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
@@ -28,7 +24,6 @@ function inicio(){
 	poner_fecha_defecto('#id_fecha_apertura')
 }
 
-<<<<<<< HEAD
 function crear_nota_marginal(id_form,id_modal){
 	$(id_form).on('submit', function(e){
 		e.preventDefault();
@@ -52,13 +47,13 @@ function crear_nota_marginal(id_form,id_modal){
 		});
 	})
 }
-=======
+
 $(document).ajaxStart(function(){
 	$('#spinner').show();
 }).ajaxStop(function(){
 	$('#spinner').hide();
 });
->>>>>>> 207bea9bb1a6a6f36656f7bdf62e8a2a7811db76
+
 
 function poner_fecha_defecto(id){
 	var date= new Date();

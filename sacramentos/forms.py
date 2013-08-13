@@ -242,7 +242,7 @@ class IntencionForm(ModelForm):
 		widgets = {
 			'intencion': forms.TextInput(attrs={'required':''}),
 			# 'fecha_celebracion': forms.TextInput(attrs={'required':'',
-			'data-date-format': 'dd/mm/yyyy','type': 'datetime-local'}),
+			# 'data-date-format': 'dd/mm/yyyy','type': 'datetime-local'}),
 
 			'oferente': forms.TextInput(attrs={'required':''}),
 			'precio': forms.TextInput(attrs={'required':''}),

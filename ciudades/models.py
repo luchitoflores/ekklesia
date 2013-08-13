@@ -5,11 +5,11 @@ from django.db import models
 # Create your models here.
 
 class Provincia(models.Model):
-	nombre=models.CharField(max_length=30,help_text='Ingrese una Provincia Ej: Loja, El Oro')
-	abreviatura=models.CharField(max_length=3,help_text='Ingrese una abreviatura Ej:lo, el,p')
+	nombre=models.CharField(max_length=100,help_text='Ingrese una Provincia Ej: Loja, El Oro')
+	abreviatura=models.CharField(max_length=2,help_text='Ingrese una abreviatura Ej:lo, el,p')
 
 
-	def __str__(self):
+	def __unicode__(self):
 		return self.nombre
 
 	def get_absolute_url(self):
@@ -17,22 +17,22 @@ class Provincia(models.Model):
 
 
 class Canton(models.Model):
-	nombre=models.CharField(max_length=30,help_text='Ingrese un Canton Ej: Espíndola, Calvas')
-	abreviatura=models.CharField(max_length=3, help_text='Ingrese una abreviatura Ej:lo, Ca, A')
+	nombre=models.CharField(max_length=100,help_text='Ingrese un Canton Ej: Espíndola, Calvas')
+	abreviatura=models.CharField(max_length=4, help_text='Ingrese una abreviatura Ej:lo, Ca, A')
 	provincia=models.ForeignKey(Provincia, related_name='provincia')
 
 
-	def __str__(self):
+	def __unicode__(self):
 		return self.nombre
 
 	def get_absolute_url(self):
 		return '/ciudades/canton/%i' %(self.id)
 
 class Parroquia(models.Model):
-	nombre=models.CharField(max_length=30,help_text='Ingrese Parroquia Ej: Catamayo, Cariamanga')
-	abreviatura=models.CharField(max_length=3, help_text='Ingrese una abreviatura Ej:ca, C-a')
+	nombre=models.CharField(max_length=100,help_text='Ingrese Parroquia Ej: Catamayo, Cariamanga')
+	abreviatura=models.CharField(max_length=6, help_text='Ingrese una abreviatura Ej:ca, C-a')
 	canton=models.ForeignKey(Canton, related_name='canton')
-	def __str__(self):
+	def __unicode__(self):
 		return self.nombre
 
 	def get_absolute_url(self):
@@ -40,13 +40,13 @@ class Parroquia(models.Model):
 
 
 class Direccion(models.Model):
-	nombre=models.CharField('Domicilio', max_length=200)
+	domicilio=models.CharField('Domicilio', max_length=200)
 	provincia=models.ForeignKey(Provincia)
 	canton=models.ForeignKey(Canton)
 	parroquia=models.ForeignKey(Parroquia, related_name='parroquia_civil')
-	telefono=models.CharField(max_length=10)
-	celular=models.CharField(max_length=10)
+	telefono=models.CharField(max_length=10, blank=True, null=True)
+	celular=models.CharField(max_length=10, blank=True, null=True)
 
 	def __unicode__(self):
-		return u'%s.- %s - %s' % (self.id, self.parroquia.nombre, self.nombre)
+		return u'%s.- %s - %s' % (self.id, self.domicilio)
 

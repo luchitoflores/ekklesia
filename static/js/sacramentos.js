@@ -11,18 +11,24 @@ function inicio(){
 	// usuarioCreate();
 	crear_nota_marginal($('#id_form_crear_nota'),'#id_crear_nota');
 	tablas_estilo_bootstrap();
+<<<<<<< HEAD
 	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_nota');
+=======
+	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil');
+>>>>>>> 207bea9bb1a6a6f36656f7bdf62e8a2a7811db76
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
 	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
-	prueba();
+	cargar_tabla_usuarios_en_modal();
+	verificar_select_seleccionado();
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
 	poner_fecha_defecto('#id_fecha_apertura')
 }
 
+<<<<<<< HEAD
 function crear_nota_marginal(id_form,id_modal){
 	$(id_form).on('submit', function(e){
 		e.preventDefault();
@@ -46,6 +52,13 @@ function crear_nota_marginal(id_form,id_modal){
 		});
 	})
 }
+=======
+$(document).ajaxStart(function(){
+	$('#spinner').show();
+}).ajaxStop(function(){
+	$('#spinner').hide();
+});
+>>>>>>> 207bea9bb1a6a6f36656f7bdf62e8a2a7811db76
 
 function poner_fecha_defecto(id){
 	var date= new Date();
@@ -182,7 +195,9 @@ function campos_con_fechas(){
 // });
 // }
 
-function prueba(){
+
+//Muestra una tabla en un modal con los datos de feligreses después de una búsqueda
+function cargar_tabla_usuarios_en_modal(){
 	$('#id_form_busqueda').on('submit', function(e){
 		e.preventDefault();
 		var url= '/api/usuario/';
@@ -212,6 +227,25 @@ function almacenar_busqueda_en_map(lista){
 	return map;
 }
 
+// function devolver_campos_de_lista(map){
+// 	$('a#id_click').on('click', function(e){
+// 		// alert('estoy aqui');
+// 		e.preventDefault();
+// 		$("#id_buscar_padre").modal('hide');  		
+// 		var id =  $(this).parents('tr').attr('id');
+// 		var objeto = map[id];
+// 		console.log(objeto.nombres);
+// 		$('#id_form_padre #id_padre').attr('value', objeto.id);
+// 		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
+// 		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
+// 		$('#id_form_padre #id_dni').attr('value', objeto.dni);
+// 		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
+// 		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
+// 		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
+
+// 	});
+// }
+
 function devolver_campos_de_lista(map){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
@@ -219,21 +253,19 @@ function devolver_campos_de_lista(map){
 		$("#id_buscar_padre").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
 		var objeto = map[id];
-
-
-		console.log(objeto.nombres);
-
-		$('#id_form_padre #id_padre').attr('value', objeto.id);
-
-		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
-		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
-		$('#id_form_padre #id_dni').attr('value', objeto.dni);
-		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
-		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
-
+		console.log(objeto.sexo);
+		if(objeto.sexo =='Masculino'){
+			$('#id_padre option').remove();
+			$('#id_padre').append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+		} 
+		if (objeto.sexo =='Femenino') {
+			$('#id_madre option').remove();
+			$('#id_madre').append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+		}
 	});
 }
+
+
 function devolver_campos_bautismo(map){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
@@ -259,7 +291,6 @@ function devolver_campos_bautismo(map){
 function asignar_padre(){
 	$('#id_form_padre').on('submit', function(e){
 		e.preventDefault();
-
 		//obtener id del feligres
 		//obtener id del padre
 		var idfeligres = $('#id_perfil').val();
@@ -317,23 +348,7 @@ function autocomplete(identificador){
 }
 
 
-
-// function autocomplete(identificador){
-// 	$(identificador).select2({
-// 		placeholder: 'Mensaje' ,
-// 		minimumInputLength: 1,
-// 		query: function (query) {
-// 			var data = {results: []}, i, j, s;
-// 			for (i = 1; i < 5; i++) {
-// 				s = "";
-// 				for (j = 0; j < i; j++) {s = s + query.term;}
-// 					data.results.push({id: query.term + i, text: s});
-// 			}
-// 			query.callback(data);
-// 		}
-// 	});
-// }
-
+//  Esta función llama a un modal para crear un padre para un feligrés
 function crear_padre(identificador, idpadre, idmodal, sexo){
 	$(identificador).on('submit', function(e){
 		e.preventDefault();
@@ -374,7 +389,6 @@ function crear_direccion(identificador){
 function seleccionar_cantones(identificador){
 	$(identificador).on('change', function(e){
 		$('#id_canton option').remove();
-		$('#id_canton').append('<option>---------</option>')
 		$('#id_canton').prop('disabled', true);
 		$('#id_parroquia option').remove();
 		$('#id_parroquia').append('<option>---------</option>')
@@ -388,20 +402,19 @@ function seleccionar_cantones(identificador){
 		$.get(url, ctx, function(data){
 			console.log(data.cantones)
 			$.each(data.cantones, function(index, element){
+				console.log(element);
 				$('#id_canton').prop('disabled', false);
-				$('#id_canton').append('<option value="'+element.id+'" >'+element.canton+'</option>')
+				$('#id_canton').append(element.option)
 			});
 		});
 	})
 }
 
-// Permite elegir los cantones de acuerdo a sus respectivas provincias
+// Permite elegir las parroquias de acuerdo a sus respectivos cantones
 function seleccionar_parroquias(identificador){
 	$(identificador).on('change', function(e){
 		$('#id_parroquia option').remove();
-		$('#id_parroquia').append('<option>---------</option>')
 		$('#id_parroquia').prop('disabled', true);
-
 		e.preventDefault();
 		var url = '/api/ciudades/select/';
 		var canton = $(identificador + ' option:selected').text();
@@ -411,11 +424,21 @@ function seleccionar_parroquias(identificador){
 			console.log(data.parroquias)
 			$.each(data.parroquias, function(index, element){
 				$('#id_parroquia').prop('disabled', false);
-				$('#id_parroquia').append('<option value="'+element.id+'" >'+element.parroquia+'</option>')
+				$('#id_parroquia').append(element.option)
 			});
 		});
 	})
 }
+
+// Permite verificar si un select tiene algun valor seleccionado
+function verificar_select_seleccionado(){
+	if($("#id_provincia option:selected").text()!= '-- Seleccione --'){
+		$('#id_canton').prop('disabled', false);
+		$('#id_parroquia').prop('disabled', false);
+	}
+}
+
+
 
 
 

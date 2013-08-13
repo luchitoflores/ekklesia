@@ -15,8 +15,7 @@
 	<link rel="stylesheet" href="/static/css/multi-select.css">
 	<link rel="stylesheet" href="/static/css/modelo-tablas.css">
 	<link rel="stylesheet" href="/static/css/font-awesome.min.css">
-	<!-- <link href='http://fonts.googleapis.com/css?family=Dosis|Lato|Viga|Ubuntu|Open+Sans|Montserrat|Patua+One&subset=latin-ext' rel='stylesheet' type='text/css'> -->
-	<link href='http://fonts.googleapis.com/css?family=Dosis|Viga|Open+Sans&subset=latin-ext' rel='stylesheet' type='text/css'>
+	<!--<link href='http://fonts.googleapis.com/css?family=Dosis|Viga|Open+Sans&subset=latin-ext' rel='stylesheet' type='text/css'> -->
 	{% block extrastyle %}{% endblock %}
 	<script src="/static/js/jquery.min.js"></script>
 	<script src='/static/js/jquery-ui.min.js'></script>
@@ -66,6 +65,24 @@
 			</div>
 		</div>
 	</header>
+	
+	<div id="id_messages">
+		<aside>
+			<div>
+				{%block messages%}
+				{% if messages%}
+				{%for message in messages%}
+				<div {% if message.tags %}class="alert alert-{{message.tags}}"{% endif %}>
+					<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+					<img {% if message.tags %}src="/static/img/{{message.tags}}.png" {% endif %} alt=""> {{message}}
+				</div>
+				{%endfor%}
+				{%endif%}
+				{%endblock%}
+			</div>
+		</aside>
+	</div>
+
 	<div class="container" id='id_container'>
 		<div class="row">
 			<div class="span10 offset1">
@@ -75,22 +92,6 @@
 						{%endblock%}
 					</article>
 				</div>
-				<div id="id_messages">
-					<aside>
-						<div>
-							{%block messages%}
-							{% if messages%}
-							{%for message in messages%}
-							<div {% if message.tags %}class="alert alert-{{message.tags}}"{% endif %}>
-								<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
-								<img {% if message.tags %}src="/static/img/{{message.tags}}.png" {% endif %} alt=""> {{message}}
-							</div>
-							{%endfor%}
-							{%endif%}
-							{%endblock%}
-						</div>
-					</aside>
-				</div>
 			</div>
 		</div>
 		<!-- Footer -->
@@ -98,7 +99,10 @@
 
 			<footer>{%block footer%}
 				<h5>Diócesis de Loja</h5>
-				<p>Copyright © Todos los derechos reservados</p>
+				<h6>Copyright © Todos los derechos reservados</h6>
+				<h6>
+					Fecha: {% now "jA F Y H:i" %}
+				</h6>
 				{%endblock%}
 			</footer>	
 

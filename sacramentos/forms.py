@@ -8,7 +8,8 @@ from django.forms.widgets import RadioSelect
 
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
-					Direccion, Intenciones,NotaMarginal)
+					Direccion, Intenciones,NotaMarginal,Parroquia)
+
 
 
 class DivErrorList(ErrorList):
@@ -50,23 +51,14 @@ class PerfilUsuarioForm(ModelForm):
 		('v','Viudo/a')
 		)
 	# fecha_nacimiento = forms.CharField(required=True, label=u'Fecha de Nacimiento', 
-	#  	widget=forms.TextInput(attrs={'required':'', 'data-date-format': 
-		# 'dd/mm/yyyy', 'type':'date'}))
-
-	sexo = forms.TypedChoiceField(label=u'Sexo', choices=SEXO_CHOICES, required=True, 
-		widget=forms.Select(attrs={'required':''}))
-	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', 
-		choices=ESTADO_CIVIL_CHOICES, required=True, 
-		widget=forms.Select(attrs={'required':''}))
-	padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), required=False, 
-		empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
-	madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), required=False, 
-		empty_label='--- Seleccione ---', widget=forms.Select(attrs={'required':''}))
+	sexo = forms.TypedChoiceField(label=u'Sexo', choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
+	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', choices=ESTADO_CIVIL_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
+	# padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), empty_label='--- Seleccione ---')
+	# madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), empty_label='--- Seleccione ---')
 		
 	class Meta():
 		model = PerfilUsuario
-		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' 
-			,'profesion');
+		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion', 'padre', 'madre');
 		widgets = {
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
@@ -80,6 +72,7 @@ class PadreForm(ModelForm):
 	fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento',
 		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
 	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento')
+	
 	class Meta(): 
 		model = PerfilUsuario
 		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
@@ -223,23 +216,28 @@ class ConfirmacionForm(ModelForm):
 
 
 
-#Forms para dirección
-class DireccionForm(ModelForm):
+#Forms para Parroquia - Funcionando
+class ParroquiaForm(ModelForm):
 	class Meta:
-		model = Direccion
+		model = Parroquia
+		fields = ('nombre',)
 
 
 #Form para Intenciones de Misa - Funcionando
 class IntencionForm(ModelForm):
 	class Meta:
 		model = Intenciones
+		# fields = ('intencion','oferente','fecha_celebracion','precio')
 		widgets = {
 			'intencion': forms.TextInput(attrs={'required':''}),
-			'fecha_celebracion': forms.TextInput(attrs={'required':'',
+			# 'fecha_celebracion': forms.TextInput(attrs={'required':'',
 			'data-date-format': 'dd/mm/yyyy','type': 'datetime-local'}),
+
 			'oferente': forms.TextInput(attrs={'required':''}),
-			'precio': forms.TextInput(attrs={'required':''})
+			'precio': forms.TextInput(attrs={'required':''}),
+			'fecha_celebracion': forms.TextInput(attrs={'required':'', 'type': 'datetime-local', 'step' :"7200"}),
 		}
+
 
 # Forms para Notas Marginals
 
@@ -253,3 +251,4 @@ class NotaMarginalForm(ModelForm):
 		model= NotaMarginal
 		fields=('fecha','descripcion')
 		
+

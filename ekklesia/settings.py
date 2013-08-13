@@ -170,3 +170,11 @@ AUTH_PROFILE_MODULE = 'sacramentos.PerfilUsuario'
 
 #Sirve para indicar a donde se debe redirigir cada vez que se logue
 LOGIN_REDIRECT_URL = '/home/'
+
+#Sirve para expirar la sesion al cerrar el navegador
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+#Sirve para subir datos al servidor
+# FIXTURE_DIRS = (
+#    'ciudades',
+# )

@@ -11,7 +11,7 @@ from .views import (
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
-	ParroquiaCreateView, ParroquiaListView, ParroquiaUpdateView,
+	parroquia_create_view, parroquia_update_view, ParroquiaListView,
 	IntencionCreateView, IntencionListView, IntencionUpdateView,
 	)
 urlpatterns = patterns('', 
@@ -20,7 +20,6 @@ urlpatterns = patterns('',
 	url(r'^usuario/add/$', usuarioCreateView, name='usuario_create'),
 	url(r'^usuario/(?P<pk>\d+)/$', edit_usuario_view, name='usuario_update'),
 	url(r'^padre/add/$', padre_create_view, name='padre_create'),
-
 	url(r'^feligres/add/$', feligres_create_view, name='feligres_create'),
 	
 
@@ -29,9 +28,9 @@ urlpatterns = patterns('',
 	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
 	url(r'^api/asignarpadre/$', 'sacramentos.rest.edit_padre_viewapi', 
 		name='api_setear_padre'),
-
 	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', 
 		name='api_create_padre'),
+
 
 	# urls de libro
 	url(r'^libro/$',LibroListView.as_view(),name='libro_list'),
@@ -75,9 +74,9 @@ urlpatterns = patterns('',
 
 	#urls de parroquia eclesiástica
 	url(r'^parroquia/$', ParroquiaListView.as_view(), name='parroquia_list'),
-	url(r'^parroquia/add/$', ParroquiaCreateView.as_view(), name='parroquia_create'),
-	url(r'^parroquia/(?P<pk>\d+)/$', ParroquiaUpdateView.as_view(), 
-		name='parroquia_update'),
+	url(r'^parroquia/add/$', parroquia_create_view, name='parroquia_create'),
+	url(r'^parroquia/(?P<pk>\d+)/$', parroquia_update_view, name='parroquia_update'),
+
 
 	#urls para intenciones de misa
 	url(r'^intencion/$', IntencionListView.as_view(), name='intencion_list'),
@@ -85,5 +84,7 @@ urlpatterns = patterns('',
 	url(r'^intencion/(?P<pk>\d+)/$', IntencionUpdateView.as_view(), 
 		name='intencion_update'),
 
-
+	#urls del api rest usuarios
+	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
+	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', name='api_create_padre'),
 	)

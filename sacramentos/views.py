@@ -575,7 +575,27 @@ class IntencionCreateView(CreateView):
 	template_name = 'intencion/intencion_form.html'
 	success_url = '/intencion/'
 
+	
+	# def get_form_kwargs(self):
+	# 	from datetime import datetime
+	# 	kwargs = super(IntencionCreateView, self).get_form_kwargs()
+	# 	date = self.request.POST['fecha_celebracion']
+	# 	date = ' '.join(date)
+	# 	#Convierte el string a fecha
+	# 	date =  datetime.strptime(date, "%Y-%m-%d %H:%M").strftime("%Y-%m-%d %H:%M:00")
+	# 	messages.error(self.request, date)
+	# 	kwargs['fecha_celebracion'] = date
+	# 	return kwargs
+
+	def form_valid(self, form):
+		fecha =self.request.POST['fecha_celebracion']
+		messages.error(self.request, fecha)
+		messages.error(self.request, 'Pasando por aqui')
+		return super(IntencionCreateView, self).form_valid(form)
+
 	def form_invalid(self, form):
+		fecha = self.request.POST['fecha_celebracion']
+		messages.error(self.request, fecha)
 		messages.error(self.request, 'Uno o más errores')
 		return super(IntencionCreateView, self).form_invalid(form)
 

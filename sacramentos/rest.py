@@ -181,36 +181,6 @@ def buscar_usuarios(request):
 # 	return HttpResponse(json.dumps(ctx), content_type='application/json')
 
 
-<<<<<<< HEAD
-def buscar_usuarios(request):
-	# q= request.GET.get('q').split()
-	q = request.GET.get('q')
-	lista = list()
-	bandera = False
-	if q:
-		query = reduce(operator.__or__, [Q(user__first_name__icontains=q) | Q(user__last_name__icontains=q) | Q(dni=q) for q in q])
-		perfiles = PerfilUsuario.objects.filter(query).distinct()
-			
-		# perfiles = PerfilUsuario.objects.filter(
-		# 	Q(user__first_name__icontains=q) |
-		# 	Q(user__last_name__icontains=q) |
-		# 	Q(dni=q) |
-		# 	Q(lugar_nacimiento=q)
-		# 	)
-			
-		if len(perfiles) > 0:
-			perfiles.distinct().order_by('user__last_name', 'user__first_name' )
-			for perfil in perfiles:
-				lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href=".">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, "DT_RowId":perfil.id})
-			ctx={'perfiles':lista, 'bandera': bandera}
-		else:
-			bandera = False
-			ctx={'perfiles':lista, 'bandera': bandera}
-	else:
-		bandera=False
-		ctx={'perfiles':lista, 'bandera': bandera}
-	return HttpResponse(json.dumps(ctx), content_type='application/json')
-
 
 # def buscar_usuarios(request):
 # 	nombres = request.GET.get('nombres')
@@ -268,8 +238,7 @@ def edit_padre_viewapi(request):
 	except Exception:
 		ctx = {'bandera': False}
 	return HttpResponse(json.dumps(ctx), content_type='applcation/json')
-=======
->>>>>>> 207bea9bb1a6a6f36656f7bdf62e8a2a7811db76
+
 
 		
 

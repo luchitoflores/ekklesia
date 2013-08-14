@@ -313,8 +313,7 @@ def matrimonio_create_view(request):
 			else:
 				messages.add_message(request, messages.WARNING, {'Matrimonio':'error de estado civil'})
 		else:
-			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors,
-				'Nota MArginal':form_nota.errors})
+			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors})
 	else:
 		form_matrimonio=MatrimonioForm()
 		

@@ -28,8 +28,8 @@ class Libro(TimeStampedModel):
             ('Bautismo','Bautismo'),
             ('Eucaristia','Eucaristia'), 
             ('Confirmacion','Confirmacion'),
-            ('Matrimonio','Matrimonio'),
-            ('Intenciones','Intenciones')          
+            ('Matrimonio','Matrimonio')
+                     
     	)
 
 	ESTADO_CHOICES=(
@@ -111,13 +111,13 @@ class Sacramento(TimeStampedModel):
 
     
 class Bautismo(Sacramento):
-	bautizado=models.OneToOneField(PerfilUsuario, related_name='Bautizado',null=True,blank=True)
-	abuelo_paterno = models.CharField(max_length=200)
-	abuela_paterna = models.CharField(max_length=200)
-	abuelo_materno = models.CharField(max_length=200)
-	abuela_materna = models.CharField(max_length=200)
-	vecinos_paternos = models.CharField(max_length=200)
-	vecinos_maternos = models.CharField(max_length=200)
+	bautizado=models.OneToOneField(PerfilUsuario, related_name='Bautizado')
+	abuelo_paterno = models.CharField(max_length=200,null=True,blank=True)
+	abuela_paterna = models.CharField(max_length=200,null=True,blank=True)
+	abuelo_materno = models.CharField(max_length=200,null=True,blank=True)
+	abuela_materna = models.CharField(max_length=200,null=True,blank=True)
+	vecinos_paternos = models.CharField(max_length=200,null=True,blank=True)
+	vecinos_maternos = models.CharField(max_length=200,null=True,blank=True)
 	objects=BautismoManager()
 
 
@@ -129,7 +129,7 @@ class Bautismo(Sacramento):
 
 
 class Eucaristia(Sacramento):
-	feligres=models.OneToOneField(PerfilUsuario, related_name='feligres', null=True,blank=True)
+	feligres=models.OneToOneField(PerfilUsuario, related_name='feligres')
 	
 	def __unicode__(self):
 		return '%s %s' %(self.feligres.user.first_name,self.feligres.user.last_name)
@@ -145,8 +145,8 @@ class Confirmacion(Sacramento):
 
 
 class Matrimonio(Sacramento):
-	novio=models.OneToOneField(PerfilUsuario, related_name='Novio',null=True,blank=True)
-	novia=models.OneToOneField(PerfilUsuario, related_name='Novia',null=True,blank=True)
+	novio=models.OneToOneField(PerfilUsuario, related_name='Novio')
+	novia=models.OneToOneField(PerfilUsuario, related_name='Novia')
 	testigo_novio = models.CharField(max_length=200)
 	testigo_novia = models.CharField(max_length=200)
 	

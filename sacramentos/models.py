@@ -60,7 +60,7 @@ class PerfilUsuario(TimeStampedModel):
 		('f','Femenino')
 		)	
 
-	ESTADO_CIVIL_CHOICES    = (
+	ESTADO_CIVIL_CHOICES = (
 		('s','Soltero/a'),
 		('c','Casado/a'),
 		('d','Divorciado/a'),

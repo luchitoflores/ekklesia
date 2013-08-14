@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 # Django settings for ekklesia project.
 
 DEBUG = True
@@ -5,12 +6,12 @@ TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
-)
+    )
 
 MANAGERS = ADMINS
 
 DATABASES = {
-    'default': {
+'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'ekklesia.db',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
@@ -18,8 +19,8 @@ DATABASES = {
         'PASSWORD': '',
         'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
         'PORT': '',                      # Set to empty string for default.
-    }
-}
+        }
+        }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
@@ -73,7 +74,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     'static',
-)
+    )
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -101,7 +102,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+    )
 
 ROOT_URLCONF = 'ekklesia.urls'
 
@@ -113,7 +114,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     'templates',
-)
+    )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -128,7 +129,7 @@ INSTALLED_APPS = (
     'ciudades',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-)
+    )
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -136,27 +137,27 @@ INSTALLED_APPS = (
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse'
-        }
-    },
-    'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
-    },
-    'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-    }
+'version': 1,
+'disable_existing_loggers': False,
+'filters': {
+'require_debug_false': {
+'()': 'django.utils.log.RequireDebugFalse'
+}
+},
+'handlers': {
+'mail_admins': {
+'level': 'ERROR',
+'filters': ['require_debug_false'],
+'class': 'django.utils.log.AdminEmailHandler'
+}
+},
+'loggers': {
+'django.request': {
+'handlers': ['mail_admins'],
+'level': 'ERROR',
+'propagate': True,
+},
+}
 }
 
 
@@ -173,8 +174,26 @@ LOGIN_REDIRECT_URL = '/home/'
 
 #Sirve para expirar la sesion al cerrar el navegador
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# Para que la sesión expire en una hora
+SESSION_COOKIE_AGE = 3600
 
 #Sirve para subir datos al servidor
 # FIXTURE_DIRS = (
 #    'ciudades',
 # )
+
+DATETIME_INPUT_FORMATS = (
+    '%Y-%m-%dT%H:%M:%S',
+    '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
+    '%Y-%m-%d %H:%M:%S.%f',  # '2006-10-25 14:30:59.000200'
+    '%Y-%m-%d %H:%M',        # '2006-10-25 14:30'
+    '%Y-%m-%d',              # '2006-10-25'
+    '%m/%d/%Y %H:%M:%S',     # '10/25/2006 14:30:59'
+    '%m/%d/%Y %H:%M:%S.%f',  # '10/25/2006 14:30:59.000200'
+    '%m/%d/%Y %H:%M',        # '10/25/2006 14:30'
+    '%m/%d/%Y',              # '10/25/2006'
+    '%m/%d/%y %H:%M:%S',     # '10/25/06 14:30:59'
+    '%m/%d/%y %H:%M:%S.%f',  # '10/25/06 14:30:59.000200'
+    '%m/%d/%y %H:%M',        # '10/25/06 14:30'
+    '%m/%d/%y',              # '10/25/06'
+    )

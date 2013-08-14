@@ -86,8 +86,8 @@ class PerfilUsuario(TimeStampedModel):
 		else:
 			return '%s %s' %(self.user.first_name, self.user.last_name) 
 
-	# class Meta:
-	# 	ordering = ('user__last_name', 'user__first_name')
+	def get_absolute_url_sacerdote(self):
+		return u'/sacerdote/%i' % self.id
 
 
 
@@ -198,12 +198,15 @@ class Libro(TimeStampedModel):
 
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200)
-	fecha_celebracion = models.DateTimeField()
+	fecha = models.DateTimeField()
 	oferente = models.CharField(max_length=200)
 	precio = models.PositiveIntegerField()
 
 	def __unicode__(self):
 		return self.intencion
+
+	def get_absolute_url(self):
+		return u'/intencion/%i' % self.id
 
 
 class Parroquia(TimeStampedModel):

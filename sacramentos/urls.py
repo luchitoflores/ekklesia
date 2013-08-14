@@ -5,7 +5,7 @@ from django.views.generic import TemplateView
 # from sacramentos.rest import api_usuario_list
 from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
-	sacerdote_create_view, SacerdoteListView,  
+	sacerdote_create_view, SacerdoteListView,  sacerdote_update_view,
 	libro_create_view, libro_update_view ,LibroListView,
 	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,
 	bautismo_update_view, BautismoListView, bautismo_create_view,
@@ -23,6 +23,7 @@ urlpatterns = patterns('',
 	url(r'^feligres/add/$', feligres_create_view, name='feligres_create'),
 	url(r'^sacerdote/add/$', sacerdote_create_view, name='sacerdote_create'),
 	url(r'^sacerdote/$', SacerdoteListView.as_view(), name='sacerdote_list'),
+	url(r'^sacerdote/(?P<pk>\d+)/$', sacerdote_update_view, name='sacerdote_update'),
 
 	
 

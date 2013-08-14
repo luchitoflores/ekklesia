@@ -5,7 +5,7 @@ Lista de Intenciones de Misa
 {%endblock%}
 
 {%block content%}
-<table id='id_table_parroquia' class='table table-bordered table-striped'>
+<table id='id_table_parroquia' class='table table-bordered table-striped table-hover' >
 	<thead>
 		<tr>
 			<th>Intención</th>
@@ -20,7 +20,7 @@ Lista de Intenciones de Misa
 			<td>
 				<a href="{{o.get_absolute_url}}">{{o.intencion}}</a>
 			</td>
-			<td>{{o.fecha_celebracion}}</td>
+			<td>{{o.fecha}}</td>
 			<td>{{o.oferente}}</td>
 		</tr>
 		{%endfor%}

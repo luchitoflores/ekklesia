@@ -13,8 +13,9 @@ Agregar Intenciones de Misa
 
 <form action="." method='POST' class='form-horizontal'>
 	{%csrf_token%}
-	{%for f in form_intencion%}
+	{%for f in form%}
 
+	{% if f.label == form.fecha.label%}
 	<div class="control-group">
 		<label for="" class="control-label">{{f.label}}</label>
 		<div class="controls">
@@ -24,6 +25,18 @@ Agregar Intenciones de Misa
 			{{f.errors}}
 		</div>
 	</div>
+	
+	{%else%}
+	<div class="control-group">
+		<label for="" class="control-label">{{f.label}}</label>
+		<div class="controls">
+			{{f}}
+		</div>
+		<div class="controls">
+			{{f.errors}}
+		</div>
+	</div>
+	{%endif%}
 	{%endfor%}
 	<div class="form-actions">
 		<input class='btn btn-primary' type="submit" value='Enviar'>

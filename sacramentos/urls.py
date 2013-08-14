@@ -49,10 +49,13 @@ urlpatterns = patterns('',
 	url(r'^matrimonio/add/$',matrimonio_create_view, name='matrimonio_create'),
 	url(r'^matrimonio/(?P<pk>\d+)/$',matrimonio_update_view, name='matrimonio_update'),
 
-	#urla de Nota Marginal
+	#urls de Nota Marginal para crear con bautismo y matrimonios
 
 	url(r'^api/nota/add/$', 'sacramentos.rest.nota_marginal_create_ajax', 
 		name='api_create_nota'),
+	
+	url(r'^api/nota_matrimonio/add/$', 'sacramentos.rest.nota_create_matrimonio_ajax', 
+		name='api_create_nota_matrimonio'),
 
 	#urls de Bautismo
 	# url(r'^usuario/(?P<id_fel>\d+)/bautismo/add/$',bautismo_create_view, 

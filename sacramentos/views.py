@@ -561,7 +561,7 @@ class ParroquiaListView(ListView):
 def parroquia_update_view(request, pk):
 	template_name = 'parroquia/parroquia_form.html'
 	success_url = '/parroquia/'
-	parroquia = Parroquia.objects.get(pk=pk)
+	parroquia = get_object_or_404(Parroquia, pk = pk)
 	direccion = parroquia.direccion
 	
 	if request.method == 'POST':
@@ -593,62 +593,20 @@ def intencion_create_view(request):
 	template_name = 'intencion/intencion_form.html'
 	success_url = '/intencion/'
 	if request.method == 'POST':
-
-		date = request.POST['fecha_celebracion']
-		# date = ' '.join(date)
-		# #Convierte el string a fecha
-		date =  datetime.strptime(date, "%Y-%m-%dT%H:%M").strftime("%Y-%m-%d %H:%M:00")
-		messages.info(request, request.POST['fecha_celebracion'])
-		messages.info(request, date)
-		# request.POST['fecha_celebracion'] = 'Hola'
 		form_intencion = IntencionForm(request.POST)
 		if form_intencion.is_valid():
-
-			messages.success(request, success_url)
+			form_intencion.save()
+			messages.success(request, 'Creado exitosamente')
+			return HttpResponseRedirect(success_url)
 		else:
 			messages.error(request, u'Uno o más campos no son incorrectos: %s' % form_intencion.errors)
-			ctx = {'form_intencion': form_intencion}
+			ctx = {'form': form_intencion}
 			return render(request, template_name, ctx)
-
 	else:
 		form_intencion = IntencionForm()
-		ctx = {'form_intencion': form_intencion}
+		ctx = {'form': form_intencion}
 		return render(request, template_name, ctx)
 
-
-#Vistas para administar intenciones de misa - no funciona, se cambio por una función 
-# class IntencionCreateView(CreateView):
-# 	model = Intenciones
-# 	form_class = IntencionForm
-# 	template_name = 'intencion/intencion_form.html'
-# 	success_url = '/intencion/'
-
-	
-# 	def get_form_kwargs(self):
-# 		kwargs = super(IntencionCreateView, self).get_form_kwargs()
-# 		# date = self.request.POST['fecha_celebracion']
-# 		# date = ' '.join(date)
-# 		# #Convierte el string a fecha
-# 		# date =  datetime.strptime(date, "%Y-%m-%d %H:%M").strftime("%Y-%m-%d %H:%M:00")
-# 		# messages.error(self.request, date)
-# 		# kwargs['fecha_celebracion'] = date
-# 		return kwargs
-
-# 	def form_valid(self, form):
-# 		fecha =self.request.POST['fecha_celebracion']
-# 		messages.error(self.request, fecha)
-# 		messages.error(self.request, 'Pasando por aqui')
-# 		return super(IntencionCreateView, self).form_valid(form)
-
-# 	def form_invalid(self, form):
-# 		fecha = self.request.POST['fecha_celebracion']
-# 		messages.error(self.request, fecha)
-# 		messages.error(self.request, 'Uno o más errores')
-# 		return super(IntencionCreateView, self).form_invalid(form)
-
-
-
-	
 class IntencionListView(ListView):
 	model= Intenciones
 	template_name = 'intencion/intencion_list.html'
@@ -658,6 +616,7 @@ class IntencionUpdateView(UpdateView):
 	template_name = 'intencion/intencion_form.html'
 	form_class = IntencionForm
 	success_url = '/intencion/'
+	context_object_name = 'form_intencion'
 
 def sacerdote_create_view(request):
 	template_name = 'usuario/sacerdote_form.html' 
@@ -665,15 +624,15 @@ def sacerdote_create_view(request):
 	if request.method == 'POST':
 		form_sacerdote = SacerdoteForm(request.POST)
 		form_usuario = UsuarioForm(request.POST)
-		if sacerdote_form.is_valid and form_usuario.is_valid():
+		if form_sacerdote.is_valid and form_usuario.is_valid():
 			usuario = form_usuario.save(commit= False) 
-			sacerdote = sacerdote_form.save(commit=False)
-			usuario.user_name(sacerdote.dni)
+			sacerdote = form_sacerdote.save(commit=False)
+			usuario.username=sacerdote.dni
 			usuario.save()
-			sacerdote.user(usuario)
-			sacerdote.sexo = 'Masculino'
+			sacerdote.user =usuario
+			sacerdote.sexo = 'm'
 			sacerdote.profesion = 'Sacerdote'
-			estado_civil = 'Soltero/a'
+			estado_civil = 's'
 			sacerdote.save()
 			return HttpResponseRedirect(success_url)
 
@@ -688,7 +647,41 @@ def sacerdote_create_view(request):
 		ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario}
 		return render(request, template_name, ctx)
 
+def sacerdote_update_view(request, pk):
+	sacerdote = get_object_or_404(PerfilUsuario, pk=pk)
+	if sacerdote.profesion != 'Sacerdote':
+		raise Http404
+	else: 
+		template_name = 'usuario/sacerdote_form.html' 
+		success_url = '/sacerdote/'
+		if request.method == 'POST':
+			form_sacerdote = SacerdoteForm(request.POST, instance=sacerdote)
+			form_usuario = UsuarioForm(request.POST, instance=sacerdote.user)
+			if form_sacerdote.is_valid and form_usuario.is_valid():
+				usuario = form_usuario.save(commit= False) 
+				sacerdote = form_sacerdote.save(commit=False)
+				usuario.username=sacerdote.dni
+				usuario.save()
+				sacerdote.user =usuario
+				sacerdote.sexo = 'm'
+				sacerdote.profesion = 'Sacerdote'
+				estado_civil = 's'
+				sacerdote.save()
+				return HttpResponseRedirect(success_url)
+
+			else:
+				messages.error(request, 'Uno o más datos son inválidos %s %s' % (form_usuario, form_sacerdote))
+				ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
+				return render(request, template_name, ctx)
+
+		else:
+			form_sacerdote = SacerdoteForm(instance=sacerdote)
+			form_usuario = UsuarioForm(instance=sacerdote.user)
+			ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
+			return render(request, template_name, ctx)
+
 
 class SacerdoteListView(ListView):
 	model = PerfilUsuario
 	template_name = 'usuario/sacerdote_list.html'
+	queryset = PerfilUsuario.objects.sacerdotes()

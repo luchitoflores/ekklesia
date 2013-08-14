@@ -25,6 +25,9 @@ class PersonaManager(models.Manager):
 	def todos(self):
 		return self.model.objects.all()
 
+	def sacerdotes(self):
+		return self.model.objects.filter(profesion='Sacerdote')
+
 class BautismoManager(models.Manager):
 	# def libro_activo(self):
 	# 	return self.model.objects.filter(libro__tipo_libro='Bautismo')

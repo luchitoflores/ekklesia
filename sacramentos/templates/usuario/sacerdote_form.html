@@ -1,13 +1,29 @@
 {%extends 'base.html'%}
 
+{%block title%}
+{%if object.id%}
+Editar Sacerdote
+{%else%}
+Agregar Sacerdote
+{%endif%}
+{%endblock%}
+
+{%block content_title%}
+{%if object.id%} 
+Editar Sacerdote
+{%else%}
+Agregar Sacerdote
+{%endif%}
+{%endblock%}
+
 {% block content%}
-	<form action="." method='POST'>
-		{% csrf_token%}
-		{{form_usuario}}
-		{{form_sacerdote}}
-	</form>
+<form action="." method='POST'>
+	{% csrf_token%}
+	{{form_usuario}}
+	{{form_sacerdote}}
 	<div class="form-actions">
 		<input type="submit" value="Enviar" class="btn btn-primary">
 		<a href="{% url 'sacerdote_list' %}" class='btn btn-primary'>Cancelar</a>
 	</div>
+</form>
 {% endblock%}

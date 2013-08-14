@@ -27,14 +27,7 @@ Agregar Matrimonio
 
 
 <!-- Pestañas para datos del feligres, y del bautizo -->
-
-
-
-
-
-
-
-
+<input id='id_hidden' type="hidden" value='{{object.id}}'>
 <form id='id_form_matrimonio' action="." method='POST' class='form-horizontal'>
 	{% csrf_token%}
 	
@@ -80,6 +73,7 @@ Agregar Matrimonio
 					<label for="id_novio" class='control-label'>{{form_matrimonio.novio.label}}</label>
 					<div class='controls'>
 						{{form_matrimonio.novio}}
+						<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 					</div>
 				</div>
 
@@ -87,6 +81,7 @@ Agregar Matrimonio
 					<label for="id_novia" class='control-label'>{{form_matrimonio.novia.label}}</label>
 					<div class='controls'>
 						{{form_matrimonio.novia}}
+						<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 					</div>
 				</div>
 				
@@ -139,19 +134,25 @@ Agregar Matrimonio
 				</div>
 			</fieldset>
 			<fieldset class='scheduler-border'>
-				<legend class='scheduler-border'>Nota Marginal</legend>
-				<div class='control-group'>
-					<label for="id_fecha_nota" class='control-label'>{{form_nota.fecha.label}}</label>
-					<div class='controls'>
-						{{form_nota.fecha}}
-					</div>
-				</div>
-				<div class='control-group'>
-					<label for="id_descripcion" class='control-label'>{{form_nota.descripcion.label}}</label>
-					<div class='controls'>
-						{{form_nota.descripcion}}
-					</div>
-				</div>
+				<legend class='scheduler-border'><a href="#id_crear_nota_matrimonio" data-toggle='modal'>Nota Marginal</a></legend>
+				<table id='id_table_nota_matrimonio' class='table table-bordered table-striped'>
+					<thead>
+						<tr class='alert alert-info'>
+							<th>Fecha</th>
+							<th>Descripcion</th>
+						</tr>
+
+					</thead>
+					<tbody>
+						{% for o in notas %}
+						<tr>
+							<td> {{o.fecha}}</td>
+							<td>{{o.descripcion}}</td>
+						</tr>
+
+						{%endfor%}
+					</tbody>
+				</table>
 			</fieldset>
 		</div>
 	</div>
@@ -166,6 +167,28 @@ Agregar Matrimonio
 
 </form>
 
+<!--Modal para crear Notas Marginales -->
+<div id="id_crear_nota_matrimonio" class="modal hide fade">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<h3>Crear Nota Marginal</h3>
+	</div>
+	<div class="modal-body">
+		<form id='id_form_crear_nota_matrimonio' class='form-horizontal' method='POST'>
+			{%nota_marginal%}
+
+			<div class="control-group">
+				<div class='controls'>
+					<input id='crear'type="submit"  value='Enviar' class='btn btn-primary'>
+				</div>
+			</div>
+		</form>
+
+	</div>
+	<div class="modal-footer">
+		<a href="." class="btn btn-primary" data-dismiss="modal">Cancelar</a>
+	</div>
+</div>
 
 
 

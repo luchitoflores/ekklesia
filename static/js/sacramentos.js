@@ -9,9 +9,10 @@ function inicio(){
 	autocomplete('#id_padre');
 	asignar_padre();
 	// usuarioCreate();
-	crear_nota_marginal($('#id_form_crear_nota'),'#id_crear_nota');
+	crear_nota_marginal($('#id_form_crear_nota'),'#id_crear_nota','/api/nota/add/');
+	crear_nota_marginal($('#id_form_crear_nota_matrimonio'),'#id_crear_nota_matrimonio','/api/nota_matrimonio/add/');
 	tablas_estilo_bootstrap();
-	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_nota');
+	modelo_tablas('#id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil');
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
@@ -24,11 +25,11 @@ function inicio(){
 	poner_fecha_defecto('#id_fecha_apertura')
 }
 
-function crear_nota_marginal(id_form,id_modal){
+function crear_nota_marginal(id_form,id_modal,url_rest){
 	$(id_form).on('submit', function(e){
 		e.preventDefault();
 		var id=$('#id_hidden').val();
-		var url = '/api/nota/add/';
+		var url = url_rest;
 		var json = $(this).serialize()+"&id="+id+"";
 		$.post(url, json, function(data){
 			if(data.respuesta){
@@ -37,8 +38,7 @@ function crear_nota_marginal(id_form,id_modal){
 				$('tbody tr').remove();
 				$.each(data.tabla,function(index,element){
 					$('tbody').append(element.tabla);
-
-
+					habilitar_campos('#id_href');
 				});
 			} else{
 				console.log('Existen errores');
@@ -47,6 +47,8 @@ function crear_nota_marginal(id_form,id_modal){
 		});
 	})
 }
+
+
 
 $(document).ajaxStart(function(){
 	$('#spinner').show();
@@ -208,8 +210,14 @@ function cargar_tabla_usuarios_en_modal(){
 		$.get(url, ctx, function(data){
 			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
 			var map = almacenar_busqueda_en_map(data.perfiles);
-			devolver_campos_de_lista(map);
-			devolver_campos_bautismo(map)
+			devolver_campos_de_lista(map,'#id_novio','#id_novia');
+			devolver_campos_de_lista(map,'#id_padre','#id_madre');
+			
+			// devolver_campos_de_lista(map,'#id_madre');
+			devolver_campos_a_sacramento(map,'#id_bautizado');
+			devolver_campos_a_sacramento(map,'#id_confirmado');
+			devolver_campos_de_novios(map);
+			devolver_campos_a_sacramento(map,'#id_feligres');
 		});
 	});
 }
@@ -241,7 +249,7 @@ function almacenar_busqueda_en_map(lista){
 // 	});
 // }
 
-function devolver_campos_de_lista(map){
+function devolver_campos_de_lista(map,id_male,id_female){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
 		e.preventDefault();
@@ -249,39 +257,31 @@ function devolver_campos_de_lista(map){
 		var id =  $(this).parents('tr').attr('id');
 		var objeto = map[id];
 		console.log(objeto.sexo);
-		if(objeto.sexo =='Masculino'){
-			$('#id_padre option').remove();
-			$('#id_padre').append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+		if(objeto.sexo =='m'){
+			$(id_male +' option').remove();
+			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
 		} 
-		if (objeto.sexo =='Femenino') {
-			$('#id_madre option').remove();
-			$('#id_madre').append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+		if (objeto.sexo =='f') {
+			$(id_female+' option').remove();
+			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
 		}
 	});
 }
 
 
-function devolver_campos_bautismo(map){
+function devolver_campos_a_sacramento(map,id_feligres){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
 		e.preventDefault();
-		$("#id_buscar_padre").modal('hide');  //$(this).parents("div:first").html(...);
-		console.log('prueba: ' + $(this).parents('tr').attr('id'));
+		$("#id_buscar_padre").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
-		console.log(map[id]);
 		var objeto = map[id];
-
-		console.log(objeto.nombres +' '+objeto.apellidos);
-		$('#id_form_bautizado #id_first_name').attr('value', objeto.nombres);
-		$('#id_form_bautizado #id_last_name').attr('value', objeto.apellidos);
-		$('#id_form_bautizado #id_dni').attr('value', objeto.dni);
-		$('#id_form_bautizado #id_profesion').attr('value', objeto.profesion);
-		$('#id_form_bautizado #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-		// $('#id_form_padre #id_estado_civil').attr('value', objeto.estado_civil);
-		$('#id_form_bautizado #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
-		$('#id_form_bautizado #id_sexo option[value="'+objeto.sexo+'"]').prop('selected', true);
+		$(id_feligres+' option').remove();
+		$(id_feligres).append('<option value='+objeto.id+'>'+ objeto.nombres + " " + objeto.apellidos+'</option>')
+		
 	});
 }
+
 
 function asignar_padre(){
 	$('#id_form_padre').on('submit', function(e){

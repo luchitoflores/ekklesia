@@ -295,10 +295,8 @@ class LibroListView(ListView):
 def matrimonio_create_view(request):
 	if(request.method=='POST'):
 		form_matrimonio=MatrimonioForm(request.POST)
-		form_nota=NotaMarginalForm(request.POST)
-		if(form_matrimonio.is_valid() and form_nota.is_valid()):
+		if(form_matrimonio.is_valid()):
 			matrimonio=form_matrimonio.save(commit=False)
-			nota=form_nota.save(commit=False)
 			matrimonio.tipo_sacramento='Matrimonio'
 			novio=matrimonio.novio
 			novia=matrimonio.novia
@@ -310,19 +308,16 @@ def matrimonio_create_view(request):
 			matrimonio.novia=novia
 
 			if(matrimonio.novio.estado_civil=='Casado/a' and matrimonio.novia.estado_civil=='Casado/a'):
-				nota.save()
-				matrimonio.nota_marginal=nota
 				matrimonio.save()
 				return HttpResponseRedirect('/matrimonio')
 			else:
 				messages.add_message(request, messages.WARNING, {'Matrimonio':'error de estado civil'})
 		else:
-			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors,
-				'Nota MArginal':form_nota.errors})
+			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors})
 	else:
 		form_matrimonio=MatrimonioForm()
-		form_nota=NotaMarginalForm()
-	ctx={'form_matrimonio':form_matrimonio,'form_nota':form_nota}
+		
+	ctx={'form_matrimonio':form_matrimonio}
 	return render(request,'matrimonio/matrimonio_form.html',ctx)
 
 
@@ -333,13 +328,12 @@ def matrimonio_create_view(request):
 
 def matrimonio_update_view(request,pk):
 	matrimonio=get_object_or_404(Matrimonio,pk=pk)
-	nota=matrimonio.nota_marginal
+	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
 	if request.method == 'POST':
 		form_matrimonio = MatrimonioForm(request.POST,instance=matrimonio)
-		form_nota=NotaMarginalForm(request.POST,instance=nota)
-		if form_matrimonio.is_valid() and form_nota.is_valid():
+		if form_matrimonio.is_valid():
 			form_matrimonio.save()
-			form_nota.save()
+			
 			return HttpResponseRedirect('/matrimonio')
 		else:
 			messages.add_message(request, messages.WARNING, {
@@ -348,9 +342,9 @@ def matrimonio_update_view(request,pk):
 
 	else:
 		form_matrimonio= MatrimonioForm(instance=matrimonio)
-		form_nota=NotaMarginalForm(instance=nota)
+		
 									
-	ctx = {'form_matrimonio': form_matrimonio,'form_nota':form_nota,'object':matrimonio}
+	ctx = {'form_matrimonio': form_matrimonio,'notas':notas,'object':matrimonio}
 	return render(request, 'matrimonio/matrimonio_form.html', ctx)
 
 
@@ -398,7 +392,7 @@ def mostrar():
 
 def bautismo_update_view(request,pk):
 	bautismo= get_object_or_404(Bautismo, pk=pk)
-	actas=NotaMarginal.objects.filter(bautismo=bautismo)
+	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	if request.method == 'POST':
 		bautismo_form = BautismoForm(request.POST,instance=bautismo)
 		# form_nota=NotaMarginalForm(request.POST,instance=nota)
@@ -408,7 +402,7 @@ def bautismo_update_view(request,pk):
 			return HttpResponseRedirect('/bautismo')
 		else:
 			messages.error(request, 'error')
-			ctx = {'formBautismo': bautismo_form,'actas':actas,'object':bautismo}
+			ctx = {'formBautismo': bautismo_form,'notas':notas,'object':bautismo}
 			return render(request, 'bautismo/bautismo_form.html', ctx)
 			
 	else:
@@ -416,7 +410,7 @@ def bautismo_update_view(request,pk):
 		
 		# form_nota=NotaMarginalForm(instance=nota)
 									
-	ctx = {'formBautismo': bautismo_form,'actas':actas,'object':bautismo}
+	ctx = {'formBautismo': bautismo_form,'notas':notas,'object':bautismo}
 	return render(request, 'bautismo/bautismo_form.html', ctx)
 
 

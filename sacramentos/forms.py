@@ -142,7 +142,8 @@ class BautismoForm(ModelForm):
 	lugar_sacramento = forms.CharField(help_text='Ingrese el lugar del sacramento ej: Loja ', 
 		required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
-	iglesia = forms.CharField(help_text='Ingrese el nombre de iglesia: San Sebastian',required=True,label='Iglesia',
+	iglesia = forms.CharField(help_text='Ingrese el nombre de la iglesia: San Jose',
+		required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
 		empty_label=None,label='Libro',
@@ -172,7 +173,7 @@ class EucaristiaForm(ModelForm):
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
-		help_text='Ingrese el nombre de iglesia: San Sebastian')
+		help_text='Ingrese el nombre de la iglesia: San Jose')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.filter(tipo_libro='Eucaristia',estado='Abierto'),
 		help_text='Seleccione un libro para la Eucaristia')
@@ -202,7 +203,7 @@ class ConfirmacionForm(ModelForm):
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
-		help_text='Ingrese el nombre de iglesia: San Sebastian')
+		help_text='Ingrese el nombre de la iglesia: San Jose')
 	obispo = forms.CharField(required=True,label='Celebrante',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Nombre de Ministro ej: Ob Julio Parrilla')
@@ -235,15 +236,20 @@ class MatrimonioForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
-		widget=forms.TextInput(attrs={'required':''}))
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el lugar del sacramento ej: Loja ')
 	iglesia = forms.CharField(required=True,label='Iglesia',
-		widget=forms.TextInput(attrs={'required':''}))
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el nombre de la iglesia: San Jose')
 	testigo_novio= forms.CharField(required=True,label='Testigo',
-		widget=forms.TextInput(attrs={'required':''}))
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el nombre de testigo ej: Pablo Robles')
 	testigo_novia= forms.CharField(required=True,label='Testiga',
-		widget=forms.TextInput(attrs={'required':''}))
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el nombre de testiga ej:Maria Pincay')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
-		queryset=Libro.objects.filter(tipo_libro='Matrimonio',estado='Abierto'))
+		queryset=Libro.objects.filter(tipo_libro='Matrimonio',estado='Abierto'),
+		help_text='Seleccione un libro para el Matrimonio')
 	class Meta():
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento',

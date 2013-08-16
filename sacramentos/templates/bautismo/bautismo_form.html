@@ -44,7 +44,12 @@ Agregar Bautismo
 							<label for="id_libro" class='control-label'>{{formBautismo.libro.label}}</label>
 							<div class='controls'>
 								{{formBautismo.libro}}
+								
 							</div>
+							<div class="controls help-text">
+									{{formBautismo.libro.help_text}}
+							</div>
+							
 						</div>
 					</div>
 					<div class="span4">
@@ -53,6 +58,10 @@ Agregar Bautismo
 							<div class='controls'>
 								{{formBautismo.pagina}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.pagina.help_text}}
+							</div>
+							
 						</div>
 					</div>
 					<div class="span4">
@@ -60,6 +69,9 @@ Agregar Bautismo
 							<label for="id_numero_acta" class='control-label'>{{formBautismo.numero_acta.label}}</label>
 							<div class='controls'>
 								{{formBautismo.numero_acta}}
+							</div>
+							<div class="controls help-text">
+								{{formBautismo.numero_acta.help_text}}
 							</div>
 						</div>
 
@@ -70,7 +82,10 @@ Agregar Bautismo
 							<div class='controls'>
 								{{formBautismo.fecha_sacramento}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.fecha_sacramento.help_text}}</div>
 						</div>
+
 					</div>
 					<div class="span8">
 						<div class='control-group'>
@@ -79,6 +94,8 @@ Agregar Bautismo
 								{{formBautismo.bautizado}}
 								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.bautizado.help_text}}</div>
 						</div>
 					</div>
 					<div class="span4">
@@ -87,74 +104,101 @@ Agregar Bautismo
 							<div class='controls'>
 								{{formBautismo.lugar_sacramento}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.lugar_sacramento.help_text}}</div>
 						</div>
 					</div>
 					<div class="span4">
 						<div class='control-group'>
-							<label for="id_iglesia" class='control-label'>{{formBautismo.iglesia.label}}</label>
+							<label for="id_iglesia" class='control-label'>
+								{{formBautismo.iglesia.label}}</label>
 							<div class='controls'>
 								{{formBautismo.iglesia}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.iglesia.help_text}}</div>
 						</div>
 					</div>
 				</div>
-
-
-
 			</fieldset>
+
 			<fieldset class='scheduler-border'>
 				<legend class='scheduler-border'>Mas Datos del Sacramento</legend>
 				<div class="row">
 					<div class='span4'>
 						<div class='control-group'>
-							<label for="id_padrino" class='control-label'>{{formBautismo.padrino.label}}</label>
+							<label for="id_padrino" class='control-label'>
+								{{formBautismo.padrino.label}}</label>
 							<div class='controls'>
 								{{formBautismo.padrino}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.padrino.help_text}}</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_madrina" class='control-label'>{{formBautismo.madrina.label}}</label>
+							<label for="id_madrina" class='control-label'>
+								{{formBautismo.madrina.label}}</label>
 							<div class='controls'>
 								{{formBautismo.madrina}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.madrina.help_text}}</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_abuelo_paterno" class='control-label'>{{formBautismo.abuelo_paterno.label}}</label>
+							<label for="id_abuelo_paterno" class='control-label'>
+								{{formBautismo.abuelo_paterno.label}}</label>
 							<div class='controls'>
 								{{formBautismo.abuelo_paterno}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.abuelo_paterno.help_text}}</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_abuela_paterna" class='control-label'>{{formBautismo.abuela_paterna.label}}</label>
+							<label for="id_abuela_paterna" class='control-label'>
+								{{formBautismo.abuela_paterna.label}}</label>
 							<div class='controls'>
 								{{formBautismo.abuela_paterna}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.abuela_paterna.help_text}}</div>
 						</div>
 					</div>
 					<div class="span4">
 						<div class='control-group'>
-							<label for="id_abuelo_materno" class='control-label'>{{formBautismo.abuelo_materno.label}}</label>
+							<label for="id_abuelo_materno" class='control-label'>
+								{{formBautismo.abuelo_materno.label}}</label>
 							<div class='controls'>
 								{{formBautismo.abuelo_materno}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.abuelo_materno.help_text}}</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_abuela_materna" class='control-label'>{{formBautismo.abuela_materna.label}}</label>
+							<label for="id_abuela_materna" class='control-label'>
+								{{formBautismo.abuela_materna.label}}</label>
 							<div class='controls'>
 								{{formBautismo.abuela_materna}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.abuela_materna.help_text}}</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_vecinos_paternos" class='control-label'>{{formBautismo.vecinos_paternos.label}}</label>
+							<label for="id_vecinos_paternos" class='control-label'>
+								{{formBautismo.vecinos_paternos.label}}</label>
 							<div class='controls'>
 								{{formBautismo.vecinos_paternos}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.vecinos_paternos.help_text}}</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_vecinos_maternos" class='control-label'>{{formBautismo.vecinos_maternos.label}}</label>
+							<label for="id_vecinos_maternos" class='control-label'>
+								{{formBautismo.vecinos_maternos.label}}</label>
 							<div class='controls'>
 								{{formBautismo.vecinos_maternos}}
 							</div>
+							<div class="controls help-text">
+								{{formBautismo.vecinos_maternos.help_text}}</div>
 						</div>
 
 					</div>
@@ -196,7 +240,9 @@ Agregar Bautismo
 <!--Modal para crear Notas Marginales -->
 <div id="id_crear_nota" class="modal hide fade">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+			
+		</button>
 		<h3>Crear Nota Marginal</h3>
 	</div>
 	<div class="modal-body">

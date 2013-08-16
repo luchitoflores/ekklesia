@@ -126,20 +126,114 @@ class LibroForm(ModelForm):
 	class Meta():
 		model=Libro
 
-class MatrimonioForm(ModelForm):
-	pagina=forms.IntegerField(required=True, label='Pagina', 
-		widget=forms.TextInput(attrs={'required': ''}))
-	novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
-		required=True, empty_label='--- Seleccione ---', 
+
+
+class BautismoForm(ModelForm):
+	bautizado=forms.ModelChoiceField(help_text='Presione buscar para encontrar un feligres',label='Feligres',
+		queryset=PerfilUsuario.objects.todos(),	required=True,	empty_label='--- Seleccione ---',
 		widget=forms.Select(attrs={'required':''}))
-	novia=forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), 
-		required=True, empty_label='--- Seleccione ---', 
-		widget=forms.Select(attrs={'required':''}))
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+	pagina=forms.IntegerField(required=True,help_text='Ingrese el numero de pagina ej:5,67', label='Pagina', 
 		widget=forms.TextInput(attrs={'required': ''}))
-	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+	numero_acta=forms.IntegerField(help_text='Ingrese el numero del acta ej:3,25',required=True, 
+		label='Numero Acta', widget=forms.TextInput(attrs={'required': ''}))
+	fecha_sacramento = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',required=True,label='Fecha de Sacramento',
 		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}))
+	lugar_sacramento = forms.CharField(help_text='Ingrese el lugar del sacramento ej: Loja ', 
+		required=True,label='Lugar del Sacramento',
+		widget=forms.TextInput(attrs={'required':''}))
+	iglesia = forms.CharField(help_text='Ingrese el nombre de iglesia: San Sebastian',required=True,label='Iglesia',
+		widget=forms.TextInput(attrs={'required':''}))
+	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
+		empty_label=None,label='Libro',
+		queryset=Libro.objects.filter( tipo_libro='Bautismo',estado='Abierto'))
+	class Meta():
+		model=Bautismo
+		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento',
+			'lugar_sacramento','padrino','madrina',
+			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno',
+			'abuela_materna','vecinos_paternos','vecinos_maternos')
+
+class EucaristiaForm(ModelForm):
+	feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
+	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
+	help_text='Presione buscar para encontrar al feligres')
+	pagina=forms.IntegerField(required=True, label='Pagina', 
+		widget=forms.TextInput(attrs={'required': ''}),
+		help_text='Ingrese el numero de pagina ej:5,67')
+	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+		widget=forms.TextInput(attrs={'required': ''}),
+		help_text='Ingrese el numero del acta ej:3,25')
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el lugar del sacramento ej: Loja ')
+	iglesia = forms.CharField(required=True,label='Iglesia',
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el nombre de iglesia: San Sebastian')
+	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
+		queryset=Libro.objects.filter(tipo_libro='Eucaristia',estado='Abierto'),
+		help_text='Seleccione un libro para la Eucaristia')
+
+	class Meta():
+		model=Eucaristia
+		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento',
+			'lugar_sacramento','padrino',
+			'madrina','iglesia')
+
+class ConfirmacionForm(ModelForm):
+	confirmado=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),
+		required=True,label='Feligres',
+	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
+	help_text='Presione buscar para encontrar al feligres')
+	pagina=forms.IntegerField(required=True, label='Pagina', 
+		widget=forms.TextInput(attrs={'required': ''}),
+		help_text='Ingrese el numero de pagina ej:5,67')
+	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+		widget=forms.TextInput(attrs={'required': ''}),
+		help_text='Ingrese el numero del acta ej:3,25')
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el lugar del sacramento ej: Loja ')
+	iglesia = forms.CharField(required=True,label='Iglesia',
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese el nombre de iglesia: San Sebastian')
+	obispo = forms.CharField(required=True,label='Celebrante',
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Nombre de Ministro ej: Ob Julio Parrilla')
+	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
+		queryset=Libro.objects.filter(tipo_libro='Confirmacion',estado='Abierto'),
+		help_text='Seleccione un libro para la Confirmacion')
+	class Meta():
+		model=Confirmacion
+		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento',
+			'lugar_sacramento',
+			'padrino','madrina','obispo','iglesia')
+
+
+class MatrimonioForm(ModelForm):
+	pagina=forms.IntegerField(required=True, label='Pagina', 
+		widget=forms.TextInput(attrs={'required': ''}),
+		help_text='Ingrese el numero de pagina ej:5,67')
+	novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
+		required=True, empty_label='--- Seleccione ---', 
+		widget=forms.Select(attrs={'required':''}),
+		help_text='Presione buscar para encontrar el novio')
+	novia=forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), 
+		required=True, empty_label='--- Seleccione ---', 
+		widget=forms.Select(attrs={'required':''}),
+		help_text='Presione buscar para encontrar la novia')
+	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+		widget=forms.TextInput(attrs={'required': ''}),
+		help_text='Ingrese el numero del acta ej:3,25')
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(required=True,label='Iglesia',
@@ -154,78 +248,6 @@ class MatrimonioForm(ModelForm):
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento',
 			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
-
-
-class BautismoForm(ModelForm):
-	bautizado=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
-	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}))
-	pagina=forms.IntegerField(required=True, label='Pagina', 
-		widget=forms.TextInput(attrs={'required': ''}))
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
-		widget=forms.TextInput(attrs={'required': ''}))
-	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}))
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
-		widget=forms.TextInput(attrs={'required':''}))
-	iglesia = forms.CharField(required=True,label='Iglesia',
-		widget=forms.TextInput(attrs={'required':''}))
-	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
-		queryset=Libro.objects.filter(tipo_libro='Bautismo',estado='Abierto'))
-	class Meta():
-		model=Bautismo
-		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento',
-			'lugar_sacramento','padrino','madrina',
-			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno',
-			'abuela_materna','vecinos_paternos','vecinos_maternos')
-
-class EucaristiaForm(ModelForm):
-	feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
-	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}))
-	pagina=forms.IntegerField(required=True, label='Pagina', 
-		widget=forms.TextInput(attrs={'required': ''}))
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
-		widget=forms.TextInput(attrs={'required': ''}))
-	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}))
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
-		widget=forms.TextInput(attrs={'required':''}))
-	iglesia = forms.CharField(required=True,label='Iglesia',
-		widget=forms.TextInput(attrs={'required':''}))
-	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
-		queryset=Libro.objects.filter(tipo_libro='Eucaristia',estado='Abierto'))
-
-	class Meta():
-		model=Eucaristia
-		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento',
-			'lugar_sacramento','padrino',
-			'madrina','iglesia')
-
-class ConfirmacionForm(ModelForm):
-	confirmado=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
-	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}))
-	pagina=forms.IntegerField(required=True, label='Pagina', 
-		widget=forms.TextInput(attrs={'required': ''}))
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
-		widget=forms.TextInput(attrs={'required': ''}))
-	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}))
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
-		widget=forms.TextInput(attrs={'required':''}))
-	iglesia = forms.CharField(required=True,label='Iglesia',
-		widget=forms.TextInput(attrs={'required':''}))
-	obispo = forms.CharField(required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
-	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
-		queryset=Libro.objects.filter(tipo_libro='Confirmacion',estado='Abierto'))
-	class Meta():
-		model=Confirmacion
-		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento',
-			'lugar_sacramento',
-			'padrino','madrina','obispo','iglesia')
-
 
 
 #Forms para Parroquia - Funcionando

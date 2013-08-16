@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 from datetime import datetime
 from django.db import models
 from django.db.models import Q
@@ -219,7 +220,15 @@ class Libro(TimeStampedModel):
 		return '%d %s' %(self.numero_libro,self.tipo_libro)
 
 
-	
+class FeligresParroquia(TimeStampedModel):
+	feligres = models.ForeignKey('PerfilUsuario')
+	parroquia = models.ForeignKey('Parroquia')
+	inicio = models.DateField()
+	fin = models.DateField(null=True, blank=True)	
+	estado = models.DateField()
+
+	def __unicode__(self):
+		return u'Párroco: %s - Parroquia: %s' % (self.feligres.user.get_full_name(), self.parroquia.nombre) 
 
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200)

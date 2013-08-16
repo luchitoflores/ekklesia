@@ -300,14 +300,14 @@ def matrimonio_create_view(request):
 			matrimonio.tipo_sacramento='Matrimonio'
 			novio=matrimonio.novio
 			novia=matrimonio.novia
-			novio.estado_civil='Casado/a'
-			novia.estado_civil='Casado/a'
+			novio.estado_civil='c'
+			novia.estado_civil='c'
 			novio.save()
 			novia.save()
 			matrimonio.novio=novio
 			matrimonio.novia=novia
 
-			if(matrimonio.novio.estado_civil=='Casado/a' and matrimonio.novia.estado_civil=='Casado/a'):
+			if(matrimonio.novio.estado_civil=='c' and matrimonio.novia.estado_civil=='c'):
 				matrimonio.save()
 				return HttpResponseRedirect('/matrimonio')
 			else:

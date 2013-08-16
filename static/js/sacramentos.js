@@ -210,17 +210,12 @@ function cargar_tabla_usuarios_en_modal(){
 		$.get(url, ctx, function(data){
 			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
 			var map = almacenar_busqueda_en_map(data.perfiles);
-			devolver_campos_de_lista(map,'#id_novio','#id_novia');
 			devolver_campos_de_lista(map,'#id_padre','#id_madre');
 			
-			// devolver_campos_de_lista(map,'#id_madre');
-			devolver_campos_a_sacramento(map,'#id_bautizado');
-			devolver_campos_a_sacramento(map,'#id_confirmado');
-			devolver_campos_de_novios(map);
-			devolver_campos_a_sacramento(map,'#id_feligres');
 		});
 	});
 }
+
 
 function almacenar_busqueda_en_map(lista){
 	var map = {};
@@ -230,24 +225,7 @@ function almacenar_busqueda_en_map(lista){
 	return map;
 }
 
-// function devolver_campos_de_lista(map){
-// 	$('a#id_click').on('click', function(e){
-// 		// alert('estoy aqui');
-// 		e.preventDefault();
-// 		$("#id_buscar_padre").modal('hide');  		
-// 		var id =  $(this).parents('tr').attr('id');
-// 		var objeto = map[id];
-// 		console.log(objeto.nombres);
-// 		$('#id_form_padre #id_padre').attr('value', objeto.id);
-// 		$('#id_form_padre #id_first_name').attr('value', objeto.nombres);
-// 		$('#id_form_padre #id_last_name').attr('value', objeto.apellidos);
-// 		$('#id_form_padre #id_dni').attr('value', objeto.dni);
-// 		$('#id_form_padre #id_profesion').attr('value', objeto.profesion);
-// 		$('#id_form_padre #id_lugar_nacimiento').attr('value', objeto.lugar_nacimiento);
-// 		$('#id_form_padre #id_estado_civil option[value="'+objeto.estado_civil+'"]').prop('selected', true);
 
-// 	});
-// }
 
 function devolver_campos_de_lista(map,id_male,id_female){
 	$('a#id_click').on('click', function(e){
@@ -256,31 +234,52 @@ function devolver_campos_de_lista(map,id_male,id_female){
 		$("#id_buscar_padre").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
 		var objeto = map[id];
-		console.log(objeto.sexo);
+		alert('Estoy aqui den sexo')
+		// console.log("Sexo 1"+objeto.sexo);
+
 		if(objeto.sexo =='m'){
-			$(id_male +' option').remove();
-			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+			$(id_male+' option').remove();
+			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
 		} 
 		if (objeto.sexo =='f') {
 			$(id_female+' option').remove();
-			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
 		}
 	});
 }
 
+// function devolver_campos_a_matrimonio(map,id_male,id_female){
+// 	$('a#id_click').on('click', function(e){
+// 		// alert('estoy aqui');
+// 		e.preventDefault();
+// 		$("#id_buscar_padre").modal('hide');  		
+// 		var id =  $(this).parents('tr').attr('id');
+// 		var objeto = map[id];
+// 		console.log(objeto.sexo);
+// 		if(objeto.sexo =='m'){
+// 			$(id_male+' option').remove();
+// 			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+// 		} 
+// 		if (objeto.sexo =='f') {
+// 			$(id_female+' option').remove();
+// 			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+// 		}
+// 	});
+// }
 
-function devolver_campos_a_sacramento(map,id_feligres){
-	$('a#id_click').on('click', function(e){
-		// alert('estoy aqui');
-		e.preventDefault();
-		$("#id_buscar_padre").modal('hide');  		
-		var id =  $(this).parents('tr').attr('id');
-		var objeto = map[id];
-		$(id_feligres+' option').remove();
-		$(id_feligres).append('<option value='+objeto.id+'>'+ objeto.nombres + " " + objeto.apellidos+'</option>')
+
+// function devolver_campos_a_sacramento(map,id_feligres){
+// 	$('a#id_click').on('click', function(e){
+// 		// alert('estoy aqui');
+// 		e.preventDefault();
+// 		$("#id_buscar_padre").modal('hide');  		
+// 		var id =  $(this).parents('tr').attr('id');
+// 		var objeto = map[id];
+// 		$(id_feligres+' option').remove();
+// 		$(id_feligres).append('<option value='+objeto.id+'>'+ objeto.nombres + " " + objeto.apellidos+'</option>')
 		
-	});
-}
+// 	});
+// }
 
 
 function asignar_padre(){

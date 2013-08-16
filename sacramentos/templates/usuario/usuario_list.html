@@ -20,24 +20,22 @@ Lista de Feligreses
 		<tr class='alert alert-info'>
 			
 			<th>Nombres</th>
-			<th>Apellidos</th>
 			<th>Dni</th>
 			<th>Fecha Nacimiento</th>
-			<th>Papa</th>
-			<th>Mama</th>
+			<th>Padre</th>
+			<th>Madre</th>
 		</tr>
 		
 	</thead>
 	<tbody>
 		{% for o in object_list %}
 		<tr>
-			<td><a href="{%url 'usuario_update' pk=o.id%}"> {{o.user.first_name}}</a></td>
-			<td>{{o.user.last_name}}</td>
+			<td><a href="{%url 'usuario_update' pk=o.id%}"> {{o.user.get_full_name}}</a></td>
 			<td> {{o.dni}}</td>
 			<td id='id_fecha_nacimiento'>{{o.fecha_nacimiento}}</td>
-			<td>{{o.padre.first_name}} {{o.padre.last_name }}</td>
-			<td>{{o.madre.first_name}} {{o.madre.last_name}}</td>
-						
+			<td>{{o.padre.user.get_full_name}}</td>
+			<td>{{o.madre.user.get_full_name}}</td>
+
 		</tr>
 		{% endfor %}
 	</tbody>
@@ -45,25 +43,5 @@ Lista de Feligreses
 </table>
 
 <a href="{% url 'usuario_create' %}" class='btn btn-primary'>Nuevo Feligres</a>
-
-<div class="pagination">
-	<ul>
-
-		{% if page_obj.has_previous %}
-		<li><a href="?page={{page_obj.previous_page_number }}">Anterior</a>
-			{% endif %}
-		</li>
-
-		{%for p in lista%}
-		<li><a href="?page={{p}}">{{p}}</a></li>
-		{%endfor%}
-
-		<li>
-			{% if page_obj.has_next %}
-			<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-			{% endif %}
-		</li>
-	</ul>
-</div>
 
 {%endblock%}

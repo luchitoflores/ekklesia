@@ -685,3 +685,7 @@ class SacerdoteListView(ListView):
 	model = PerfilUsuario
 	template_name = 'usuario/sacerdote_list.html'
 	queryset = PerfilUsuario.objects.sacerdotes()
+
+
+def asignar_parroquia_view(request, id):
+	pass

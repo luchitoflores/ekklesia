@@ -69,8 +69,8 @@ class PerfilUsuario(TimeStampedModel):
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Usuario', null=True, blank=True)
 	dni = models.CharField(max_length=10, null=True, blank=True)
-	padre = models.ForeignKey(User, related_name='Padre', null=True, blank=True)
-	madre = models.ForeignKey(User, related_name='Madre', null=True, blank=True)
+	padre = models.ForeignKey('PerfilUsuario', related_name='Padre', null=True, blank=True)
+	madre = models.ForeignKey('PerfilUsuario', related_name='Madre', null=True, blank=True)
 	fecha_nacimiento = models.DateField(null=True, blank=True)
 	lugar_nacimiento = models.CharField(max_length=100, null=True, blank=True)
 	sexo = models.CharField(max_length=10, choices=SEXO_CHOICES)

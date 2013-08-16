@@ -11,7 +11,7 @@ from .views import (
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
-	parroquia_create_view, parroquia_update_view, ParroquiaListView,
+	parroquia_create_view, parroquia_update_view, ParroquiaListView, asignar_parroquia_view,
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	)
 urlpatterns = patterns('', 
@@ -83,7 +83,8 @@ urlpatterns = patterns('',
 	url(r'^parroquia/$', ParroquiaListView.as_view(), name='parroquia_list'),
 	url(r'^parroquia/add/$', parroquia_create_view, name='parroquia_create'),
 	url(r'^parroquia/(?P<pk>\d+)/$', parroquia_update_view, name='parroquia_update'),
-
+	#urls para asignación de parroquias
+	url(r'^asignarparroquia$/', asignar_parroquia_view, name='asignar_parroquia'),
 
 	#urls para intenciones de misa
 	url(r'^intencion/$', IntencionListView.as_view(), name='intencion_list'),
@@ -94,4 +95,8 @@ urlpatterns = patterns('',
 	#urls del api rest usuarios
 	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
 	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', name='api_create_padre'),
+	
+
+	url(r'^api/datatables/$', 'sacramentos.rest.data_tables'),
+	url(r'^datatables/$', TemplateView.as_view(template_name="data_tables.html")), 
 	)

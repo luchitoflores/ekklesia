@@ -265,9 +265,47 @@ def edit_padre_viewapi(request):
 		ctx = {'bandera': False}
 	return HttpResponse(json.dumps(ctx), content_type='applcation/json')
 
+def data_tables(request):
+	iTotalRecords = PerfilUsuario.objects.all().count() # Indica el número total de registros en la BD
+	iTotalDisplayRecords = 1 #Indica el número total de registros que se mostrarán en la tabla al hacer una búsqueda
+	iDisplayLength = request.GET.get('iDisplayLength') # Obtiene el numero de registros que van a ser mostrados de un intervalo [5, 10, 25, Todos]
+	q = request.GET.get('sSearch').split() # Me devuelve el criterio de búsqueda que pongo en el input de búsqueda
+	sEcho = request.GET['sEcho'] #indica el número de peticiones que se ha hecho al servidor
+	lista = list()
+	iSortingCols = request.GET['iSortingCols'] #Numero de columnas ordenables
+	
+	ordenacion = ''
+	sColumns = request.GET.get('sColumns').split(',')
 
-		
+	 #Devuelve el nombre de las columnas separadas por comas
+	lista_ordenacion = []
+	for i in iSortingCols:
+		columna_ordenable = 'bSortable_%d' % int(i)
+		columna = request.GET[columna_ordenable] # devuelve verdadero si la columna es ordenable y falso si pasa lo contrario
+		if columna:
+			pass
+			# cadena_ordenacion = 'iSortCol_%d' % int(i) # sSortDir devuelve una cadena asc o desc
+			# tipo_ordenacion = request.GET[cadena_ordenacion]
+			# lista_ordenacion.append[sColumns[int(i)]]
+
+			# if tipo_ordenacion == 'asc':
+			# 	pass
+			# else:
+			# 	pass
 
 
-
-
+	# iSortingCols = request.GET['iSortingCols'] # las columnas a ordenar
+	# print q
+	# q = 'Luis'
+	if q:
+		query = reduce(operator.__or__, [Q(user__first_name__icontains=q) | Q(user__last_name__icontains=q) | Q(dni=q) for q in q])
+		perfiles = PerfilUsuario.objects.filter(query).distinct().order_by('user__first_name', 'user__last_name')[:2]
+		iTotalDisplayRecords = perfiles.count()
+	else:
+		perfiles = PerfilUsuario.objects.filter(user__first_name='Jose')	
+	for perfil in perfiles:
+		lista.append({'Nombres': perfil.user.first_name, 'Dni': perfil.dni,"DT_RowId":perfil.id})
+	
+	ctx = { "sEcho": sEcho, "iTotalRecords": iTotalRecords,"iTotalDisplayRecords": iTotalDisplayRecords,"aaData": lista}
+	# print lista
+	return HttpResponse(json.dumps(ctx), content_type='application/json')

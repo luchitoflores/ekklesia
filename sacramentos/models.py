@@ -205,7 +205,7 @@ class Libro(TimeStampedModel):
 	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES,
 		help_text='Elija un estado')
 	numero_maximo_actas=models.PositiveIntegerField(help_text='Numero maximo de actas ej: 40')
-	parroquia = models.ForeignKey('Parroquia',help_text='Seleccione una parroquia')
+	parroquia = models.ForeignKey("Parroquia",help_text='Seleccione una parroquia')
 
 	objects = LibroManager()
 

@@ -43,6 +43,7 @@ class Libro(TimeStampedModel):
 	fecha_cierre=models.DateField()
 	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
 	numero_maximo_actas=models.PositiveIntegerField()
+	parroquia = models.ForeignKey('Parroquia', related_name='parroquia', help_text='Seleccione una parroquia')
 
 	def fecha_cierre_mayor(self):
 		if (self.fecha_apertura < self.fecha_cierre):
@@ -115,6 +116,7 @@ class Sacramento(TimeStampedModel):
     iglesia = models.CharField(max_length=50,help_text='Nombre de iglesia ej:Catedral')
     libro=models.ForeignKey(Libro, related_name='Libro',
     	help_text='Seleccione un libro')
+    parroquia = models.ForeignKey('Parroquia', related_name='Parroquia')
 
     
 class Bautismo(Sacramento):
@@ -185,47 +187,12 @@ class NotaMarginal(TimeStampedModel):
 
 
 
-class Libro(TimeStampedModel):
- 	TIPO_LIBRO_CHOICES = (
- 		('Bautismo','Bautismo'),
-        ('Eucaristia','Eucaristia'), 
-        ('Confirmacion','Confirmacion'),
-        ('Matrimonio','Matrimonio'),
-       )
-	ESTADO_CHOICES=(
-		('Abierto','Abierto'),
-		('Cerrado','Cerrado'),
-		)
-	numero_libro=models.PositiveIntegerField(help_text='Numero de libro ej: 1,7,50')
-	tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES,
-		help_text='Elija tipo de Libro')
-	fecha_apertura=models.DateField(help_text='Elija una fecha ej:dd/mm/yyyy')
-	fecha_cierre=models.DateField(help_text='Elija una fecha ej:dd/mm/yyyy',null=True,
-		blank=True)
-	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES,
-		help_text='Elija un estado')
-	numero_maximo_actas=models.PositiveIntegerField(help_text='Numero maximo de actas ej: 40')
-	parroquia = models.ForeignKey("Parroquia",help_text='Seleccione una parroquia')
-
-	objects = LibroManager()
-
-	def fecha_cierre_mayor(self):
-		if (self.fecha_apertura < self.fecha_cierre):
-			return True
-		else:
-			return False
-
-
-	def __unicode__(self):
-		return '%d %s' %(self.numero_libro,self.tipo_libro)
-
-
-class FeligresParroquia(TimeStampedModel):
-	feligres = models.ForeignKey('PerfilUsuario')
+class AsignacionParroquia(TimeStampedModel):
+	persona = models.ForeignKey('PerfilUsuario')
 	parroquia = models.ForeignKey('Parroquia')
 	inicio = models.DateField()
 	fin = models.DateField(null=True, blank=True)	
-	estado = models.DateField()
+	estado = models.BooleanField()
 
 	def __unicode__(self):
 		return u'Párroco: %s - Parroquia: %s' % (self.feligres.user.get_full_name(), self.parroquia.nombre) 

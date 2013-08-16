@@ -14,7 +14,9 @@ from django.views.generic.edit import CreateView, UpdateView
 
 from .models import (PerfilUsuario,
 	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,NotaMarginal,
-	Parroquia, Intenciones)
+	Parroquia, Intenciones,
+	AsignacionParroquia,
+	)
 
 from .forms import (
 	UsuarioForm, PerfilUsuarioForm, PadreForm,
@@ -179,13 +181,14 @@ class UsuarioListView(ListView):
 def libro_create_view(request):
 	if(request.method=='POST'):
 		form_libro=LibroForm(request.POST)
-		if(form_libro.is_valid()):
+		if form_libro.is_valid():
 			libro=form_libro.save(commit=False)
 			estado=libro.estado
 			tipo=libro.tipo_libro
 
 			try:
-
+				parroquia = AsignacionParroquia.objects.get(persona__user=request.user, estado=True).parroquia
+				libro.parroquia = parroquia
 				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo)
 				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
@@ -275,6 +278,20 @@ def libro_update_view(request,pk):
 class LibroListView(ListView):
 	model = Libro
 	template_name = 'libro/libro_list.html'
+
+	def get_queryset(self):
+		try:
+			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
+			queryset = Libro.objects.filter(parroquia=parroquia)
+			return queryset
+		except: 
+			return [];
+		# return Libro.objects.filter(numero_libro=12)
+		# self.publisher = get_object_or_404(Publisher, name=self.args[0])
+		# return Book.objects.filter(publisher=self.publisher)
+
+
+
 	# paginate_by = 5
 	# def get_queryset(self):
 	# 	queryset=super(LibroListView, self).get_queryset()

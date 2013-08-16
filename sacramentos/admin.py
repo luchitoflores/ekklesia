@@ -10,7 +10,7 @@ PerfilUsuario,
 Libro, Bautismo, Eucaristia, Confirmacion, Matrimonio, NotaMarginal,
 Intenciones,
 Parroquia, Direccion, 
-FeligresParroquia,
+AsignacionParroquia,
 )
 # def user_unicode(self):
 #    	return  u'%s %s' % (self.first_name, self.last_name)
@@ -27,5 +27,5 @@ admin.site.register(Matrimonio)
 admin.site.register(NotaMarginal)
 admin.site.register(Intenciones)
 admin.site.register(Parroquia)
-admin.site.register(FeligresParroquia)
+admin.site.register(AsignacionParroquia)
 

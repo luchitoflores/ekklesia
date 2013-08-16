@@ -173,7 +173,7 @@ class Matrimonio(Sacramento):
 		
 
 class NotaMarginal(TimeStampedModel):
-	fecha = models.DateField(help_text='Elija una fecha ej:dd/mm/yyyy')
+	fecha = models.DateField()
 	descripcion = models.TextField(max_length=300,
 		help_text='Descripcion ej:Saco para casarse') 
 	bautismo= models.ForeignKey("Bautismo",related_name='Bautismo',null=True,blank=True)

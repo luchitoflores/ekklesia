@@ -242,11 +242,11 @@ function devolver_campos_de_lista(map,id_male,id_female){
 		var objeto = map[id];
 		if(objeto.sexo =='m'){
 			$(id_male+' option').remove();
-			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+objeto.apellidos+'</option>')
 		} 
 		if (objeto.sexo =='f') {
 			$(id_female+' option').remove();
-			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
+			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+objeto.apellidos+'</option>')
 		}
 	});
 }

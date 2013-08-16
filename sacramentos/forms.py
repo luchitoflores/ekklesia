@@ -106,22 +106,24 @@ class LibroForm(ModelForm):
 		('Cerrado','Cerrado'),
 		)
 	numero_libro=forms.IntegerField(required=True, label='Numero Libro', 
-		widget=forms.TextInput(attrs={'required': ''}))
+		widget=forms.TextInput(attrs={'required': ''}),
+		help_text='Ingrese un numero para libro ej:1,35')
 
 	tipo_libro= forms.TypedChoiceField(label=u'Tipo de Libro', choices=TIPO_LIBRO_CHOICES, 
-		required=True, widget=forms.Select(attrs={'required':''}))
+		required=True, widget=forms.Select(attrs={'required':''}),
+		help_text='Seleccione un tipo de libro')
 
 	estado=forms.ChoiceField(required=True,choices=ESTADO_CHOICES,label='Estado', 
 		widget=RadioSelect(attrs={'required':''}))
 	fecha_apertura = forms.CharField(required=True, label=u'Fecha de Apertura', 
 		widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}))
+			'type':'date'}),help_text='Seleccione una fecha ej:17/12/2010')
 	fecha_cierre = forms.CharField(required=True, label=u'Fecha de Cierre', 
 		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'
-			}))
+			}),help_text='Seleccione una fecha ej:17/12/2010')
 	numero_maximo_actas=forms.IntegerField(required=True, label='Maximo Actas', 
 		widget=forms.TextInput(attrs={'required': '','type':'number','value':'35',
-			'max':'40'}))
+			'max':'40'}),help_text='Ingrese el numero maximo de actas ej:50') 
 	
 	class Meta():
 		model=Libro
@@ -267,9 +269,8 @@ class ParroquiaForm(ModelForm):
 
 #Form para Intenciones de Misa - Funcionando
 class IntencionForm(ModelForm):
-	
-
-	fecha = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M'], widget=forms.DateTimeInput(attrs={'type':'datetime-local'}))
+	fecha = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M'],
+	 widget=forms.DateTimeInput(attrs={'type':'datetime-local'}))
 
 	def clean_fecha(self):
 		data = self.cleaned_data['fecha']
@@ -297,11 +298,13 @@ class IntencionForm(ModelForm):
 # Forms para Notas Marginals
 
 class NotaMarginalForm(ModelForm):
-	fecha = forms.CharField(required=True,label='Fecha',
+	fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
+		required=True,label='Fecha',
 		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}))
 	descripcion=forms.CharField(required=True,label='Descripcion',
-		widget=forms.Textarea(attrs={'required':''}))
+		widget=forms.Textarea(attrs={'required':''}),
+		help_text='Ingrese una descripcion ej: saco para casarse')
 	class Meta():
 		model= NotaMarginal
 		fields=('fecha','descripcion')

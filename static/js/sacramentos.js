@@ -211,6 +211,11 @@ function cargar_tabla_usuarios_en_modal(){
 			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
 			var map = almacenar_busqueda_en_map(data.perfiles);
 			devolver_campos_de_lista(map,'#id_padre','#id_madre');
+			devolver_campos_de_lista(map,'#id_novio','#id_novia');
+			devolver_campos_a_sacramento(map,'#id_bautizado');
+			devolver_campos_a_sacramento(map,'#id_feligres');
+			devolver_campos_a_sacramento(map,'#id_confirmado');
+
 			
 		});
 	});
@@ -226,7 +231,8 @@ function almacenar_busqueda_en_map(lista){
 }
 
 
-
+// Funcion para buscar y asignar usuarios a Matrimonio 
+// todavia no vale para aignar padre y madre
 function devolver_campos_de_lista(map,id_male,id_female){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
@@ -234,9 +240,6 @@ function devolver_campos_de_lista(map,id_male,id_female){
 		$("#id_buscar_padre").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
 		var objeto = map[id];
-		alert('Estoy aqui den sexo')
-		// console.log("Sexo 1"+objeto.sexo);
-
 		if(objeto.sexo =='m'){
 			$(id_male+' option').remove();
 			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+'</option>')
@@ -267,19 +270,20 @@ function devolver_campos_de_lista(map,id_male,id_female){
 // 	});
 // }
 
-
-// function devolver_campos_a_sacramento(map,id_feligres){
-// 	$('a#id_click').on('click', function(e){
-// 		// alert('estoy aqui');
-// 		e.preventDefault();
-// 		$("#id_buscar_padre").modal('hide');  		
-// 		var id =  $(this).parents('tr').attr('id');
-// 		var objeto = map[id];
-// 		$(id_feligres+' option').remove();
-// 		$(id_feligres).append('<option value='+objeto.id+'>'+ objeto.nombres + " " + objeto.apellidos+'</option>')
+// Funcion para buscar y asignar usuarios a Bautismo,Feligres,
+// Confirmacion
+function devolver_campos_a_sacramento(map,id_feligres){
+	$('a#id_click').on('click', function(e){
+		// alert('estoy aqui');
+		e.preventDefault();
+		$("#id_buscar_padre").modal('hide');  		
+		var id =  $(this).parents('tr').attr('id');
+		var objeto = map[id];
+		$(id_feligres+' option').remove();
+		$(id_feligres).append('<option value='+objeto.id+'>'+ objeto.nombres + " " + objeto.apellidos+'</option>')
 		
-// 	});
-// }
+	});
+}
 
 
 function asignar_padre(){

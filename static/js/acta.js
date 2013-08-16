@@ -133,26 +133,33 @@ function tablas_estilo_bootstrap(){
   );
 }
 
-function tablas_busqueda_ajax(identificador_tabla, columnas_tabla, datos){
-	$(identificador_tabla).dataTable({
-		"sDom": "<'top't><'bottom'p><'clear'>",
-		"sPaginationType": "bootstrap",
-		"iDisplayLength": 2,
-		"bPaginate": true,
-		"bInfo": true,
-		"bSorted": true,
-		"bFilter": true,
-		"bLengthChange": true,
-		"aLengthMenu": [[2, 5, 10, -1], [2, 5, 10, "Todos"]],
-		"aaData": datos,
+function tablas_busqueda_ajax(){
+	var url = '/api/datatables/';
+	var columnas = [
+	{ 'sName':"user.first_name", "mData": "Nombres", "sWidth": "40px" }, //El sName es el nombre de la variable que va al servidor
+	{ 'sName': "dni", "mData": "Dni", "sWidth": "25px"}
+	]
+
+	$('#id_data_tables').dataTable({
+		"bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": url,
+        "sPaginationType": "bootstrap",
+        "bPaginate": true,
+        "bInfo": true,
+        // "bSorted": true,
+        // "bFilter": true,
+        "bLengthChange": true,
+        "aLengthMenu": [[2, 5, 10, -1], [2, 5, 10, "Todos"]],
+		// "aaData": [{'Nombres': 'Jose', 'Dni': 222 }, {'Nombres': 'Luis', 'Dni': 11111}],
 		"bDestroy": true,
-		"aoColumns" : columnas_tabla,
+		"aoColumns" : columnas,
 		"oLanguage": {
 			"sInfo": "Mostrando _END_ de _TOTAL_  Elementos",
 			"sLengthMenu": "Mostrar _MENU_ registros",
-			"sSearch": "Filtrar:",
+			"sSearch": "Buscar:",
 			"sEmptyTable": "No existen datos disponibles en la tabla",
-			"sInfoFiltered": " (Filtrado de _MAX_ Elementos)",
+			"sInfoFiltered": " (Total: _MAX_ elementos en la BD)",
 			"sZeroRecords": "No existen registros con ese criterio de búsqueda",
 			"oPaginate": {
 				"sFirst": "",

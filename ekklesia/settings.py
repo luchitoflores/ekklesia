@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'sacramentos',
     'ciudades',
+    'tastypie',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     )

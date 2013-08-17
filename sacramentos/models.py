@@ -202,7 +202,10 @@ class Intenciones(TimeStampedModel):
 	fecha = models.DateField()
 	hora = models.TimeField()
 	oferente = models.CharField(max_length=200)
-	precio = models.PositiveIntegerField()
+	ofrenda = models.PositiveIntegerField()
+	parroquia = models.ForeignKey('Parroquia')
+	individual = models.BooleanField('Es única?')
+
 
 	def __unicode__(self):
 		return self.intencion

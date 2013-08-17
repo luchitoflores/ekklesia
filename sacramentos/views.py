@@ -612,7 +612,13 @@ def intencion_create_view(request):
 	if request.method == 'POST':
 		form_intencion = IntencionForm(request.POST)
 		if form_intencion.is_valid():
-			form_intencion.save()
+			intencion = form_intencion.save(commit=False)
+			try:
+				intencion.parroquia = AsignacionParroquia.objects.get(persona__user=request.user).parroquia
+			
+			except:
+				raise Http404
+			intencion.save()
 			messages.success(request, 'Creado exitosamente')
 			return HttpResponseRedirect(success_url)
 		else:

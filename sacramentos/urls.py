@@ -14,6 +14,12 @@ from .views import (
 	parroquia_create_view, parroquia_update_view, ParroquiaListView, asignar_parroquia_view,
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	)
+from .rest import ParroquiaResource
+
+
+entry_resource = ParroquiaResource()
+
+
 urlpatterns = patterns('', 
 	#urls de usuarios
 	url(r'^usuario/$', UsuarioListView.as_view(), name='usuario_list'),
@@ -96,6 +102,9 @@ urlpatterns = patterns('',
 	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
 	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', name='api_create_padre'),
 	
+	#urls del api rest parroquias
+	(r'^api/', include(entry_resource.urls)),
+
 
 	url(r'^api/datatables/$', 'sacramentos.rest.data_tables'),
 	url(r'^datatables/$', TemplateView.as_view(template_name="data_tables.html")), 

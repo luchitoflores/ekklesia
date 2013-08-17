@@ -185,6 +185,8 @@ class NotaMarginal(TimeStampedModel):
 	def __unicode__(self):
 		return self.descripcion
 
+
+
 class AsignacionParroquia(TimeStampedModel):
 	persona = models.ForeignKey('PerfilUsuario')
 	parroquia = models.ForeignKey('Parroquia')

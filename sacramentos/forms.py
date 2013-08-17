@@ -270,7 +270,8 @@ class ParroquiaForm(ModelForm):
 #Form para Intenciones de Misa - Funcionando
 class IntencionForm(ModelForm):
 	fecha = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M'],
-	 widget=forms.DateTimeInput(attrs={'type':'datetime-local'}))
+	 widget=forms.DateTimeInput(attrs={'type':'datetime-local'}),
+	 help_text='Ingrese la fecha de la intencion ej:2010-11-13')
 
 	def clean_fecha(self):
 		data = self.cleaned_data['fecha']

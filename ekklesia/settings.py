@@ -175,7 +175,7 @@ LOGIN_REDIRECT_URL = '/home/'
 #Sirve para expirar la sesion al cerrar el navegador
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Para que la sesión expire en una hora
-SESSION_COOKIE_AGE = 3600
+# SESSION_COOKIE_AGE = 3600
 
 #Sirve para subir datos al servidor
 # FIXTURE_DIRS = (

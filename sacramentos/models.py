@@ -195,7 +195,7 @@ class AsignacionParroquia(TimeStampedModel):
 	estado = models.BooleanField()
 
 	def __unicode__(self):
-		return u'Párroco: %s - Parroquia: %s' % (self.feligres.user.get_full_name(), self.parroquia.nombre) 
+		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200)

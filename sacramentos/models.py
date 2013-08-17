@@ -199,7 +199,8 @@ class AsignacionParroquia(TimeStampedModel):
 
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200)
-	fecha = models.DateTimeField()
+	fecha = models.DateField()
+	hora = models.TimeField()
 	oferente = models.CharField(max_length=200)
 	precio = models.PositiveIntegerField()
 

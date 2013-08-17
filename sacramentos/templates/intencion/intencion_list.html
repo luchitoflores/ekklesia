@@ -10,6 +10,7 @@ Lista de Intenciones de Misa
 		<tr>
 			<th>Intención</th>
 			<th>Fecha</th>
+			<th>Hora</th>
 			<th>Oferente</th>
 		</tr>
 	</thead>
@@ -21,6 +22,7 @@ Lista de Intenciones de Misa
 				<a href="{{o.get_absolute_url}}">{{o.intencion}}</a>
 			</td>
 			<td>{{o.fecha}}</td>
+			<td>{{o.hora}}</td>
 			<td>{{o.oferente}}</td>
 		</tr>
 		{%endfor%}

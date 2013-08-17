@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from django.contrib import messages
-from datetime import datetime
+from datetime import datetime, date
 from django import forms
 from django.contrib.auth.models import User
 from django.forms import ModelForm
@@ -269,15 +269,14 @@ class ParroquiaForm(ModelForm):
 
 #Form para Intenciones de Misa - Funcionando
 class IntencionForm(ModelForm):
-	fecha = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M'],
-	 widget=forms.DateTimeInput(attrs={'type':'datetime-local'}),
-	 help_text='Ingrese la fecha de la intencion ej:2010-11-13')
+	# fecha = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M'],
+	#  widget=forms.DateTimeInput(attrs={'type':'datetime-local'}),
+	#  help_text='Ingrese la fecha de la intencion ej:2010-11-13')
 
 	def clean_fecha(self):
 		data = self.cleaned_data['fecha']
-		print datetime.now()
-		# if datetime.now() < data:
-	 #  		raise forms.ValidationError('Lo siento, no puede usar fechas en el futuro')
+		if date.today() > data:
+	  		raise forms.ValidationError('Lo siento, no puede usar fechas en el pasado')
 	 	return data
 	
 
@@ -286,13 +285,11 @@ class IntencionForm(ModelForm):
 		# fields = ('intencion','oferente','fecha_celebracion','precio')
 		widgets = {
 			'intencion': forms.TextInput(attrs={'required':'', 'title':'intencion'}),
-			# 'fecha_celebracion': forms.TextInput(attrs={'required':'',
-			# 'data-date-format': 'dd/mm/yyyy','type': 'datetime-local'}),
-
 			'oferente': forms.TextInput(attrs={'required':''}),
 			'precio': forms.TextInput(attrs={'required':'',  'pattern':'[0-9]+'}),
-			# DateTimeField(input_formats=['%Y-%m-%d %I:%M %p'])
-			# 'fecha': forms.DateTimeInput(attrs={'required':'', 'type': 'datetime-local', 'step' :"7200"}),
+			'hora': forms.TextInput(attrs={'required':'', 'type':'time'}),
+			'fecha': forms.TextInput(attrs={'required':'', 'type': 'date'}),
+			
 		}
 
 

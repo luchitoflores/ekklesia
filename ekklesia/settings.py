@@ -44,7 +44,7 @@ USE_I18N = True
 
 # If you set this to False, Django will not format dates, numbers and
 # calendars according to the current locale.
-USE_L10N = False
+USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
@@ -173,7 +173,7 @@ AUTH_PROFILE_MODULE = 'sacramentos.PerfilUsuario'
 LOGIN_REDIRECT_URL = '/home/'
 
 #Sirve para expirar la sesion al cerrar el navegador
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Para que la sesión expire en una hora
 # SESSION_COOKIE_AGE = 3600
 
@@ -182,18 +182,18 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 #    'ciudades',
 # )
 
-DATETIME_INPUT_FORMATS = (
-    '%Y-%m-%dT%H:%M:%S',
-    '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
-    '%Y-%m-%d %H:%M:%S.%f',  # '2006-10-25 14:30:59.000200'
-    '%Y-%m-%d %H:%M',        # '2006-10-25 14:30'
-    '%Y-%m-%d',              # '2006-10-25'
-    '%m/%d/%Y %H:%M:%S',     # '10/25/2006 14:30:59'
-    '%m/%d/%Y %H:%M:%S.%f',  # '10/25/2006 14:30:59.000200'
-    '%m/%d/%Y %H:%M',        # '10/25/2006 14:30'
-    '%m/%d/%Y',              # '10/25/2006'
-    '%m/%d/%y %H:%M:%S',     # '10/25/06 14:30:59'
-    '%m/%d/%y %H:%M:%S.%f',  # '10/25/06 14:30:59.000200'
-    '%m/%d/%y %H:%M',        # '10/25/06 14:30'
-    '%m/%d/%y',              # '10/25/06'
-    )
+# DATETIME_INPUT_FORMATS = (
+#     '%Y-%m-%dT%H:%M:%S',
+#     '%Y-%m-%d %H:%M:%S',     # '2006-10-25 14:30:59'
+#     '%Y-%m-%d %H:%M:%S.%f',  # '2006-10-25 14:30:59.000200'
+#     '%Y-%m-%d %H:%M',        # '2006-10-25 14:30'
+#     '%Y-%m-%d',              # '2006-10-25'
+#     '%m/%d/%Y %H:%M:%S',     # '10/25/2006 14:30:59'
+#     '%m/%d/%Y %H:%M:%S.%f',  # '10/25/2006 14:30:59.000200'
+#     '%m/%d/%Y %H:%M',        # '10/25/2006 14:30'
+#     '%m/%d/%Y',              # '10/25/2006'
+#     '%m/%d/%y %H:%M:%S',     # '10/25/06 14:30:59'
+#     '%m/%d/%y %H:%M:%S.%f',  # '10/25/06 14:30:59.000200'
+#     '%m/%d/%y %H:%M',        # '10/25/06 14:30'
+#     '%m/%d/%y',              # '10/25/06'
+#     )

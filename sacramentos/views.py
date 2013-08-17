@@ -187,12 +187,13 @@ def libro_create_view(request):
 			tipo=libro.tipo_libro
 
 			try:
-				parroquia = AsignacionParroquia.objects.get(persona__user=request.user, estado=True).parroquia
-				libro.parroquia = parroquia
+
 				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo)
 				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
-
+						parroquia = AsignacionParroquia.objects.get(
+							persona__user=request.user,estado=True).parroquia
+						libro.parroquia = parroquia
 						libro.save()
 						return HttpResponseRedirect('/libro')
 					else:
@@ -325,6 +326,9 @@ def matrimonio_create_view(request):
 			matrimonio.novia=novia
 
 			if(matrimonio.novio.estado_civil=='c' and matrimonio.novia.estado_civil=='c'):
+				parroquia = AsignacionParroquia.objects.get(
+							persona__user=request.user,estado=True).parroquia
+				matrimonio.parroquia = parroquia
 				matrimonio.save()
 				return HttpResponseRedirect('/matrimonio')
 			else:
@@ -370,6 +374,14 @@ class MatrimonioListView(ListView):
 	model = Matrimonio
 	template_name = 'matrimonio/matrimonio_list.html'
 
+	def get_queryset(self):
+		try:
+			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
+			queryset = Matrimonio.objects.filter(parroquia=parroquia)
+			return queryset
+		except: 
+			return [];
+
 
 # VISTAS PARA ADMIN DE BAUTISMO
 
@@ -384,6 +396,9 @@ def bautismo_create_view(request):
 			bautismo.tipo_sacramento =  u'Bautismo'
 			# nota.save()
 			# bautismo.nota_marginal=nota
+			parroquia = AsignacionParroquia.objects.get(
+				persona__user=request.user,estado=True).parroquia
+			bautismo.parroquia = parroquia
 			bautismo.save()
 			
 			return HttpResponseRedirect('/bautismo')
@@ -440,7 +455,13 @@ def bautismo_update_view(request,pk):
 class BautismoListView(ListView):
 	model=Bautismo
 	template_name='bautismo/bautismo_list.html'
-
+	def get_queryset(self):
+		try:
+			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
+			queryset = Bautismo.objects.filter(parroquia=parroquia)
+			return queryset
+		except: 
+			return [];
 
 
 # VISTAS PARA ADMIN DE EUCARISTIA
@@ -458,6 +479,9 @@ def eucaristia_create_view(request):
 			eucaristia=form_eucaristia.save(commit=False)
 			tipo_sacramento='Eucaristia'
 			eucaristia.tipo_sacramento=tipo_sacramento
+			parroquia = AsignacionParroquia.objects.get(
+				persona__user=request.user,estado=True).parroquia
+			eucaristia.parroquia = parroquia
 			eucaristia.save()
 			return HttpResponseRedirect('/eucaristia')
 		else:
@@ -493,6 +517,13 @@ def eucaristia_update_view(request,pk):
 class EucaristiaListView(ListView):
 	model=Eucaristia
 	template_name='eucaristia/eucaristia_list.html'
+	def get_queryset(self):
+		try:
+			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
+			queryset = Eucaristia.objects.filter(parroquia=parroquia)
+			return queryset
+		except: 
+			return [];
 
 # VISTAS PARA ADMIN DE CONFIRMACION
 
@@ -507,6 +538,9 @@ def confirmacion_create_view(request):
 		if(form_confirmacion.is_valid()):
 			confirmacion=form_confirmacion.save(commit=False)
 			confirmacion.tipo_sacramento='Confirmacion'
+			parroquia = AsignacionParroquia.objects.get(
+				persona__user=request.user,estado=True).parroquia
+			confirmacion.parroquia = parroquia
 			confirmacion.save()
 			return HttpResponseRedirect('/confirmacion')
 		else:
@@ -543,6 +577,14 @@ class ConfirmacionListView(ListView):
 	model=Confirmacion
 	template_name='confirmacion/confirmacion_list.html'
 
+	def get_queryset(self):
+		try:
+			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
+			queryset = Confirmacion.objects.filter(parroquia=parroquia)
+			return queryset
+		except: 
+			return [];
+
 
 
 #Vistas para crear una parroquia
@@ -574,6 +616,7 @@ def parroquia_create_view(request):
 class ParroquiaListView(ListView):
 	model= Parroquia
 	template_name = 'parroquia/parroquia_list.html'
+
 
 def parroquia_update_view(request, pk):
 	template_name = 'parroquia/parroquia_form.html'

@@ -2,6 +2,7 @@ body
 {
 	background: gray;
 	font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
+	font-size: 16px;
 }
 h1{
 	font-family: 'Droid Serif',Helvetica,Arial,sans-serif;
@@ -67,12 +68,26 @@ legend.scheduler-border {
 
 #id_title
 {
-	background: url(../img/textura.jpg);
+	/*background-color: #005ea2;*/
+	background-image: url(../img/textura.jpg);
+	background-position:center;
+	background-repeat:no-repeat;
+	background-size:100%;
+	/*background-attachment: fixed;*/
+
+	/*background-size: cover;*/
+	-webkit-background-size: 100%;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+
 	font-family: 'Droid Serif',Helvetica,Arial,sans-serif;
-	padding-top: 2em;
-	padding-bottom: 2em;
+	font-size: 1em;
 	margin-bottom: 1em;
-	
+	max-height: 100%;
+	max-width: 100%;
+	padding-top: 2em;
+	padding-bottom: 2em; 
+
 }
 
 .invalid

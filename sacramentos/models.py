@@ -2,6 +2,7 @@
 from datetime import datetime
 from django.db import models
 from django.db.models import Q
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
 from django.conf import settings
 
@@ -198,11 +199,15 @@ class AsignacionParroquia(TimeStampedModel):
 		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 
 class Intenciones(TimeStampedModel):
-	intencion = models.CharField(max_length=200)
-	fecha = models.DateField()
-	hora = models.TimeField()
-	oferente = models.CharField(max_length=200)
-	precio = models.PositiveIntegerField()
+	intencion = models.CharField(max_length=200, 
+		help_text='Ingrese hacia quien va dirigida la intención. Ej: A las almas de los fieles difuntos')
+	fecha = models.DateField(help_text='Ingrese la fecha de la intención con el siguiente formato: dia/mes/año')
+	hora = models.TimeField(help_text='Ingrese la hora de celebración de la intención con el siguiente formato: hora:minutos')
+	oferente = models.CharField(max_length=200, help_text='Ingrese el nombre de la persona que ofrece la intención. Ej: La familia Flores, Un devoto')
+	ofrenda = models.PositiveIntegerField(help_text='Ingrese el monto de la ofrenda recibida por la intención. Ej: 5')
+	parroquia = models.ForeignKey('Parroquia')
+	individual = models.BooleanField('Es única?', help_text='Marque la casilla para indicar que la intención será la única que se celebrará durante la misa')
+
 
 	def __unicode__(self):
 		return self.intencion
@@ -221,13 +226,11 @@ class Parroquia(TimeStampedModel):
 	def get_absolute_url(self):
 		return '/parroquia/%s' %(self.id)
 
-# class Direccion(TimeStampedModel):
-# 	nombre=models.CharField(max_length=200)
-# 	provincia=models.ForeignKey(Provincia)
-# 	canton=models.ForeignKey(Canton)
-# 	parroquia=models.ForeignKey(Parroquia)
-# 	telefono=models.CharField(max_length=10)
-# 	celular=models.CharField(max_length=10)
+	class Meta:
+		permissions = (
+			('create', 'Puede crear parroquias'),
+			('can_change', 'Puede actualizar parroquias'),
+			('delete', 'Puede eliminar parroquias'),
+			)
 
-# 	def __unicode__(self):
-# 		return self.parroquia
+

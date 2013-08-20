@@ -6,9 +6,11 @@ from datetime import datetime
 from django import forms
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render,get_object_or_404
+from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 
@@ -80,17 +82,20 @@ def crear_username(username):
 	# 	return username
 	# return username
 
+@login_required
 def usuarioCreateView(request):
 	if request.method == 'POST':
 		valido = False
 		form_usuario = UsuarioForm(request.POST)
 		form_perfil = PerfilUsuarioForm(request.POST, error_class=DivErrorList)
 		if form_usuario.is_valid() and form_perfil.is_valid():
+			feligres, created = Group.objects.get_or_create(name='Feligres')
 			valido = True
 			usuario = form_usuario.save(commit=False)
 			perfil = form_perfil.save(commit=False)
 			usuario.username = perfil.dni
 			usuario.save()
+			usuario.groups.add(feligres)
 			perfil.user = usuario
 			perfil.save()
 			ctx = {'valido': valido}
@@ -692,7 +697,13 @@ def intencion_create_view(request):
 	if request.method == 'POST':
 		form_intencion = IntencionForm(request.POST)
 		if form_intencion.is_valid():
-			form_intencion.save()
+			intencion = form_intencion.save(commit=False)
+			try:
+				intencion.parroquia = AsignacionParroquia.objects.get(persona__user=request.user).parroquia
+			
+			except:
+				raise Http404
+			intencion.save()
 			messages.success(request, 'Creado exitosamente')
 			return HttpResponseRedirect(success_url)
 		else:
@@ -715,6 +726,10 @@ class IntencionUpdateView(UpdateView):
 	success_url = '/intencion/'
 	context_object_name = 'form_intencion'
 
+@login_required(login_url='/login/')
+@permission_required('sacramentos.can_change', login_url='/login/')
+# @staff_member_required
+# @user_passes_test(lambda u: u.is_staff)
 def sacerdote_create_view(request):
 	template_name = 'usuario/sacerdote_form.html' 
 	success_url = '/sacerdote/'
@@ -722,10 +737,12 @@ def sacerdote_create_view(request):
 		form_sacerdote = SacerdoteForm(request.POST)
 		form_usuario = UsuarioForm(request.POST)
 		if form_sacerdote.is_valid and form_usuario.is_valid():
+			sacerdotes, created = Group.objects.get_or_create(name='Sacerdotes')
 			usuario = form_usuario.save(commit= False) 
 			sacerdote = form_sacerdote.save(commit=False)
 			usuario.username=sacerdote.dni
 			usuario.save()
+			usuario.groups.add(sacerdotes)
 			sacerdote.user =usuario
 			sacerdote.sexo = 'm'
 			sacerdote.profesion = 'Sacerdote'
@@ -782,6 +799,11 @@ class SacerdoteListView(ListView):
 	model = PerfilUsuario
 	template_name = 'usuario/sacerdote_list.html'
 	queryset = PerfilUsuario.objects.sacerdotes()
+
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('sacramentos.can_change', login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(SacerdoteListView, self).dispatch(*args, **kwargs)
 
 
 def asignar_parroquia_view(request, id):

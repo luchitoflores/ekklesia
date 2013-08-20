@@ -10,7 +10,6 @@
 	<link rel="stylesheet" href="/static/css/bootstrap-responsive.min.css">
 	<link rel="stylesheet" href="/static/css/datepicker.css">
 	<link rel="stylesheet" href="/static/css/jquery-ui.min.css">
-	<link rel="stylesheet" href="/static/css/select2.css">
 	<link rel="stylesheet" href="/static/css/mycss.css">
 	<link rel="stylesheet" href="/static/css/multi-select.css">
 	<link rel="stylesheet" href="/static/css/modelo-tablas.css">
@@ -18,7 +17,7 @@
 	<!--<link href='http://fonts.googleapis.com/css?family=Dosis|Viga|Open+Sans&subset=latin-ext' rel='stylesheet' type='text/css'> -->
 	{% block extrastyle %}{% endblock %}
 	<script src="/static/js/jquery.min.js"></script>
-<!--	<script src='/static/js/jquery-ui.min.js'></script> -->
+	<!--	<script src='/static/js/jquery-ui.min.js'></script> -->
 	<script src="/static/js/bootstrap.min.js"></script>
 	<script src='/static/js/jquery.dataTables.min.js'></script>
 	<script src='/static/js/bootstrap-datepicker.js'></script>
@@ -28,7 +27,7 @@
 	<script src='/static/js/prefixfree.min.js'></script>
 	<script src='/static/js/spin.min.js'></script>
 	<script src='/static/js/sacramentos.js'></script>
-	<script src='/static/js/jquery.multi-select.js'></script>
+	
 
 	
 	<script>
@@ -50,16 +49,14 @@
 		<nav>
 			{%include 'includes/menubar.html'%}
 		</nav>
-		<div class="container">
-			<div class="row">
+		<div id='id_title' class="container">
+			<div class="row-fluid">
 				<div class="span12">
-					<div id='id_title'>
-						<div class="row">
-							<div class="span10 offset1">
-								<h1>{% block content_title %}{% endblock %}</h1>
-							</div>
+					
+						<div class="span10 offset1">
+							<h1>{% block content_title %}{% endblock %}</h1>
 						</div>
-					</div>
+					
 				</div>
 			</div>
 		</div>

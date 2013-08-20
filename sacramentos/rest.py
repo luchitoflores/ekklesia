@@ -1,12 +1,30 @@
 # -*- coding:utf-8 -*-
+
+# Core de Python
 import json
 import operator
 
+# Librerías de Django
 from django.db.models import Q
 from django.http import HttpResponse, HttpResponseRedirect
 
+# Librerías de terceros
+from tastypie.resources import ModelResource
+
+# Librerías del proyecto
 from .forms import PerfilUsuarioForm, UsuarioForm, PadreForm,NotaMarginalForm
-from .models import PerfilUsuario,NotaMarginal,Bautismo,Matrimonio
+from .models import (PerfilUsuario,NotaMarginal,Bautismo,Matrimonio,
+	Parroquia)
+
+
+# Api parroquias
+class ParroquiaResource(ModelResource):
+	class Meta:
+		queryset = Parroquia.objects.all()
+		resource_name = 'parroquia' 
+		fields = ('id', 'nombre')
+		allowed_methods = ['get']
+
 
 
 # Método para crear un feligres
@@ -52,7 +70,6 @@ def padre_create_ajax(request):
 
 
 # vista para crear una nota marginal a Bautismo con modal.....
-
 def nota_marginal_create_ajax(request):
 	
 	if request.method == 'POST':

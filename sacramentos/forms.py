@@ -318,17 +318,23 @@ class IntencionForm(ModelForm):
 	  		raise forms.ValidationError('Lo siento, no puede usar fechas en el pasado')
 	 	return data
 	
-
 	class Meta:
 		model = Intenciones
+		fields = ('intencion', 'oferente', 'ofrenda', 'fecha', 'hora', 'individual')
 		# fields = ('intencion','oferente','fecha_celebracion','precio')
 		widgets = {
 			'intencion': forms.TextInput(attrs={'required':'', 'title':'intencion'}),
 			'oferente': forms.TextInput(attrs={'required':''}),
-			'precio': forms.TextInput(attrs={'required':'', 'pattern':'[0-9]+'}),
-			'hora': forms.TextInput(attrs={'required':'', 'type':'time'}),
+			'ofrenda': forms.TextInput(attrs={'required':'',  'pattern':'[0-9]+'}),
 			'fecha': forms.TextInput(attrs={'required':'', 'type': 'date'}),
-			
+			'hora': forms.TextInput(attrs={'required':'', 'type':'time'}),			
+		}
+		help_text= {
+			'intencion': 'ffssffs',
+			'oferente': '',
+			'ofrenda': '',
+			'fecha': '',
+			'hora': '', 
 		}
 
 

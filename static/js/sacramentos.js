@@ -22,8 +22,20 @@ function inicio(){
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
-	poner_fecha_defecto('#id_fecha_apertura')
+	poner_fecha_defecto('#id_fecha_apertura');
+	
+
 }
+
+
+function check(input) {  
+	if(input.validity.typeMismatch==true){  
+		input.setCustomValidity("Dude '" + input.value + "' is not a valid email. Enter something nice!!");  
+	}  
+	else {  
+		input.setCustomValidity("");  
+	}                 
+}  
 
 function crear_nota_marginal(id_form,id_modal,url_rest){
 	$(id_form).on('submit', function(e){
@@ -70,7 +82,7 @@ function poner_fecha_defecto(id){
 	if (day < 10) {
 		day = "0" + day;
 	}
-
+	
 	var today = year + "-" + month + "-" + day;  
 	$(id).attr('value',today);
 }
@@ -242,11 +254,11 @@ function devolver_campos_de_lista(map,id_male,id_female){
 		var objeto = map[id];
 		if(objeto.sexo =='m'){
 			$(id_male+' option').remove();
-			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+objeto.apellidos+'</option>')
+			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
 		} 
 		if (objeto.sexo =='f') {
 			$(id_female+' option').remove();
-			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+objeto.apellidos+'</option>')
+			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
 		}
 	});
 }

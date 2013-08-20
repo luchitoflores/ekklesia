@@ -9,7 +9,7 @@ from django.forms.widgets import RadioSelect
 
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
-					Direccion, Intenciones,NotaMarginal,Parroquia)
+					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia)
 
 
 
@@ -115,10 +115,10 @@ class LibroForm(ModelForm):
 
 	estado=forms.ChoiceField(required=True,choices=ESTADO_CHOICES,label='Estado', 
 		widget=RadioSelect(attrs={'required':''}))
-	fecha_apertura = forms.CharField(required=True, label=u'Fecha de Apertura', 
+	fecha_apertura = forms.CharField(label=u'Fecha de Apertura', 
 		widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}),help_text='Seleccione una fecha ej:17/12/2010')
-	fecha_cierre = forms.CharField(required=True, label=u'Fecha de Cierre', 
+	fecha_cierre = forms.CharField(label=u'Fecha de Cierre', 
 		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'
 			}),help_text='Seleccione una fecha ej:17/12/2010')
 	numero_maximo_actas=forms.IntegerField(required=True, label='Maximo Actas', 
@@ -133,14 +133,18 @@ class LibroForm(ModelForm):
 
 
 class BautismoForm(ModelForm):
-	bautizado=forms.ModelChoiceField(help_text='Presione buscar para encontrar un feligres',label='Feligres',
+	bautizado=forms.ModelChoiceField(
+		label='Feligres',
+		help_text='Presione buscar para encontrar un feligres',
 		queryset=PerfilUsuario.objects.todos(),	required=True,	empty_label='--- Seleccione ---',
 		widget=forms.Select(attrs={'required':''}))
 	pagina=forms.IntegerField(required=True,help_text='Ingrese el numero de pagina ej:5,67', label='Pagina', 
 		widget=forms.TextInput(attrs={'required': ''}))
-	numero_acta=forms.IntegerField(help_text='Ingrese el numero del acta ej:3,25',required=True, 
+	numero_acta=forms.IntegerField(help_text='Ingrese el numero del acta ej:3,25',
+		required=True, 
 		label='Numero Acta', widget=forms.TextInput(attrs={'required': ''}))
-	fecha_sacramento = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',required=True,label='Fecha de Sacramento',
+	fecha_sacramento = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
+		required=True,label='Fecha de Sacramento',
 		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}))
 	lugar_sacramento = forms.CharField(help_text='Ingrese el lugar del sacramento ej: Loja ', 
@@ -150,8 +154,17 @@ class BautismoForm(ModelForm):
 		required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
-		empty_label=None,label='Libro',
-		queryset=Libro.objects.filter( tipo_libro='Bautismo',estado='Abierto'))
+		queryset=Libro.objects.none(),empty_label=None)
+
+	def __init__(self,user, *args, **kwargs):
+
+		super(BautismoForm, self).__init__(*args, **kwargs)
+		parroquia = AsignacionParroquia.objects.get(
+			persona__user=user,estado=True).parroquia
+		self.fields['libro'].queryset = Libro.objects.filter(
+			estado='Abierto',tipo_libro='Bautismo',parroquia=parroquia)
+      
+	
 	class Meta():
 		model=Bautismo
 		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento',
@@ -179,8 +192,16 @@ class EucaristiaForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
-		queryset=Libro.objects.filter(tipo_libro='Eucaristia',estado='Abierto'),
+		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Eucaristia')
+
+	def __init__(self,user, *args, **kwargs):
+		
+		super(EucaristiaForm, self).__init__(*args, **kwargs)
+		parroquia = AsignacionParroquia.objects.get(
+			persona__user=user,estado=True).parroquia
+		self.fields['libro'].queryset = Libro.objects.filter(
+			estado='Abierto',tipo_libro='Eucaristia',parroquia=parroquia)
 
 	class Meta():
 		model=Eucaristia
@@ -212,8 +233,18 @@ class ConfirmacionForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Nombre de Ministro ej: Ob Julio Parrilla')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
-		queryset=Libro.objects.filter(tipo_libro='Confirmacion',estado='Abierto'),
+		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
+
+	def __init__(self,user, *args, **kwargs):
+		
+		super(ConfirmacionForm, self).__init__(*args, **kwargs)
+		parroquia = AsignacionParroquia.objects.get(
+			persona__user=user,estado=True).parroquia
+		self.fields['libro'].queryset = Libro.objects.filter(
+			estado='Abierto',tipo_libro='Confirmacion',parroquia=parroquia)
+
+
 	class Meta():
 		model=Confirmacion
 		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento',
@@ -223,7 +254,7 @@ class ConfirmacionForm(ModelForm):
 
 class MatrimonioForm(ModelForm):
 	pagina=forms.IntegerField(required=True, label='Pagina', 
-		widget=forms.TextInput(attrs={'required': ''}),
+		widget=forms.TextInput(attrs={'required': '','pattern':'[0-9]+'}),
 		help_text='Ingrese el numero de pagina ej:5,67')
 	novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
 		required=True, empty_label='--- Seleccione ---', 
@@ -252,8 +283,16 @@ class MatrimonioForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de testiga ej:Maria Pincay')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
-		queryset=Libro.objects.filter(tipo_libro='Matrimonio',estado='Abierto'),
-		help_text='Seleccione un libro para el Matrimonio')
+		queryset=Libro.objects.none(),help_text='Seleccione un libro para el Matrimonio')
+
+	def __init__(self,user, *args, **kwargs):
+		
+		super(MatrimonioForm, self).__init__(*args, **kwargs)
+		parroquia = AsignacionParroquia.objects.get(
+			persona__user=user,estado=True).parroquia
+		self.fields['libro'].queryset = Libro.objects.filter(
+			estado='Abierto',tipo_libro='Matrimonio',parroquia=parroquia)
+
 	class Meta():
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento',
@@ -286,7 +325,7 @@ class IntencionForm(ModelForm):
 		widgets = {
 			'intencion': forms.TextInput(attrs={'required':'', 'title':'intencion'}),
 			'oferente': forms.TextInput(attrs={'required':''}),
-			'precio': forms.TextInput(attrs={'required':'',  'pattern':'[0-9]+'}),
+			'precio': forms.TextInput(attrs={'required':'', 'pattern':'[0-9]+'}),
 			'hora': forms.TextInput(attrs={'required':'', 'type':'time'}),
 			'fecha': forms.TextInput(attrs={'required':'', 'type': 'date'}),
 			

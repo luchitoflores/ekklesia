@@ -185,39 +185,50 @@ def libro_create_view(request):
 			libro=form_libro.save(commit=False)
 			estado=libro.estado
 			tipo=libro.tipo_libro
+			parroquia = AsignacionParroquia.objects.get(
+				persona__user=request.user,estado=True).parroquia
+			libro.parroquia = parroquia
 
 			try:
 
-				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo)
+				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,parroquia=parroquia)
 				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
-						parroquia = AsignacionParroquia.objects.get(
-							persona__user=request.user,estado=True).parroquia
-						libro.parroquia = parroquia
 						libro.save()
+						messages.success(request, 'Creado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
-						messages.add_message(request,messages.WARNING,
-						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+						messages.info(request,'La fecha de cierre no puede ser menor'+
+						' o igual a fecha de apertura')
+						# messages.add_message(request,messages.WARNING,
+						# {'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
 
 				elif(estado != consulta.estado and tipo==consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
 						libro.save()
+						messages.success(request, 'Creado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
-						messages.add_message(request,messages.WARNING,
-						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+						messages.info(request,'La fecha de cierre no puede ser menor'+
+						' o igual a fecha de apertura')
+						# messages.add_message(request,messages.WARNING,
+						# {'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
 				else:
-					messages.add_message(request,messages.WARNING,
-						{'Libro':'Ya existe un libro abierto, cierrelo y vuela a crear'})
+
+					messages.info(request,'Ya existe un libro abierto, cierrelo '+
+						'y vuela a crear')
+					# messages.add_message(request,messages.WARNING,
+					# 	{'Libro':'Ya existe un libro abierto, cierrelo y vuela a crear'})
 
 			except ObjectDoesNotExist:
 				libro.save()
+				messages.success(request, 'Creado exitosamente')
 				return HttpResponseRedirect('/libro')
 				
 
 		else:
-			messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})
+			messages.info(request,form_libro.errors)
+			# messages.add_message(request,messages.WARNING,{'libro':form_libro.errors})
 	else:
 		form_libro=LibroForm()
 	ctx={'form_libro':form_libro}
@@ -238,33 +249,37 @@ def libro_update_view(request,pk):
 			libro=form_libro.save(commit=False)
 			estado=libro.estado
 			tipo=libro.tipo_libro
+			parroquia = AsignacionParroquia.objects.get(
+				persona__user=request.user,estado=True).parroquia
+			libro.parroquia = parroquia
 
 			try:
 
-				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo)
+				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,parroquia=parroquia)
 				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
 
 						libro.save()
+						messages.success(request, 'Actualizado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
-						messages.add_message(request,messages.WARNING,
-						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
-
+						messages.info(request,'La fecha de cierre no puede ser menor'+
+						' o igual a fecha de apertura')
 				elif(estado != consulta.estado and tipo==consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
 
 						libro.save()
 						return HttpResponseRedirect('/libro')
 					else:
-						messages.add_message(request,messages.WARNING,
-						{'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+						messages.info(request,'La fecha de cierre no puede ser menor'+
+						' o igual a fecha de apertura')
 				else:
-					messages.add_message(request,messages.WARNING,
-						{'Libro':'Ya existe un libro abierto, cierrelo y vuela a crear'})
+					messages.info(request,'Ya existe un libro abierto, cierrelo '+
+						'y vuela a crear')
 
 			except ObjectDoesNotExist:
 				libro.save()
+				messages.success(request, 'Actualizado exitosamente')
 				return HttpResponseRedirect('/libro')
 				
 
@@ -311,8 +326,9 @@ class LibroListView(ListView):
 # 	success_url='/matrimonio/'
 
 def matrimonio_create_view(request):
+	usuario=request.user
 	if(request.method=='POST'):
-		form_matrimonio=MatrimonioForm(request.POST)
+		form_matrimonio=MatrimonioForm(usuario,request.POST)
 		if(form_matrimonio.is_valid()):
 			matrimonio=form_matrimonio.save(commit=False)
 			matrimonio.tipo_sacramento='Matrimonio'
@@ -330,13 +346,17 @@ def matrimonio_create_view(request):
 							persona__user=request.user,estado=True).parroquia
 				matrimonio.parroquia = parroquia
 				matrimonio.save()
+				messages.success(request,'Creado exitosamente')
 				return HttpResponseRedirect('/matrimonio')
 			else:
-				messages.add_message(request, messages.WARNING, {'Matrimonio':'error de estado civil'})
+				messages.info(request,'Errores en estado civil')
+				
 		else:
-			messages.add_message(request, messages.WARNING, {'Matrimonio':form_matrimonio.errors})
+			messages.warning(request,form_matrimonio.errors)
+		
 	else:
-		form_matrimonio=MatrimonioForm()
+
+		form_matrimonio=MatrimonioForm(usuario)
 		
 	ctx={'form_matrimonio':form_matrimonio}
 	return render(request,'matrimonio/matrimonio_form.html',ctx)
@@ -348,21 +368,22 @@ def matrimonio_create_view(request):
 # 	success_url='/matrimonio/'
 
 def matrimonio_update_view(request,pk):
+	usuario=request.user
 	matrimonio=get_object_or_404(Matrimonio,pk=pk)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
 	if request.method == 'POST':
-		form_matrimonio = MatrimonioForm(request.POST,instance=matrimonio)
+		form_matrimonio = MatrimonioForm(usuario,request.POST,instance=matrimonio)
 		if form_matrimonio.is_valid():
 			form_matrimonio.save()
-			
+			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/matrimonio')
 		else:
-			messages.add_message(request, messages.WARNING, {
-				'Matrimonio':form_matrimonio.errors,
-				'Nota MArginal':form_nota.errors})
-
+			messages.error(request, 'Error al actualizar')
+			ctx = {'form_matrimonio': form_matrimonio,'notas':notas,'object':matrimonio}
+			return render(request,'matrimonio/matrimonio_form.html', ctx)
+			
 	else:
-		form_matrimonio= MatrimonioForm(instance=matrimonio)
+		form_matrimonio= MatrimonioForm(usuario,instance=matrimonio)
 		
 									
 	ctx = {'form_matrimonio': form_matrimonio,'notas':notas,'object':matrimonio}
@@ -376,7 +397,9 @@ class MatrimonioListView(ListView):
 
 	def get_queryset(self):
 		try:
-			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
+			parroquia = AsignacionParroquia.objects.get(
+				persona__user=self.request.user).parroquia
+
 			queryset = Matrimonio.objects.filter(parroquia=parroquia)
 			return queryset
 		except: 
@@ -387,7 +410,9 @@ class MatrimonioListView(ListView):
 
 def bautismo_create_view(request):
 	if(request.method == 'POST' ):
-		formBautismo=BautismoForm(request.POST)
+
+		usuario=request.user
+		formBautismo=BautismoForm(usuario,request.POST)
 		# form_nota=NotaMarginalForm(request.POST)
 		if (formBautismo.is_valid()):
 			#perfil=formPerfil.save(commit=False)
@@ -400,12 +425,13 @@ def bautismo_create_view(request):
 				persona__user=request.user,estado=True).parroquia
 			bautismo.parroquia = parroquia
 			bautismo.save()
-			
+			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/bautismo')
 		else:
-			messages.add_message(request, messages.WARNING, {'Bautismo':formBautismo.errors})
+			messages.error(request,formBautismo.errors)
 	else:
-		formBautismo=BautismoForm()
+		usuario=request.user
+		formBautismo=BautismoForm(usuario)
 		# form_nota=NotaMarginalForm()
 	ctx={'formBautismo':formBautismo}
 	return render (request,'bautismo/bautismo_form.html',ctx)
@@ -423,22 +449,23 @@ def mostrar():
 
 
 def bautismo_update_view(request,pk):
+	usuario=request.user
 	bautismo= get_object_or_404(Bautismo, pk=pk)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	if request.method == 'POST':
-		bautismo_form = BautismoForm(request.POST,instance=bautismo)
+		bautismo_form = BautismoForm(usuario,request.POST,instance=bautismo)
 		# form_nota=NotaMarginalForm(request.POST,instance=nota)
 		if bautismo_form.is_valid():
 			bautismo_form.save()
-			# form_nota.save()
+			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/bautismo')
 		else:
-			messages.error(request, 'error')
+			messages.error(request, 'Error al actualizar')
 			ctx = {'formBautismo': bautismo_form,'notas':notas,'object':bautismo}
 			return render(request, 'bautismo/bautismo_form.html', ctx)
 			
 	else:
-		bautismo_form = BautismoForm(instance=bautismo)
+		bautismo_form = BautismoForm(usuario,instance=bautismo)
 		
 		# form_nota=NotaMarginalForm(instance=nota)
 									
@@ -473,21 +500,23 @@ class BautismoListView(ListView):
 
 
 def eucaristia_create_view(request):
+	usuario=request.user
 	if request.method == 'POST':
-		form_eucaristia=EucaristiaForm(request.POST)
+		form_eucaristia=EucaristiaForm(usuario,request.POST)
 		if form_eucaristia.is_valid():
 			eucaristia=form_eucaristia.save(commit=False)
-			tipo_sacramento='Eucaristia'
+			tipo_sacramento=u'Eucaristia'
 			eucaristia.tipo_sacramento=tipo_sacramento
 			parroquia = AsignacionParroquia.objects.get(
 				persona__user=request.user,estado=True).parroquia
 			eucaristia.parroquia = parroquia
 			eucaristia.save()
+			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/eucaristia')
 		else:
-			messages.add_message(request,messages.WARNING,{'Eucaristia':form_eucaristia.errors})
+			messages.error(request,form_eucaristia.errors)
 	else:
-		form_eucaristia=EucaristiaForm()
+		form_eucaristia=EucaristiaForm(usuario)
 
 	ctx={'form_eucaristia':form_eucaristia}
 	return render(request,'eucaristia/eucaristia_form.html',ctx)
@@ -499,16 +528,18 @@ def eucaristia_create_view(request):
 # 	success_url='/eucaristia/'
 
 def eucaristia_update_view(request,pk):
+	usuario=request.user
 	eucaristia=get_object_or_404(Eucaristia,pk=pk)
 	if(request.method == 'POST'):
-		form_eucaristia=EucaristiaForm(request.POST,instance=eucaristia)
+		form_eucaristia=EucaristiaForm(usuario,request.POST,instance=eucaristia)
 		if(form_eucaristia.is_valid()):
 			form_eucaristia.save()
+			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/eucaristia')
 		else:
-			messages.add_message(request,messages.WARNING,{'Eucaristia':form_eucaristia.errors})
-	else:
-		form_eucaristia=EucaristiaForm(instance=eucaristia)
+			messages.error(request,form_eucaristia.errors)
+		
+		form_eucaristia=EucaristiaForm(usuario,instance=eucaristia)
 	ctx={'form_eucaristia':form_eucaristia, 'object':eucaristia}
 	return render(request,'eucaristia/eucaristia_form.html',ctx)
 
@@ -533,8 +564,10 @@ class EucaristiaListView(ListView):
 # 	success_url='/confirmacion/'
 
 def confirmacion_create_view(request):
+	usuario=request.user
+
 	if(request.method == 'POST'):
-		form_confirmacion=ConfirmacionForm(request.POST)
+		form_confirmacion=ConfirmacionForm(usuario,request.POST)
 		if(form_confirmacion.is_valid()):
 			confirmacion=form_confirmacion.save(commit=False)
 			confirmacion.tipo_sacramento='Confirmacion'
@@ -542,11 +575,13 @@ def confirmacion_create_view(request):
 				persona__user=request.user,estado=True).parroquia
 			confirmacion.parroquia = parroquia
 			confirmacion.save()
+			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/confirmacion')
 		else:
-			messages.add_message(request,messages.WARNING,{'Confirmacion':form_confirmacion.errors})
+			messages.error(request,form_confirmacion.errors)
+			
 	else:
-		form_confirmacion=ConfirmacionForm()
+		form_confirmacion=ConfirmacionForm(usuario)
 	ctx={'form_confirmacion':form_confirmacion}
 	return render(request,'confirmacion/confirmacion_form.html',ctx)
 
@@ -559,16 +594,18 @@ def confirmacion_create_view(request):
 # 	success_url='/confirmacion/'
 
 def confirmacion_update_view(request,pk):
+	usuario=request.user
 	confirmacion=get_object_or_404(Confirmacion,pk=pk)
 	if(request.method == 'POST'):
-		form_confirmacion=ConfirmacionForm(request.POST,instance=confirmacion)
+		form_confirmacion=ConfirmacionForm(usuario,request.POST,instance=confirmacion)
 		if(form_confirmacion.is_valid()):
 			form_confirmacion.save()
+			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/confirmacion')
 		else:
-			messages.add_message(request,messages.WARNING,{'Confirmacion':form_confirmacion.errors})
+			messages.error(request,form_confirmacion.errors)
 	else:
-		form_confirmacion=ConfirmacionForm(instance=confirmacion)
+		form_confirmacion=ConfirmacionForm(usuario,instance=confirmacion)
 	ctx={'form_confirmacion':form_confirmacion,'object':confirmacion}
 	return render(request,'confirmacion/confirmacion_form.html',ctx)
 

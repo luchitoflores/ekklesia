@@ -15,8 +15,18 @@ Editar Matrimonio
 Agregar Matrimonio 
 {%endif%}
 {%endblock%}
+{%block extra_script%}
+<script>
 
-
+function check(input) {  
+    if(input.validity.typeMismatch){  
+        input.setCustomValidity("Dude '" + input.value + "' is not a valid email. Enter something nice!!");  
+    }else {  
+        input.setCustomValidity("");  
+    }                 
+}  
+</script>
+{%endblock%}
 {%block content%}
 
 

@@ -41,7 +41,7 @@ class Libro(TimeStampedModel):
 	numero_libro=models.PositiveIntegerField()
 	tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES)
 	fecha_apertura=models.DateField()
-	fecha_cierre=models.DateField()
+	fecha_cierre=models.DateField(null=True,blank=True)
 	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
 	numero_maximo_actas=models.PositiveIntegerField()
 	parroquia = models.ForeignKey('Parroquia', related_name='parroquia', help_text='Seleccione una parroquia')

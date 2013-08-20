@@ -70,7 +70,6 @@ def padre_create_ajax(request):
 
 
 # vista para crear una nota marginal a Bautismo con modal.....
-
 def nota_marginal_create_ajax(request):
 	
 	if request.method == 'POST':

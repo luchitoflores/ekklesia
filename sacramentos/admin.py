@@ -18,6 +18,10 @@ AsignacionParroquia,
 # User.__unicode__ = user_unicode
 # admin.site.unregister(User)
 # admin.site.register(User)
+
+
+
+
 admin.site.register(PerfilUsuario)
 admin.site.register(Libro)
 admin.site.register(Bautismo)

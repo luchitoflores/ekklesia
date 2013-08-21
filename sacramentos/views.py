@@ -93,7 +93,8 @@ def usuarioCreateView(request):
 			valido = True
 			usuario = form_usuario.save(commit=False)
 			perfil = form_perfil.save(commit=False)
-			usuario.username = perfil.dni
+			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
+			# usuario.username = perfil.dni
 			usuario.save()
 			usuario.groups.add(feligres)
 			perfil.user = usuario

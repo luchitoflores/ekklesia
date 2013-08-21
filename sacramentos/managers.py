@@ -29,6 +29,13 @@ class PersonaManager(models.Manager):
 	def sacerdotes(self):
 		return self.model.objects.filter(profesion='Sacerdote')
 
+	def username_disponible(self, username):
+		try:
+			persona = self.model.objects.get(user__username=username)
+			return persona.user.username
+		except:
+			return True
+
 class BautismoManager(models.Manager):
 	# def libro_activo(self):
 	# 	return self.model.objects.filter(libro__tipo_libro='Bautismo')

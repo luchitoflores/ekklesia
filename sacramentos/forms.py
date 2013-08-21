@@ -59,7 +59,7 @@ class PerfilUsuarioForm(ModelForm):
 		
 	class Meta():
 		model = PerfilUsuario
-		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion', 'padre', 'madre');
+		fields = ('nacionalidad', 'dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion', 'padre', 'madre');
 		widgets = {
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
@@ -76,7 +76,7 @@ class PadreForm(ModelForm):
 	
 	class Meta(): 
 		model = PerfilUsuario
-		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
+		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
 		 'profesion');
 
 
@@ -86,7 +86,7 @@ class SacerdoteForm(ModelForm):
 	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento')
 	class Meta(): 
 		model = PerfilUsuario
-		fields = ('dni', 'fecha_nacimiento', 'lugar_nacimiento');
+		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento');
 
 
 
@@ -329,14 +329,7 @@ class IntencionForm(ModelForm):
 			'fecha': forms.TextInput(attrs={'required':'', 'type': 'date'}),
 			'hora': forms.TextInput(attrs={'required':'', 'type':'time'}),			
 		}
-		help_text= {
-			'intencion': 'ffssffs',
-			'oferente': '',
-			'ofrenda': '',
-			'fecha': '',
-			'hora': '', 
-		}
-
+		
 
 # Forms para Notas Marginals
 

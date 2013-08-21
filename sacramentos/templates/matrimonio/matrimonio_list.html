@@ -37,8 +37,8 @@ Lista de Matrimonios
 			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
 			<td>{{o.testigo_novio}}</td>
 			<td>{{o.testigo_novia}}</td>
-			<td>{{o.novio.padre.first_name}} {{o.novio.padre.last_name}}</td>
-			<td>{{o.novia.padre.first_name}} {{o.novia.padre.last_name}}</td>
+			<td>{{o.novio.padre.user.first_name}} {{o.novio.padre.user.last_name}}</td>
+			<td>{{o.novia.padre.user.first_name}} {{o.novia.padre.user.last_name}}</td>
 		</tr>
 		{% endfor %}
 	</tbody>

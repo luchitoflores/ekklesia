@@ -20,7 +20,7 @@ class DivErrorList(ErrorList):
 	def as_divs(self):
 		if not self: 
 			return u''
-		return u'<div class="controls">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
+		return u'<div class="error">%s</div>' % ''.join([u'<div class="error">%s</div>' % e for e in self])
 
 
 #forms para manejo de usuarios
@@ -83,14 +83,19 @@ class PadreForm(ModelForm):
 			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
 		return data
 
-	fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento', help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy',
-		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
-	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento', help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
+	# fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento', help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy',
+	# 	widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+	# lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento', help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
 	
 	class Meta(): 
 		model = PerfilUsuario
 		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
 		 'profesion');
+		widgets = {
+			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
+				'dd/mm/yyyy', 'type':'date'}),
+			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
+			}
 
 
 class SacerdoteForm(ModelForm):

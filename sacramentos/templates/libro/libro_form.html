@@ -18,7 +18,7 @@ Agregar Libro
 
 <form id='id_form_libro' action="." method='POST' class='form-horizontal'>
 	{% csrf_token%}
-	<div class='container'>
+	
 		{% for f in form_libro%}
 		<div class="control-group">
 			<label class='control-label'>
@@ -41,7 +41,7 @@ Agregar Libro
 			</div>
 		</div>
 		{%endfor%}
-	</div>
+	
 	<div class="form-actions">
 		<input type="submit" value="Enviar" class='btn btn-primary'/>
 		<a href="{%url 'libro_list'%}" class='btn btn-primary'>Cancelar</a>

@@ -143,7 +143,7 @@ class LibroForm(ModelForm):
 	fecha_apertura = forms.CharField(label=u'Fecha de Apertura', initial=date.today(),
 		widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}),help_text='Seleccione una fecha ej:17/12/2010')
-	fecha_cierre = forms.CharField(label=u'Fecha de Cierre', 
+	fecha_cierre = forms.CharField(required=False,label=u'Fecha de Cierre', 
 		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'
 			}),help_text='Seleccione una fecha ej:17/12/2010')
 	numero_maximo_actas=forms.IntegerField(required=True, label='Maximo Actas', 

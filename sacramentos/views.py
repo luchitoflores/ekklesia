@@ -737,11 +737,11 @@ def sacerdote_create_view(request):
 	if request.method == 'POST':
 		form_sacerdote = SacerdoteForm(request.POST)
 		form_usuario = UsuarioForm(request.POST)
-		if form_sacerdote.is_valid and form_usuario.is_valid():
+		if form_sacerdote.is_valid() and form_usuario.is_valid():
 			sacerdotes, created = Group.objects.get_or_create(name='Sacerdotes')
 			usuario = form_usuario.save(commit= False) 
 			sacerdote = form_sacerdote.save(commit=False)
-			usuario.username=sacerdote.dni
+			usuario.username= sacerdote.crear_username(usuario.first_name, usuario.last_name)
 			usuario.save()
 			usuario.groups.add(sacerdotes)
 			sacerdote.user =usuario
@@ -752,7 +752,7 @@ def sacerdote_create_view(request):
 			return HttpResponseRedirect(success_url)
 
 		else:
-			messages.error(request, 'Uno o más datos son inválidos %s %s' % (form_usuario, form_sacerdote))
+			messages.error(request, 'Uno o más datos son inválidos')
 			ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario}
 			return render(request, template_name, ctx)
 
@@ -772,20 +772,15 @@ def sacerdote_update_view(request, pk):
 		if request.method == 'POST':
 			form_sacerdote = SacerdoteForm(request.POST, instance=sacerdote)
 			form_usuario = UsuarioForm(request.POST, instance=sacerdote.user)
-			if form_sacerdote.is_valid and form_usuario.is_valid():
-				usuario = form_usuario.save(commit= False) 
-				sacerdote = form_sacerdote.save(commit=False)
-				usuario.username=sacerdote.dni
-				usuario.save()
-				sacerdote.user =usuario
-				sacerdote.sexo = 'm'
-				sacerdote.profesion = 'Sacerdote'
-				estado_civil = 's'
-				sacerdote.save()
+			if form_sacerdote.is_valid() and form_usuario.is_valid():
+				usuario = form_usuario.save() 
+				sacerdote = form_sacerdote.save()
+				# usuario.save()
+				# sacerdote.save()
 				return HttpResponseRedirect(success_url)
 
 			else:
-				messages.error(request, 'Uno o más datos son inválidos %s %s' % (form_usuario, form_sacerdote))
+				messages.error(request, 'Uno o más datos son inválidos')
 				ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
 				return render(request, template_name, ctx)
 

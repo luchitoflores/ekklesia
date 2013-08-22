@@ -52,14 +52,22 @@ Agregar Feligrés
 							<div class="controls">
 								{{form_usuario.first_name}}
 							</div>
-							<div class="controls">{{form_usuario.first_name.help_text}}</div>
+							<div class="controls">
+								<div class="help-text">								
+									{{form_usuario.first_name.help_text}}
+								</div>
+							</div>
 						</div>
 						<div class="control-group">
 							{{form_usuario.last_name|label_with_classes:'control-label'}}
 							<div class="controls">
 								{{form_usuario.last_name}}
 							</div>
-							<div class="controls">{{form_usuario.last_name.help_text}}</div>
+							<div class="controls">
+								<div class='help-text'>
+									{{form_usuario.last_name.help_text}}
+								</div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="span4">
@@ -70,21 +78,33 @@ Agregar Feligrés
 										{{ radio }}
 										{% endfor %}
 									</div>
-									<div class="controls">{{form_perfil.sexo.help_text}}</div>
+									<div class="controls">
+										<div class="help-text">
+											{{form_perfil.sexo.help_text}}
+										</div>
+									</div>
 								</div>
 								<div class="control-group">
 									{{form_perfil.nacionalidad|label_with_classes:'control-label'}}
 									<div class="controls">
 										{{form_perfil.nacionalidad}}
 									</div>
-									<div class="controls">{{form_perfil.nacionalidad.help_text}}</div>
+									<div class="controls help-text">
+										<div class='help-text'>
+											{{form_perfil.nacionalidad.help_text}}
+										</div>
+									</div>
 								</div>
 								<div class="control-group">
 									{{form_perfil.dni|label_with_classes:'control-label'}}
 									<div class="controls">
 										{{form_perfil.dni}}
 									</div>
-									<div class="controls">{{form_perfil.dni.help_text}}</div>
+									<div class="controls">
+										<div class='help-text'>
+											{{form_perfil.dni.help_text}}
+										</div>
+									</div>
 								</div>
 
 							</div>
@@ -95,7 +115,9 @@ Agregar Feligrés
 										{{form_perfil.estado_civil}}
 									</div>
 									<div class="controls">
-										{{form_perfil.estado_civil.help_text}}
+										<div class='help-text'>
+											{{form_perfil.estado_civil.help_text}}
+										</div>
 									</div>
 								</div>
 								<div class="control-group">
@@ -104,14 +126,16 @@ Agregar Feligrés
 										{{form_perfil.profesion}}
 									</div>
 									<div class="controls">
-										{{form_perfil.profesion.help_text}}
+										<div class="help-text">
+											{{form_perfil.profesion.help_text}}
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 
 					</fieldset>
-					
+
 					<fieldset class='scheduler-border'>
 						<legend class='scheduler-border'>Datos de Nacimiento</legend>
 						<div class="control-group">
@@ -119,14 +143,22 @@ Agregar Feligrés
 							<div class="controls">
 								{{form_perfil.fecha_nacimiento}}
 							</div>
-							<div class="controls">{{form_perfil.fecha_nacimiento.help_text}}</div>
+							<div class="controls">
+								<div class="help-text">
+									{{form_perfil.fecha_nacimiento.help_text}}
+								</div>
+							</div>
 						</div>
 						<div class="control-group">
 							{{form_perfil.lugar_nacimiento|label_with_classes:'control-label'}}
 							<div class="controls">
 								{{form_perfil.lugar_nacimiento}}
 							</div>
-							<div class="controls">{{form_perfil.lugar_nacimiento.help_text}}</div>
+							<div class="controls">
+								<div class="help-text">
+									{{form_perfil.lugar_nacimiento.help_text}}
+								</div>
+							</div>
 						</div>
 					</fieldset>
 					<fieldset class="scheduler-border">
@@ -138,7 +170,11 @@ Agregar Feligrés
 								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 								<a href="#id_crear_padre" class='btn btn-primary' data-toggle='modal'>Crear Padre</a>
 							</div>
-							<div class="controls">{{form_perfil.padre.help_text}}</div>
+							<div class="controls">
+								<div class="help-text">
+									{{form_perfil.padre.help_text}}
+								</div>
+							</div>
 						</div>
 						<div class="control-group">
 							{{form_perfil.madre|label_with_classes:'control-label'}}
@@ -147,10 +183,14 @@ Agregar Feligrés
 								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 								<a href="#id_crear_madre" class='btn btn-primary' data-toggle='modal'>Crear Madre</a>
 							</div>
-							<div class="controls">{{form_perfil.madre.help_text}}</div>
+							<div class="controls">
+								<div class="help-text">
+									{{form_perfil.madre.help_text}}
+								</div>
+							</div>
 						</div>
 					</fieldset>
-					
+
 
 					<div class="form-actions">
 						<input type="submit" value='Enviar' class="btn btn-primary">

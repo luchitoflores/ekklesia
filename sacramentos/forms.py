@@ -25,9 +25,9 @@ class DivErrorList(ErrorList):
 
 #forms para manejo de usuarios
 class UsuarioForm(ModelForm):
-	first_name = forms.CharField(required=True, label='Nombres', 
+	first_name = forms.CharField(required=True, label='Nombres', help_text='Ingrese los nombres completos. Ej: Juan José',
 		widget=forms.TextInput(attrs={'required': ''}))
-	last_name = forms.CharField(required=True, label='Apellidos', 
+	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
 
 	class Meta():
@@ -35,8 +35,15 @@ class UsuarioForm(ModelForm):
 		fields= ('first_name', 'last_name')
 
 class PerfilUsuarioForm(ModelForm):
-	error_css_class = 'errorprueba'
-	required_css_class = 'requiredeeeee'
+
+	def clean_fecha_nacimiento(self):
+		data = self.cleaned_data['fecha_nacimiento']
+		if data > date.today():
+			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
+		return data
+
+	# error_css_class = 'errorprueba'
+	# required_css_class = 'requiredeeeee'
 
 	SEXO_CHOICES = (
 		('', '--- Seleccione ---'),
@@ -52,8 +59,8 @@ class PerfilUsuarioForm(ModelForm):
 		('v','Viudo/a')
 		)
 	# fecha_nacimiento = forms.CharField(required=True, label=u'Fecha de Nacimiento', 
-	sexo = forms.TypedChoiceField(label=u'Sexo', choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
-	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', choices=ESTADO_CIVIL_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
+	sexo = forms.TypedChoiceField(label=u'Sexo', help_text='Elija el sexo de la persona. Ej: Masculino', choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
+	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', help_text='Elija el estado civil. Ej: Soltero/a', choices=ESTADO_CIVIL_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
 	# padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), empty_label='--- Seleccione ---')
 	# madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), empty_label='--- Seleccione ---')
 		
@@ -70,9 +77,15 @@ class PerfilUsuarioForm(ModelForm):
 		}
 		
 class PadreForm(ModelForm):
-	fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento',
+	def clean_fecha_nacimiento(self):
+		data = self.cleaned_data['fecha_nacimiento']
+		if data > date.today():
+			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
+		return data
+
+	fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento', help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy',
 		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
-	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento')
+	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento', help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
 	
 	class Meta(): 
 		model = PerfilUsuario
@@ -81,12 +94,24 @@ class PadreForm(ModelForm):
 
 
 class SacerdoteForm(ModelForm):
-	fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento',
-		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
-	lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento')
+	def clean_fecha_nacimiento(self):
+		data = self.cleaned_data['fecha_nacimiento']
+		if data > date.today():
+			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
+		return data
+
+	# fecha_nacimiento = forms.CharField(help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy', label='Fecha de Nacimiento',
+	# 	widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
+	# lugar_nacimiento = forms.CharField(help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza', label='Lugar de Nacimiento')
 	class Meta(): 
 		model = PerfilUsuario
 		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento');
+		widgets = {
+			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
+				'dd/mm/yyyy', 'type':'date'}),
+			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
+			}
+
 
 
 

@@ -302,16 +302,16 @@ class PerfilUsuario(TimeStampedModel):
 
 
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Usuario', null=True, blank=True)
-	dni = models.CharField('Cédula/Pasaporte', max_length=10, null=True, blank=True)
+	dni = models.CharField('Cédula/Pasaporte', max_length=10, null=True, blank=True, help_text='Ingrese un numero de cedula ej:1104688617')
 	nacionalidad = models.CharField(max_length=2, help_text='Escoja la nacionalidad. Ej: Ecuador', choices=NACIONALIDAD_CHOICES)
-	padre = models.ForeignKey('PerfilUsuario', related_name='Padre', null=True, blank=True)
-	madre = models.ForeignKey('PerfilUsuario', related_name='Madre', null=True, blank=True)
-	fecha_nacimiento = models.DateField(null=True, blank=True)
-	lugar_nacimiento = models.CharField(max_length=100, null=True, blank=True)
+	padre = models.ForeignKey('PerfilUsuario', related_name='Padre', null=True, blank=True, limit_choices_to={'sexo':'m'}, help_text='Presione buscar, si no está en la lista, presione crear')
+	madre = models.ForeignKey('PerfilUsuario', related_name='Madre', null=True, blank=True, limit_choices_to={'sexo':'f'}, help_text='Presione buscar, si no está en la lista, presione crear')
+	fecha_nacimiento = models.DateField(null=True, blank=True, help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy')
+	lugar_nacimiento = models.CharField(max_length=100, null=True, blank=True, help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
 	sexo = models.CharField(max_length=10, choices=SEXO_CHOICES,
-		help_text='Elija un sexo')
-	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True)
-	profesion = models.CharField(max_length=50, null=True, blank=True)
+		help_text='Elija el sexo de la persona. Ej: Masculino')
+	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True, help_text='Elija el estado civil. Ej: Soltero/a')
+	profesion = models.CharField(max_length=50, null=True, blank=True, help_text='Ingrese la profesión de la persona')
 
 	objects = PersonaManager()
 
@@ -320,16 +320,16 @@ class PerfilUsuario(TimeStampedModel):
 		if self.user.first_name == None and self.user.last_name == None:
 			return self.user.username 
 		else:
-			return '%s %s' %(self.user.first_name, self.user.last_name) 
+			return '%s.- %s %s' %(self.id, self.user.first_name, self.user.last_name) 
 
 	def get_absolute_url_sacerdote(self):
 		return u'/sacerdote/%i' % self.id
 
 	def crear_username(self, nombres, apellidos):
-            # nombres = nombres.lower().split()
-            # apellidos = apellidos.lower().split()
-            # username = u'%s%s'% (nombres[0][0],apellidos[0])
-            username = u'%s%s'% (nombres,apellidos)
+            nombres = nombres.lower().split()
+            apellidos = apellidos.lower().split()
+            username = u'%s%s'% (nombres[0][0],apellidos[0])
+            # username = u'%s%s'% (nombres,apellidos)
             print username
             user_name = PerfilUsuario.objects.username_disponible(username)
 
@@ -337,12 +337,7 @@ class PerfilUsuario(TimeStampedModel):
                 return username
             else:
                 personas = PerfilUsuario.objects.filter(user__username__startswith=username).latest('user__date_joined')
-                ultimo_username = ''
-                # for p in personas:
-                #     ultimo_username = p.user.username
-
                 ultimo_username = personas.user.username
-
                 digitos = ''
                 for d in ultimo_username:
                     if re.match('[0-9]+', d):

@@ -17,24 +17,24 @@ function inicio(){
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
 	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
+	
 	cargar_tabla_usuarios_en_modal();
 	verificar_select_seleccionado();
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
-	poner_fecha_defecto('#id_fecha_apertura');
+	// poner_fecha_defecto('#id_fecha_apertura');
+	mostrar_nota_marginal('#id_fielset_tabla');
 	
-
 }
 
 
-function check(input) {  
-	if(input.validity.typeMismatch==true){  
-		input.setCustomValidity("Dude '" + input.value + "' is not a valid email. Enter something nice!!");  
-	}  
-	else {  
-		input.setCustomValidity("");  
-	}                 
+function mostrar_nota_marginal(idFieldSet){
+	var v=$('#id_hidden').val();
+		if(v!=0 & v>0){
+		mostrar_html(idFieldSet);
+	}
+
 }  
 
 function crear_nota_marginal(id_form,id_modal,url_rest){
@@ -69,23 +69,7 @@ $(document).ajaxStart(function(){
 });
 
 
-function poner_fecha_defecto(id){
-	var date= new Date();
-	var day = date.getDate();
-	var month = date.getMonth() + 1;
-	var year = date.getFullYear();
 
-	if (month < 10){
-		month = "0" + month;
-		
-	} 
-	if (day < 10) {
-		day = "0" + day;
-	}
-	
-	var today = year + "-" + month + "-" + day;  
-	$(id).attr('value',today);
-}
 function limpiar_campos(campos){
 	$(campos).val('');
 }
@@ -96,6 +80,10 @@ function habilitar_campos(campos){
 
 function deshabilitar_campos(campos){
 	$(campos).prop('disabled', true);
+	// $(campos).attr('disabled', 'disabled');
+}
+function deshabilitar_campos2(campos){
+	$(campos).prop('enabled', true);
 	// $(campos).attr('disabled', 'disabled');
 }
 

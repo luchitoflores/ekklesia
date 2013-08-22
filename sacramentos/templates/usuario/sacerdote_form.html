@@ -1,5 +1,5 @@
 {%extends 'base.html'%}
-
+{%load tags_html%}
 {%block title%}
 {%if object.id%}
 Editar Sacerdote
@@ -17,13 +17,103 @@ Agregar Sacerdote
 {%endblock%}
 
 {% block content%}
-<form action="." method='POST'>
+<form action="." method='POST' class='form-horizontal'>
 	{% csrf_token%}
-	{{form_usuario}}
-	{{form_sacerdote}}
-	<div class="form-actions">
-		<input type="submit" value="Enviar" class="btn btn-primary">
-		<a href="{% url 'sacerdote_list' %}" class='btn btn-primary'>Cancelar</a>
+
+	<div class="row">
+		<div class="span10">
+			<fieldset class='scheduler-border'>
+				<legend class='scheduler-border'>Datos Personales</legend>
+				<div class="control-group">
+					{{form_usuario.first_name|label_with_classes:'control-label'}}
+					<div class="controls">
+						{{form_usuario.first_name}}
+					</div>
+					<div class="controls">
+						<div class="help-text">								
+							{{form_usuario.first_name.help_text}}
+						</div>
+					</div>
+				</div>
+				<div class="control-group">
+					{{form_usuario.last_name|label_with_classes:'control-label'}}
+					<div class="controls">
+						{{form_usuario.last_name}}
+					</div>
+					<div class="controls">
+						<div class='help-text'>
+							{{form_usuario.last_name.help_text}}
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="span4">
+						<div class="control-group">
+							{{form_sacerdote.nacionalidad|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_sacerdote.nacionalidad}}
+							</div>
+							<div class="controls help-text">
+								<div class='help-text'>
+									{{form_sacerdote.nacionalidad.help_text}}
+								</div>
+							</div>
+						</div>
+						<div class="control-group">
+							{{form_sacerdote.dni|label_with_classes:'control-label'}}
+							<div class="controls">
+								{{form_sacerdote.dni}}
+							</div>
+							<div class="controls">
+								<div class='help-text'>
+									{{form_sacerdote.dni.help_text}}
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</fieldset>
+
+			<fieldset class='scheduler-border'>
+				<legend class='scheduler-border'>Datos de Nacimiento</legend>
+				<div class="control-group">
+					{{form_sacerdote.fecha_nacimiento|label_with_classes:'control-label'}}
+					<div class="controls">
+						<div class='error'>
+							{{form_sacerdote.fecha_nacimiento}}
+						</div>
+					</div>
+					<div class="controls">
+						<div class="help-text">
+							{{form_sacerdote.fecha_nacimiento.help_text}}
+						</div>
+					</div>
+					<div class="controls">
+						{{form_sacerdote.fecha_nacimiento.errors}}
+					</div>
+				</div>
+				<div class="control-group">
+					{{form_sacerdote.lugar_nacimiento|label_with_classes:'control-label'}}
+					<div class="controls">
+						{{form_sacerdote.lugar_nacimiento}}
+					</div>
+					<div class="controls">
+						<div class="help-text">
+							{{form_sacerdote.lugar_nacimiento.help_text}}
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="form-actions">
+				<input type="submit" value="Enviar" class="btn btn-primary">
+				<a href="{% url 'sacerdote_list' %}" class='btn btn-primary'>Cancelar</a>
+			</div>
+
+		</div>
 	</div>
+
 </form>
 {% endblock%}

@@ -1,0 +1,33 @@
+{%extends 'base.html'%}
+{%block title%}Lista de Asignaciones de Parroquia{%endblock%}
+{%block content_title%}
+Lista de Asignaciones de Parroquia
+{%endblock%}
+
+
+
+{% block content%}
+<table class='table table-bordered table-striped'>
+	<thead>
+		<tr>
+			<th>Sacerdote</th>
+			<th>Parroquia</th>
+			<th>Fecha de Inicio</th>
+			<th>Fecha de Final</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for o in object_list%}
+		<tr>
+			<td><a href="{{o.get_absolute_url}}">{{o.persona}}</a></td>
+			<td>{{o.parroquia}}</td>
+			<td>{{o.inicio}}</td>
+			<td>{{o.fin}}</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+</table>
+
+<a href="{%url 'asignar_parroquia_create'%}" class='btn btn-primary'>Nueva Asignación</a>
+
+{% endblock%}

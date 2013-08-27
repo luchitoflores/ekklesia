@@ -51,7 +51,7 @@ def padre_create_ajax(request):
 		if usuario_form.is_valid() and perfil_form.is_valid():
 			perfil = perfil_form.save(commit=False)
 			usuario = usuario_form.save(commit=False)
-			usuario.username = '%s' % perfil.dni
+			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
 			usuario.save()
 			perfil.user = usuario
 			if sexo:

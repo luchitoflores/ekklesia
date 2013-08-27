@@ -106,6 +106,26 @@ Agregar Sacerdote
 					</div>
 				</div>
 			</fieldset>
+			<fieldset class="scheduler-border">
+				<legend class="scheduler-border">Grupos</legend>
+				<div class="control-group">
+					{{form_usuario.groups|label_with_classes:'control-label'}}
+					<div class='controls'>
+						{{form_usuario.groups}}
+					</div>
+					<div class='controls'>
+						<div class="help-text">
+							{{form_usuario.groups.help_text}}
+						</div>
+					</div>
+					<div class='controls'>
+						<div class="errors">
+							{{form_usuario.groups.errors}}
+						</div>
+					</div>
+					
+				</div>
+			</fieldset>
 
 			<div class="form-actions">
 				<input type="submit" value="Enviar" class="btn btn-primary">
@@ -114,6 +134,8 @@ Agregar Sacerdote
 
 		</div>
 	</div>
+
+
 
 </form>
 {% endblock%}

@@ -45,7 +45,9 @@ legend.scheduler-border {
     font-family: 'Viga', sans-serif;
 }
 
-
+ul {
+	list-style-type: none !important;
+}
 
 #id_container{
 	background: white;

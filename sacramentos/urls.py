@@ -11,7 +11,8 @@ from .views import (
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,
-	parroquia_create_view, parroquia_update_view, ParroquiaListView, asignar_parroquia_view,
+	parroquia_create_view, parroquia_update_view, ParroquiaListView, 
+	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	)
 from .rest import ParroquiaResource
@@ -90,8 +91,9 @@ urlpatterns = patterns('',
 	url(r'^parroquia/add/$', parroquia_create_view, name='parroquia_create'),
 	url(r'^parroquia/(?P<pk>\d+)/$', parroquia_update_view, name='parroquia_update'),
 	#urls para asignación de parroquias
-	url(r'^asignarparroquia$/', asignar_parroquia_view, name='asignar_parroquia'),
-
+	url(r'^asignar/parroquia/add/$', AsignarParroquiaCreate.as_view() , name='asignar_parroquia_create'),
+	url(r'^asignar/parroquia/(?P<pk>\d+)/$', AsignarParroquiaUpdate.as_view() , name='asignar_parroquia_update'),
+	url(r'^asignar/parroquia/$', AsignarParroquiaList.as_view() , name='asignar_parroquia_list'),
 	#urls para intenciones de misa
 	url(r'^intencion/$', IntencionListView.as_view(), name='intencion_list'),
 	url(r'^intencion/add/$', intencion_create_view, name='intencion_create'),

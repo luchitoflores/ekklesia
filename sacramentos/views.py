@@ -31,6 +31,7 @@ from .forms import (
 	IntencionForm,
 	ParroquiaForm, 
 	SacerdoteForm,
+	AsignarParroquiaForm,
 	)
 
 from ciudades.forms import DireccionForm
@@ -636,7 +637,9 @@ def parroquia_create_view(request):
 	success_url = '/parroquia/'
 	if request.method== 'POST':
 		form_parroquia = ParroquiaForm(request.POST)
-		form_direccion = DireccionForm(request.POST)
+		canton = Canton.objects.all()
+		parroquia_civil = ParroquiaCivil.objects.all()
+		form_direccion = DireccionForm(canton, parroquia_civil, request.POST)
 		if form_parroquia.is_valid() and form_direccion.is_valid():
 			parroquia = form_parroquia.save(commit=False)
 			direccion = form_direccion.save()
@@ -669,7 +672,9 @@ def parroquia_update_view(request, pk):
 	
 	if request.method == 'POST':
 		form_parroquia = ParroquiaForm(request.POST, instance=parroquia)
-		form_direccion = DireccionForm(request.POST, instance=direccion)
+		canton = Canton.objects.all()
+		parroquia_civil = ParroquiaCivil.objects.all()
+		form_direccion = DireccionForm(canton, parroquia_civil, request.POST, instance=direccion)
 		if form_parroquia.is_valid() and form_direccion.is_valid():
 			form_parroquia.save()
 			form_direccion.save()
@@ -683,8 +688,10 @@ def parroquia_update_view(request, pk):
 			messages.info(request, ctx)
 			return render(request, template_name, ctx)
 	else:
+		canton = Canton.objects.filter(provincia=parroquia.direccion.provincia)
+		parroquia_civil = ParroquiaCivil.objects.filter(canton=canton)
 		form_parroquia = ParroquiaForm(instance=parroquia)
-		form_direccion = DireccionForm(instance=direccion)
+		form_direccion = DireccionForm(instance=direccion, canton = canton, parroquia=parroquia_civil)
 		ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
 		return render(request, template_name, ctx)
 
@@ -802,5 +809,21 @@ class SacerdoteListView(ListView):
 		return super(SacerdoteListView, self).dispatch(*args, **kwargs)
 
 
-def asignar_parroquia_view(request, id):
-	pass
+# def asignar_parroquia_view(request, id):
+# 	pass
+
+class AsignarParroquiaCreate(CreateView):
+	model = AsignacionParroquia
+	form_class = AsignarParroquiaForm
+	template_name = 'parroquia/asignar_parroquia_form.html'
+	success_url = '/asignar/parroquia/'
+
+class AsignarParroquiaUpdate(UpdateView):
+	model = AsignacionParroquia
+	form_class = AsignarParroquiaForm
+	template_name = 'parroquia/asignar_parroquia_form.html'
+	success_url = '/asignar/parroquia/'	
+
+class AsignarParroquiaList(ListView):
+	model = AsignacionParroquia
+	template_name = 'parroquia/asignar_parroquia_list.html'

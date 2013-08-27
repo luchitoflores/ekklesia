@@ -451,6 +451,10 @@ class AsignacionParroquia(TimeStampedModel):
 	def __unicode__(self):
 		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 
+        def get_absolute_url(self):
+            return '/asignar/parroquia/%i' % self.id
+
+        
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200, 
 		help_text='Ingrese hacia quien va dirigida la intención. Ej: A las almas de los fieles difuntos')

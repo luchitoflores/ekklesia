@@ -32,7 +32,10 @@ class UsuarioForm(ModelForm):
 
 	class Meta():
 		model = User
-		fields= ('first_name', 'last_name')
+		fields= ('first_name', 'last_name', 'groups')
+		widgets = {
+			'groups': forms.CheckboxSelectMultiple(attrs={'required':''})
+		}
 
 class PerfilUsuarioForm(ModelForm):
 
@@ -503,6 +506,16 @@ class ParroquiaForm(ModelForm):
 		model = Parroquia
 		fields = ('nombre',)
 
+#Form para asignar parroquia
+class AsignarParroquiaForm(ModelForm):
+	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes()) 
+	class Meta:
+		model = AsignacionParroquia
+		widgets = {
+		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		'fin': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		}
+
 
 #Form para Intenciones de Misa - Funcionando
 class IntencionForm(ModelForm):
@@ -519,7 +532,6 @@ class IntencionForm(ModelForm):
 	class Meta:
 		model = Intenciones
 		fields = ('intencion', 'oferente', 'ofrenda', 'fecha', 'hora', 'individual')
-		# fields = ('intencion','oferente','fecha_celebracion','precio')
 		widgets = {
 			'intencion': forms.TextInput(attrs={'required':'', 'title':'intencion'}),
 			'oferente': forms.TextInput(attrs={'required':''}),

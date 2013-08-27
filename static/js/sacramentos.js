@@ -25,13 +25,31 @@ function inicio(){
 	crear_direccion('#id_form_direccion');
 	// poner_fecha_defecto('#id_fecha_apertura');
 	mostrar_nota_marginal('#id_fielset_tabla');
+	// widget_multiselect('#id_groups');
 	
 }
 
 
+// Función para añadir el widget multiselect
+function widget_multiselect(identificador){
+	$(identificador).multiSelect({
+		selectableHeader: "<div style='background:#006dcc; color:white'>Permisos disponibles</div>",
+		selectionHeader: "<div style='background:#006dcc; color:white'>Permisos elegidos</div>"
+	});
+	
+	$('#id_select_all').click(function(){
+		$(identificador).multiSelect('select_all');
+		return false;
+	});
+	$('#id_delete_all').click(function(){
+		$(identificador).multiSelect('deselect_all');
+		return false;
+	});
+}
+
 function mostrar_nota_marginal(idFieldSet){
 	var v=$('#id_hidden').val();
-		if(v!=0 & v>0){
+	if(v!=0 & v>0){
 		mostrar_html(idFieldSet);
 	}
 

@@ -24,7 +24,24 @@ Agregar Bautismo
 <div id="id_mensaje">
 	
 </div>
+{%if object.id%}
+<div class="btn-toolbar pull-right">
+<div class="btn-group">
+    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+        <i class='icon-print'></i>  Reportes <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu pull-right" >
+        <li>
+        	
+        	<a href="{%url 'bautismo_acta' pk=object.id%}" target="_blank"><i class='icon-book '></i> Acta</a>
+        	<a href="{%url 'bautismo_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Certificado</a>
 
+            
+        </li>
+     </ul>
+  </div>
+</div>
+{%endif%}
 
 
 <!-- Pestañas para datos del feligres, y del bautizo -->
@@ -205,8 +222,8 @@ Agregar Bautismo
 
 				</div>
 			</fieldset>
-
-			<fieldset id='id_fielset_tabla' class='scheduler-border' style='display: none'>
+			{%if object.id%}	
+			<fieldset id='id_fielset_tabla' class='scheduler-border'>
 				<legend class='scheduler-border'><a href="#id_crear_nota" data-toggle='modal'>Nota Marginal</a></legend>
 				
 				<table id='id_table_nota_bautismo' class='table table-bordered table-striped'>
@@ -228,11 +245,13 @@ Agregar Bautismo
 					</tbody>
 				</table>
 			</fieldset>
+			{%endif%}
 		</div>
 	</div>
 	<div class="form-actions">
 		<input type="submit" value="Enviar" class='btn btn-primary'>
 		<a href="{%url 'bautismo_list'%}" class='btn btn-primary'>Cancelar</a>
+		{# <a href="{%url 'bautismo_reporte' pk=request.bautismo.id%}" class='btn btn-primary'>Reporte</a> #}
 	</div>
 
 </form>

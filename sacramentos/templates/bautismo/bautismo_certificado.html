@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head> 
+<style>
+@page {
+	margin-bottom: 2.5cm;
+	size: a4; 
+	margin: 3cm 3cm 3cm 3cm;
+	@frame footer {
+		-pdf-frame-content: pagina;
+		bottom: 2cm;
+		margin-left: 1cm;
+		margin-right: 1cm;
+		height: 1cm;
+	}
+}
+body {
+	font-family: Helvetica, Arial, Sans;
+	font-size: 14px;
+}
+
+
+</style> 
+<body>
+	<center>
+		
+		
+		<h1> 
+			{{ "Diocesis de Loja"|upper }}  <br/>
+			Parroquia Eclesiastica {{bautismo.parroquia|upper}} <br/>
+			{{"Loja - Ecuador" | upper}} <br/>
+
+			{{"Direccion: "}}{{ bautismo.parroquia.direccion }} {{"Tel: "}}{{bautismo.parroquia.direccion.telefono}}<br/><br/>
+			{{"Partida Bautismal"|upper}}<p/></h4></center></h1>
+			<h2> <p>El suscrito Párroco de {{bautismo.parroquia|upper}} CERTIFICA:</h2>
+			Que en el libro: {{ bautismo.libro.numero_libro}}, pagina: {{ bautismo.pagina}} y con el numero: {{ bautismo.numero_acta }} </br>
+			se encuentra la Partida Bautismal de: {{ bautismo.bautizado}} <br/>
+			Hijo(a) de: {{ bautismo.bautizado.padre}} <br/>
+			y de: {{ bautismo.bautizado.madre}} <br/>
+			Nacido(a) el: {{bautismo.bautizado.fecha_nacimiento}}<br/>
+			y bautizado(a) el: {{bautismo.fecha_sacramento}}<br/>
+			Bautizante:  {{"Nombre del que bautizo"}}<br/>
+			Padrinos: {{ bautismo.padrino}} y {{ bautismo.madrina}} <br/><br/>
+			Datos fidedignos tomados del archivo parroquial<br/><br/>
+
+
+
+
+
+
+			Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/>
+			
+
+			P.{{cura}}<br/><br/><br/><br/><br/><br/><br/>
+
+			Observaciones:<br/>
+
+			{%for n in notas%}
+			{{n.fecha|date:"SHORT_DATE_FORMAT"}}{{": "}}{{n.descripcion}}<br/>
+			{%endfor%}
+
+
+
+			<div id="pagina">
+				Pagina Nro: <pdf:pagenumber>
+			</div>
+
+
+		</body>
+		</html>

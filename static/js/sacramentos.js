@@ -23,8 +23,8 @@ function inicio(){
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
-	// poner_fecha_defecto('#id_fecha_apertura');
-	mostrar_nota_marginal('#id_fielset_tabla');
+	
+	
 	
 }
 

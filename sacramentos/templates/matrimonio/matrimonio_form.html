@@ -34,8 +34,21 @@ function check(input) {
 <div id="id_mensaje">
 	
 </div>
-
-
+{%if object.id%}
+<div class="btn-toolbar pull-right">
+<div class="btn-group">
+    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+        <i class='icon-print'></i>  Reportes <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu pull-right" >
+        <li>
+            <a href="{%url 'matrimonio_acta' pk=object.id%}" target="_blank"><i class='icon-book '></i> Acta</a>
+            <a href="{%url 'matrimonio_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Certificado</a>
+        </li>
+     </ul>
+  </div>
+</div>
+{%endif%}
 <!-- Pestañas para datos del feligres, y del bautizo -->
 <input id='id_hidden' type="hidden" value='{{object.id}}'>
 <form id='id_form_matrimonio' action="." method='POST' class='form-horizontal'>
@@ -168,7 +181,8 @@ function check(input) {
 
 				</div>
 			</fieldset>
-			<fieldset id='id_fielset_tabla' style='display: none'class='scheduler-border'>
+			{%if object.id %}
+			<fieldset id='id_fielset_tabla' class='scheduler-border'>
 				<legend class='scheduler-border'><a href="#id_crear_nota_matrimonio" data-toggle='modal'>Nota Marginal</a></legend>
 				<table id='id_table_nota_matrimonio' class='table table-bordered table-striped'>
 					<thead>
@@ -189,6 +203,7 @@ function check(input) {
 					</tbody>
 				</table>
 			</fieldset>
+			{%endif%}
 		</div>
 	</div>
 

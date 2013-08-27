@@ -23,6 +23,19 @@ Agregar Confirmacion
 <div id="id_mensaje">
 	
 </div>
+<div class="btn-toolbar pull-right">
+<div class="btn-group">
+    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+        <i class='icon-print'></i>  Reportes <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu pull-right" >
+        <li>
+            <a href="{%url 'confirmacion_reporte' pk=object.id%}" target="_blank"><i class='icon-book '></i> Acta</a>
+            <a href="{%url 'confirmacion_reporte' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Certificado</a>
+        </li>
+     </ul>
+  </div>
+</div>
 
 
 <!-- Pestañas para datos del feligres, y del bautizo -->

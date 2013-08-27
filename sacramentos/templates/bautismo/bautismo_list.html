@@ -16,12 +16,14 @@ Lista de Bautizados
 	<thead>
 		<tr class='alert alert-info'>
 			
-			<th>Acta</th>
+			
+
 			<th>Bautizado</th>
 			<th>Fecha Nacimiento</th>
 			<th>Fecha Sacramento</th>
 			<th>Papa</th>
 			<th>Mama</th>
+			
 			
 			
 			
@@ -31,13 +33,13 @@ Lista de Bautizados
 	<tbody>
 		{% for o in object_list %}
 		<tr>
-			<td><a href="{%url 'bautismo_update' pk=o.id%}"> {{o.pagina}}</a></td>
-			<td>{{o.bautizado.user.first_name}} {{o.bautizado.user.last_name}}</td>
+			
+			<td><a href="{%url 'bautismo_update' pk=o.id%}">{{o.bautizado.user.first_name}} {{o.bautizado.user.last_name}}</a></td>
 			<td id='id_fecha_nacimiento'>{{o.bautizado.fecha_nacimiento}}</td>
 			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
 			<td>{{o.bautizado.padre.user.first_name}} {{o.bautizado.padre.user.last_name}}</td>
 			<td>{{o.bautizado.madre.user.first_name}} {{o.bautizado.madre.user.last_name}}</td>
-
+			
 		</tr>
 
 		{% endfor %}

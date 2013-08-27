@@ -19,12 +19,13 @@ Lista de Primera Comunión
 	<thead>
 		<tr class='alert alert-info'>
 			
-			<th>Acta</th>
-			<th>Eucaristado</th>
+			
+			<th>Feligres</th>
 			<th>Fecha Nacimiento</th>
 			<th>Fecha Sacramento</th>
 			<th>Papa</th>
 			<th>Mama</th>
+			{# <th>Reportes</th> #}
 			
 			
 		</tr>
@@ -33,12 +34,13 @@ Lista de Primera Comunión
 	<tbody>
 		{% for o in object_list %}
 		<tr>
-			<td><a href="{%url 'eucaristia_update' pk=o.id%}"> {{o.pagina}}</a></td>
-			<td>{{o.feligres.user.first_name}} {{o.feligres.user.last_name}}</td>
+			
+			<td><a href="{%url 'eucaristia_update' pk=o.id%}">{{o.feligres.user.first_name}} {{o.feligres.user.last_name}}</a></td>
 			<td id='id_fecha_nacimiento'>{{o.feligres.fecha_nacimiento}}</td>
 			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
-			<td>{{o.feligres.padre.first_name}} {{o.feligres.padre.last_name}}</td>
-			<td>{{o.feligres.madre.first_name}} {{o.feligres.madre.last_name}}</td>
+			<td>{{o.feligres.padre.user.first_name}} {{o.feligres.padre.user.last_name}}</td>
+			<td>{{o.feligres.madre.user.first_name}} {{o.feligres.madre.user.last_name}}</td>
+			{# <td><a href="{%url 'eucaristia_reporte' pk=o.id%}"> acta</a></td> #}
 		</tr>
 		{% endfor %}
 	</tbody>

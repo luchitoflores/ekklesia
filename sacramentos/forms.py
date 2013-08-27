@@ -193,7 +193,7 @@ class BautismoForm(ModelForm):
 	class Meta():
 		model=Bautismo
 		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento',
-			'lugar_sacramento','padrino','madrina',
+			'lugar_sacramento','padrino','madrina','celebrante',
 			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno',
 			'abuela_materna','vecinos_paternos','vecinos_maternos')
 
@@ -233,7 +233,7 @@ class BautismoFormEditar(ModelForm):
 	
 	class Meta():
 		model=Bautismo
-		fields=('numero_acta','pagina','bautizado','libro','fecha_sacramento',
+		fields=('numero_acta','pagina','bautizado','libro','celebrante','fecha_sacramento',
 			'lugar_sacramento','padrino','madrina',
 			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno',
 			'abuela_materna','vecinos_paternos','vecinos_maternos')
@@ -274,7 +274,7 @@ class EucaristiaForm(ModelForm):
 	class Meta():
 		model=Eucaristia
 		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento',
-			'lugar_sacramento','padrino','madrina','iglesia')
+			'lugar_sacramento','padrino','madrina','celebrante','iglesia')
 
 class EucaristiaFormEditar(ModelForm):
 	feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
@@ -301,7 +301,7 @@ class EucaristiaFormEditar(ModelForm):
 
 	def __init__(self,user, *args, **kwargs):
 		
-		super(EucaristiaForm, self).__init__(*args, **kwargs)
+		super(EucaristiaFormEditar, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
 			persona__user=user,estado=True).parroquia
 		self.fields['libro'].queryset = Libro.objects.filter(
@@ -311,7 +311,7 @@ class EucaristiaFormEditar(ModelForm):
 	class Meta():
 		model=Eucaristia
 		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento',
-			'lugar_sacramento','padrino','madrina','iglesia')
+			'lugar_sacramento','padrino','madrina','celebrante','iglesia')
 
 
 class ConfirmacionForm(ModelForm):
@@ -352,8 +352,8 @@ class ConfirmacionForm(ModelForm):
 
 	class Meta():
 		model=Confirmacion
-		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento',
-			'lugar_sacramento','padrino','madrina','obispo','iglesia')
+		fields=('numero_acta','pagina','confirmado','celebrante','libro','fecha_sacramento',
+			'lugar_sacramento','padrino','madrina','iglesia')
 
 
 class ConfirmacionFormEditar(ModelForm):
@@ -385,7 +385,7 @@ class ConfirmacionFormEditar(ModelForm):
 
 	def __init__(self,user, *args, **kwargs):
 		
-		super(ConfirmacionForm, self).__init__(*args, **kwargs)
+		super(ConfirmacionFormEditar, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
 			persona__user=user,estado=True).parroquia
 		self.fields['libro'].queryset = Libro.objects.filter(
@@ -395,8 +395,7 @@ class ConfirmacionFormEditar(ModelForm):
 	class Meta():
 		model=Confirmacion
 		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento',
-			'lugar_sacramento',
-			'padrino','madrina','obispo','iglesia')
+			'lugar_sacramento','celebrante','padrino','madrina','iglesia')
 
 
 class MatrimonioForm(ModelForm):
@@ -442,7 +441,7 @@ class MatrimonioForm(ModelForm):
 
 	class Meta():
 		model=Matrimonio
-		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento',
+		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','celebrante',
 			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
 
 class MatrimonioFormEditar(ModelForm):
@@ -480,7 +479,7 @@ class MatrimonioFormEditar(ModelForm):
 
 	def __init__(self,user, *args, **kwargs):
 		
-		super(MatrimonioForm, self).__init__(*args, **kwargs)
+		super(MatrimonioFormEditar, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
 			persona__user=user,estado=True).parroquia
 		self.fields['libro'].queryset = Libro.objects.filter(
@@ -488,7 +487,7 @@ class MatrimonioFormEditar(ModelForm):
 
 	class Meta():
 		model=Matrimonio
-		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento',
+		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','celebrante',
 			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
 
 

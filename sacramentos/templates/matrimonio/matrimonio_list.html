@@ -22,8 +22,7 @@ Lista de Matrimonios
 			<th>Fecha Sacramento</th>
 			<th>Testigo</th>
 			<th>Testiga</th>
-			<th>Papa Novio</th>
-			<th>Papa Novia</th>
+			
 			
 		</tr>
 		
@@ -31,14 +30,14 @@ Lista de Matrimonios
 	<tbody>
 		{% for o in object_list %}
 		<tr>
-			<td><a href="{%url 'matrimonio_update' pk=o.id%}"> {{o.pagina}}</a></td>
+			<td><a href="{%url 'matrimonio_update' pk=o.id%}"> {{o.numero_acta}}</a></td>
 			<td>{{o.novio.user.first_name}} {{o.novio.user.last_name}}</td>
 			<td>{{o.novia.user.first_name}} {{o.novia.user.last_name}}</td>
 			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
 			<td>{{o.testigo_novio}}</td>
 			<td>{{o.testigo_novia}}</td>
-			<td>{{o.novio.padre.user.first_name}} {{o.novio.padre.user.last_name}}</td>
-			<td>{{o.novia.padre.user.first_name}} {{o.novia.padre.user.last_name}}</td>
+			
+			
 		</tr>
 		{% endfor %}
 	</tbody>

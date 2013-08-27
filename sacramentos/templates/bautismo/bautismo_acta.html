@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head> 
+<style>
+@page {
+	margin-bottom: 2.5cm;
+	size: a4; 
+	margin: 3cm 3cm 3cm 3cm;
+	@frame footer {
+		-pdf-frame-content: pagina;
+		bottom: 2cm;
+		margin-left: 1cm;
+		margin-right: 1cm;
+		height: 1cm;
+	}
+}
+body {
+	font-family: Helvetica, Arial, Sans;
+	font-size: 14px;
+}
+
+
+</style> 
+<body style="text-align: justify;">
+	
+	<p align="justify"> 
+
+
+
+		{{ "En la Iglesia Parroquial de "}} {{bautismo.parroquia|title}}, Diócesis de Loja
+		a {{bautismo.fecha_sacramento|date:'d'}}, dias del mes de {{bautismo.fecha_sacramento|date:'F'}} del año del Señor de {{bautismo.fecha_sacramento|date:'Y'}}.<br/>
+		Yo,{{"Nombre del q bautizó"}}, Cura-Párroco de la misma,
+		bauticé solemnemente a 
+		{% if "m" in bautismo.bautizado.sexo%}
+		un niño 
+		{%else%}
+		una niña
+		{%endif%}
+		que nació el día  {{bautismo.bautizado.fecha_nacimiento|date:'d'}}
+		del mes de {{bautismo.bautizado.fecha_nacimiento|date:'F'}} del año {{bautismo.bautizado.fecha_nacimiento|date:'Y'}} y a quién
+		puse los nombres de {{ bautismo.bautizado}}. <br/>
+
+		{% if "m" in bautismo.bautizado.sexo%}
+		Es hijo de {{ bautismo.bautizado.padre}}
+		feligrés de {{"Nose que va aqui"}}
+		y de {{ bautismo.bautizado.madre}} 
+		de la parroquia de {{"Nose que va aqui"}}, 
+		{%else%}
+		Es hija de {{ bautismo.bautizado.padre}}
+		feligrés de {{"Nose que va aqui"}}
+		y de {{ bautismo.bautizado.madre}} 
+		de la parroquia de {{"Nose que va aqui"}}, 
+		{%endif%}
+		siendo sus abuelos paternos {{bautismo.abuelo_paterno}} y {{bautismo.abuela_paterna}}
+		vecinos de {{bautismo.vecinos_paternos}} y los maternos
+		{{bautismo.abuelo_materno}} y {{bautismo.abuela_materna}} 
+		vecinos de {{bautismo.vecinos_maternos}}.<br/>
+		{%if bautismo.padrino and bautismo.madrina%}
+		Fueron sus Padrinos {{ bautismo.padrino}} y {{ bautismo.madrina}} a quienes advertí de su parentezco espiritual y obligaciones. Y para que conste lo firmo.<br/>
+		{%endif%}	
+		{%if bautismo.padrino and  not bautismo.madrina%}
+		Fue su Padrino {{ bautismo.padrino}}, a quien advertí de su parentezco espiritual y obligaciones. Y para que conste lo firmo.<br/>
+		{%endif%}	
+		{%if not bautismo.padrino and  bautismo.madrina%}
+		Fue su Madrina {{ bautismo.madrina}}, a quien advertí de su parentezco espiritual y obligaciones. Y para que conste lo firmo.<br/>
+		{%endif%}	
+		
+
+	</p>
+
+
+
+
+</body>
+</html>

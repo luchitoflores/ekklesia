@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head> 
+<style>
+@page {
+	margin: 1cm;
+	margin-bottom: 2.5cm;
+	@frame footer {
+		-pdf-frame-content: pagina;
+		bottom: 2cm;
+		margin-left: 1cm;
+		margin-right: 1cm;
+		height: 1cm;
+	}
+}
+</style>   
+<body>
+	<center>
+		
+		<h1> 
+			{{ "Diocesis de Loja"|upper }}  <br/>
+			Parroquia Eclesiastica {{eucaristia.parroquia|upper}} <br/>
+			{{"Loja - Ecuador" | upper}} <br/>
+
+			{{"Direccion: "}}{{ eucaristia.parroquia.direccion }} {{"Tel: "}}{{eucaristia.parroquia.direccion.telefono}}<br/><br/>
+			{{"Certificado de Primera Comunión"|upper}}<p/></h4></center></h1>
+			<h2> <p>El suscrito Párroco de {{eucaristia.parroquia|upper}} CERTIFICA:</h2>
+			Que en el libro: {{ eucaristia.libro.numero_libro}}, pagina: {{ eucaristia.pagina}} y con el numero: {{ eucaristia.numero_acta }} </br>
+			se registra el nombre de: {{ eucaristia.feligres}} <br/>
+			Nombre del Padre: {{ eucaristia.feligres.padre}} <br/>
+			Nombre de la Madre: {{ eucaristia.feligres.madre}} <br/>
+			Padrinos: {{ eucaristia.padrino}} y {{ eucaristia.madrina}} <br/>
+			Recibió el Sacramento: {{eucaristia.fecha_sacramento}}
+			en la iglesia de: {{ eucaristia.iglesia}} </p>
+
+
+
+
+			Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/>
+			
+
+			P.{{cura}}<br/><br/><br/><br/><br/><br/><br/>
+
+			Observaciones:<br/>
+
+
+
+			<div id="pagina">
+				Pagina Nro: <pdf:pagenumber>
+			</div>
+
+
+		</body>
+		</html>

@@ -24,10 +24,23 @@ Agregar Primera Comunión
 	
 </div>
 
-
+<div class="btn-toolbar pull-right">
+<div class="btn-group">
+    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+        <i class='icon-print'></i>  Reportes <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu pull-right" >
+        <li>
+            <a href="{%url 'eucaristia_reporte' pk=object.id%}" target="_blank"><i class='icon-book '></i> Acta</a>
+            <a href="{%url 'eucaristia_reporte' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Certificado</a>
+        </li>
+     </ul>
+  </div>
+</div>
 <!-- Pestañas para datos del feligres, y del bautizo -->
 
-
+<!--<ul class='nav nav-bar'><a href="{%url 'eucaristia_reporte' pk=object.id%}" target="_blank" class='btn btn-primary'><i class='icon-print'></i><li class='brand'>Reporte</li></a>
+<a href="{%url 'eucaristia_reporte' pk=object.id%}" target="_blank" class='btn btn-primary'><i class='note'></i><li class='brand'>Reporte</li></a></ul>-->
 <form id='id_form_comunion' action="." method='POST' class='form-horizontal'>
 	{% csrf_token%}
 	
@@ -118,6 +131,7 @@ Agregar Primera Comunión
 			<div class="form-actions">
 				<input type="submit" value="Enviar" class='btn btn-primary'/>
 				<a href="{%url 'eucaristia_list'%}" class='btn btn-primary'>Cancelar</a>
+
 			</div>
 		</div>
 	</form>

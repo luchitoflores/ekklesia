@@ -361,11 +361,13 @@ class Sacramento(TimeStampedModel):
     tipo_sacramento = models.CharField(max_length=50, 
     	choices=TIPO_SACRAMENTO_CHOICES,help_text='Elija un tipo de sacramento')
     fecha_sacramento = models.DateField(help_text='Elija una fecha ej:dd/mm/yyyy')
+    celebrante = models.CharField(max_length=200,
+        help_text='Nombre del Celebrante ej: Ob Julio Parrilla')
     lugar_sacramento = models.CharField(max_length=50,
     	help_text='Ingrese el lugar ej: Loja,San Pedro')
-    padrino = models.CharField(max_length= 200,
+    padrino = models.CharField(max_length= 200,null=True,blank=True,
     	help_text='Ingrese el nombre de padrino ej:Jose Rivera')
-    madrina = models.CharField(max_length= 200,
+    madrina = models.CharField(max_length= 200,null=True,blank=True,
     	help_text='Ingrese el nombre de madrina ej:Luisa Mera')
     iglesia = models.CharField(max_length=50,help_text='Nombre de iglesia ej:Catedral')
     libro=models.ForeignKey(Libro, related_name='Libro',
@@ -410,8 +412,7 @@ class Eucaristia(Sacramento):
 class Confirmacion(Sacramento):
 	confirmado=models.OneToOneField(PerfilUsuario, related_name='Confirmado',null=True,
 		blank=True,help_text='Seleccione un feligres')
-	obispo = models.CharField(max_length=200,
-		help_text='Nombre de Ministro ej: Ob Julio Parrilla')
+	
 
 	def __unicode__(self):
 		return '%s %s' %(self.confirmado.user.first_name,self.confirmado.user.last_name)

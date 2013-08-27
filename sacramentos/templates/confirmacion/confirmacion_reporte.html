@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+</head> 
+<style>
+@page {
+	margin-bottom: 2.5cm;
+	size: a4; 
+	margin: 3cm 3cm 3cm 3cm;
+	@frame footer {
+		-pdf-frame-content: pagina;
+		bottom: 2cm;
+		margin-left: 1cm;
+		margin-right: 1cm;
+		height: 1cm;
+	}
+}
+body {
+	font-family: Helvetica, Arial, Sans;
+	font-size: 14px;
+}
+
+
+</style>    
+<body>
+	<center>
+		
+		<h1> 
+			{{ "Diocesis de Loja"|upper }}  <br/>
+			Parroquia Eclesiastica {{confirmacion.parroquia|upper}} <br/>
+			{{"Loja - Ecuador" | upper}} <br/>
+
+			{{"Direccion: "}}{{ confirmacion.parroquia.direccion }} {{"Tel: "}}{{confirmacion.parroquia.direccion.telefono}}<br/><br/>
+			{{"Partida de Confirmación"|upper}}<p/></h4></center></h1>
+			<h2> <p>El suscrito Párroco de {{confirmacion.parroquia|upper}} CERTIFICA:</h2>
+			Que en el libro: {{ confirmacion.libro.numero_libro}}, pagina: {{ confirmacion.pagina}} y con el numero: {{ confirmacion.numero_acta }} </br>
+			se encuentra la partida de Confirmación de: {{ confirmacion.confirmado}} <br/>
+			hijo(a) de: {{ confirmacion.confirmado.padre}} <br/>
+			y de: {{ confirmacion.confirmado.madre}} <br/>
+			realizado el: {{confirmacion.fecha_sacramento}}<br/>
+			Confirmante: {{confirmacion.obispo}}<br/>
+			Padrinos: {{ confirmacion.padrino}} y {{ confirmacion.madrina}} <br/><br/>
+			
+			Datos fidedignos tomados del archivo parroquial<br/><br/>
+
+
+
+
+			Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/>
+			
+
+			P.{{cura}}<br/><br/><br/><br/><br/><br/><br/>
+
+			Observaciones:<br/>
+
+
+
+			<div id="pagina">
+				Pagina Nro: <pdf:pagenumber>
+			</div>
+
+
+		</body>
+		</html>

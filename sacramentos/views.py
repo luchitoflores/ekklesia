@@ -9,10 +9,15 @@ from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.template import RequestContext
+from django.template.loader import render_to_string
 from django.shortcuts import render,get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
+from ho import pisa
+import StringIO 
+import cgi
 
 from .models import (PerfilUsuario,
 	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,NotaMarginal,
@@ -375,7 +380,7 @@ def matrimonio_create_view(request):
 
 def matrimonio_update_view(request,pk):
 	usuario=request.user
-	matrimonio=get_object_or_404(usuario,Matrimonio,pk=pk)
+	matrimonio=get_object_or_404(Matrimonio,pk=pk)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
 	if request.method == 'POST':
 		form_matrimonio = MatrimonioFormEditar(usuario,request.POST,instance=matrimonio)
@@ -535,7 +540,7 @@ def eucaristia_create_view(request):
 
 def eucaristia_update_view(request,pk):
 	usuario=request.user
-	eucaristia=get_object_or_404(usuario,Eucaristia,pk=pk)
+	eucaristia=get_object_or_404(Eucaristia,pk=pk)
 	if(request.method == 'POST'):
 		form_eucaristia=EucaristiaFormEditar(usuario,request.POST,instance=eucaristia)
 		if(form_eucaristia.is_valid()):
@@ -545,6 +550,7 @@ def eucaristia_update_view(request,pk):
 		else:
 			messages.error(request,form_eucaristia.errors)
 		
+	else:
 		form_eucaristia=EucaristiaFormEditar(usuario,instance=eucaristia)
 	ctx={'form_eucaristia':form_eucaristia, 'object':eucaristia}
 	return render(request,'eucaristia/eucaristia_form.html',ctx)
@@ -601,7 +607,7 @@ def confirmacion_create_view(request):
 
 def confirmacion_update_view(request,pk):
 	usuario=request.user
-	confirmacion=get_object_or_404(usuario,Confirmacion,pk=pk)
+	confirmacion=get_object_or_404(Confirmacion,pk=pk)
 	if(request.method == 'POST'):
 		form_confirmacion=ConfirmacionFormEditar(usuario,request.POST,instance=confirmacion)
 		if(form_confirmacion.is_valid()):
@@ -804,3 +810,74 @@ class SacerdoteListView(ListView):
 
 def asignar_parroquia_view(request, id):
 	pass
+
+
+
+#Reportes
+
+
+def generar_pdf(html):
+    # Función para generar el archivo PDF y devolverlo mediante HttpResponse
+    result = StringIO.StringIO()
+    pdf = pisa.pisaDocument(StringIO.StringIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return HttpResponse(result.getvalue(), mimetype='application/pdf')
+    return HttpResponse('Error al generar el PDF: %s' % cgi.escape(html))
+
+def libro_pdf(request, pk):
+	libro=get_object_or_404(Libro, pk=pk)
+	html = render_to_string('libro/libro.html', {'pagesize':'A4', 'libro':libro}, 
+		context_instance=RequestContext(request))
+	return generar_pdf(html)
+
+
+def matrimonio_certificado(request, pk):
+	matrimonio=get_object_or_404(Matrimonio, pk=pk)
+	cura=AsignacionParroquia.objects.get(parroquia=matrimonio.parroquia).persona
+	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
+	html = render_to_string('matrimonio/matrimonio_certificado.html', {'pagesize':'A4', 
+		'matrimonio':matrimonio,'cura':cura,'notas':notas},
+		context_instance=RequestContext(request))
+	return generar_pdf(html)
+
+def matrimonio_acta(request, pk):
+	matrimonio=get_object_or_404(Matrimonio, pk=pk)
+	cura=AsignacionParroquia.objects.get(parroquia=matrimonio.parroquia).persona
+	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
+	html = render_to_string('matrimonio/matrimonio_acta.html', {'pagesize':'A4', 
+		'matrimonio':matrimonio,'cura':cura,'notas':notas},
+		context_instance=RequestContext(request))
+	return generar_pdf(html)
+
+def bautismo_certificado(request, pk):
+	bautismo=get_object_or_404(Bautismo, pk=pk)
+	cura=AsignacionParroquia.objects.get(parroquia=bautismo.parroquia).persona
+	notas=NotaMarginal.objects.filter(bautismo=bautismo)
+	html = render_to_string('bautismo/bautismo_certificado.html', {'pagesize':'A4', 'bautismo':bautismo,
+		'cura':cura,'notas':notas},context_instance=RequestContext(request))
+	return generar_pdf(html)
+
+def bautismo_acta(request, pk):
+	bautismo=get_object_or_404(Bautismo, pk=pk)
+	cura=AsignacionParroquia.objects.get(parroquia=bautismo.parroquia).persona
+	notas=NotaMarginal.objects.filter(bautismo=bautismo)
+	html = render_to_string('bautismo/bautismo_acta.html', {'pagesize':'A4', 'bautismo':bautismo,
+		'cura':cura,'notas':notas},context_instance=RequestContext(request))
+	return generar_pdf(html)
+
+def confirmacion_reporte(request, pk):
+	confirmacion=get_object_or_404(Confirmacion, pk=pk)
+	cura=AsignacionParroquia.objects.get(parroquia=confirmacion.parroquia).persona
+	# notas=NotaMarginal.objects.filter(bautismo=bautismo)
+	html = render_to_string('confirmacion/confirmacion_reporte.html', 
+		{'pagesize':'A4', 'confirmacion':confirmacion,'cura':cura},context_instance=RequestContext(request))
+	return generar_pdf(html)
+
+
+def eucaristia_reporte(request, pk):
+	eucaristia=get_object_or_404(Eucaristia, pk=pk)
+	cura=AsignacionParroquia.objects.get(parroquia=eucaristia.parroquia).persona
+	# notas=NotaMarginal.objects.filter()
+	html = render_to_string('eucaristia/eucaristia_reporte.html', {'pagesize':'A4', 'eucaristia':eucaristia,
+		'cura':cura},context_instance=RequestContext(request))
+	return generar_pdf(html)

@@ -815,7 +815,6 @@ class SacerdoteListView(ListView):
 		return super(SacerdoteListView, self).dispatch(*args, **kwargs)
 
 
-<<<<<<< HEAD
 def asignar_parroquia_view(request, id):
 	pass
 
@@ -889,7 +888,7 @@ def eucaristia_reporte(request, pk):
 	html = render_to_string('eucaristia/eucaristia_reporte.html', {'pagesize':'A4', 'eucaristia':eucaristia,
 		'cura':cura},context_instance=RequestContext(request))
 	return generar_pdf(html)
-=======
+
 # def asignar_parroquia_view(request, id):
 # 	pass
 
@@ -908,4 +907,4 @@ class AsignarParroquiaUpdate(UpdateView):
 class AsignarParroquiaList(ListView):
 	model = AsignacionParroquia
 	template_name = 'parroquia/asignar_parroquia_list.html'
->>>>>>> dbeed84cc28ed453f66012ab7afe17b7a2107ede
+

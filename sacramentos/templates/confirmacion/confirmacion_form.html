@@ -23,6 +23,7 @@ Agregar Confirmacion
 <div id="id_mensaje">
 	
 </div>
+{%if object.id%}
 <div class="btn-toolbar pull-right">
 <div class="btn-group">
     <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
@@ -37,7 +38,7 @@ Agregar Confirmacion
   </div>
 </div>
 
-
+{%endif%}
 <!-- Pestañas para datos del feligres, y del bautizo -->
 
 <form id='id_form_confirmacion' action="." method='POST' class='form-horizontal'>

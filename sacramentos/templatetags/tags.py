@@ -1,5 +1,5 @@
 from django import template
-from sacramentos.forms import UsuarioForm, PadreForm,PerfilUsuarioForm,NotaMarginalForm
+from sacramentos.forms import UsuarioPadreForm, PadreForm,PerfilUsuarioForm,NotaMarginalForm
 register = template.Library()
 
 # @register.inclusion_tag('usuario/form_padre.html', takes_context=True)
@@ -12,7 +12,7 @@ register = template.Library()
 @register.inclusion_tag('usuario/feligres.html', takes_context=True)
 def feligres(context):
 	form_perfil = PadreForm()
-	form_usuario = UsuarioForm()
+	form_usuario = UsuarioPadreForm()
 	ctx = {'form_padre':form_perfil,'form_usuariopadre':form_usuario}
 	return ctx
 

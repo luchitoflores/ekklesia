@@ -37,6 +37,18 @@ class UsuarioForm(ModelForm):
 			'groups': forms.CheckboxSelectMultiple(attrs={'required':''})
 		}
 
+
+class UsuarioPadreForm(ModelForm):
+	first_name = forms.CharField(required=True, label='Nombres', help_text='Ingrese los nombres completos. Ej: Juan José',
+		widget=forms.TextInput(attrs={'required': ''}))
+	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+		widget=forms.TextInput(attrs={'required': ''}))
+
+	class Meta():
+		model = User
+		fields= ('first_name', 'last_name')
+		
+
 class PerfilUsuarioForm(ModelForm):
 
 	def clean_fecha_nacimiento(self):

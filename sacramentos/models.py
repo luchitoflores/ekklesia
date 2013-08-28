@@ -59,21 +59,22 @@ class Libro(TimeStampedModel):
 class PerfilUsuario(TimeStampedModel):
 	# p.f00_size
 	# p.get_foo_size_display()
-	SEXO_CHOICES = (
+    SEXO_CHOICES = (
 		('m', 'Masculino'), 
 		('f','Femenino')
-		)	
+        )
+        
+    ESTADO_CIVIL_CHOICES = (
+        ('s','Soltero/a'),
+        ('c','Casado/a'),
+        ('d','Divorciado/a'),
+        ('v','Viudo/a')
+        )
 
-	ESTADO_CIVIL_CHOICES = (
-		('s','Soltero/a'),
-		('c','Casado/a'),
-		('d','Divorciado/a'),
-		('v','Viudo/a')
-		)
-
-	NACIONALIDAD_CHOICES = (
-					('AF', 'Afganistán'), 
-					('AL', 'Albania'), 
+    NACIONALIDAD_CHOICES = (
+                    ('EC', 'Ecuador'),
+                    ('AF', 'Afganistán'), 
+                    ('AL', 'Albania'), 
                     ('DE', 'Alemania'), 
                     ('AD', 'Andorra'), 
                     ('AO', 'Angola'),
@@ -130,7 +131,6 @@ class PerfilUsuario(TimeStampedModel):
                     ('DK', 'Dinamarca'), 
                     ('DJ', 'Djibouti'),
                     ('DM', 'Dominica'),
-                    ('EC', 'Ecuador'),
                     ('EG', 'Egipto'),
                     ('SV', 'El Salvador'), 
                     ('AE', 'Emiratos Árabes Unidos'),
@@ -301,26 +301,26 @@ class PerfilUsuario(TimeStampedModel):
                     )
 
 
-	user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Usuario', null=True, blank=True)
-	dni = models.CharField('Cédula/Pasaporte', max_length=10, null=True, blank=True, help_text='Ingrese un numero de cedula ej:1104688617')
-	nacionalidad = models.CharField(max_length=2, help_text='Escoja la nacionalidad. Ej: Ecuador', choices=NACIONALIDAD_CHOICES)
-	padre = models.ForeignKey('PerfilUsuario', related_name='Padre', null=True, blank=True, limit_choices_to={'sexo':'m'}, help_text='Presione buscar, si no está en la lista, presione crear')
-	madre = models.ForeignKey('PerfilUsuario', related_name='Madre', null=True, blank=True, limit_choices_to={'sexo':'f'}, help_text='Presione buscar, si no está en la lista, presione crear')
-	fecha_nacimiento = models.DateField(null=True, blank=True, help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy')
-	lugar_nacimiento = models.CharField(max_length=100, null=True, blank=True, help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
-	sexo = models.CharField(max_length=10, choices=SEXO_CHOICES,
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Usuario', null=True, blank=True)
+    dni = models.CharField('Cédula/Pasaporte', max_length=10, null=True, blank=True, help_text='Ingrese un numero de cedula ej:1104688617')
+    nacionalidad = models.CharField(max_length=2, help_text='Escoja la nacionalidad. Ej: Ecuador', choices=NACIONALIDAD_CHOICES)
+    padre = models.ForeignKey('PerfilUsuario', related_name='Padre', null=True, blank=True, limit_choices_to={'sexo':'m'}, help_text='Presione buscar, si no está en la lista, presione crear')
+    madre = models.ForeignKey('PerfilUsuario', related_name='Madre', null=True, blank=True, limit_choices_to={'sexo':'f'}, help_text='Presione buscar, si no está en la lista, presione crear')
+    fecha_nacimiento = models.DateField(null=True, blank=True, help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy')
+    lugar_nacimiento = models.CharField(max_length=100, null=True, blank=True, help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
+    sexo = models.CharField(max_length=10, choices=SEXO_CHOICES,
 		help_text='Elija el sexo de la persona. Ej: Masculino')
-	estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True, help_text='Elija el estado civil. Ej: Soltero/a')
-	profesion = models.CharField(max_length=50, null=True, blank=True, help_text='Ingrese la profesión de la persona')
+    estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True, help_text='Elija el estado civil. Ej: Soltero/a')
+    profesion = models.CharField(max_length=50, null=True, blank=True, help_text='Ingrese la profesión de la persona')
 
-	objects = PersonaManager()
+    objects = PersonaManager()
 
 
-	def __unicode__(self):
-		if self.user.first_name == None and self.user.last_name == None:
-			return self.user.username 
-		else:
-			return '%s.- %s %s' %(self.id, self.user.first_name, self.user.last_name) 
+    def __unicode__(self):
+        if self.user.first_name == None and self.user.last_name == None:
+            return self.user.username 
+	else:
+            return '%s.- %s %s' %(self.id, self.user.first_name, self.user.last_name) 
 
 	def get_absolute_url_sacerdote(self):
 		return u'/sacerdote/%i' % self.id

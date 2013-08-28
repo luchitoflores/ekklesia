@@ -815,8 +815,22 @@ class SacerdoteListView(ListView):
 		return super(SacerdoteListView, self).dispatch(*args, **kwargs)
 
 
-def asignar_parroquia_view(request, id):
-	pass
+class AsignarParroquiaCreate(CreateView):
+	model = AsignacionParroquia
+	form_class = AsignarParroquiaForm
+	template_name = 'parroquia/asignar_parroquia_form.html'
+	success_url = '/asignar/parroquia/'
+
+class AsignarParroquiaUpdate(UpdateView):
+	model = AsignacionParroquia
+	form_class = AsignarParroquiaForm
+	template_name = 'parroquia/asignar_parroquia_form.html'
+	success_url = '/asignar/parroquia/'	
+
+class AsignarParroquiaList(ListView):
+	model = AsignacionParroquia
+	template_name = 'parroquia/asignar_parroquia_list.html'
+
 
 
 
@@ -888,23 +902,4 @@ def eucaristia_reporte(request, pk):
 	html = render_to_string('eucaristia/eucaristia_reporte.html', {'pagesize':'A4', 'eucaristia':eucaristia,
 		'cura':cura},context_instance=RequestContext(request))
 	return generar_pdf(html)
-
-# def asignar_parroquia_view(request, id):
-# 	pass
-
-class AsignarParroquiaCreate(CreateView):
-	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'
-
-class AsignarParroquiaUpdate(UpdateView):
-	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'	
-
-class AsignarParroquiaList(ListView):
-	model = AsignacionParroquia
-	template_name = 'parroquia/asignar_parroquia_list.html'
 

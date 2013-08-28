@@ -322,22 +322,21 @@ class PerfilUsuario(TimeStampedModel):
 	else:
             return '%s.- %s %s' %(self.id, self.user.first_name, self.user.last_name) 
 
-    def get_absolute_url_sacerdote(self):
-	return u'/sacerdote/%i' % self.id
-    
+	def get_absolute_url_sacerdote(self):
+		return u'/sacerdote/%i' % self.id
 
-    def crear_username(self, nombres, apellidos):
-    	nombres = nombres.lower().split()
-    	apellidos = apellidos.lower().split()
-    	username = u'%s%s'% (nombres[0][0],apellidos[0])
+	def crear_username(self, nombres, apellidos):
+            nombres = nombres.lower().split()
+            apellidos = apellidos.lower().split()
+            username = u'%s%s'% (nombres[0][0],apellidos[0])
             # username = u'%s%s'% (nombres,apellidos)
-    	print username
-    	user_name = PerfilUsuario.objects.username_disponible(username)
+            print username
+            user_name = PerfilUsuario.objects.username_disponible(username)
 
-    	if user_name == True:
-    		return username
-    	else:
-    		personas = PerfilUsuario.objects.filter(user__username__startswith=username).latest('user__date_joined')
+            if user_name == True:
+                return username
+            else:
+                personas = PerfilUsuario.objects.filter(user__username__startswith=username).latest('user__date_joined')
                 ultimo_username = personas.user.username
                 digitos = ''
                 for d in ultimo_username:

@@ -31,7 +31,15 @@
 			se registra el nombre de: {{ eucaristia.feligres}} <br/>
 			Nombre del Padre: {{ eucaristia.feligres.padre}} <br/>
 			Nombre de la Madre: {{ eucaristia.feligres.madre}} <br/>
+			{%if eucaristia.padrino and eucaristia.madrina%}
 			Padrinos: {{ eucaristia.padrino}} y {{ eucaristia.madrina}} <br/>
+			{%endif%}
+			{%if eucaristia.padrino and not eucaristia.madrina%}
+			Padrino: {{ eucaristia.padrino}} <br/>
+			{%endif%}
+			{%if not eucaristia.padrino and eucaristia.madrina%}
+			Madrina: {{ eucaristia.madrina}} <br/>
+			{%endif%}
 			Recibió el Sacramento: {{eucaristia.fecha_sacramento}}
 			en la iglesia de: {{ eucaristia.iglesia}} </p>
 

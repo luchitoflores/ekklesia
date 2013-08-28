@@ -20,6 +20,9 @@ body {
 	font-family: Helvetica, Arial, Sans;
 	font-size: 14px;
 }
+#id_direccion{
+	font-size: 10px;
+}
 
 
 </style> 
@@ -32,17 +35,34 @@ body {
 			Parroquia Eclesiastica {{bautismo.parroquia|upper}} <br/>
 			{{"Loja - Ecuador" | upper}} <br/>
 
-			{{"Direccion: "}}{{ bautismo.parroquia.direccion }} {{"Tel: "}}{{bautismo.parroquia.direccion.telefono}}<br/><br/>
+			<div id='id_direccion'>{{"Direccion: "}}{{ bautismo.parroquia.direccion }} {{"Tel: "}}{{bautismo.parroquia.direccion.telefono}}<br/><br/></div>
 			{{"Partida Bautismal"|upper}}<p/></h4></center></h1>
 			<h2> <p>El suscrito Párroco de {{bautismo.parroquia|upper}} CERTIFICA:</h2>
 			Que en el libro: {{ bautismo.libro.numero_libro}}, pagina: {{ bautismo.pagina}} y con el numero: {{ bautismo.numero_acta }} </br>
 			se encuentra la Partida Bautismal de: {{ bautismo.bautizado}} <br/>
-			Hijo(a) de: {{ bautismo.bautizado.padre}} <br/>
+			{%if "m" in bautismo.bautizado.sexo%}
+			Hijo de: {{ bautismo.bautizado.padre}} <br/>
 			y de: {{ bautismo.bautizado.madre}} <br/>
-			Nacido(a) el: {{bautismo.bautizado.fecha_nacimiento}}<br/>
-			y bautizado(a) el: {{bautismo.fecha_sacramento}}<br/>
-			Bautizante:  {{"Nombre del que bautizo"}}<br/>
+			Nacido el: {{bautismo.bautizado.fecha_nacimiento}}<br/>
+			y bautizado el: {{bautismo.fecha_sacramento}}<br/>
+			{%else%}
+			Hija de: {{ bautismo.bautizado.padre}} <br/>
+			y de: {{ bautismo.bautizado.madre}} <br/>
+			Nacida el: {{bautismo.bautizado.fecha_nacimiento}}<br/>
+			y bautizada el: {{bautismo.fecha_sacramento}}<br/>
+			{%endif%}
+			Bautizante:  {{bautismo.celebrante}}<br/>
+
+			{%if bautismo.padrino and bautismo.madrina%}
 			Padrinos: {{ bautismo.padrino}} y {{ bautismo.madrina}} <br/><br/>
+			{%endif%}	
+			{%if bautismo.padrino and  not bautismo.madrina%}
+			Padrino: {{ bautismo.padrino}}<br/><br/>
+			{%endif%}	
+			{%if not bautismo.padrino and  bautismo.madrina%}
+			Madrina: {{ bautismo.madrina}}<br/><br/>
+			{%endif%}	
+			
 			Datos fidedignos tomados del archivo parroquial<br/><br/>
 
 

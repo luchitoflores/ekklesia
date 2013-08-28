@@ -29,9 +29,9 @@ body {
 
 
 
-		{{ "En la Iglesia Parroquial de "}} {{bautismo.parroquia|title}}, Diócesis de Loja
-		a {{bautismo.fecha_sacramento|date:'d'}}, dias del mes de {{bautismo.fecha_sacramento|date:'F'}} del año del Señor de {{bautismo.fecha_sacramento|date:'Y'}}.<br/>
-		Yo,{{"Nombre del q bautizó"}}, Cura-Párroco de la misma,
+		{{ "En la Iglesia Parroquial de "}} {{bautismo.iglesia|title}}, Diócesis de Loja
+		a {{bautismo.fecha_sacramento|date:'d'}} dias del mes de {{bautismo.fecha_sacramento|date:'F'}}, del año del Señor de {{bautismo.fecha_sacramento|date:'Y'}}.<br/>
+		Yo, {{bautismo.celebrante}}, Cura-Párroco de la misma,
 		bauticé solemnemente a 
 		{% if "m" in bautismo.bautizado.sexo%}
 		un niño 

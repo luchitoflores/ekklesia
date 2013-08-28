@@ -713,13 +713,13 @@ def intencion_create_view(request):
 		if form_intencion.is_valid():
 			intencion = form_intencion.save(commit=False)
 			try:
-				intencion.parroquia = AsignacionParroquia.objects.get(persona__user=request.user).parroquia
-			
+				asignacion = AsignacionParroquia.objects.filter(persona__user=request.user)[:1]
+				intencion.parroquia = asignacion.parroquia
+				intencion.save()
+				messages.success(request, 'Creado exitosamente')
+				return HttpResponseRedirect(success_url)
 			except:
 				raise Http404
-			intencion.save()
-			messages.success(request, 'Creado exitosamente')
-			return HttpResponseRedirect(success_url)
 		else:
 			messages.error(request, u'Uno o más campos no son incorrectos: %s' % form_intencion.errors)
 			ctx = {'form': form_intencion}

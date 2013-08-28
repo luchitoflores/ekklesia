@@ -13,7 +13,8 @@ from .views import (
 	bautismo_acta,bautismo_certificado,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,eucaristia_reporte,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,confirmacion_reporte,
-	parroquia_create_view, parroquia_update_view, ParroquiaListView, asignar_parroquia_view,
+	parroquia_create_view, parroquia_update_view, ParroquiaListView,
+	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	)
 from .rest import ParroquiaResource

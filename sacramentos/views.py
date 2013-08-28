@@ -103,7 +103,7 @@ def usuarioCreateView(request):
 			usuario = form_usuario.save(commit=False)
 			perfil = form_perfil.save(commit=False)
 			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
-			# usuario.username = perfil.dni
+			usuario.set_password(usuario.username)
 			usuario.save()
 			usuario.groups.add(feligres)
 			perfil.user = usuario
@@ -755,6 +755,7 @@ def sacerdote_create_view(request):
 			usuario = form_usuario.save(commit= False) 
 			sacerdote = form_sacerdote.save(commit=False)
 			usuario.username= sacerdote.crear_username(usuario.first_name, usuario.last_name)
+			usuario.set_password(usuario.username)
 			usuario.save()
 			usuario.groups.add(sacerdotes)
 			sacerdote.user =usuario

@@ -53,6 +53,8 @@ def padre_create_ajax(request):
 			usuario = usuario_form.save(commit=False)
 			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
 			usuario.save()
+			feligres, created = Group.objects.get_or_create(name='Feligres')
+			usuario.groups.add(feligres)
 			perfil.user = usuario
 			if sexo:
 				perfil.sexo = sexo

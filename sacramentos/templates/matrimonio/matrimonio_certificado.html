@@ -8,22 +8,22 @@
 	margin-bottom: 2.5cm;
 	size: a4; 
 	margin: 3cm 3cm 3cm 3cm;
-	 @frame footer {
+	@frame footer {
 		-pdf-frame-content: pagina;
 		bottom: 2cm;
 		margin-left: 1cm;
 		margin-right: 1cm;
 		height: 1cm;
 	}
-	}
-    body {
-		font-family: Helvetica, Arial, Sans;
-		font-size: 14px;
-    }
-    #id_direccion{
-    	font-size: 10px;
-    }
-	
+}
+body {
+	font-family: Helvetica, Arial, Sans;
+	font-size: 14px;
+}
+#id_direccion{
+	font-size: 10px;
+}
+
 
 </style>   
 <body>
@@ -48,10 +48,36 @@
 
 
 
-			Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/>
+			Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/><br/><br/>
 			
 
-			P.{{cura}}<br/><br/><br/><br/><br/><br/><br/>
+			<table align='center'>
+				<tbody>
+					<tr>
+						<td>
+							<p align='center'>
+								
+								---------------------------------------------------<br/>
+								P.{{cura}} 
+							</p>
+						</td>
+						<td>
+							<p align='center'>
+								
+								-----------------------------------------<br/>
+								{{"SECRETARIO"}}
+							</p>
+							
+							
+
+
+							
+						</td>
+					</tr>
+
+
+				</tbody>
+			</table>
 
 			Observaciones:<br/>
 
@@ -66,5 +92,5 @@
 			</div>
 
 
-</body>
-</html>
+		</body>
+		</html>

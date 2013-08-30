@@ -824,11 +824,36 @@ class AsignarParroquiaCreate(CreateView):
 	template_name = 'parroquia/asignar_parroquia_form.html'
 	success_url = '/asignar/parroquia/'
 
+
+	def form_valid(self, form):
+		persona_id = self.request.POST['persona']
+		estado = self.request.POST.get('estado')
+		if estado:
+			user = PerfilUsuario.objects.get(pk=persona_id).user
+			user.is_staff = True 
+			user.save()
+		
+		return super(AsignarParroquiaCreate, self).form_valid(form)
+
 class AsignarParroquiaUpdate(UpdateView):
 	model = AsignacionParroquia
 	form_class = AsignarParroquiaForm
 	template_name = 'parroquia/asignar_parroquia_form.html'
 	success_url = '/asignar/parroquia/'	
+
+	def form_valid(self, form):
+		persona_id = self.request.POST['persona']
+		estado = self.request.POST.get('estado')
+		if estado:
+			user = PerfilUsuario.objects.get(pk=persona_id).user
+			user.is_staff = True 
+			user.save()
+		else:
+			user = PerfilUsuario.objects.get(pk=persona_id).user
+			user.is_staff = False
+			user.save()
+		
+		return super(AsignarParroquiaUpdate, self).form_valid(form)
 
 class AsignarParroquiaList(ListView):
 	model = AsignacionParroquia

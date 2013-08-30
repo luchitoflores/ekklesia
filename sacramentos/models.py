@@ -312,6 +312,7 @@ class PerfilUsuario(TimeStampedModel):
 		help_text='Elija el sexo de la persona. Ej: Masculino')
     estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True, help_text='Elija el estado civil. Ej: Soltero/a')
     profesion = models.CharField(max_length=50, null=True, blank=True, help_text='Ingrese la profesión de la persona')
+    parroquias = models.ManyToManyField('Parroquia', null=True, blank=True, through='AsignacionParroquia') 
 
     objects = PersonaManager()
 
@@ -446,13 +447,16 @@ class AsignacionParroquia(TimeStampedModel):
 	parroquia = models.ForeignKey('Parroquia')
 	inicio = models.DateField()
 	fin = models.DateField(null=True, blank=True)	
-	estado = models.BooleanField()
+	estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que es el párroco actual')
 
 	def __unicode__(self):
 		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 
         def get_absolute_url(self):
-            return '/asignar/parroquia/%i' % self.id
+		return '/asignar/parroquia/%i' % self.id
+
+    	# class Meta:
+     #    	db_table = u'sacramentos_perfilusuario_parroquias'
 
         
 class Intenciones(TimeStampedModel):

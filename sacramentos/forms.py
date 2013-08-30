@@ -519,7 +519,14 @@ class ParroquiaForm(ModelForm):
 
 #Form para asignar parroquia
 class AsignarParroquiaForm(ModelForm):
-	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes()) 
+
+
+	# def clean_estado(self):
+	# 	data = self.cleaned['estado']
+	# 	if data:
+	# 		AsignacionParroquia.
+
+	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes().exclude(user__is_staff=True)) 
 	class Meta:
 		model = AsignacionParroquia
 		widgets = {

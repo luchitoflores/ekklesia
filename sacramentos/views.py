@@ -346,22 +346,24 @@ def matrimonio_create_view(request):
 			matrimonio.tipo_sacramento='Matrimonio'
 			novio=matrimonio.novio
 			novia=matrimonio.novia
-			novio.estado_civil='c'
-			novia.estado_civil='c'
-			novio.save()
-			novia.save()
-			matrimonio.novio=novio
-			matrimonio.novia=novia
-
-			if(matrimonio.novio.estado_civil=='c' and matrimonio.novia.estado_civil=='c'):
+			if  (novio.estado_civil!='c') and (novia.estado_civil!='c'):
+				
+				novio.estado_civil='c'
+				novia.estado_civil='c'
+				novio.save()
+				novia.save()
+				matrimonio.novio=novio
+				matrimonio.novia=novia
 				parroquia = AsignacionParroquia.objects.get(
-							persona__user=request.user,estado=True).parroquia
+						persona__user=request.user,estado=True).parroquia
 				matrimonio.parroquia = parroquia
 				matrimonio.save()
 				messages.success(request,'Creado exitosamente')
 				return HttpResponseRedirect('/matrimonio')
+				
 			else:
-				messages.info(request,'Errores en estado civil')
+				messages.info(request,'Uno de los novios ya esta casado')
+
 				
 		else:
 			messages.error(request,form_matrimonio.errors)
@@ -903,4 +905,5 @@ def eucaristia_reporte(request, pk):
 	html = render_to_string('eucaristia/eucaristia_reporte.html', {'pagesize':'A4', 'eucaristia':eucaristia,
 		'cura':cura},context_instance=RequestContext(request))
 	return generar_pdf(html)
+
 

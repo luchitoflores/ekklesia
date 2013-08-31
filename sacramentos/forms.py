@@ -526,7 +526,7 @@ class AsignarParroquiaForm(ModelForm):
 	# 	if data:
 	# 		AsignacionParroquia.
 
-	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes().exclude(user__is_staff=True)) 
+	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes()) 
 	class Meta:
 		model = AsignacionParroquia
 		widgets = {

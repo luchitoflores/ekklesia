@@ -2,7 +2,7 @@
 from django.contrib import messages
 from datetime import datetime, date
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.forms import ModelForm
 from django.forms.util import ErrorList
 from django.forms.widgets import RadioSelect
@@ -10,8 +10,6 @@ from django.forms.widgets import RadioSelect
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
 					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia)
-
-
 
 class DivErrorList(ErrorList):
 	def __unicode__(self):
@@ -29,13 +27,14 @@ class UsuarioForm(ModelForm):
 		widget=forms.TextInput(attrs={'required': ''}))
 	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
+	groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all(),widget=forms.CheckboxSelectMultiple())
 
 	class Meta():
 		model = User
 		fields= ('first_name', 'last_name', 'groups')
-		widgets = {
-			'groups': forms.CheckboxSelectMultiple(attrs={'required':''})
-		}
+		# widgets = {
+		# 	'groups': forms.CheckboxSelectMultiple(attrs={'required':''})
+		# }
 
 
 class UsuarioPadreForm(ModelForm):
@@ -98,10 +97,6 @@ class PadreForm(ModelForm):
 			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
 		return data
 
-	# fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento', help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy',
-	# 	widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
-	# lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento', help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
-	
 	class Meta(): 
 		model = PerfilUsuario
 		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
@@ -138,14 +133,6 @@ class SacerdoteForm(ModelForm):
 # forms para sacramentos
 
 class LibroForm(ModelForm):
-
-	# def clean_fecha_apertura(self):
-	# 	data = self.cleaned_data['fecha_apertura']
-		
-	# 	if data > date.today() or data<date.today():
-	# 		raise forms.ValidationError('La fecha cierre no puede ser mayor o igual a la fecha de apertura')
-	# 	return data
-
 	TIPO_LIBRO_CHOICES = (
 		('', '--- Seleccione ---'),
 		('Bautismo','Bautismo'),
@@ -178,25 +165,14 @@ class LibroForm(ModelForm):
 		widget=forms.TextInput(attrs={'required': '','type':'number','value':'35',
 			'max':'40'}),help_text='Ingrese el numero maximo de actas ej:50') 
 	
-	
 	class Meta():
 		model=Libro
 		fields = ('numero_libro', 'tipo_libro', 'fecha_apertura', 'fecha_cierre', 
 			'estado', 'numero_maximo_actas')
-		
-
 
 
 
 class BautismoForm(ModelForm):
-	
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
-
 	bautizado=forms.ModelChoiceField(
 		label='Feligres',
 		help_text='Presione buscar para encontrar un feligres',
@@ -207,7 +183,10 @@ class BautismoForm(ModelForm):
 	numero_acta=forms.IntegerField(help_text='Ingrese el numero del acta ej:3,25',
 		required=True, 
 		label='Numero Acta', widget=forms.TextInput(attrs={'required': ''}))
-	
+	fecha_sacramento = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
+		required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
 	lugar_sacramento = forms.CharField(help_text='Ingrese el lugar del sacramento ej: Loja ', 
 		required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
@@ -216,8 +195,6 @@ class BautismoForm(ModelForm):
 		widget=forms.TextInput(attrs={'required':''}))
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
 		queryset=Libro.objects.none(),empty_label=None)
-
-	
 
 	def __init__(self,user, *args, **kwargs):
 
@@ -234,20 +211,8 @@ class BautismoForm(ModelForm):
 			'lugar_sacramento','padrino','madrina','celebrante',
 			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno',
 			'abuela_materna','vecinos_paternos','vecinos_maternos')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
 
 class BautismoFormEditar(ModelForm):
-
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
 	bautizado=forms.ModelChoiceField(
 		label='Feligres',
 		help_text='Presione buscar para encontrar un feligres',
@@ -258,7 +223,10 @@ class BautismoFormEditar(ModelForm):
 	numero_acta=forms.IntegerField(help_text='Ingrese el numero del acta ej:3,25',
 		required=True, 
 		label='Numero Acta', widget=forms.TextInput(attrs={'required': ''}))
-	
+	fecha_sacramento = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
+		required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
 	lugar_sacramento = forms.CharField(help_text='Ingrese el lugar del sacramento ej: Loja ', 
 		required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}))
@@ -268,8 +236,6 @@ class BautismoFormEditar(ModelForm):
 	libro=forms.ModelChoiceField(empty_label=None,queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para el Bautismo')
 
-
-	
 
 	def __init__(self,user, *args, **kwargs):
 
@@ -286,23 +252,9 @@ class BautismoFormEditar(ModelForm):
 			'lugar_sacramento','padrino','madrina',
 			'iglesia', 'abuelo_paterno', 'abuela_paterna', 'abuelo_materno',
 			'abuela_materna','vecinos_paternos','vecinos_maternos')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
 
 
 class EucaristiaForm(ModelForm):
-
-
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
-
 	feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
 	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
 	help_text='Presione buscar para encontrar al feligres')
@@ -312,9 +264,9 @@ class EucaristiaForm(ModelForm):
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
-	# fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
-		# widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-			# 'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
@@ -324,7 +276,6 @@ class EucaristiaForm(ModelForm):
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Eucaristia')
-
 
 	def __init__(self,user, *args, **kwargs):
 		
@@ -339,20 +290,8 @@ class EucaristiaForm(ModelForm):
 		model=Eucaristia
 		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento',
 			'lugar_sacramento','padrino','madrina','celebrante','iglesia')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
 
 class EucaristiaFormEditar(ModelForm):
-
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
 	feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
 	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
 	help_text='Presione buscar para encontrar al feligres')
@@ -362,7 +301,9 @@ class EucaristiaFormEditar(ModelForm):
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
-	
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
@@ -372,9 +313,6 @@ class EucaristiaFormEditar(ModelForm):
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Eucaristia')
-
-
-	
 
 	def __init__(self,user, *args, **kwargs):
 		
@@ -389,22 +327,9 @@ class EucaristiaFormEditar(ModelForm):
 		model=Eucaristia
 		fields=('numero_acta','pagina','feligres','libro','fecha_sacramento',
 			'lugar_sacramento','padrino','madrina','celebrante','iglesia')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
 
 
 class ConfirmacionForm(ModelForm):
-
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
-
 	confirmado=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),
 		required=True,label='Feligres',
 	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
@@ -415,7 +340,9 @@ class ConfirmacionForm(ModelForm):
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
-	
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
@@ -428,9 +355,6 @@ class ConfirmacionForm(ModelForm):
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
-
-
-	
 
 	def __init__(self,user, *args, **kwargs):
 		
@@ -445,22 +369,9 @@ class ConfirmacionForm(ModelForm):
 		model=Confirmacion
 		fields=('numero_acta','pagina','confirmado','celebrante','libro','fecha_sacramento',
 			'lugar_sacramento','padrino','madrina','iglesia')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
 
 
 class ConfirmacionFormEditar(ModelForm):
-
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
-
 	confirmado=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),
 		required=True,label='Feligres',
 	empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
@@ -471,7 +382,9 @@ class ConfirmacionFormEditar(ModelForm):
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
-	
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
@@ -484,9 +397,6 @@ class ConfirmacionFormEditar(ModelForm):
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
-
-
-	
 
 	def __init__(self,user, *args, **kwargs):
 		
@@ -501,22 +411,9 @@ class ConfirmacionFormEditar(ModelForm):
 		model=Confirmacion
 		fields=('numero_acta','pagina','confirmado','libro','fecha_sacramento',
 			'lugar_sacramento','celebrante','padrino','madrina','iglesia')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
 
 
 class MatrimonioForm(ModelForm):
-
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
-
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': '','pattern':'[0-9]+'}),
 		help_text='Ingrese el numero de pagina ej:5,67')
@@ -531,7 +428,9 @@ class MatrimonioForm(ModelForm):
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
-	
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
@@ -555,27 +454,12 @@ class MatrimonioForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Matrimonio',parroquia=parroquia)
 
-	
-
 	class Meta():
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','celebrante',
 			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
 
 class MatrimonioFormEditar(ModelForm):
-
-	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_sacramento']
-		if data > date.today():
-			raise forms.ValidationError('La fecha de sacramento no puede ser mayor a la fecha actual')
-		return data
-
-
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': '','pattern':'[0-9]+'}),
 		help_text='Ingrese el numero de pagina ej:5,67')
@@ -590,7 +474,9 @@ class MatrimonioFormEditar(ModelForm):
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
-	
+	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
@@ -606,8 +492,6 @@ class MatrimonioFormEditar(ModelForm):
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),help_text='Seleccione un libro para el Matrimonio')
 
-	
-
 	def __init__(self,user, *args, **kwargs):
 		
 		super(MatrimonioFormEditar, self).__init__(*args, **kwargs)
@@ -620,11 +504,19 @@ class MatrimonioFormEditar(ModelForm):
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','celebrante',
 			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
-		widgets = {
-			'fecha_sacramento': forms.TextInput(attrs={'required':'', 'data-date-format': 
-				'dd/mm/yyyy', 'type':'date'}),
-			
-			}
+
+# Forms para Notas Marginals
+class NotaMarginalForm(ModelForm):
+	fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
+		required=True,label='Fecha',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
+	descripcion=forms.CharField(required=True,label='Descripcion',
+		widget=forms.Textarea(attrs={'required':''}),
+		help_text='Ingrese una descripcion ej: saco para casarse')
+	class Meta():
+		model= NotaMarginal
+		fields=('fecha','descripcion')
 
 
 #Forms para Parroquia - Funcionando
@@ -635,13 +527,6 @@ class ParroquiaForm(ModelForm):
 
 #Form para asignar parroquia
 class AsignarParroquiaForm(ModelForm):
-
-
-	# def clean_estado(self):
-	# 	data = self.cleaned['estado']
-	# 	if data:
-	# 		AsignacionParroquia.
-
 	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes()) 
 	class Meta:
 		model = AsignacionParroquia
@@ -649,6 +534,13 @@ class AsignarParroquiaForm(ModelForm):
 		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
 		'fin': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
 		}
+
+#Form para asignar una secretaria a una parroquia
+class AsignarSecretariaForm(ModelForm):
+	persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.none()) 
+	class Meta:
+		model = AsignacionParroquia
+		fields = ('persona', 'parroquia')
 
 
 #Form para Intenciones de Misa - Funcionando
@@ -675,18 +567,5 @@ class IntencionForm(ModelForm):
 		}
 		
 
-# Forms para Notas Marginals
-
-class NotaMarginalForm(ModelForm):
-	fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
-		required=True,label='Fecha',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}))
-	descripcion=forms.CharField(required=True,label='Descripcion',
-		widget=forms.Textarea(attrs={'required':''}),
-		help_text='Ingrese una descripcion ej: saco para casarse')
-	class Meta():
-		model= NotaMarginal
-		fields=('fecha','descripcion')
 		
 

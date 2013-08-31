@@ -27,7 +27,10 @@ class PersonaManager(models.Manager):
 		return self.model.objects.all()
 
 	def sacerdotes(self):
-		return self.model.objects.filter(profesion='Sacerdote')
+		return self.model.objects.filter(user__groups__name='Sacerdote')
+
+	def feligreses(self):
+		return self.model.objects.filter(user__groups__name='Feligres')
 
 	def username_disponible(self, username):
 		try:

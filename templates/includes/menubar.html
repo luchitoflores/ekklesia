@@ -27,18 +27,21 @@
 			<div class='pull-right'>
 				<ul class="nav pull-right">
 					{% if user.is_authenticated%}
-
-					<li><a href="">Bienvenido/a, {{ user.first_name }} {{ user.last_name }}.</a></li>
-					<li><a href="{%url 'logout'%}">Cerrar Sesión</a></li>
-
+					<li><a href="">{%if user.get_full_name%}{{ user.get_full_name }}{%else%}{{ user.username }}{%endif%}</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<i class='icon-gear'></i><b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="{%url 'password_change'%}"><i class="icon-key"></i> Cambiar Clave</a></li>
+							<li><a href="{%url 'logout'%}"><i class="icon-power-off"></i> Cerrar Sesión</a></li>
+						</ul>
+					</li>
 					{%else%}
 					<li><a href='/login/'>Iniciar Sesión</a></li>
-
 					{%endif%}
 				</ul>
-
 			</div>
-
 		</div>
 	</div>
 </div>
@@ -71,18 +74,21 @@
 			<div class='pull-right'>
 				<ul class="nav pull-right">
 					{% if user.is_authenticated%}
-
-					<li><a href="">Bienvenido/a, {{ user.first_name }} {{ user.last_name }}.</a></li>
-					<li><a href="{%url 'logout'%}">Cerrar Sesión</a></li>
-
+					<li><a href="">{%if user.get_full_name%}{{ user.get_full_name }}{%else%}{{ user.username }}{%endif%}</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							<i class='icon-gear'></i><b class="caret"></b>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="{%url 'password_change'%}"><i class="icon-key"></i> Cambiar Clave</a></li>
+							<li><a href="{%url 'logout'%}"><i class="icon-power-off"></i> Cerrar Sesión</a></li>
+						</ul>
+					</li>
 					{%else%}
 					<li><a href='/login/'>Iniciar Sesión</a></li>
-
 					{%endif%}
 				</ul>
-
 			</div>
-
 		</div>
 	</div>
 </div>

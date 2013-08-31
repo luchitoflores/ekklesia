@@ -1025,12 +1025,12 @@ class LogListView(ListView):
 
 	def get_queryset(self):
 		try:
-			if (self.user.is_staff):
+			if (self.request.user.is_superuser):
 
-				queryset = LogEntry.objects.filter(user=1)
+				queryset = LogEntry.objects.all()
 				return queryset
 			else:
-				queryset=LogEntry.objects.filter(user=self.user)
+				queryset=LogEntry.objects.filter(user=self.request.user)
 				return queryset
 
 		except: 

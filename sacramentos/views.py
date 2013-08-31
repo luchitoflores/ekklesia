@@ -15,6 +15,10 @@ from django.shortcuts import render,get_object_or_404
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
+# Para los logs
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
+from django.contrib.contenttypes.models import ContentType
+# 
 from ho import pisa
 import StringIO 
 import cgi
@@ -41,6 +45,9 @@ from .forms import (
 
 from ciudades.forms import DireccionForm
 from ciudades.models import Canton, Provincia, Parroquia as ParroquiaCivil
+
+
+
 
 
 
@@ -210,6 +217,13 @@ def libro_create_view(request):
 				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
 						libro.save()
+						LogEntry.objects.log_action(
+            			user_id=request.user.id,
+            			content_type_id=ContentType.objects.get_for_model(libro).pk,
+            			object_id=libro.id,
+            			object_repr=unicode(libro.tipo_libro),
+            			action_flag=ADDITION,
+            			change_message=libro)
 						messages.success(request, 'Creado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
@@ -220,6 +234,13 @@ def libro_create_view(request):
 				elif(estado != consulta.estado and tipo==consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
 						libro.save()
+						LogEntry.objects.log_action(
+            			user_id=request.user.id,
+            			content_type_id=ContentType.objects.get_for_model(libro).pk,
+            			object_id=libro.id,
+            			object_repr=unicode(libro.tipo_libro),
+            			action_flag=ADDITION,
+            			change_message=libro)
 						messages.success(request, 'Creado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
@@ -235,6 +256,13 @@ def libro_create_view(request):
 
 			except ObjectDoesNotExist:
 				libro.save()
+				LogEntry.objects.log_action(
+            			user_id=request.user.id,
+            			content_type_id=ContentType.objects.get_for_model(libro).pk,
+            			object_id=libro.id,
+            			object_repr=unicode(libro.tipo_libro),
+            			action_flag=ADDITION,
+            			change_message=libro)
 				messages.success(request, 'Creado exitosamente')
 				return HttpResponseRedirect('/libro')
 				
@@ -273,6 +301,13 @@ def libro_update_view(request,pk):
 					if libro.estado == consulta.estado:
 						if libro.fecha_cierre_mayor():
 							libro.save()
+							LogEntry.objects.log_action(
+            				user_id=request.user.id,
+            				content_type_id=ContentType.objects.get_for_model(libro).pk,
+            				object_id=libro.id,
+            				object_repr=unicode(libro.tipo_libro),
+            				action_flag=CHANGE,
+            				change_message='se modifico el libro')
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -283,6 +318,13 @@ def libro_update_view(request,pk):
 					else:
 						if libro.fecha_cierre_mayor():
 							libro.save()
+							LogEntry.objects.log_action(
+            				user_id=request.user.id,
+            				content_type_id=ContentType.objects.get_for_model(libro).pk,
+            				object_id=libro.id,
+            				object_repr=unicode(libro.tipo_libro),
+            				action_flag=CHANGE,
+            				change_message='se modifico el libro')
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -294,6 +336,13 @@ def libro_update_view(request,pk):
 					if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 						if libro.fecha_cierre_mayor():
 							libro.save()
+							LogEntry.objects.log_action(
+            				user_id=request.user.id,
+            				content_type_id=ContentType.objects.get_for_model(libro).pk,
+            				object_id=libro.id,
+            				object_repr=unicode(libro.tipo_libro),
+            				action_flag=CHANGE,
+            				change_message='se modifico el libro')
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -304,6 +353,13 @@ def libro_update_view(request,pk):
 					elif(estado != consulta.estado and tipo==consulta.tipo_libro):
 						if libro.fecha_cierre_mayor():
 							libro.save()
+							LogEntry.objects.log_action(
+            				user_id=request.user.id,
+            				content_type_id=ContentType.objects.get_for_model(libro).pk,
+            				object_id=libro.id,
+            				object_repr=unicode(libro.tipo_libro),
+            				action_flag=CHANGE,
+            				change_message='se modifico el libro')
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -319,6 +375,13 @@ def libro_update_view(request,pk):
 
 			except ObjectDoesNotExist:
 				libro.save()
+				LogEntry.objects.log_action(
+					user_id=request.user.id,
+            		content_type_id=ContentType.objects.get_for_model(libro).pk,
+            		object_id=libro.id,
+            		object_repr=unicode(libro.tipo_libro),
+            		action_flag=CHANGE,
+            		change_message='se modifico el libro')
 				messages.success(request, 'Actualizado exitosamente')
 				return HttpResponseRedirect('/libro')
 				
@@ -382,13 +445,34 @@ def matrimonio_create_view(request):
 				novio.estado_civil='c'
 				novia.estado_civil='c'
 				novio.save()
+				LogEntry.objects.log_action(
+					user_id=request.user.id,
+            		content_type_id=ContentType.objects.get_for_model(novio).pk,
+            		object_id=novio.id,
+            		object_repr=unicode(novio),
+            		action_flag=ADDITION,
+            		change_message='Se creo novio')
 				novia.save()
+				LogEntry.objects.log_action(
+					user_id=request.user.id,
+            		content_type_id=ContentType.objects.get_for_model(novia).pk,
+            		object_id=novia.id,
+            		object_repr=unicode(novia),
+            		action_flag=ADDITION,
+            		change_message='Se creo novia')
 				matrimonio.novio=novio
 				matrimonio.novia=novia
 				parroquia = AsignacionParroquia.objects.get(
 						persona__user=request.user,estado=True).parroquia
 				matrimonio.parroquia = parroquia
 				matrimonio.save()
+				LogEntry.objects.log_action(
+					user_id=request.user.id,
+            		content_type_id=ContentType.objects.get_for_model(matrimonio).pk,
+            		object_id=matrimonio.id,
+            		object_repr=unicode(matrimonio),
+            		action_flag=ADDITION,
+            		change_message='Se creo matrimonio')
 				messages.success(request,'Creado exitosamente')
 				return HttpResponseRedirect('/matrimonio')
 				
@@ -420,6 +504,13 @@ def matrimonio_update_view(request,pk):
 		form_matrimonio = MatrimonioFormEditar(usuario,request.POST,instance=matrimonio)
 		if form_matrimonio.is_valid():
 			form_matrimonio.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(matrimonio).pk,
+            	object_id=matrimonio.id,
+            	object_repr=unicode(matrimonio),
+            	action_flag=CHANGE,
+            	change_message='Se modifico matrimonio')
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/matrimonio')
 		else:
@@ -470,6 +561,14 @@ def bautismo_create_view(request):
 				persona__user=request.user,estado=True).parroquia
 			bautismo.parroquia = parroquia
 			bautismo.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(bautismo).pk,
+            	object_id=bautismo.id,
+            	object_repr=unicode(bautismo),
+            	action_flag=ADDITION,
+            	change_message='Se creo bautismo')
+			
 			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/bautismo')
 		else:
@@ -480,6 +579,7 @@ def bautismo_create_view(request):
 		# form_nota=NotaMarginalForm()
 	ctx={'formBautismo':formBautismo}
 	return render (request,'bautismo/bautismo_form.html',ctx)
+
 
 def mostrar():
 
@@ -502,6 +602,13 @@ def bautismo_update_view(request,pk):
 		# form_nota=NotaMarginalForm(request.POST,instance=nota)
 		if bautismo_form.is_valid():
 			bautismo_form.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(bautismo).pk,
+            	object_id=bautismo.id,
+            	object_repr=unicode(bautismo),
+            	action_flag=CHANGE,
+            	change_message='Se Modifico bautismo')
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/bautismo')
 		else:
@@ -556,6 +663,13 @@ def eucaristia_create_view(request):
 				persona__user=request.user,estado=True).parroquia
 			eucaristia.parroquia = parroquia
 			eucaristia.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(eucaristia).pk,
+            	object_id=eucaristia.id,
+            	object_repr=unicode(eucaristia),
+            	action_flag=ADDITION,
+            	change_message='Se creo eucaristia')
 			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/eucaristia')
 		else:
@@ -579,6 +693,13 @@ def eucaristia_update_view(request,pk):
 		form_eucaristia=EucaristiaFormEditar(usuario,request.POST,instance=eucaristia)
 		if(form_eucaristia.is_valid()):
 			form_eucaristia.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(eucaristia).pk,
+            	object_id=eucaristia.id,
+            	object_repr=unicode(eucaristia),
+            	action_flag=CHANGE,
+            	change_message='Se modifico eucaristia')
 			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/eucaristia')
 		else:
@@ -621,6 +742,13 @@ def confirmacion_create_view(request):
 				persona__user=request.user,estado=True).parroquia
 			confirmacion.parroquia = parroquia
 			confirmacion.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(confirmacion).pk,
+            	object_id=confirmacion.id,
+            	object_repr=unicode(confirmacion),
+            	action_flag=ADDITION,
+            	change_message='Se creo confirmacion')
 			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/confirmacion')
 		else:
@@ -646,6 +774,13 @@ def confirmacion_update_view(request,pk):
 		form_confirmacion=ConfirmacionFormEditar(usuario,request.POST,instance=confirmacion)
 		if(form_confirmacion.is_valid()):
 			form_confirmacion.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(confirmacion).pk,
+            	object_id=confirmacion.id,
+            	object_repr=unicode(confirmacion),
+            	action_flag=CHANGE,
+            	change_message='Se modifico confirmacion')
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/confirmacion')
 		else:
@@ -891,7 +1026,25 @@ class AsignarParroquiaList(ListView):
 	template_name = 'parroquia/asignar_parroquia_list.html'
 
 
+# views para los LOGS del ekklesia
 
+class LogListView(ListView):
+	model=LogEntry
+	template_name='log/log_list.html'
+
+	def get_queryset(self):
+		try:
+			if (self.user.is_staff):
+
+				queryset = LogEntry.objects.filter(user=1)
+				return queryset
+			else:
+				queryset=LogEntry.objects.filter(user=self.user)
+				return queryset
+
+		except: 
+			return [];
+	
 
 #Reportes
 

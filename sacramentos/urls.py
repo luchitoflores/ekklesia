@@ -16,6 +16,7 @@ from .views import (
 	parroquia_create_view, parroquia_update_view, ParroquiaListView,
 	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
 	intencion_create_view, IntencionListView, IntencionUpdateView,
+	LogListView,
 	)
 from .rest import ParroquiaResource
 
@@ -118,4 +119,8 @@ urlpatterns = patterns('',
 
 	url(r'^api/datatables/$', 'sacramentos.rest.data_tables'),
 	url(r'^datatables/$', TemplateView.as_view(template_name="data_tables.html")), 
+
+	# urls de los logs de ekklesia
+	url(r'^log/$', LogListView.as_view(), name='log_list'),
+
 	)

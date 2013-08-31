@@ -1,0 +1,32 @@
+{%extends 'base.html'%}
+{%block title%}Lista de Parroquias Eclesiásticas{%endblock%}
+{%block content_title%}
+Lista de Parroquias Eclesiásticas
+{%endblock%}
+
+{%block content%}
+<table id='id_table_log' class='table table-bordered table-striped'>
+	<thead>
+		<tr>
+			<th>Usuario</th>
+			<th>Objeto</th>
+			<th>Transaccion</th>
+			<th>Mensaje</th>
+		</tr>
+	</thead>
+	<tbody>
+
+		{%for o in object_list%}
+		<tr>
+			<td>{{o.user}}</td>
+			<td>{{o.object_repr}}</td>
+			<td>{{o.action_flag}}</td>
+			<td>{{o.change_message}}</td>
+		</tr>
+		{%endfor%}
+	</tbody>
+</table>
+
+
+
+{%endblock%}

@@ -421,16 +421,14 @@ class Confirmacion(Sacramento):
 
 
 class Matrimonio(Sacramento):
-	novio=models.OneToOneField(PerfilUsuario, related_name='Novio',
+	novio=models.ForeignKey(PerfilUsuario, related_name='Novio',
 		help_text='Seleccione un novio')
-	novia=models.OneToOneField(PerfilUsuario, related_name='Novia',
+	novia=models.ForeignKey(PerfilUsuario, related_name='Novia',
 		help_text='Seleccione una novia')
 	testigo_novio = models.CharField(max_length=200,
 		help_text='Nombre de testigo ej: Pablo Robles')
-	testigo_novia = models.CharField(max_length=200,
-		help_text='Nombre de testiga ej:Fernanda Pincay')
-	
-		
+	testigo_novia = models.CharField(max_length=200,help_text='Nombre de testiga ej:Fernanda Pincay')
+    
 
 class NotaMarginal(TimeStampedModel):
 	fecha = models.DateField()

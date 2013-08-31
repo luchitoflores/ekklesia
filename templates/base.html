@@ -53,35 +53,38 @@
 			<div class="row-fluid">
 				<div class="span12">
 					
-						<div class="span10 offset1">
-							<h1>{% block content_title %}{% endblock %}</h1>
-						</div>
+					<div class="span10 offset1">
+						<h1>{% block content_title %}{% endblock %}</h1>
+					</div>
 					
 				</div>
 			</div>
 		</div>
 	</header>
 	
-	<div id="id_messages">
-		<aside>
-			<div>
-				{%block messages%}
-				{% if messages%}
-				{%for message in messages%}
-				<div {% if message.tags %}class="alert alert-{{message.tags}}"{% endif %}>
-					<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
-					<img {% if message.tags %}src="/static/img/{{message.tags}}.png" {% endif %} alt=""> {{message}}
-				</div>
-				{%endfor%}
-				{%endif%}
-				{%endblock%}
-			</div>
-		</aside>
-	</div>
-
 	<div class="container" id='id_container'>
 		<div class="row">
 			<div class="span10 offset1">
+
+				<!-- Para mostrar mensajes del sistema-->
+				<div id="id_messages">
+					<aside>
+						<div>
+							{%block messages%}
+							{% if messages%}
+							{%for message in messages%}
+							<div {% if message.tags %}class="alert alert-{{message.tags}}"{% endif %}>
+								<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>
+								<img {% if message.tags %}src="/static/img/{{message.tags}}.png" {% endif %} alt=""> {{message}}
+							</div>
+							{%endfor%}
+							{%endif%}
+							{%endblock%}
+						</div>
+					</aside>
+				</div>
+
+
 				<div id='id_content'>
 					<article>
 						{%block content%}

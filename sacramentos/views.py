@@ -42,55 +42,6 @@ from .forms import (
 from ciudades.forms import DireccionForm
 from ciudades.models import Canton, Provincia, Parroquia as ParroquiaCivil
 
-
-
-# def usuarioCreateView(request):
-# 	if request.is_ajax():
-# 		if request.method == 'POST':
-# 			valido = False
-# 			usuario_form = UsuarioForm(request.POST)
-# 			perfil_form = PerfilUsuarioForm(request.POST)
-# 			if usuario_form.is_valid() and perfil_form.is_valid():
-# 				valido = True
-# 				usuario = usuario_form.save(commit=False)
-# 				perfil = perfil_form.save(commit=False)
-# 				usuario.username = '%s%s%s' %(usuario.first_name, usuario.last_name, perfil.dni)
-# 				usuario.save()
-# 				perfil.user = usuario
-# 				perfil.save()
-# 				ctx = {'valido': valido}
-				
-
-# 			else:
-# 				errores_usuario = usuario_form.errors
-# 				errores_perfil =  perfil_form.errors
-# 				ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
-
-# 			return HttpResponse(json.dumps(ctx), content_type='application/json')
-# 	else:
-# 		usuario_form = UsuarioForm()
-# 		perfil_form = PerfilUsuarioForm()
-# 		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
-# 		return render (request, 'usuario/usuario_form.html', ctx)
-
-
-def crear_username(username):
-	users =  User.objects.filter(username__startswith='admin').order_by('-username')[0]
-	# for i
-	# valor_original = user_name_original
-	# username = user_name
-	# try:
-	# 	usuario = User.objects.get(username=user_name)
-	# 	username = user_name_original + str(i)
-	# 	print '%s: %s' % ('Username', username)
-	# 	contador = int(i) + int(1)
-	# 	print type(contador)
-	# 	print u'%s %s' %('Contador: ', contador)
-	# 	crear_username(valor_original, username, contador)
-	# except:
-	# 	return username
-	# return username
-
 @login_required
 def usuarioCreateView(request):
 	if request.method == 'POST':
@@ -183,6 +134,7 @@ class UsuarioListView(ListView):
 	model=User
 	model=PerfilUsuario
 	template_name="usuario/usuario_list.html"
+	queryset = PerfilUsuario.objects.feligreses()
 
 
 
@@ -784,7 +736,7 @@ def sacerdote_create_view(request):
 		form_sacerdote = SacerdoteForm(request.POST)
 		form_usuario = UsuarioForm(request.POST)
 		if form_sacerdote.is_valid() and form_usuario.is_valid():
-			sacerdotes, created = Group.objects.get_or_create(name='Sacerdotes')
+			sacerdotes, created = Group.objects.get_or_create(name='Sacerdote')
 			usuario = form_usuario.save(commit= False) 
 			sacerdote = form_sacerdote.save(commit=False)
 			usuario.username= sacerdote.crear_username(usuario.first_name, usuario.last_name)

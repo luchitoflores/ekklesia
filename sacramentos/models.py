@@ -328,9 +328,13 @@ class PerfilUsuario(TimeStampedModel):
     
 
     def crear_username(self, nombres, apellidos):
-    	nombres = nombres.lower().split()
-    	apellidos = apellidos.lower().split()
-    	username = u'%s%s'% (nombres[0][0],apellidos[0])
+        import unicodedata
+        nombres = ''.join((c for c in unicodedata.normalize('NFD', unicode(nombres)) if unicodedata.category(c) != 'Mn'))
+        apellidos = ''.join((c for c in unicodedata.normalize('NFD', unicode(apellidos)) if unicodedata.category(c) != 'Mn'))
+        nombres = nombres.lower().split()
+        apellidos = apellidos.lower().split()
+        # s = ''.join((c for c in unicodedata.normalize('NFD',unicode(cadena)) if unicodedata.category(c) != 'Mn'))
+        username = u'%s%s'% (nombres[0][0],apellidos[0])
             # username = u'%s%s'% (nombres,apellidos)
     	print username
     	user_name = PerfilUsuario.objects.username_disponible(username)

@@ -215,8 +215,7 @@ def libro_create_view(request):
 					else:
 						messages.info(request,'La fecha de cierre no puede ser menor'+
 						' o igual a fecha de apertura')
-						# messages.add_message(request,messages.WARNING,
-						# {'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+										
 
 				elif(estado != consulta.estado and tipo==consulta.tipo_libro):
 					if libro.fecha_cierre_mayor():
@@ -226,8 +225,7 @@ def libro_create_view(request):
 					else:
 						messages.info(request,'La fecha de cierre no puede ser menor'+
 						' o igual a fecha de apertura')
-						# messages.add_message(request,messages.WARNING,
-						# {'Fecha':'La fecha de cierre no puede ser menor o igual a fecha de apertura'})
+						
 				else:
 
 					messages.info(request,'Ya existe un libro abierto, cierrelo '+
@@ -270,23 +268,56 @@ def libro_update_view(request,pk):
 
 			try:
 
-				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,
-					parroquia=parroquia)
-				
-				if(estado != consulta.estado and tipo==consulta.tipo_libro):
-					if libro.fecha_cierre_mayor():
-						libro.parroquia = parroquia
-						libro.save()
-						return HttpResponseRedirect('/libro')
+				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,parroquia=parroquia)
+				if (libro.id == consulta.id):
+					if libro.estado == consulta.estado:
+						if libro.fecha_cierre_mayor():
+							libro.save()
+							messages.success(request, 'Actualizado exitosamente')
+							return HttpResponseRedirect('/libro')
+						else:
+							messages.info(request,'La fecha de cierre no puede ser menor'+
+							' o igual a fecha de apertura')
+						
+
 					else:
-						messages.info(request,'La fecha de cierre no puede ser menor'+
-						' o igual a fecha de apertura')
+						if libro.fecha_cierre_mayor():
+							libro.save()
+							messages.success(request, 'Actualizado exitosamente')
+							return HttpResponseRedirect('/libro')
+						else:
+							messages.info(request,'La fecha de cierre no puede ser menor'+
+							' o igual a fecha de apertura')
 				else:
-					messages.info(request,'Ya existe un libro abierto, cierrelo '+
-						'y vuela a crear')
+
+
+					if(estado != consulta.estado and tipo!=consulta.tipo_libro):
+						if libro.fecha_cierre_mayor():
+							libro.save()
+							messages.success(request, 'Actualizado exitosamente')
+							return HttpResponseRedirect('/libro')
+						else:
+							messages.info(request,'La fecha de cierre no puede ser menor'+
+							' o igual a fecha de apertura')
+											
+
+					elif(estado != consulta.estado and tipo==consulta.tipo_libro):
+						if libro.fecha_cierre_mayor():
+							libro.save()
+							messages.success(request, 'Actualizado exitosamente')
+							return HttpResponseRedirect('/libro')
+						else:
+							messages.info(request,'La fecha de cierre no puede ser menor'+
+							' o igual a fecha de apertura')
+							
+					else:
+
+						messages.info(request,'Ya existe un libro abierto, cierrelo '+
+							'y vuela a crear')
+						# messages.add_message(request,messages.WARNING,
+						# 	{'Libro':'Ya existe un libro abierto, cierrelo y vuela a crear'})
 
 			except ObjectDoesNotExist:
-				libro.parroquia = parroquia
 				libro.save()
 				messages.success(request, 'Actualizado exitosamente')
 				return HttpResponseRedirect('/libro')

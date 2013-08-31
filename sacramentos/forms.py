@@ -11,8 +11,6 @@ from .models import (PerfilUsuario,
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
 					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia)
 
-
-
 class DivErrorList(ErrorList):
 	def __unicode__(self):
 		return self.as_divs()
@@ -99,10 +97,6 @@ class PadreForm(ModelForm):
 			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
 		return data
 
-	# fecha_nacimiento = forms.CharField(label='Fecha de Nacimiento', help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy',
-	# 	widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
-	# lugar_nacimiento = forms.CharField(label='Lugar de Nacimiento', help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
-	
 	class Meta(): 
 		model = PerfilUsuario
 		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
@@ -511,6 +505,19 @@ class MatrimonioFormEditar(ModelForm):
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','celebrante',
 			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
 
+# Forms para Notas Marginals
+class NotaMarginalForm(ModelForm):
+	fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
+		required=True,label='Fecha',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
+	descripcion=forms.CharField(required=True,label='Descripcion',
+		widget=forms.Textarea(attrs={'required':''}),
+		help_text='Ingrese una descripcion ej: saco para casarse')
+	class Meta():
+		model= NotaMarginal
+		fields=('fecha','descripcion')
+
 
 #Forms para Parroquia - Funcionando
 class ParroquiaForm(ModelForm):
@@ -520,13 +527,6 @@ class ParroquiaForm(ModelForm):
 
 #Form para asignar parroquia
 class AsignarParroquiaForm(ModelForm):
-
-
-	# def clean_estado(self):
-	# 	data = self.cleaned['estado']
-	# 	if data:
-	# 		AsignacionParroquia.
-
 	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes()) 
 	class Meta:
 		model = AsignacionParroquia
@@ -534,6 +534,13 @@ class AsignarParroquiaForm(ModelForm):
 		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
 		'fin': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
 		}
+
+#Form para asignar una secretaria a una parroquia
+class AsignarSecretariaForm(ModelForm):
+	persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.none()) 
+	class Meta:
+		model = AsignacionParroquia
+		fields = ('persona', 'parroquia')
 
 
 #Form para Intenciones de Misa - Funcionando
@@ -560,18 +567,5 @@ class IntencionForm(ModelForm):
 		}
 		
 
-# Forms para Notas Marginals
-
-class NotaMarginalForm(ModelForm):
-	fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
-		required=True,label='Fecha',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}))
-	descripcion=forms.CharField(required=True,label='Descripcion',
-		widget=forms.Textarea(attrs={'required':''}),
-		help_text='Ingrese una descripcion ej: saco para casarse')
-	class Meta():
-		model= NotaMarginal
-		fields=('fecha','descripcion')
 		
 

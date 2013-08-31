@@ -50,6 +50,10 @@ ul {
 	list-style-type: none !important;
 }
 
+div.errors {
+	color: red;
+}
+
 #id_container{
 	background: white;
 	color = white;

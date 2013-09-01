@@ -41,6 +41,7 @@ from .forms import (
 	ParroquiaForm, 
 	SacerdoteForm,
 	AsignarParroquiaForm,
+	AsignarSecretariaForm,
 	)
 
 from ciudades.forms import DireccionForm
@@ -977,9 +978,9 @@ class AsignarParroquiaList(ListView):
 
 class AsignarSecretariaCreate(CreateView):
 	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'
+	form_class = AsignarSecretariaForm
+	template_name = 'parroquia/asignar_secretaria_form.html'
+	success_url = '/asignar/secretaria/'
 
 
 	def form_valid(self, form):
@@ -994,9 +995,9 @@ class AsignarSecretariaCreate(CreateView):
 
 class AsignarSecretariaUpdate(UpdateView):
 	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'	
+	form_class = AsignarSecretariaForm
+	template_name = 'parroquia/asignar_secretaria_form.html'
+	success_url = '/asignar/secretaria/'	
 
 	def form_valid(self, form):
 		persona_id = self.request.POST['persona']
@@ -1014,8 +1015,7 @@ class AsignarSecretariaUpdate(UpdateView):
 
 class AsignarSecretariaList(ListView):
 	model = AsignacionParroquia
-	template_name = 'parroquia/asignar_parroquia_list.html'
-
+	template_name = 'parroquia/asignar_secretaria_list.html'
 
 # views para los LOGS del ekklesia
 

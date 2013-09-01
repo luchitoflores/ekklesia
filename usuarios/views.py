@@ -1,40 +1,21 @@
-# *-* coding:utf-8 *-* 
+# -*- coding:utf-8 -*-
 # Create your views here.
 import json
 
-from django.shortcuts import render_to_response, render
-from django.http import HttpResponse, HttpResponseRedirect
-from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordChangeForm
 from django.contrib import messages
-from django.utils.decorators import method_decorator
+from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordChangeForm
+from django.contrib.auth.models import Group, User
+from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render_to_response, render
+from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
-from django.contrib.auth.models import Group, User
 
-def loginajax_view(request):	
-	if request.method == 'POST':
-		exito = False
-		username = request.POST['username']
-		password = request.POST['password']
-		user = authenticate(username=username, password=password)
-		if user is not None and user.is_active:
-			login(request,user)
-			exito = True
-			# return HttpResponseRedirect('/')
-			ctx = {'exito': exito}
-			return HttpResponse(json.dumps(ctx), content_type='application/json')
+from .forms import SendEmailForm
 
-		else:
-			ctx = {'exito': exito}
-			return HttpResponse(json.dumps(ctx), content_type='application/json')
-
-
-	else:
-		exito = False
-		ctx = json.dumps({'exito': exito})
-		return HttpResponse(ctx, content_type="application/json; charset=uft8")
 
 #Login de usuarios sin utilizar ningún formulario preestablecido
 # def login_view(request):
@@ -119,6 +100,35 @@ def change_password_view(request):
 
 	ctx = {'form': form}
 	return render(request, 'change-password.html', ctx)
+
+def send_email_view(request):
+	template_name = 'send_password.html' 
+	success_url = '/login/'
+	if request.method == 'POST':
+		form = SendEmailForm(request.POST)
+		if form.is_valid():
+			email = request.POST.get('email')
+			user = User.objects.get(email=email)
+			nuevo_password = User.objects.make_random_password(length=8, allowed_chars='abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789') 
+			user.set_password(nuevo_password)
+			user.save()
+			subject, from_email, to = 'Recuperación de la contraseña', 'from@server.com', email
+			text_content = u'Su nueva contraseña es: %s Cámbiela por una que ud recuerde fácilmente' % nuevo_password
+			html_content = u'<p>Su nueva contraseña es:  <strong> %s </strong></p><p>Cámbiela por una que ud recuerde fácilmente</p>' % nuevo_password
+			msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
+			msg.attach_alternative(html_content, "text/html")
+			msg.send()
+			return HttpResponseRedirect(success_url)
+		
+		else:
+			ctx = {'form': form}
+			return render(request, template_name, ctx)
+	else:
+		form = SendEmailForm()
+		ctx = {'form': form}
+		return render(request, template_name, ctx)
+
+
 	
 
 class GroupCreate(CreateView):

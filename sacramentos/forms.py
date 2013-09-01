@@ -538,6 +538,12 @@ class AsignarParroquiaForm(ModelForm):
 #Form para asignar una secretaria a una parroquia
 class AsignarSecretariaForm(ModelForm):
 	persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.none()) 
+	# parroquia = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.filter()) 
+	
+	# def __init__(self, *args, **kwargs):
+	# 	super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
+	# 	self.fields['parroquia']=forms.ModelChoiceField(queryset=PerfilUsuario.objects.get(user=self.request.user).parroquias, empty_label='-- Seleccione --',
+
 	class Meta:
 		model = AsignacionParroquia
 		fields = ('persona', 'parroquia')

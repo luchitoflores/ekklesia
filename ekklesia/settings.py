@@ -173,6 +173,13 @@ AUTH_PROFILE_MODULE = 'sacramentos.PerfilUsuario'
 #Sirve para indicar a donde se debe redirigir cada vez que se logue
 LOGIN_REDIRECT_URL = '/home/'
 
+# Configuración para el envío de email
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'floysinternacional@gmail.com'
+EMAIL_HOST_PASSWORD = '13cordova'
+EMAIL_USE_TLS = True
+
 #Sirve para expirar la sesion al cerrar el navegador
 # SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # Para que la sesión expire en una hora

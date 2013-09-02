@@ -199,7 +199,7 @@ class PerfilUsuario(TimeStampedModel):
                     ('LI', 'Liechtenstein'), 
                     ('LT', 'Lituania'), 
                     ('LU', 'Luxemburgo'), 
-                    ('MK', 'Macedonia, Ex-República Yugoslava de'), 
+                    ('MK', 'Macedonia'), 
                     ('MG', 'Madagascar'), 
                     ('MY', 'Malasia'), 
                     ('MW', 'Malawi'), 
@@ -302,7 +302,7 @@ class PerfilUsuario(TimeStampedModel):
 
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='Usuario', null=True, blank=True)
-    dni = models.CharField('Cédula/Pasaporte', max_length=10, null=True, blank=True, help_text='Ingrese un numero de cedula ej:1104688617')
+    dni = models.CharField('Cédula/Pasaporte', max_length=20, null=True, blank=True, help_text='Ingrese un numero de cedula ej:1104688617')
     nacionalidad = models.CharField(max_length=2, help_text='Escoja la nacionalidad. Ej: Ecuador', choices=NACIONALIDAD_CHOICES)
     padre = models.ForeignKey('PerfilUsuario', related_name='Padre', null=True, blank=True, limit_choices_to={'sexo':'m'}, help_text='Presione buscar, si no está en la lista, presione crear')
     madre = models.ForeignKey('PerfilUsuario', related_name='Madre', null=True, blank=True, limit_choices_to={'sexo':'f'}, help_text='Presione buscar, si no está en la lista, presione crear')
@@ -312,6 +312,7 @@ class PerfilUsuario(TimeStampedModel):
 		help_text='Elija el sexo de la persona. Ej: Masculino')
     estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True, help_text='Elija el estado civil. Ej: Soltero/a')
     profesion = models.CharField(max_length=50, null=True, blank=True, help_text='Ingrese la profesión de la persona')
+    celular=models.CharField(max_length=10, blank=True, null=True)
     parroquias = models.ManyToManyField('Parroquia', null=True, blank=True, through='AsignacionParroquia') 
 
     objects = PersonaManager()

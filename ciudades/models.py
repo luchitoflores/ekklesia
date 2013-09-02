@@ -45,7 +45,7 @@ class Direccion(models.Model):
 	canton=models.ForeignKey(Canton)
 	parroquia=models.ForeignKey(Parroquia, related_name='parroquia_civil')
 	telefono=models.CharField(max_length=10, blank=True, null=True)
-	celular=models.CharField(max_length=10, blank=True, null=True)
+	
 
 	def __unicode__(self):
 		return u'%s' % (self.domicilio)

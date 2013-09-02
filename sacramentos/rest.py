@@ -13,7 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from tastypie.resources import ModelResource
 
 # Librerías del proyecto
-from .forms import PerfilUsuarioForm, UsuarioForm, PadreForm,NotaMarginalForm
+from .forms import PerfilUsuarioForm, UsuarioForm, PadreForm,NotaMarginalForm, UsuarioPadreForm
 from .models import (PerfilUsuario,NotaMarginal,Bautismo,Matrimonio,
 	Parroquia)
 
@@ -47,15 +47,15 @@ def padre_create_ajax(request):
 	sexo = request.POST.get('sexo')
 	if request.method == 'POST':
 		respuesta = False
-		usuario_form = UsuarioForm(request.POST)
+		usuario_form = UsuarioPadreForm(request.POST)
 		perfil_form = PadreForm(request.POST)
 		if usuario_form.is_valid() and perfil_form.is_valid():
 			perfil = perfil_form.save(commit=False)
 			usuario = usuario_form.save(commit=False)
 			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
 			usuario.set_password(usuario.username)
-			usuario.save()
 			feligres, created = Group.objects.get_or_create(name='Feligres')
+			usuario.save()
 			usuario.groups.add(feligres)
 			perfil.user = usuario
 			if sexo:

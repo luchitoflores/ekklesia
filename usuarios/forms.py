@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashWidget, ReadOnlyPasswordHashField
-
+from django.core.exceptions import ObjectDoesNotExist
 # from .models import Usuario
 
 # class UserCreationForm(forms.ModelForm):
@@ -40,16 +40,13 @@ class SendEmailForm(forms.Form):
 
 	def clean_email(self):
 		data = self.cleaned_data['email']
-		bandera = False
 		try:
 			user = User.objects.get(email=data)
-			bandera = True
-		except:
-			bandera = False
-
-		if bandera == False:
+			if not user.is_staff:
+				raise forms.ValidationError('Ud no tiene permiso para ingresar al sistema')
+				return data
+		except ObjectDoesNotExist:
 			raise forms.ValidationError('El email ingresado no está asociado a ningún usuario')
-		
-		return data
+			return data
 
 	email = forms.EmailField(help_text='Ingresa tu dirección de correo electrónico ')

@@ -13,8 +13,7 @@ function inicio(){
 	crear_nota_marginal($('#id_form_crear_nota_matrimonio'),'#id_crear_nota_matrimonio','/api/nota_matrimonio/add/');
 	tablas_estilo_bootstrap();
 
-	modelo_tablas('#id_table_log, #id_table_libro, #id_table_feligres,#id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_sacerdotes');
-
+	modelo_tablas('#id_table_log, #id_table_libro, #id_table_feligres, #id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_sacerdotes');
 	campos_con_fechas();
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
@@ -25,6 +24,7 @@ function inicio(){
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
+	verificar_select_padre("#id_padre, #id_madre");
 
 	
 }
@@ -260,11 +260,11 @@ function devolver_campos_de_lista(map,id_male,id_female){
 		var objeto = map[id];
 		if(objeto.sexo =='m'){
 			$(id_male+' option').remove();
-			$(id_male).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+			$(id_male).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
 		} 
 		if (objeto.sexo =='f') {
 			$(id_female+' option').remove();
-			$(id_female).append('<option value='+objeto.id+'>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+			$(id_female).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
 		}
 	});
 }
@@ -451,6 +451,14 @@ function verificar_select_seleccionado(){
 	if($("#id_provincia option:selected").text()!= '-- Seleccione --'){
 		$('#id_canton').prop('disabled', false);
 		$('#id_parroquia').prop('disabled', false);
+	}
+}
+
+function verificar_select_padre(id_etiqueta){
+	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){
+		$(id_etiqueta).prop('disabled', false);
+	} else {
+		$(id_etiqueta).prop('disabled', true);
 	}
 }
 

@@ -57,6 +57,12 @@ Agregar Feligrés
 									{{form_usuario.first_name.help_text}}
 								</div>
 							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_usuario.first_name.errors}}
+								</div>
+							</div>
+							
 						</div>
 						<div class="control-group">
 							{{form_usuario.last_name|label_with_classes:'control-label'}}
@@ -66,6 +72,11 @@ Agregar Feligrés
 							<div class="controls">
 								<div class='help-text'>
 									{{form_usuario.last_name.help_text}}
+								</div>
+							</div>
+							<div class="controls">
+								<div class='errors'>
+									{{form_usuario.last_name.errors}}
 								</div>
 							</div>
 						</div>
@@ -83,15 +94,25 @@ Agregar Feligrés
 											{{form_perfil.sexo.help_text}}
 										</div>
 									</div>
+									<div class="controls">
+										<div class="errors">
+											{{form_perfil.sexo.errors}}
+										</div>
+									</div>
 								</div>
 								<div class="control-group">
 									{{form_perfil.nacionalidad|label_with_classes:'control-label'}}
 									<div class="controls">
 										{{form_perfil.nacionalidad}}
 									</div>
-									<div class="controls help-text">
+									<div class="controls">
 										<div class='help-text'>
 											{{form_perfil.nacionalidad.help_text}}
+										</div>
+									</div>
+									<div class="controls">
+										<div class='errors'>
+											{{form_perfil.nacionalidad.errors}}
 										</div>
 									</div>
 								</div>
@@ -103,6 +124,11 @@ Agregar Feligrés
 									<div class="controls">
 										<div class='help-text'>
 											{{form_perfil.dni.help_text}}
+										</div>
+									</div>
+									<div class="controls">
+										<div class='errors'>
+											{{form_perfil.dni.errors}}
 										</div>
 									</div>
 								</div>
@@ -119,6 +145,11 @@ Agregar Feligrés
 											{{form_perfil.estado_civil.help_text}}
 										</div>
 									</div>
+									<div class="controls">
+										<div class='errors'>
+											{{form_perfil.estado_civil.errors}}
+										</div>
+									</div>
 								</div>
 								<div class="control-group">
 									{{form_perfil.profesion|label_with_classes:'control-label'}}
@@ -128,6 +159,11 @@ Agregar Feligrés
 									<div class="controls">
 										<div class="help-text">
 											{{form_perfil.profesion.help_text}}
+										</div>
+									</div>
+									<div class="controls">
+										<div class="errors">
+											{{form_perfil.profesion.errors}}
 										</div>
 									</div>
 								</div>
@@ -148,6 +184,11 @@ Agregar Feligrés
 									{{form_perfil.fecha_nacimiento.help_text}}
 								</div>
 							</div>
+							<div class="controls">
+								<div class="errors">
+									{{form_perfil.fecha_nacimiento.errors}}
+								</div>
+							</div>
 						</div>
 						<div class="control-group">
 							{{form_perfil.lugar_nacimiento|label_with_classes:'control-label'}}
@@ -157,6 +198,11 @@ Agregar Feligrés
 							<div class="controls">
 								<div class="help-text">
 									{{form_perfil.lugar_nacimiento.help_text}}
+								</div>
+							</div>
+							<div class="controls">
+								<div class="errors">
+									{{form_perfil.lugar_nacimiento.errors}}
 								</div>
 							</div>
 						</div>
@@ -175,6 +221,11 @@ Agregar Feligrés
 									{{form_perfil.padre.help_text}}
 								</div>
 							</div>
+							<div class="controls">
+								<div class="errors">
+									{{form_perfil.padre.errors}}
+								</div>
+							</div>
 						</div>
 						<div class="control-group">
 							{{form_perfil.madre|label_with_classes:'control-label'}}
@@ -188,8 +239,52 @@ Agregar Feligrés
 									{{form_perfil.madre.help_text}}
 								</div>
 							</div>
+							<div class="controls">
+								<div class="errors">
+									{{form_perfil.madre.errors}}
+								</div>
+							</div>
 						</div>
 					</fieldset>
+
+					<fieldset class="scheduler-border">
+						<legend class="scheduler-border">Datos de Contacto</legend>
+						<div class="control-group">
+							{{form_usuario.email|label_with_classes:'control-label'}}
+							<div class='controls'>
+								{{form_usuario.email}}
+							</div>
+							<div class='controls'>
+								<div class="help-text">
+									{{form_usuario.email.help_text}}
+								</div>
+							</div>
+							<div class='controls'>
+								<div class="errors">
+									{{form_usuario.email.errors}}
+								</div>
+							</div>
+							
+						</div> 
+
+						<div class="control-group">
+							{{form_perfil.celular|label_with_classes:'control-label'}}
+							<div class='controls'>
+								{{form_perfil.celular}}
+							</div>
+							<div class="controls">
+								<div class="help-text">
+									{{form_perfil.celular.help_text}}
+								</div>
+							</div>
+							<div class="controls">
+								<div class="errors">
+									{{form_perfil.celular.errors}}
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					
 
 					<fieldset class="scheduler-border">
 						<legend class="scheduler-border">Grupos de Usuario</legend>

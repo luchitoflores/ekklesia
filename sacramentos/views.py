@@ -30,7 +30,7 @@ from .models import (PerfilUsuario,
 	)
 
 from .forms import (
-	UsuarioForm, PerfilUsuarioForm, PadreForm,
+	UsuarioForm, PerfilUsuarioForm, PadreForm, UsuarioPadreForm,
 	MatrimonioForm,MatrimonioFormEditar,
 	BautismoForm,BautismoFormEditar,
 	EucaristiaForm,EucaristiaFormEditar,
@@ -41,21 +41,22 @@ from .forms import (
 	ParroquiaForm, 
 	SacerdoteForm,
 	AsignarParroquiaForm,
+	AsignarSecretariaForm,
 	)
 
 from ciudades.forms import DireccionForm
 from ciudades.models import Canton, Provincia, Parroquia as ParroquiaCivil
 
 
-@login_required
+@login_required(login_url='/login/')
 def usuarioCreateView(request):
 	if request.method == 'POST':
-		valido = False
 		form_usuario = UsuarioForm(request.POST)
-		form_perfil = PerfilUsuarioForm(request.POST, error_class=DivErrorList)
+		padre = PerfilUsuario.objects.padre()
+		madre =  PerfilUsuario.objects.madre()
+		form_perfil = PerfilUsuarioForm(padre, madre, request.POST)
 		if form_usuario.is_valid() and form_perfil.is_valid():
 			feligres, created = Group.objects.get_or_create(name='Feligres')
-			valido = True
 			usuario = form_usuario.save(commit=False)
 			perfil = form_perfil.save(commit=False)
 			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
@@ -64,47 +65,90 @@ def usuarioCreateView(request):
 			usuario.groups.add(feligres)
 			perfil.user = usuario
 			perfil.save()
-			ctx = {'valido': valido}
 			return HttpResponseRedirect('/usuario')
 			
 		else:
-			errores_usuario = form_usuario.errors
-			errores_perfil =  form_perfil.errors
-			messages.info(request, errores_usuario)
-			messages.info(request, errores_perfil)
-			# ctx = {'valido': valido, 'errores_usuario':errores_usuario, 'errores_perfil': errores_perfil}
-			ctx = {'form_usuario': form_usuario, 'form_perfil': form_perfil}
+			messages.error(request, 'Uno o más datos no son válidos')
+			ctx = {'form_usuario': form_usuario , 'form_perfil': form_perfil}
 			return render (request, 'usuario/usuario_form.html', ctx)
 	else:
-		form_usuario = UsuarioForm(label_suffix=':', error_class=DivErrorList)
+		form_usuario = UsuarioForm()
 		form_perfil = PerfilUsuarioForm(label_suffix=':')
 		# form_perfil.fields['madre'] = forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), required=False, empty_label='--- Seleccione ---')
 		# form_perfil.fields['padre'] = forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), required=False, empty_label='--- Seleccione ---')
 		ctx = {'form_usuario': form_usuario, 'form_perfil': form_perfil}
 		return render (request, 'usuario/usuario_form.html', ctx)
 
+@login_required(login_url='/login/')
 def edit_usuario_view(request,pk):
 	perfil= get_object_or_404(PerfilUsuario, pk=pk)
 	user= perfil.user	
 	if request.method == 'POST':
+		padre = PerfilUsuario.objects.padre()
+		madre =  PerfilUsuario.objects.madre()
 		form_usuario = UsuarioForm(request.POST,instance=user)
-		form_perfil = PerfilUsuarioForm(request.POST,instance=perfil)
+		form_perfil = PerfilUsuarioForm(padre, madre, request.POST,instance=perfil)
 		if form_usuario.is_valid() and form_perfil.is_valid():
 			form_usuario.save()
 			form_perfil.save()
 			return HttpResponseRedirect('/usuario')
 		else:
-			messages.info(request, 'Errores al actualizar')
-			ctx = {'form_usuario': form_usuario,'form_perfil':form_perfil, 'perfil':perfil}
+			if perfil.padre and perfil.madre:
+				padre = PerfilUsuario.objects.filter(user__id=perfil.padre.user.id)
+				madre = PerfilUsuario.objects.filter(user__id=perfil.madre.user.id)
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST,instance=perfil)
+			elif perfil.padre and not perfil.madre:
+				padre = PerfilUsuario.objects.filter(user__id=perfil.padre.user.id)
+				madre = PerfilUsuario.objects.none()
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST,instance=perfil)
+			elif not perfil.padre and perfil.madre:
+				madre = PerfilUsuario.objects.filter(user__id=perfil.madre.user.id)
+				padre= PerfilUsuario.objects.none()
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST,instance=perfil)
 
+			else:
+				padre = PerfilUsuario.objects.none()
+				madre = PerfilUsuario.objects.none()
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST,instance=perfil)
+			
+			messages.error(request, 'Uno o más campos no son válidos')
+			ctx = {'form_usuario': form_usuario,'form_perfil':form_perfil, 'perfil':perfil}
+			return render(request, 'usuario/usuario_form.html', ctx)
 
 	else:
+		if perfil.padre and perfil.madre:
+			padre = PerfilUsuario.objects.filter(user__id=perfil.padre.user.id)
+			madre = PerfilUsuario.objects.filter(user__id=perfil.madre.user.id)
+			form_perfil = PerfilUsuarioForm(padre, madre, instance=perfil)
+		elif perfil.padre and not perfil.madre:
+			padre = PerfilUsuario.objects.filter(user__id=perfil.padre.user.id)
+			form_perfil = PerfilUsuarioForm(padre, instance=perfil)
+		elif not perfil.padre and perfil.madre:
+			madre = PerfilUsuario.objects.filter(user__id=perfil.madre.user.id)
+			padre= PerfilUsuario.objects.none()
+			form_perfil = PerfilUsuarioForm(padre, madre, instance=perfil)
+
+		else:
+			form_perfil = PerfilUsuarioForm(instance=perfil)
+
 		form_usuario = UsuarioForm(instance=user)
-		form_perfil = PerfilUsuarioForm(instance=perfil)
+		
 									
 	ctx = {'form_usuario': form_usuario,'form_perfil':form_perfil, 'perfil':perfil}
 	return render(request, 'usuario/usuario_form.html', ctx)
 
+class UsuarioListView(ListView):
+	model=User
+	model=PerfilUsuario
+	template_name="usuario/usuario_list.html"
+	queryset = PerfilUsuario.objects.feligreses()
+
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(UsuarioListView, self).dispatch(*args, **kwargs)
+
+		
+@login_required
 def padre_create_view(request):
 	if request.is_ajax():
 		if request.method == 'POST':
@@ -119,27 +163,97 @@ def padre_create_view(request):
 	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_padre_form}
 	return render(request, 'usuario/padre_form.html', ctx) 
 
+@login_required
 def feligres_create_view(request):
-	
+	if request.method == 'POST':
+		usuario_form = UsuarioPadreForm(request.POST)
+		perfil_form = PerfilUsuarioForm(request.POST)
+		if usuario_form.is_valid() and perfil_form.is_valid():
+			pass
+	else: 
+		usuario_form = UsuarioForm()
+		perfil_form = PerfilUsuarioForm()
+
+	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
+	return render(request, 'usuario/feligres.html', ctx) 
+
+
+@login_required(login_url='/login/')
+@permission_required('sacramentos.can_change', login_url='/login/')
+def sacerdote_create_view(request):
+	template_name = 'usuario/sacerdote_form.html' 
+	success_url = '/sacerdote/'
+	if request.method == 'POST':
+		form_sacerdote = SacerdoteForm(request.POST)
+		form_usuario = UsuarioForm(request.POST)
+		if form_sacerdote.is_valid() and form_usuario.is_valid():
+			sacerdotes, created = Group.objects.get_or_create(name='Sacerdote')
+			usuario = form_usuario.save(commit= False) 
+			sacerdote = form_sacerdote.save(commit=False)
+			usuario.username= sacerdote.crear_username(usuario.first_name, usuario.last_name)
+			usuario.set_password(usuario.username)
+			usuario.save()
+			usuario.groups.add(sacerdotes)
+			sacerdote.user =usuario
+			sacerdote.sexo = 'm'
+			sacerdote.profesion = 'Sacerdote'
+			sacerdote.estado_civil = 's'
+			sacerdote.save()
+			return HttpResponseRedirect(success_url)
+
+		else:
+			messages.error(request, 'Uno o más datos son inválidos')
+			ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario}
+			return render(request, template_name, ctx)
+
+	else:
+		form_sacerdote = SacerdoteForm()
+		form_usuario = UsuarioForm()
+		ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario}
+		return render(request, template_name, ctx)
+
+@login_required(login_url='/login/')
+def sacerdote_update_view(request, pk):
+	sacerdote = get_object_or_404(PerfilUsuario, pk=pk)
+	if sacerdote.profesion != 'Sacerdote':
+		raise Http404
+	else: 
+		template_name = 'usuario/sacerdote_form.html' 
+		success_url = '/sacerdote/'
 		if request.method == 'POST':
-			usuario_form = UsuarioForm(request.POST)
-			perfil_form = PerfilUsuarioForm(request.POST)
-			if usuario_form.is_valid() and perfil_form.is_valid():
-				pass
-		else: 
-			usuario_form = UsuarioForm()
-			perfil_form = PerfilUsuarioForm()
+			form_sacerdote = SacerdoteForm(request.POST, instance=sacerdote)
+			form_usuario = UsuarioForm(request.POST, instance=sacerdote.user)
+			if form_sacerdote.is_valid() and form_usuario.is_valid():
+				usuario = form_usuario.save() 
+				sacerdote = form_sacerdote.save()
+				# usuario.save()
+				# sacerdote.save()
+				return HttpResponseRedirect(success_url)
 
-		ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
-		return render(request, 'usuario/feligres.html', ctx) 
+			else:
+				messages.error(request, 'Uno o más datos son inválidos')
+				ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
+				return render(request, template_name, ctx)
+
+		else:
+			form_sacerdote = SacerdoteForm(instance=sacerdote)
+			form_usuario = UsuarioForm(instance=sacerdote.user)
+			ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
+			return render(request, template_name, ctx)
+
+
+class SacerdoteListView(ListView):
+	model = PerfilUsuario
+	template_name = 'usuario/sacerdote_list.html'
+	queryset = PerfilUsuario.objects.sacerdotes()
+
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('sacramentos.can_change', login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(SacerdoteListView, self).dispatch(*args, **kwargs)
 
 
 
-class UsuarioListView(ListView):
-	model=User
-	model=PerfilUsuario
-	template_name="usuario/usuario_list.html"
-	queryset = PerfilUsuario.objects.feligreses()
 
 
 
@@ -804,6 +918,7 @@ class ConfirmacionListView(ListView):
 
 
 #Vistas para crear una parroquia
+@login_required(login_url='/login/')
 def parroquia_create_view(request):
 	template_name = 'parroquia/parroquia_form.html'
 	success_url = '/parroquia/'
@@ -829,13 +944,7 @@ def parroquia_create_view(request):
 		ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
 		return render(request, template_name, ctx)
 
-	
-
-class ParroquiaListView(ListView):
-	model= Parroquia
-	template_name = 'parroquia/parroquia_list.html'
-
-
+@login_required(login_url='/login/')
 def parroquia_update_view(request, pk):
 	template_name = 'parroquia/parroquia_form.html'
 	success_url = '/parroquia/'
@@ -867,10 +976,12 @@ def parroquia_update_view(request, pk):
 		ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
 		return render(request, template_name, ctx)
 
+class ParroquiaListView(ListView):
+	model= Parroquia
+	template_name = 'parroquia/parroquia_list.html'
 
 
-
-
+@login_required(login_url='/login/')
 def intencion_create_view(request):
 	template_name = 'intencion/intencion_form.html'
 	success_url = '/intencion/'
@@ -906,81 +1017,6 @@ class IntencionUpdateView(UpdateView):
 	success_url = '/intencion/'
 	context_object_name = 'form_intencion'
 
-@login_required(login_url='/login/')
-@permission_required('sacramentos.can_change', login_url='/login/')
-# @staff_member_required
-# @user_passes_test(lambda u: u.is_staff)
-def sacerdote_create_view(request):
-	template_name = 'usuario/sacerdote_form.html' 
-	success_url = '/sacerdote/'
-	if request.method == 'POST':
-		form_sacerdote = SacerdoteForm(request.POST)
-		form_usuario = UsuarioForm(request.POST)
-		if form_sacerdote.is_valid() and form_usuario.is_valid():
-			sacerdotes, created = Group.objects.get_or_create(name='Sacerdote')
-			usuario = form_usuario.save(commit= False) 
-			sacerdote = form_sacerdote.save(commit=False)
-			usuario.username= sacerdote.crear_username(usuario.first_name, usuario.last_name)
-			usuario.set_password(usuario.username)
-			usuario.save()
-			usuario.groups.add(sacerdotes)
-			sacerdote.user =usuario
-			sacerdote.sexo = 'm'
-			sacerdote.profesion = 'Sacerdote'
-			estado_civil = 's'
-			sacerdote.save()
-			return HttpResponseRedirect(success_url)
-
-		else:
-			messages.error(request, 'Uno o más datos son inválidos')
-			ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario}
-			return render(request, template_name, ctx)
-
-	else:
-		form_sacerdote = SacerdoteForm()
-		form_usuario = UsuarioForm()
-		ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario}
-		return render(request, template_name, ctx)
-
-def sacerdote_update_view(request, pk):
-	sacerdote = get_object_or_404(PerfilUsuario, pk=pk)
-	if sacerdote.profesion != 'Sacerdote':
-		raise Http404
-	else: 
-		template_name = 'usuario/sacerdote_form.html' 
-		success_url = '/sacerdote/'
-		if request.method == 'POST':
-			form_sacerdote = SacerdoteForm(request.POST, instance=sacerdote)
-			form_usuario = UsuarioForm(request.POST, instance=sacerdote.user)
-			if form_sacerdote.is_valid() and form_usuario.is_valid():
-				usuario = form_usuario.save() 
-				sacerdote = form_sacerdote.save()
-				# usuario.save()
-				# sacerdote.save()
-				return HttpResponseRedirect(success_url)
-
-			else:
-				messages.error(request, 'Uno o más datos son inválidos')
-				ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
-				return render(request, template_name, ctx)
-
-		else:
-			form_sacerdote = SacerdoteForm(instance=sacerdote)
-			form_usuario = UsuarioForm(instance=sacerdote.user)
-			ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
-			return render(request, template_name, ctx)
-
-
-class SacerdoteListView(ListView):
-	model = PerfilUsuario
-	template_name = 'usuario/sacerdote_list.html'
-	queryset = PerfilUsuario.objects.sacerdotes()
-
-	@method_decorator(login_required(login_url='/login/'))
-	@method_decorator(permission_required('sacramentos.can_change', login_url='/login/'))
-	def dispatch(self, *args, **kwargs):
-		return super(SacerdoteListView, self).dispatch(*args, **kwargs)
-
 
 class AsignarParroquiaCreate(CreateView):
 	model = AsignacionParroquia
@@ -998,6 +1034,7 @@ class AsignarParroquiaCreate(CreateView):
 			user.save()
 		
 		return super(AsignarParroquiaCreate, self).form_valid(form)
+
 
 class AsignarParroquiaUpdate(UpdateView):
 	model = AsignacionParroquia
@@ -1019,15 +1056,17 @@ class AsignarParroquiaUpdate(UpdateView):
 		
 		return super(AsignarParroquiaUpdate, self).form_valid(form)
 
+
 class AsignarParroquiaList(ListView):
 	model = AsignacionParroquia
 	template_name = 'parroquia/asignar_parroquia_list.html'
 
+
 class AsignarSecretariaCreate(CreateView):
 	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'
+	form_class = AsignarSecretariaForm
+	template_name = 'parroquia/asignar_secretaria_form.html'
+	success_url = '/asignar/secretaria/'
 
 
 	def form_valid(self, form):
@@ -1040,11 +1079,12 @@ class AsignarSecretariaCreate(CreateView):
 		
 		return super(AsignarParroquiaCreate, self).form_valid(form)
 
+
 class AsignarSecretariaUpdate(UpdateView):
 	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'	
+	form_class = AsignarSecretariaForm
+	template_name = 'parroquia/asignar_secretaria_form.html'
+	success_url = '/asignar/secretaria/'	
 
 	def form_valid(self, form):
 		persona_id = self.request.POST['persona']
@@ -1062,8 +1102,7 @@ class AsignarSecretariaUpdate(UpdateView):
 
 class AsignarSecretariaList(ListView):
 	model = AsignacionParroquia
-	template_name = 'parroquia/asignar_parroquia_list.html'
-
+	template_name = 'parroquia/asignar_secretaria_list.html'
 
 # views para los LOGS del ekklesia
 

@@ -10,6 +10,9 @@ from django.forms.widgets import RadioSelect
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
 					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia)
+from .validators import validate_cedula
+
+
 
 class DivErrorList(ErrorList):
 	def __unicode__(self):
@@ -31,7 +34,7 @@ class UsuarioForm(ModelForm):
 
 	class Meta():
 		model = User
-		fields= ('first_name', 'last_name', 'groups')
+		fields= ('first_name', 'last_name', 'email', 'groups')
 		# widgets = {
 		# 	'groups': forms.CheckboxSelectMultiple(attrs={'required':''})
 		# }
@@ -56,8 +59,24 @@ class PerfilUsuarioForm(ModelForm):
 			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
 		return data
 
-	# error_css_class = 'errorprueba'
-	# required_css_class = 'requiredeeeee'
+	def clean_dni(self):
+		cedula = self.cleaned_data['dni']
+		nacionalidad = self.cleaned_data['nacionalidad']
+		if nacionalidad == 'EC':
+			if not cedula.isdigit():
+				raise forms.ValidationError('El número de cédula no debe contener letras')
+				return cedula
+			if len(cedula)!=10:
+				raise forms.ValidationError('El número de cédula debe ser de 10 dígitos')
+				return cedula
+			valores = [ int(cedula[x]) * (2 - x % 2) for x in range(9) ]
+			suma = sum(map(lambda x: x > 9 and x - 9 or x, valores))
+			if int(cedula[9]) != 10 - int(str(suma)[-1:]):
+				raise forms.ValidationError('El número de cédula no es válido')
+				return cedula
+
+		return cedula
+
 
 	SEXO_CHOICES = (
 		('', '--- Seleccione ---'),
@@ -72,23 +91,25 @@ class PerfilUsuarioForm(ModelForm):
 		('d','Divorciado/a'),
 		('v','Viudo/a')
 		)
-	# fecha_nacimiento = forms.CharField(required=True, label=u'Fecha de Nacimiento', 
+	
+	
 	sexo = forms.TypedChoiceField(label=u'Sexo', help_text='Elija el sexo de la persona. Ej: Masculino', choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
 	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', help_text='Elija el estado civil. Ej: Soltero/a', choices=ESTADO_CIVIL_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
-	# padre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), empty_label='--- Seleccione ---')
-	# madre= forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), empty_label='--- Seleccione ---')
-		
+	
+	def __init__(self, padre = PerfilUsuario.objects.none() , madre = PerfilUsuario.objects.none(), *args, **kwargs):
+		super(PerfilUsuarioForm, self).__init__(*args, **kwargs)
+		self.fields['padre']=forms.ModelChoiceField(required=False, queryset=padre, empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+		self.fields['madre']=forms.ModelChoiceField(required=False, queryset=madre, empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+
 	class Meta():
 		model = PerfilUsuario
-		fields = ('nacionalidad', 'dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion', 'padre', 'madre');
+		fields = ('nacionalidad', 'dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil' ,'profesion', 'padre', 'madre', 'celular');
 		widgets = {
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
 			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
 			'dni': forms.TextInput(attrs={'required':''}),
-			# 'estado_civil': forms.Select(attrs={'required':''}),
-			# 'sexo': forms.Select(attrs={'required':''}),
-		}
+			}
 		
 class PadreForm(ModelForm):
 	def clean_fecha_nacimiento(self):
@@ -115,12 +136,30 @@ class SacerdoteForm(ModelForm):
 			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
 		return data
 
+	def clean_dni(self):
+		cedula = self.cleaned_data['dni']
+		nacionalidad = self.cleaned_data['nacionalidad']
+		if nacionalidad == 'EC':
+			if not cedula.isdigit():
+				raise forms.ValidationError('El número de cédula no debe contener letras')
+				return cedula
+			if len(cedula)!=10:
+				raise forms.ValidationError('El número de cédula debe ser de 10 dígitos')
+				return cedula
+			valores = [ int(cedula[x]) * (2 - x % 2) for x in range(9) ]
+			suma = sum(map(lambda x: x > 9 and x - 9 or x, valores))
+			if int(cedula[9]) != 10 - int(str(suma)[-1:]):
+				raise forms.ValidationError('El número de cédula no es válido')
+				return cedula
+
+		return cedula
+
 	# fecha_nacimiento = forms.CharField(help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy', label='Fecha de Nacimiento',
 	# 	widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}))
 	# lugar_nacimiento = forms.CharField(help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza', label='Lugar de Nacimiento')
 	class Meta(): 
 		model = PerfilUsuario
-		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento');
+		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento', 'celular');
 		widgets = {
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
@@ -560,6 +599,12 @@ class AsignarParroquiaForm(ModelForm):
 #Form para asignar una secretaria a una parroquia
 class AsignarSecretariaForm(ModelForm):
 	persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.none()) 
+	# parroquia = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.filter()) 
+	
+	# def __init__(self, *args, **kwargs):
+	# 	super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
+	# 	self.fields['parroquia']=forms.ModelChoiceField(queryset=PerfilUsuario.objects.get(user=self.request.user).parroquias, empty_label='-- Seleccione --',
+
 	class Meta:
 		model = AsignacionParroquia
 		fields = ('persona', 'parroquia')

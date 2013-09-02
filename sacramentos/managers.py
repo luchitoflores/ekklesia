@@ -17,6 +17,13 @@ class ParroquiaManager(models.Manager):
 	pass
 
 class PersonaManager(models.Manager):
+
+	def padre(self):
+		return self.model.objects.filter(sexo='m').exclude(profesion='Sacerdote')
+
+	def madre(self):
+		return self.model.objects.filter(sexo='f')
+
 	def male(self):
 		return self.model.objects.filter(sexo='m')
 
@@ -27,7 +34,7 @@ class PersonaManager(models.Manager):
 		return self.model.objects.all()
 
 	def sacerdotes(self):
-		return self.model.objects.filter(user__groups__name='Sacerdote')
+		return self.model.objects.filter(user__groups__name='Sacerdote', profesion='Sacerdote')
 
 	def feligreses(self):
 		return self.model.objects.filter(user__groups__name='Feligres')

@@ -7,6 +7,29 @@ Lista de Matrimonios
 
 {%block extrascript%}
 <script src='/static/js/acta.js'></script>
+<script>
+$(document).ready(function(){
+	$('.id_delete').click(function(){
+		var e=$(this).attr('name');
+
+		$.get('/matrimonio/ajax',function(data){
+			console.log(data.list_matrimonios);
+			var lista = data.list_matrimonios;
+			$.each(lista, function(indice, elemento){
+				var id = elemento.id;
+				if(id == e){
+					$('#id_novio').html('<p>'+elemento.novio+'</p>');
+					$('#id_novia').html('<p>'+elemento.novia+'</p>');
+					$('#id_eliminar').attr('href','/matrimonio/'+e+'/vigencia');
+				}
+			});
+
+		});
+	});		
+
+});
+</script>
+</script>
 
 {%endblock%}
 {%block content%}
@@ -22,6 +45,12 @@ Lista de Matrimonios
 			<th>Fecha Sacramento</th>
 			<th>Testigo</th>
 			<th>Testiga</th>
+			{%for o in object_list%}
+			{%if o.vigente%}
+			<th>Acciones</th>
+			
+			{%endif%}
+			{%endfor%}
 			
 			
 		</tr>
@@ -36,6 +65,11 @@ Lista de Matrimonios
 			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
 			<td>{{o.testigo_novio}}</td>
 			<td>{{o.testigo_novia}}</td>
+			{%if o.vigente%}
+					
+			<td><a class='id_delete' href="#id_vigencia" role="button" data-toggle="modal" name='{{o.id}}'>Quitar Vigencia</a>
+			</td>
+			{%endif%}
 			
 			
 		</tr>
@@ -46,24 +80,22 @@ Lista de Matrimonios
 
 <a href="{% url 'matrimonio_create' %}" class='btn btn-primary'>Nueva Acta Matrimonial</a>
 
-<div class="pagination">
-	<ul>
-
-		{% if page_obj.has_previous %}
-		<li><a href="?page={{page_obj.previous_page_number }}">Anterior</a>
-			{% endif %}
-		</li>
-
-		{%for p in lista%}
-		<li><a href="?page={{p}}">{{p}}</a></li>
-		{%endfor%}
-
-		<li>
-			{% if page_obj.has_next %}
-			<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-			{% endif %}
-		</li>
-	</ul>
+<!-- Modal para quitar la vigencia de un matrimonio-->
+<div  id="id_vigencia" class="modal hide fade"  tabindex="5">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+		<h3>Eliminar Vigencia del Matrimonio</h3>
+	</div>
+	<div class="modal-body">
+		<p>Está seguro de querer eliminar la vigencia del matrimonio de:</p>
+		<h5 id='id_novio'></h4> con 
+		<h5 id='id_novia'></h4> 
+	</div>
+	<div class="modal-footer">
+		<a href="." class="btn">Cancelar</a>
+		<a id='id_eliminar' href="." class="btn btn-danger">Eliminar</a>
+	</div>
 </div>
+
 
 {%endblock%}

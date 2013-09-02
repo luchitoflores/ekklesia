@@ -64,7 +64,13 @@
 						<li><a href="{% url 'bautismo_list'%}">Bautismo</a></li>
 						<li><a href="{% url 'eucaristia_list'%}">Primera Comunión</a></li>
 						<li><a href="{% url 'confirmacion_list'%}">Corfirmación</a></li>
-						<li><a href="{% url 'matrimonio_list'%}">Matrimonio</a></li>
+						<li class="dropdown-submenu" >
+							<a tabindex="-1" href="#">Matrimonio</a>
+							<ul class="dropdown-menu">
+								<li><a href="{% url 'matrimonio_list'%}">Vigentes</a></li>
+								<li><a href="{% url 'matrimonio_list_no_vigentes'%}">No Vigentes</a></li>
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li><a href="#">Agenda</a></li>

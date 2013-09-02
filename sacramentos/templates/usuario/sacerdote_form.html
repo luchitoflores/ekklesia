@@ -133,6 +133,46 @@ Agregar Sacerdote
 					</div>
 				</div>
 			</fieldset>
+
+			<fieldset class="scheduler-border">
+						<legend class="scheduler-border">Datos de Contacto</legend>
+						<div class="control-group">
+							{{form_usuario.email|label_with_classes:'control-label'}}
+							<div class='controls'>
+								{{form_usuario.email}}
+							</div>
+							<div class='controls'>
+								<div class="help-text">
+									{{form_usuario.email.help_text}}
+								</div>
+							</div>
+							<div class='controls'>
+								<div class="errors">
+									{{form_usuario.email.errors}}
+								</div>
+							</div>
+							
+						</div> 
+
+						<div class="control-group">
+							{{form_sacerdote.celular|label_with_classes:'control-label'}}
+							<div class='controls'>
+								{{form_sacerdote.celular}}
+							</div>
+							<div class="controls">
+								<div class="help-text">
+									{{form_sacerdote.celular.help_text}}
+								</div>
+							</div>
+							<div class="controls">
+								<div class="errors">
+									{{form_sacerdote.celular.errors}}
+								</div>
+							</div>
+						</div>
+					</fieldset>
+
+
 			<fieldset class="scheduler-border">
 				<legend class="scheduler-border">Grupos</legend>
 				<div class="control-group">

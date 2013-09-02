@@ -453,6 +453,11 @@ class ConfirmacionFormEditar(ModelForm):
 
 
 class MatrimonioForm(ModelForm):
+	TIPO_MATRIMONIO_CHOICES=(
+		('', '--- Seleccione ---'),
+        ('Catolico','Catolico'),
+        ('Mixto','Mixto'),
+        )
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': '','pattern':'[0-9]+'}),
 		help_text='Ingrese el numero de pagina ej:5,67')
@@ -473,6 +478,11 @@ class MatrimonioForm(ModelForm):
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
+	tipo_matrimonio = forms.TypedChoiceField(label=u'Tipo Matrimonio', 
+		help_text='Elija tipo de matrimonio Ej: Catolico o Mixto', 
+		choices=TIPO_MATRIMONIO_CHOICES, required=True, 
+		widget=forms.Select(attrs={'required':''}))
+
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
@@ -485,6 +495,7 @@ class MatrimonioForm(ModelForm):
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),help_text='Seleccione un libro para el Matrimonio')
 
+
 	def __init__(self,user, *args, **kwargs):
 		
 		super(MatrimonioForm, self).__init__(*args, **kwargs)
@@ -496,9 +507,15 @@ class MatrimonioForm(ModelForm):
 	class Meta():
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','celebrante',
-			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
+			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia',
+			'tipo_matrimonio')
 
 class MatrimonioFormEditar(ModelForm):
+	TIPO_MATRIMONIO_CHOICES=(
+		('', '--- Seleccione ---'),
+        ('Catolico','Catolico'),
+        ('Mixto','Mixto'),
+        )
 	pagina=forms.IntegerField(required=True, label='Pagina', 
 		widget=forms.TextInput(attrs={'required': '','pattern':'[0-9]+'}),
 		help_text='Ingrese el numero de pagina ej:5,67')
@@ -513,6 +530,10 @@ class MatrimonioFormEditar(ModelForm):
 	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
+	tipo_matrimonio = forms.TypedChoiceField(label=u'Tipo Matrimonio', 
+		help_text='Elija tipo de matrimonio Ej: Catolico o Mixto', 
+		choices=TIPO_MATRIMONIO_CHOICES, required=True, 
+		widget=forms.Select(attrs={'required':''}))
 	fecha_sacramento = forms.CharField(required=True,label='Fecha de Sacramento',
 		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}),help_text='Seleccione una fecha ej:18/07/2000')
@@ -542,7 +563,8 @@ class MatrimonioFormEditar(ModelForm):
 	class Meta():
 		model=Matrimonio
 		fields=('numero_acta','pagina','libro','fecha_sacramento','lugar_sacramento','celebrante',
-			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia')
+			'padrino','madrina','iglesia','novio','novia','testigo_novio','testigo_novia',
+			'tipo_matrimonio')
 
 # Forms para Notas Marginals
 class NotaMarginalForm(ModelForm):

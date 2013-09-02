@@ -962,6 +962,10 @@ class IntencionListView(ListView):
 	model= Intenciones
 	template_name = 'intencion/intencion_list.html'
 
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(IntencionListView, self).dispatch(*args, **kwargs)
+
 class IntencionUpdateView(UpdateView):
 	model= Intenciones
 	template_name = 'intencion/intencion_form.html'
@@ -969,12 +973,20 @@ class IntencionUpdateView(UpdateView):
 	success_url = '/intencion/'
 	context_object_name = 'form_intencion'
 
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(IntencionUpdateView, self).dispatch(*args, **kwargs)
+
 
 class AsignarParroquiaCreate(CreateView):
 	model = AsignacionParroquia
 	form_class = AsignarParroquiaForm
 	template_name = 'parroquia/asignar_parroquia_form.html'
 	success_url = '/asignar/parroquia/'
+
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(AsignarParroquiaCreate, self).dispatch(*args, **kwargs)
 
 
 	def form_valid(self, form):
@@ -993,6 +1005,10 @@ class AsignarParroquiaUpdate(UpdateView):
 	form_class = AsignarParroquiaForm
 	template_name = 'parroquia/asignar_parroquia_form.html'
 	success_url = '/asignar/parroquia/'	
+
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(AsignarParroquiaUpdate, self).dispatch(*args, **kwargs)
 
 	def form_valid(self, form):
 		persona_id = self.request.POST['persona']
@@ -1013,12 +1029,20 @@ class AsignarParroquiaList(ListView):
 	model = AsignacionParroquia
 	template_name = 'parroquia/asignar_parroquia_list.html'
 
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(AsignarParroquiaList, self).dispatch(*args, **kwargs)
+
 
 class AsignarSecretariaCreate(CreateView):
 	model = AsignacionParroquia
 	form_class = AsignarSecretariaForm
 	template_name = 'parroquia/asignar_secretaria_form.html'
 	success_url = '/asignar/secretaria/'
+
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(AsignarSecretariaCreate, self).dispatch(*args, **kwargs)
 
 
 	def form_valid(self, form):
@@ -1038,6 +1062,10 @@ class AsignarSecretariaUpdate(UpdateView):
 	template_name = 'parroquia/asignar_secretaria_form.html'
 	success_url = '/asignar/secretaria/'	
 
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(AsignarSecretariaUpdate, self).dispatch(*args, **kwargs)
+
 	def form_valid(self, form):
 		persona_id = self.request.POST['persona']
 		estado = self.request.POST.get('estado')
@@ -1055,6 +1083,10 @@ class AsignarSecretariaUpdate(UpdateView):
 class AsignarSecretariaList(ListView):
 	model = AsignacionParroquia
 	template_name = 'parroquia/asignar_secretaria_list.html'
+
+	@method_decorator(login_required(login_url='/login/'))
+	def dispatch(self, *args, **kwargs):
+		return super(AsignarSecretariaList, self).dispatch(*args, **kwargs)
 
 # views para los LOGS del ekklesia
 

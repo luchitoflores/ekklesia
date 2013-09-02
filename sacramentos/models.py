@@ -425,13 +425,23 @@ class Confirmacion(Sacramento):
 
 
 class Matrimonio(Sacramento):
-	novio=models.ForeignKey(PerfilUsuario, related_name='Novio',
+
+    TIPO_MATRIMONIO_CHOICES=(
+        ('Catolico','Catolico'),
+        ('Mixto','Mixto'),
+        )
+    novio=models.ForeignKey(PerfilUsuario, related_name='Novio',
 		help_text='Seleccione un novio')
-	novia=models.ForeignKey(PerfilUsuario, related_name='Novia',
+    novia=models.ForeignKey(PerfilUsuario, related_name='Novia',
 		help_text='Seleccione una novia')
-	testigo_novio = models.CharField(max_length=200,
+    testigo_novio = models.CharField(max_length=200,
 		help_text='Nombre de testigo ej: Pablo Robles')
-	testigo_novia = models.CharField(max_length=200,help_text='Nombre de testiga ej:Fernanda Pincay')
+    testigo_novia = models.CharField(max_length=200,help_text='Nombre de testiga ej:Fernanda Pincay')
+    vigente=models.BooleanField()
+    tipo_matrimonio=models.CharField(max_length=100,choices=TIPO_MATRIMONIO_CHOICES)
+    def __unicode__(self):
+        return str(self.pagina)
+
     
 
 class NotaMarginal(TimeStampedModel):

@@ -7,7 +7,8 @@ from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
 	sacerdote_create_view, SacerdoteListView,  sacerdote_update_view,
 	libro_create_view, libro_update_view ,LibroListView,libro_pdf,
-	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,
+	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,matrimonio_vigencia_view,
+	matrimonio_ajax_view,MatrimonioNoVigenteListView,
 	matrimonio_acta,matrimonio_certificado,
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	bautismo_acta,bautismo_certificado,
@@ -58,8 +59,11 @@ urlpatterns = patterns('',
 
 	#urls de matrimonio
 	url(r'^matrimonio/$',MatrimonioListView.as_view(),name='matrimonio_list'),
+	url(r'^matrimonio/no_vigentes/$',MatrimonioNoVigenteListView.as_view(),name='matrimonio_list_no_vigentes'),
 	url(r'^matrimonio/add/$',matrimonio_create_view, name='matrimonio_create'),
 	url(r'^matrimonio/(?P<pk>\d+)/$',matrimonio_update_view, name='matrimonio_update'),
+	url(r'^matrimonio/ajax/$',matrimonio_ajax_view, name='matrimonio_ajax'),
+	url(r'^matrimonio/(?P<pk>\d+)/vigencia/$',matrimonio_vigencia_view, name='matrimonio_vigencia'),
 	url(r'^matrimonio_acta/(?P<pk>\d+)/$',matrimonio_acta, name='matrimonio_acta'),
 	url(r'^matrimonio_certificado/(?P<pk>\d+)/$',matrimonio_certificado, name='matrimonio_certificado'),
 

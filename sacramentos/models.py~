@@ -312,7 +312,7 @@ class PerfilUsuario(TimeStampedModel):
 		help_text='Elija el sexo de la persona. Ej: Masculino')
     estado_civil = models.CharField(max_length=10, choices=ESTADO_CIVIL_CHOICES, null=True, blank=True, help_text='Elija el estado civil. Ej: Soltero/a')
     profesion = models.CharField(max_length=50, null=True, blank=True, help_text='Ingrese la profesión de la persona')
-    parroquias = models.ManyToManyField('Parroquia', null=True, blank=True) 
+    parroquias = models.ManyToManyField('Parroquia', null=True, blank=True, through='AsignacionParroquia') 
 
     objects = PersonaManager()
 
@@ -328,9 +328,13 @@ class PerfilUsuario(TimeStampedModel):
     
 
     def crear_username(self, nombres, apellidos):
-    	nombres = nombres.lower().split()
-    	apellidos = apellidos.lower().split()
-    	username = u'%s%s'% (nombres[0][0],apellidos[0])
+        import unicodedata
+        nombres = ''.join((c for c in unicodedata.normalize('NFD', unicode(nombres)) if unicodedata.category(c) != 'Mn'))
+        apellidos = ''.join((c for c in unicodedata.normalize('NFD', unicode(apellidos)) if unicodedata.category(c) != 'Mn'))
+        nombres = nombres.lower().split()
+        apellidos = apellidos.lower().split()
+        # s = ''.join((c for c in unicodedata.normalize('NFD',unicode(cadena)) if unicodedata.category(c) != 'Mn'))
+        username = u'%s%s'% (nombres[0][0],apellidos[0])
             # username = u'%s%s'% (nombres,apellidos)
     	print username
     	user_name = PerfilUsuario.objects.username_disponible(username)
@@ -421,16 +425,25 @@ class Confirmacion(Sacramento):
 
 
 class Matrimonio(Sacramento):
-	novio=models.OneToOneField(PerfilUsuario, related_name='Novio',
+
+    TIPO_MATRIMONIO_CHOICES=(
+        ('Catolico','Catolico'),
+        ('Mixto','Mixto'),
+        )
+    novio=models.ForeignKey(PerfilUsuario, related_name='Novio',
 		help_text='Seleccione un novio')
-	novia=models.OneToOneField(PerfilUsuario, related_name='Novia',
+    novia=models.ForeignKey(PerfilUsuario, related_name='Novia',
 		help_text='Seleccione una novia')
-	testigo_novio = models.CharField(max_length=200,
+    testigo_novio = models.CharField(max_length=200,
 		help_text='Nombre de testigo ej: Pablo Robles')
-	testigo_novia = models.CharField(max_length=200,
-		help_text='Nombre de testiga ej:Fernanda Pincay')
-	
-		
+    testigo_novia = models.CharField(max_length=200,help_text='Nombre de testiga ej:Fernanda Pincay')
+    vigente=models.BooleanField()
+    tipo_matrimonio=models.CharField(max_length=100,choices=TIPO_MATRIMONIO_CHOICES)
+
+    	def __unicode__(self):
+		return str(self.pagina)
+
+    
 
 class NotaMarginal(TimeStampedModel):
 	fecha = models.DateField()
@@ -455,10 +468,10 @@ class AsignacionParroquia(TimeStampedModel):
 		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 
         def get_absolute_url(self):
-            return '/asignar/parroquia/%i' % self.id
+		return '/asignar/parroquia/%i' % self.id
 
-    	class Meta:
-        	db_table = u'sacramentos_perfilusuario_parroquias'
+    	# class Meta:
+     #    	db_table = u'sacramentos_perfilusuario_parroquias'
 
         
 class Intenciones(TimeStampedModel):

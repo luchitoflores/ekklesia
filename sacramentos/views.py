@@ -16,7 +16,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView
 # Para los logs
-from django.contrib.admin.models import LogEntry, ADDITION, CHANGE
+from django.contrib.admin.models import LogEntry, ADDITION, CHANGE,DELETION
 from django.contrib.contenttypes.models import ContentType
 # 
 from ho import pisa
@@ -173,7 +173,7 @@ def libro_create_view(request):
             			object_id=libro.id,
             			object_repr=unicode(libro.tipo_libro),
             			action_flag=ADDITION,
-            			change_message=libro)
+            			change_message="Creo un libro")
 						messages.success(request, 'Creado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
@@ -190,7 +190,7 @@ def libro_create_view(request):
             			object_id=libro.id,
             			object_repr=unicode(libro.tipo_libro),
             			action_flag=ADDITION,
-            			change_message=libro)
+            			change_message="Creo un libro")
 						messages.success(request, 'Creado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
@@ -212,7 +212,7 @@ def libro_create_view(request):
             			object_id=libro.id,
             			object_repr=unicode(libro.tipo_libro),
             			action_flag=ADDITION,
-            			change_message=libro)
+            			change_message="Creo un libro")
 				messages.success(request, 'Creado exitosamente')
 				return HttpResponseRedirect('/libro')
 				
@@ -233,23 +233,22 @@ def libro_create_view(request):
 # 	success_url = '/libro/'
 
 def libro_update_view(request,pk):
-	libro=get_object_or_404(Libro,pk=pk)
+	libros=get_object_or_404(Libro,pk=pk)
+	
 	if(request.method=='POST'):
-		form_libro=LibroForm(request.POST,instance=libro)
+		form_libro=LibroForm(request.POST,instance=libros)
 		if(form_libro.is_valid()):
 			libro=form_libro.save(commit=False)
 			estado=libro.estado
 			tipo=libro.tipo_libro
 			parroquia = AsignacionParroquia.objects.get(
 				persona__user=request.user,estado=True).parroquia
-			
-
 			try:
-
 				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,parroquia=parroquia)
 				if (libro.id == consulta.id):
 					if libro.estado == consulta.estado:
 						if libro.fecha_cierre_mayor():
+							
 							libro.save()
 							LogEntry.objects.log_action(
             				user_id=request.user.id,
@@ -257,7 +256,7 @@ def libro_update_view(request,pk):
             				object_id=libro.id,
             				object_repr=unicode(libro.tipo_libro),
             				action_flag=CHANGE,
-            				change_message='se modifico el libro')
+            				change_message="Creo un libro")
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -267,6 +266,7 @@ def libro_update_view(request,pk):
 
 					else:
 						if libro.fecha_cierre_mayor():
+							
 							libro.save()
 							LogEntry.objects.log_action(
             				user_id=request.user.id,
@@ -274,7 +274,7 @@ def libro_update_view(request,pk):
             				object_id=libro.id,
             				object_repr=unicode(libro.tipo_libro),
             				action_flag=CHANGE,
-            				change_message='se modifico el libro')
+            				change_message="Creo un libro")
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -285,6 +285,7 @@ def libro_update_view(request,pk):
 
 					if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 						if libro.fecha_cierre_mayor():
+							
 							libro.save()
 							LogEntry.objects.log_action(
             				user_id=request.user.id,
@@ -292,7 +293,7 @@ def libro_update_view(request,pk):
             				object_id=libro.id,
             				object_repr=unicode(libro.tipo_libro),
             				action_flag=CHANGE,
-            				change_message='se modifico el libro')
+            				change_message="Creo un libro")
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -302,6 +303,7 @@ def libro_update_view(request,pk):
 
 					elif(estado != consulta.estado and tipo==consulta.tipo_libro):
 						if libro.fecha_cierre_mayor():
+							
 							libro.save()
 							LogEntry.objects.log_action(
             				user_id=request.user.id,
@@ -309,7 +311,7 @@ def libro_update_view(request,pk):
             				object_id=libro.id,
             				object_repr=unicode(libro.tipo_libro),
             				action_flag=CHANGE,
-            				change_message='se modifico el libro')
+            				change_message="Creo un libro")
 							messages.success(request, 'Actualizado exitosamente')
 							return HttpResponseRedirect('/libro')
 						else:
@@ -324,6 +326,7 @@ def libro_update_view(request,pk):
 						# 	{'Libro':'Ya existe un libro abierto, cierrelo y vuela a crear'})
 
 			except ObjectDoesNotExist:
+				
 				libro.save()
 				LogEntry.objects.log_action(
 					user_id=request.user.id,
@@ -331,19 +334,19 @@ def libro_update_view(request,pk):
             		object_id=libro.id,
             		object_repr=unicode(libro.tipo_libro),
             		action_flag=CHANGE,
-            		change_message='se modifico el libro')
+            		change_message="Creo un libro")
 				messages.success(request, 'Actualizado exitosamente')
 				return HttpResponseRedirect('/libro')
-				
-
 		else:
 			
 			messages.error(request,form_libro.errors)
-			ctx={'form_libro':form_libro,'object':libro}
+			ctx={'form_libro':form_libro,'object':libros}
 			return render(request,'libro/libro_form.html',ctx)
 	else:
-		form_libro=LibroForm(instance=libro)
-	ctx={'form_libro':form_libro,'object':libro}
+		
+		form_libro=LibroForm(instance=libros)
+
+	ctx={'form_libro':form_libro,'object':libros}
 	return render(request,'libro/libro_form.html',ctx)
 
 
@@ -395,26 +398,13 @@ def matrimonio_create_view(request):
 				novio.estado_civil='c'
 				novia.estado_civil='c'
 				novio.save()
-				LogEntry.objects.log_action(
-					user_id=request.user.id,
-            		content_type_id=ContentType.objects.get_for_model(novio).pk,
-            		object_id=novio.id,
-            		object_repr=unicode(novio),
-            		action_flag=ADDITION,
-            		change_message='Se creo novio')
 				novia.save()
-				LogEntry.objects.log_action(
-					user_id=request.user.id,
-            		content_type_id=ContentType.objects.get_for_model(novia).pk,
-            		object_id=novia.id,
-            		object_repr=unicode(novia),
-            		action_flag=ADDITION,
-            		change_message='Se creo novia')
 				matrimonio.novio=novio
 				matrimonio.novia=novia
 				parroquia = AsignacionParroquia.objects.get(
 						persona__user=request.user,estado=True).parroquia
 				matrimonio.parroquia = parroquia
+				matrimonio.vigente=True
 				matrimonio.save()
 				LogEntry.objects.log_action(
 					user_id=request.user.id,
@@ -450,6 +440,7 @@ def matrimonio_update_view(request,pk):
 	usuario=request.user
 	matrimonio=get_object_or_404(Matrimonio,pk=pk)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
+	m=matrimonio
 	if request.method == 'POST':
 		form_matrimonio = MatrimonioFormEditar(usuario,request.POST,instance=matrimonio)
 		if form_matrimonio.is_valid():
@@ -460,7 +451,7 @@ def matrimonio_update_view(request,pk):
             	object_id=matrimonio.id,
             	object_repr=unicode(matrimonio),
             	action_flag=CHANGE,
-            	change_message='Se modifico matrimonio')
+            	change_message='Antes: %s - Ahora: %s ' %(m,matrimonio))
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/matrimonio')
 		else:
@@ -475,6 +466,61 @@ def matrimonio_update_view(request,pk):
 	ctx = {'form_matrimonio': form_matrimonio,'notas':notas,'object':matrimonio}
 	return render(request, 'matrimonio/matrimonio_form.html', ctx)
 
+def matrimonio_vigencia_view(request,pk):
+	usuario = request.user
+	matrimonio=Matrimonio.objects.get(pk=pk)	
+	if request.method == 'POST':
+		novio=matrimonio.novio
+		novia=matrimonio.novia
+		novio.estado_civil='v'
+		novia.estado_civil='v'
+		novio.save()
+		novia.save()
+		matrimonio.vigente=False
+		matrimonio.save()
+		LogEntry.objects.log_action(
+			user_id=request.user.id,
+            content_type_id=ContentType.objects.get_for_model(matrimonio).pk,
+            object_id=matrimonio.id,
+            object_repr=unicode(matrimonio),
+            action_flag=DELETION,
+            change_message='Quitó vigencia del matrimonio')
+		messages.success(usuario, 'Se ha quitado la vigencia con exito')
+		return HttpResponseRedirect('/matrimonio')
+
+	else:
+		form = MatrimonioForm(usuario,instance=matrimonio)
+		matrimonio.vigente=False
+		matrimonio.save()
+	
+	ctx = {'form': form}
+	return render(request,'matrimonio/matrimonio_list.html', ctx)
+
+
+def matrimonio_ajax_view(request):
+	exito = False
+	matrimonio=Matrimonio.objects.all()
+	list_matrimonios= list()
+	for m in matrimonio:
+		novio=u'%s' % m.novio.user.get_full_name()
+		novia=u'%s' % m.novia.user.get_full_name()
+		list_matrimonios.append({ 'id': m.pk, 'novio':novio,'novia':novia})
+	ctx={'list_matrimonios':list_matrimonios, 'exito':exito}
+	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+class MatrimonioNoVigenteListView(ListView):
+	model = Matrimonio
+	template_name = 'matrimonio/matrimonio_list.html'
+
+	def get_queryset(self):
+		try:
+			parroquia = AsignacionParroquia.objects.get(
+				persona__user=self.request.user).parroquia
+
+			queryset = Matrimonio.objects.filter(parroquia=parroquia,vigente=False)
+			return queryset
+		except: 
+			return [];
 
 
 class MatrimonioListView(ListView):
@@ -486,10 +532,12 @@ class MatrimonioListView(ListView):
 			parroquia = AsignacionParroquia.objects.get(
 				persona__user=self.request.user).parroquia
 
-			queryset = Matrimonio.objects.filter(parroquia=parroquia)
+			queryset = Matrimonio.objects.filter(parroquia=parroquia,vigente=True)
 			return queryset
 		except: 
 			return [];
+
+
 
 
 # VISTAS PARA ADMIN DE BAUTISMO

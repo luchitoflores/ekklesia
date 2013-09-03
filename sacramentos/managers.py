@@ -24,6 +24,9 @@ class PersonaManager(models.Manager):
 	def madre(self):
 		return self.model.objects.filter(sexo='f')
 
+	def feligres(self):
+		return self.model.objects.all().exclude(profesion='Sacerdote')
+
 	def male(self):
 		return self.model.objects.filter(sexo='m')
 

@@ -62,7 +62,7 @@ class PerfilUsuarioForm(ModelForm):
 	def clean_dni(self):
 		cedula = self.cleaned_data['dni']
 		nacionalidad = self.cleaned_data['nacionalidad']
-		if nacionalidad == 'EC':
+		if nacionalidad == 'EC' and cedula:
 			if not cedula.isdigit():
 				raise forms.ValidationError('El número de cédula no debe contener letras')
 				return cedula
@@ -108,7 +108,6 @@ class PerfilUsuarioForm(ModelForm):
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
 			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
-			'dni': forms.TextInput(attrs={'required':''}),
 			}
 		
 class PadreForm(ModelForm):
@@ -139,7 +138,7 @@ class SacerdoteForm(ModelForm):
 	def clean_dni(self):
 		cedula = self.cleaned_data['dni']
 		nacionalidad = self.cleaned_data['nacionalidad']
-		if nacionalidad == 'EC':
+		if nacionalidad == 'EC' and cedula:
 			if not cedula.isdigit():
 				raise forms.ValidationError('El número de cédula no debe contener letras')
 				return cedula
@@ -164,6 +163,7 @@ class SacerdoteForm(ModelForm):
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
 			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
+			'dni': forms.TextInput(attrs={'required':''}),
 			}
 
 

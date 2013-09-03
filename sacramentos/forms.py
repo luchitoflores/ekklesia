@@ -235,7 +235,7 @@ class BautismoForm(ModelForm):
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
 		queryset=Libro.objects.none(),empty_label=None)
 
-	def __init__(self,user, *args, **kwargs):
+	def __init__(self,user,bautizado=PerfilUsuario.objects.none(), *args, **kwargs):
 
 		super(BautismoForm, self).__init__(*args, **kwargs)
 		
@@ -243,6 +243,7 @@ class BautismoForm(ModelForm):
 			persona__user=user,estado=True).parroquia
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Bautismo',parroquia=parroquia)
+		self.fields['bautizado']=forms.ModelChoiceField(required=False, queryset=bautizado, empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
       	
 	class Meta():
 		model=Bautismo

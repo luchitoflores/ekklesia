@@ -659,7 +659,7 @@ class MatrimonioListView(ListView):
 def bautismo_create_view(request):
 	usuario=request.user
 	if(request.method == 'POST' ):
-	
+		
 		formBautismo=BautismoForm(usuario,request.POST)
 		# form_nota=NotaMarginalForm(request.POST)
 		if (formBautismo.is_valid()):
@@ -710,7 +710,8 @@ def bautismo_update_view(request,pk):
 	bautismo= get_object_or_404(Bautismo, pk=pk)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	if request.method == 'POST':
-		bautismo_form = BautismoFormEditar(usuario,request.POST or None,instance=bautismo)
+		bautizado = PerfilUsuario.objects.all()
+		bautismo_form = BautismoForm(usuario,request.POST or None,instance=bautismo)
 		# form_nota=NotaMarginalForm(request.POST,instance=nota)
 		if bautismo_form.is_valid():
 			bautismo_form.save()
@@ -724,12 +725,28 @@ def bautismo_update_view(request,pk):
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/bautismo')
 		else:
+			if bautismo.bautizado:
+				bautizado = PerfilUsuario.objects.filter(user__id=bautismo.bautizado.user.id)
+			
+				bautismo_form = BautismoForm(usuario,bautizado, instance=bautismo)
+		
+			else:
+
+				bautismo_form = BautismoForm(instance=bautismo)
+
+			
 			messages.error(request, 'Error al actualizar')
 			ctx = {'formBautismo': bautismo_form,'notas':notas,'object':bautismo}
 			return render(request, 'bautismo/bautismo_form.html', ctx)
 			
 	else:
-		bautismo_form = BautismoFormEditar(usuario,instance=bautismo)
+		if bautismo.bautizado:
+			bautizado = PerfilUsuario.objects.filter(user__id=bautismo.bautizado.user.id)
+			bautismo_form = BautismoForm(usuario,bautizado, instance=bautismo)
+		else:
+			bautismo_form = BautismoForm(instance=bautismo)
+
+		bautismo_form = BautismoForm(usuario,instance=bautismo)
 		
 		# form_nota=NotaMarginalForm(instance=nota)
 									

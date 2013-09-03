@@ -9,11 +9,11 @@
 	size: a4; 
 	margin: 3cm 3cm 3cm 3cm;
 	@frame footer {
-		-pdf-frame-content: pagina;
-		bottom: 2cm;
-		margin-left: 1cm;
-		margin-right: 1cm;
-		height: 1cm;
+		-pdf-frame-content: footer;
+		bottom: 0cm;
+		margin-left: 3cm;
+		margin-right: 3cm;
+		height: 3cm;
 	}
 }
 body {
@@ -35,25 +35,25 @@ body {
 			{{"Partida de Confirmación"|upper}}
 		</h1>
 	</center>
-	<h2> <p>El suscrito Párroco de {{confirmacion.parroquia|upper}} CERTIFICA:</h2>
-	Que en el libro: {{ confirmacion.libro.numero_libro}}, pagina: {{ confirmacion.pagina}} y con el numero: {{ confirmacion.numero_acta }} </br>
-	se encuentra la partida de Confirmación de: {{ confirmacion.confirmado}} <br/>
+	<h2> <p>El suscrito Párroco de <strong>{{confirmacion.parroquia|upper}}</strong> CERTIFICA:</h2>
+	Que en el libro: <strong>{{ confirmacion.libro.numero_libro}}</strong>, pagina: <strong>{{ confirmacion.pagina}}</strong> y con el numero: <strong>{{ confirmacion.numero_acta }}</strong> </br>
+	se encuentra la partida de Confirmación de: <strong>{{ confirmacion.confirmado}}</strong> <br/>
 	{%if "m" in confirmacion.confirmado.sexo%}
-	hijo de: {{ confirmacion.confirmado.padre}} <br/>
+	hijo de: <strong>{{ confirmacion.confirmado.padre}}</strong> <br/>
 	{%else%}
-	hija de: {{ confirmacion.confirmado.padre}} <br/>
+	hija de: <strong>{{ confirmacion.confirmado.padre}}</strong> <br/>
 	{%endif%}
-	y de: {{ confirmacion.confirmado.madre}} <br/>
-	realizado el: {{confirmacion.fecha_sacramento}}<br/>
-	Confirmante: {{confirmacion.obispo}}<br/>
+	y de: <strong>{{ confirmacion.confirmado.madre}}</strong> <br/>
+	realizado el: <strong>{{confirmacion.fecha_sacramento}}</strong><br/>
+	Confirmante: <strong>{{confirmacion.obispo}}</strong><br/>
 	{%if confirmacion.padrino and confirmacion.madrina%}
-	Padrinos: {{ confirmacion.padrino}} y {{ confirmacion.madrina}} <br/><br/>
+	Padrinos: <strong>{{ confirmacion.padrino}}</strong> y <strong>{{ confirmacion.madrina}}</strong> <br/><br/>
 	{%endif%}
 	{%if confirmacion.padrino and not confirmacion.madrina%}
-	Padrino: {{ confirmacion.padrino}} <br/><br/>
+	Padrino: <strong>{{ confirmacion.padrino}}</strong> <br/><br/>
 	{%endif%}
 	{%if not confirmacion.padrino and confirmacion.madrina%}
-	Madrina: {{ confirmacion.madrina}} <br/><br/>
+	Madrina: <strong>{{ confirmacion.madrina}}</strong> <br/><br/>
 	{%endif%}
 
 	Datos fidedignos tomados del archivo parroquial<br/><br/>
@@ -61,7 +61,7 @@ body {
 
 
 
-	Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/>
+	<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong><br/><br/><br/>
 
 	<table align='center'>
 		<tbody>
@@ -70,14 +70,14 @@ body {
 					<p align='center'>
 
 						---------------------------------------------------<br/>
-						P.{{cura}} 
+						<strong>P.{{cura}}</strong> 
 					</p>
 				</td>
 				<td>
 					<p align='center'>
 
 						-----------------------------------------<br/>
-						{{"SECRETARIO"}}
+						<strong>{{"SECRETARIO"}}</strong>
 					</p>
 
 				</td>
@@ -91,8 +91,8 @@ body {
 
 
 
-	<div id="pagina">
-		Pagina Nro: <pdf:pagenumber>
+	<div id="footer">
+		<p>Sistema de Gestion Sacramental Ekkelsia - Reporte generado por:{{"Secretario/a"}}</p>
 	</div>
 
 

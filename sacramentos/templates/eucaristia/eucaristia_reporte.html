@@ -8,11 +8,11 @@
 	margin: 1cm;
 	margin-bottom: 2.5cm;
 	@frame footer {
-		-pdf-frame-content: pagina;
-		bottom: 2cm;
-		margin-left: 1cm;
-		margin-right: 1cm;
-		height: 1cm;
+		-pdf-frame-content: footer;
+		bottom: 0cm;
+		margin-left: 3cm;
+		margin-right: 3cm;
+		height: 3cm;
 	}
 }
 </style>   
@@ -27,27 +27,27 @@
 			{{"Direccion: "}}{{ eucaristia.parroquia.direccion }} {{"Tel: "}}{{eucaristia.parroquia.direccion.telefono}}<br/><br/>
 		</h1>
 		{{"Certificado de Primera Comunión"|upper}}<p/></h4></center></h1>
-		<h2> <p>El suscrito Párroco de {{eucaristia.parroquia|upper}} CERTIFICA:</h2>
-		Que en el libro: {{ eucaristia.libro.numero_libro}}, pagina: {{ eucaristia.pagina}} y con el numero: {{ eucaristia.numero_acta }} </br>
-		se registra el nombre de: {{ eucaristia.feligres}} <br/>
-		Nombre del Padre: {{ eucaristia.feligres.padre}} <br/>
-		Nombre de la Madre: {{ eucaristia.feligres.madre}} <br/>
+		<h2> <p>El suscrito Párroco de <strong>{{eucaristia.parroquia|upper}}</strong> CERTIFICA:</h2>
+		Que en el libro: <strong>{{ eucaristia.libro.numero_libro}}</strong>, pagina: <strong>{{ eucaristia.pagina}}</strong> y con el numero: <strong>{{ eucaristia.numero_acta }}</strong> </br>
+		se registra el nombre de: <strong>{{ eucaristia.feligres}}</strong> <br/>
+		Nombre del Padre: <strong>{{ eucaristia.feligres.padre}}</strong> <br/>
+		Nombre de la Madre: <strong>{{ eucaristia.feligres.madre}}</strong> <br/>
 		{%if eucaristia.padrino and eucaristia.madrina%}
-		Padrinos: {{ eucaristia.padrino}} y {{ eucaristia.madrina}} <br/>
+		Padrinos: <strong>{{ eucaristia.padrino}}</strong> y <strong>{{ eucaristia.madrina}}</strong> <br/>
 		{%endif%}
 		{%if eucaristia.padrino and not eucaristia.madrina%}
-		Padrino: {{ eucaristia.padrino}} <br/>
+		Padrino: <strong>{{ eucaristia.padrino}}</strong> <br/>
 		{%endif%}
 		{%if not eucaristia.padrino and eucaristia.madrina%}
-		Madrina: {{ eucaristia.madrina}} <br/>
+		Madrina: <strong>{{ eucaristia.madrina}}</strong> <br/>
 		{%endif%}
-		Recibió el Sacramento: {{eucaristia.fecha_sacramento}}
-		en la iglesia de: {{ eucaristia.iglesia}} </p>
+		Recibió el Sacramento: <strong>{{eucaristia.fecha_sacramento}}</strong>
+		en la iglesia de: <strong>{{ eucaristia.iglesia}}</strong> </p>
 
 
 
 
-		Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/>
+		<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong><br/><br/><br/>
 		
 
 		<table align='center'>
@@ -57,14 +57,14 @@
 						<p align='center'>
 							
 							---------------------------------------------------<br/>
-							P.{{cura}} 
+							<strong>P.{{cura}}</strong> 
 						</p>
 					</td>
 					<td>
 						<p align='center'>
 							
 							-----------------------------------------<br/>
-							{{"SECRETARIO"}}
+							<strong>{{"SECRETARIO"}}</strong>
 						</p>
 						
 						
@@ -81,8 +81,8 @@
 
 
 
-		<div id="pagina">
-			Pagina Nro: <pdf:pagenumber>
+		<div id="footer">
+			<p>Sistema de Gestion Sacramental Ekkelsia - Reporte generado por:{{"Secretario/a"}}</p>
 		</div>
 
 

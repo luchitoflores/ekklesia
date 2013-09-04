@@ -24,7 +24,7 @@ function inicio(){
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
-	verificar_select_padre("#id_novia,#id_novio,#id_confirmado,#id_feligres,#id_bautizado,#id_padre, #id_madre");
+	
 	
 
 	
@@ -521,13 +521,13 @@ function verificar_select_seleccionado(){
 // 	}
 // }
 
-function verificar_select_bautizado(id_etiqueta){
-	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){
-		$(id_etiqueta).prop('disabled', false);
-	} else {
-		$(id_etiqueta).prop('disabled', true);
-	}
-}
+// function verificar_select_bautizado(id_etiqueta){
+// 	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){
+// 		$(id_etiqueta).prop('disabled', false);
+// 	} else {
+// 		$(id_etiqueta).prop('disabled', true);
+// 	}
+// }
 
 
 

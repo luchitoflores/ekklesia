@@ -265,7 +265,7 @@ class BautismoForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Bautismo',parroquia=parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
-			 empty_label='-- Seleccione --',widget=forms.Select(attrs={'disabled':''}))
+			 empty_label='-- Seleccione --')
 		      	
 	class Meta():
 		model=Bautismo
@@ -317,7 +317,7 @@ class BautismoFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Bautismo',parroquia=parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
-			 empty_label='-- Seleccione --',widget=forms.Select(attrs={'disabled':''}))
+			 empty_label='-- Seleccione --')
       
 	
 	class Meta():
@@ -371,7 +371,7 @@ class EucaristiaForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Eucaristia',parroquia=parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
-			 empty_label='-- Seleccione --',widget=forms.Select(attrs={'disabled':''}))
+			 empty_label='-- Seleccione --')
 
 
 	class Meta():
@@ -422,7 +422,7 @@ class EucaristiaFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Eucaristia',parroquia=parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
-			 empty_label='-- Seleccione --',widget=forms.Select(attrs={'disabled':''}))
+			 empty_label='-- Seleccione --')
 
 
 	class Meta():
@@ -475,7 +475,7 @@ class ConfirmacionForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Confirmacion',parroquia=parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
-			 empty_label='-- Seleccione --',widget=forms.Select(attrs={'disabled':''}))
+			 empty_label='-- Seleccione --')
 
 
 
@@ -529,7 +529,7 @@ class ConfirmacionFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Confirmacion',parroquia=parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
-			 empty_label='-- Seleccione --',widget=forms.Select(attrs={'disabled':''}))
+			 empty_label='-- Seleccione --')
 
 
 	class Meta():
@@ -602,9 +602,9 @@ class MatrimonioForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Matrimonio',parroquia=parroquia)
 		self.fields['novio']=forms.ModelChoiceField(required=False, queryset=novio, 
-			empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+			empty_label='-- Seleccione --')
 		self.fields['novia']=forms.ModelChoiceField(required=False, queryset=novia, 
-			empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+			empty_label='-- Seleccione --')
 
 	class Meta():
 		model=Matrimonio
@@ -673,9 +673,9 @@ class MatrimonioFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Matrimonio',parroquia=parroquia)
 		self.fields['novio']=forms.ModelChoiceField(required=False, queryset=novio, 
-			empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+			empty_label='-- Seleccione --')
 		self.fields['novia']=forms.ModelChoiceField(required=False, queryset=novia, 
-			empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+			empty_label='-- Seleccione --')
 
 
 	class Meta():

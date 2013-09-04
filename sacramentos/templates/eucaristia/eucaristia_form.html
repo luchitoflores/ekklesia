@@ -130,6 +130,7 @@ Agregar Primera Comunión
 						{{form_eucaristia.celebrante.label}}</label>
 					<div class='controls'>
 						{{form_eucaristia.celebrante}}
+						<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 					</div>
 					<div class="controls help-text">
 						{{form_eucaristia.celebrante.help_text}}</div>
@@ -146,5 +147,6 @@ Agregar Primera Comunión
 
 	<!-- Modal para indicar que un usuario ha sid creado-->
 	{%include 'modal.html'%}
+	{%include 'buscar_sacerdotes.html'%}
 
 	{% endblock%}

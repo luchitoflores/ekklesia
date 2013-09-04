@@ -368,7 +368,7 @@ class Sacramento(TimeStampedModel):
     tipo_sacramento = models.CharField(max_length=50, 
     	choices=TIPO_SACRAMENTO_CHOICES,help_text='Elija un tipo de sacramento')
     fecha_sacramento = models.DateField(help_text='Elija una fecha ej:dd/mm/yyyy')
-    celebrante = models.CharField(max_length=200,
+    celebrante = models.ForeignKey(PerfilUsuario, related_name='Sacerdote',
         help_text='Nombre del Celebrante ej: Ob Julio Parrilla')
     lugar_sacramento = models.CharField(max_length=50,
     	help_text='Ingrese el lugar ej: Loja,San Pedro')

@@ -123,6 +123,7 @@ Agregar Confirmacion
 							<label for="id_celebrante" class='control-label'>{{form_confirmacion.celebrante.label}}</label>
 							<div class='controls'>
 								{{form_confirmacion.celebrante}}
+								<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.celebrante.help_text}}</div>
@@ -161,6 +162,5 @@ Agregar Confirmacion
 
 	<!-- Modal para indicar que un usuario ha sid creado-->
 	{%include 'modal.html'%}
-
-
+	{%include 'buscar_sacerdotes.html'%}
 	{% endblock%}

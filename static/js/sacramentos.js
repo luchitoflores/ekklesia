@@ -236,10 +236,36 @@ function cargar_tabla_usuarios_en_modal(){
 			devolver_campos_a_sacramento(map,'#id_confirmado');
 			devolver_campos_a_secretaria(map, '#id_persona');
 
+
 			
 		});
 	});
 }
+
+function cargar_tabla_sacerdotes_en_modal(){
+	$('#id_form_busqueda').on('submit', function(e){
+		e.preventDefault();
+		var url= '/api/sacerdote/';
+		var nombres = $('#id_query_nombres').val();
+		var apellidos = $('#id_query_apellidos').val();
+		var cedula = $('#id_query_cedula').val();
+		mostrar_html("#id_table_busqueda_usuarios");
+		var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
+		var columnas = [
+		{ "mData" : "link", "bSortable": true},
+		{ "mData" : "apellidos", "bSortable": true},
+		{ "mData" : "dni", "bSortable": true }];
+		$.get(url, ctx, function(data){
+			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
+			var map = almacenar_busqueda_en_map(data.perfiles);
+			
+			devolver_campos_a_sacerdote(map,'#id_celebrante');
+
+			
+		});
+	});
+}
+
 
 
 function almacenar_busqueda_en_map(lista){
@@ -271,6 +297,24 @@ function devolver_campos_de_lista(map,id_male,id_female){
 	});
 }
 
+function devolver_campos_a_sacerdote(map,id_male,id_female){
+	$('a#id_click').on('click', function(e){
+		// alert('estoy aqui');
+		e.preventDefault();
+		$("#id_buscar_sacerdotes").modal('hide');  		
+		var id =  $(this).parents('tr').attr('id');
+		var objeto = map[id];
+		if(objeto.sexo =='m'){
+			$(id_male+' option').remove();
+			$(id_male).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+		} 
+		if (objeto.sexo =='f') {
+			$(id_female+' option').remove();
+			$(id_female).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+		}
+	});
+}
+
 function devolver_campos_a_secretaria(map, id_persona){
 	$('a#id_click').on('click', function(e){
 		e.preventDefault();
@@ -282,6 +326,7 @@ function devolver_campos_a_secretaria(map, id_persona){
 		
 	});
 }
+
 
 // function devolver_campos_a_matrimonio(map,id_male,id_female){
 // 	$('a#id_click').on('click', function(e){

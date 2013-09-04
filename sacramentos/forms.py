@@ -250,9 +250,9 @@ class BautismoForm(ModelForm):
 	iglesia = forms.CharField(help_text='Ingrese el nombre de la iglesia: San Jose',
 		required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
 		queryset=Libro.objects.none(),empty_label=None)
 
@@ -303,9 +303,9 @@ class BautismoFormEditar(ModelForm):
 	iglesia = forms.CharField(help_text='Ingrese el nombre de la iglesia: San Jose',
 		required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para el Bautismo')
 
@@ -357,9 +357,9 @@ class EucaristiaForm(ModelForm):
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Eucaristia')
@@ -408,9 +408,9 @@ class EucaristiaFormEditar(ModelForm):
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Eucaristia')
@@ -461,9 +461,9 @@ class ConfirmacionForm(ModelForm):
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
@@ -515,9 +515,9 @@ class ConfirmacionFormEditar(ModelForm):
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
@@ -582,9 +582,9 @@ class MatrimonioForm(ModelForm):
 	iglesia = forms.CharField(required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	testigo_novio= forms.CharField(required=True,label='Testigo',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de testigo ej: Pablo Robles')
@@ -648,9 +648,9 @@ class MatrimonioFormEditar(ModelForm):
 		help_text='Elija tipo de matrimonio Ej: Catolico o Mixto', 
 		choices=TIPO_MATRIMONIO_CHOICES, required=True, 
 		widget=forms.Select(attrs={'required':''}))
-	celebrante = forms.CharField(help_text='Ingrese nombre del celebrante: Luis Arteaga',
-		required=True,label='Celebrante',
-		widget=forms.TextInput(attrs={'required':''}))
+	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		empty_label='-- Seleccione --')
 	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')

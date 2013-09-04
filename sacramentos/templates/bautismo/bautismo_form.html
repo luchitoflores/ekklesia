@@ -126,17 +126,6 @@ Agregar Bautismo
 								{{formBautismo.lugar_sacramento.help_text}}</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_celebrante" class='control-label'>
-								{{formBautismo.celebrante.label}}</label>
-							<div class='controls'>
-								{{formBautismo.celebrante}}
-							</div>
-							<div class="controls help-text">
-								{{formBautismo.celebrante.help_text}}</div>
-						</div>
-					</div>
-					<div class="span4">
-						<div class='control-group'>
 							<label for="id_iglesia" class='control-label'>
 								{{formBautismo.iglesia.label}}</label>
 							<div class='controls'>
@@ -145,8 +134,23 @@ Agregar Bautismo
 							<div class="controls help-text">
 								{{formBautismo.iglesia.help_text}}</div>
 						</div>
-						
 					</div>
+						<div class="span8">		
+							<div class='control-group'>
+								<label for="id_celebrante" class='control-label'>
+									{{formBautismo.celebrante.label}}</label>
+								<div class='controls'>
+									{{formBautismo.celebrante}}
+									<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								</div>
+								<div class="controls help-text">
+								{{formBautismo.celebrante.help_text}}
+								</div>
+							</div>
+						</div>
+		
+	
+					
 				</div>
 			</fieldset>
 
@@ -293,6 +297,8 @@ Agregar Bautismo
 </div>
 
 {%include 'modal.html'%}
+{%include 'buscar_sacerdotes.html'%}
+
 
 
 

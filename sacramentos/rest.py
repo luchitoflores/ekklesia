@@ -62,7 +62,7 @@ def padre_create_ajax(request):
 				perfil.sexo = sexo
 			perfil.save()
 			respuesta = True
-			ctx = {'respuesta': respuesta, 'id': perfil.user.id, 
+			ctx = {'respuesta': respuesta, 'id': perfil.id, 
 			'full_name': perfil.user.get_full_name()}
 		else:
 			errores_usuario = usuario_form.errors

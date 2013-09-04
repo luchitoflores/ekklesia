@@ -4,7 +4,7 @@ import json
 
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, PasswordChangeForm
 from django.contrib.auth.models import Group, User
 from django.core.mail import EmailMultiAlternatives
@@ -57,7 +57,7 @@ def login_view(request):
 			form = AuthenticationForm()
 	return render(request, 'login.html', {'form':form})
 
-
+@login_required(login_url='/login/')
 def logout_view(request):
 	logout(request)
 	return HttpResponseRedirect('/')

@@ -499,8 +499,10 @@ class LibroListView(ListView):
 
 def matrimonio_create_view(request):
 	usuario=request.user
+	novio = PerfilUsuario.objects.padre()
+	novia = PerfilUsuario.objects.madre()
 	if(request.method=='POST'):
-		form_matrimonio=MatrimonioForm(usuario,request.POST)
+		form_matrimonio=MatrimonioForm(usuario,novio,novia,request.POST)
 		if(form_matrimonio.is_valid()):
 			matrimonio=form_matrimonio.save(commit=False)
 			matrimonio.tipo_sacramento='Matrimonio'
@@ -538,7 +540,7 @@ def matrimonio_create_view(request):
 		
 	else:
 
-		form_matrimonio=MatrimonioForm(usuario)
+		form_matrimonio=MatrimonioForm(usuario,novio,novia)
 		
 	ctx={'form_matrimonio':form_matrimonio}
 	return render(request,'matrimonio/matrimonio_form.html',ctx)
@@ -553,9 +555,10 @@ def matrimonio_update_view(request,pk):
 	usuario=request.user
 	matrimonio=get_object_or_404(Matrimonio,pk=pk)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
-	m=matrimonio
+	novio = PerfilUsuario.objects.padre()
+	novia = PerfilUsuario.objects.madre()
 	if request.method == 'POST':
-		form_matrimonio = MatrimonioFormEditar(usuario,request.POST,instance=matrimonio)
+		form_matrimonio = MatrimonioFormEditar(usuario,novio,novia,request.POST,instance=matrimonio)
 		if form_matrimonio.is_valid():
 			form_matrimonio.save()
 			LogEntry.objects.log_action(
@@ -564,7 +567,7 @@ def matrimonio_update_view(request,pk):
             	object_id=matrimonio.id,
             	object_repr=unicode(matrimonio),
             	action_flag=CHANGE,
-            	change_message='Antes: %s - Ahora: %s ' %(m,matrimonio))
+            	change_message='Se actualizo matrimonio')
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/matrimonio')
 		else:
@@ -573,7 +576,23 @@ def matrimonio_update_view(request,pk):
 			return render(request,'matrimonio/matrimonio_form.html', ctx)
 			
 	else:
-		form_matrimonio= MatrimonioFormEditar(usuario,instance=matrimonio)
+		if matrimonio.novio and matrimonio.novia:
+			novio = PerfilUsuario.objects.filter(user__id=matrimonio.novio.user.id)
+			novia = PerfilUsuario.objects.filter(user__id=matrimonio.novia.user.id)
+			form_matrimonio = MatrimonioFormEditar(usuario,novio, novia, instance=matrimonio)
+		elif matrimonio.novio and not matrimonio.novia:
+			novio = PerfilUsuario.objects.filter(user__id=matrimonio.novio.user.id)
+			form_matrimonio = MatrimonioFormEditar(usuario,novio, instance=matrimonio)
+		elif not matrimonio.novio and matrimonio.novia:
+			novia = PerfilUsuario.objects.filter(user__id=matrimonio.novia.user.id)
+			novio= PerfilUsuario.objects.none()
+			form_matrimonio = MatrimonioFormEditar(usuario, novia, instance=matrimonio)
+
+		else:
+			form_matrimonio = MatrimonioFormEditar(usuario,instance=matrimonio)
+
+		# form_usuario = UsuarioForm(instance=user)
+		# form_matrimonio= MatrimonioFormEditar(usuario,instance=matrimonio)
 		
 									
 	ctx = {'form_matrimonio': form_matrimonio,'notas':notas,'object':matrimonio}
@@ -657,9 +676,11 @@ class MatrimonioListView(ListView):
 
 def bautismo_create_view(request):
 	usuario=request.user
+	bautizado=PerfilUsuario.objects.feligres()
+
 	if(request.method == 'POST' ):
-	
-		formBautismo=BautismoForm(usuario,request.POST)
+		
+		formBautismo=BautismoForm(usuario,bautizado,request.POST)
 		# form_nota=NotaMarginalForm(request.POST)
 		if (formBautismo.is_valid()):
 			#perfil=formPerfil.save(commit=False)
@@ -686,7 +707,7 @@ def bautismo_create_view(request):
 			messages.error(request,formBautismo.errors)
 	else:
 		
-		formBautismo=BautismoForm(usuario,)
+		formBautismo=BautismoForm(usuario,bautizado)
 		# form_nota=NotaMarginalForm()
 	ctx={'formBautismo':formBautismo}
 	return render (request,'bautismo/bautismo_form.html',ctx)
@@ -708,8 +729,10 @@ def bautismo_update_view(request,pk):
 	usuario=request.user
 	bautismo= get_object_or_404(Bautismo, pk=pk)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
+	bautizado = PerfilUsuario.objects.feligres()
 	if request.method == 'POST':
-		bautismo_form = BautismoFormEditar(usuario,request.POST or None,instance=bautismo)
+		
+		bautismo_form = BautismoFormEditar(usuario,bautizado,request.POST or None,instance=bautismo)
 		# form_nota=NotaMarginalForm(request.POST,instance=nota)
 		if bautismo_form.is_valid():
 			bautismo_form.save()
@@ -723,12 +746,27 @@ def bautismo_update_view(request,pk):
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/bautismo')
 		else:
-			messages.error(request, 'Error al actualizar')
+			if bautismo.bautizado:
+				bautizado = PerfilUsuario.objects.filter(user__id=bautismo.bautizado.user.id)
+				bautismo_form = BautismoFormEditar(usuario,bautizado, instance=bautismo)
+		
+			else:
+
+				bautismo_form = BautismoFormEditar(instance=bautismo)
+
+			
+			messages.error(request, "Error al actualizar")
 			ctx = {'formBautismo': bautismo_form,'notas':notas,'object':bautismo}
 			return render(request, 'bautismo/bautismo_form.html', ctx)
 			
 	else:
-		bautismo_form = BautismoFormEditar(usuario,instance=bautismo)
+		if bautismo.bautizado:
+			bautizado = PerfilUsuario.objects.filter(user__id=bautismo.bautizado.user.id)
+			bautismo_form = BautismoFormEditar(usuario,bautizado, instance=bautismo)
+		else:
+			bautismo_form = BautismoFormEditar(instance=bautismo)
+
+		bautismo_form = BautismoFormEditar(usuario,bautizado,instance=bautismo)
 		
 		# form_nota=NotaMarginalForm(instance=nota)
 									
@@ -764,8 +802,9 @@ class BautismoListView(ListView):
 
 def eucaristia_create_view(request):
 	usuario=request.user
+	feligres=PerfilUsuario.objects.feligres()
 	if request.method == 'POST':
-		form_eucaristia=EucaristiaForm(usuario,request.POST)
+		form_eucaristia=EucaristiaForm(usuario,feligres,request.POST)
 		if form_eucaristia.is_valid():
 			eucaristia=form_eucaristia.save(commit=False)
 			tipo_sacramento=u'Eucaristia'
@@ -786,7 +825,7 @@ def eucaristia_create_view(request):
 		else:
 			messages.error(request,form_eucaristia.errors)
 	else:
-		form_eucaristia=EucaristiaForm(usuario)
+		form_eucaristia=EucaristiaForm(usuario,feligres)
 
 	ctx={'form_eucaristia':form_eucaristia}
 	return render(request,'eucaristia/eucaristia_form.html',ctx)
@@ -800,8 +839,9 @@ def eucaristia_create_view(request):
 def eucaristia_update_view(request,pk):
 	usuario=request.user
 	eucaristia=get_object_or_404(Eucaristia,pk=pk)
+	feligres= PerfilUsuario.objects.feligres()
 	if(request.method == 'POST'):
-		form_eucaristia=EucaristiaFormEditar(usuario,request.POST,instance=eucaristia)
+		form_eucaristia=EucaristiaFormEditar(usuario,feligres,request.POST,instance=eucaristia)
 		if(form_eucaristia.is_valid()):
 			form_eucaristia.save()
 			LogEntry.objects.log_action(
@@ -817,7 +857,14 @@ def eucaristia_update_view(request,pk):
 			messages.error(request,form_eucaristia.errors)
 		
 	else:
-		form_eucaristia=EucaristiaFormEditar(usuario,instance=eucaristia)
+		if eucaristia.feligres:
+			feligres = PerfilUsuario.objects.filter(user__id=eucaristia.feligres.user.id)
+			form_eucaristia = BautismoFormEditar(usuario,feligres, instance=eucaristia)
+		else:
+			form_eucaristia = EucaristiaFormEditar(instance=eucaristia)
+
+				
+		form_eucaristia=EucaristiaFormEditar(usuario,feligres,instance=eucaristia)
 	ctx={'form_eucaristia':form_eucaristia, 'object':eucaristia}
 	return render(request,'eucaristia/eucaristia_form.html',ctx)
 
@@ -843,9 +890,9 @@ class EucaristiaListView(ListView):
 
 def confirmacion_create_view(request):
 	usuario=request.user
-
+	confirmado=PerfilUsuario.objects.feligres()
 	if(request.method == 'POST'):
-		form_confirmacion=ConfirmacionForm(usuario,request.POST)
+		form_confirmacion=ConfirmacionForm(usuario,confirmado,request.POST)
 		if(form_confirmacion.is_valid()):
 			confirmacion=form_confirmacion.save(commit=False)
 			confirmacion.tipo_sacramento='Confirmacion'
@@ -866,7 +913,7 @@ def confirmacion_create_view(request):
 			messages.error(request,form_confirmacion.errors)
 			
 	else:
-		form_confirmacion=ConfirmacionForm(usuario)
+		form_confirmacion=ConfirmacionForm(usuario,confirmado)
 	ctx={'form_confirmacion':form_confirmacion}
 	return render(request,'confirmacion/confirmacion_form.html',ctx)
 
@@ -881,8 +928,9 @@ def confirmacion_create_view(request):
 def confirmacion_update_view(request,pk):
 	usuario=request.user
 	confirmacion=get_object_or_404(Confirmacion,pk=pk)
+	confirmado=PerfilUsuario.objects.feligres()
 	if(request.method == 'POST'):
-		form_confirmacion=ConfirmacionFormEditar(usuario,request.POST,instance=confirmacion)
+		form_confirmacion=ConfirmacionFormEditar(usuario,confirmado,request.POST,instance=confirmacion)
 		if(form_confirmacion.is_valid()):
 			form_confirmacion.save()
 			LogEntry.objects.log_action(
@@ -897,7 +945,13 @@ def confirmacion_update_view(request,pk):
 		else:
 			messages.error(request,form_confirmacion.errors)
 	else:
-		form_confirmacion=ConfirmacionFormEditar(usuario,instance=confirmacion)
+		if confirmacion.confirmado:
+			confirmado = PerfilUsuario.objects.filter(user__id=confirmacion.confirmado.user.id)
+			form_confirmacion = ConfirmacionFormEditar(usuario,confirmado, instance=confirmacion)
+		else:
+			form_confirmacion = EucaristiaFormEditar(instance=confirmacion)
+
+		form_confirmacion=ConfirmacionFormEditar(usuario,confirmado,instance=confirmacion)
 	ctx={'form_confirmacion':form_confirmacion,'object':confirmacion}
 	return render(request,'confirmacion/confirmacion_form.html',ctx)
 

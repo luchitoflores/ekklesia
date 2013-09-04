@@ -9,11 +9,11 @@
 	size: a4; 
 	margin: 3cm 3cm 3cm 3cm;
 	@frame footer {
-		-pdf-frame-content: pagina;
-		bottom: 2cm;
-		margin-left: 1cm;
-		margin-right: 1cm;
-		height: 1cm;
+		-pdf-frame-content: footer;
+		bottom: 0cm;
+		margin-left: 3cm;
+		margin-right: 3cm;
+		height: 3cm;
 	}
 }
 body {
@@ -36,31 +36,31 @@ body {
 			{{"Loja - Ecuador" | upper}} <br/>
 
 			<div id='id_direccion'>{{"Direccion: "}}{{ bautismo.parroquia.direccion }} {{"Tel: "}}{{bautismo.parroquia.direccion.telefono}}<br/><br/></div>
-			{{"Partida Bautismal"|upper}}<p/></h4></center></h1>
-			<h2> <p>El suscrito Párroco de {{bautismo.parroquia|upper}} CERTIFICA:</h2>
-			Que en el libro: {{ bautismo.libro.numero_libro}}, pagina: {{ bautismo.pagina}} y con el numero: {{ bautismo.numero_acta }} </br>
-			se encuentra la Partida Bautismal de: {{ bautismo.bautizado}} <br/>
+			{{"Partida Bautismal"|upper}}<p/></h4></h1></center>
+			<h2> <p>El suscrito Párroco de <strong>{{bautismo.parroquia|upper}}</strong> CERTIFICA:</h2>
+			Que en el libro: <strong>{{ bautismo.libro.numero_libro}}</strong>, pagina: <strong>{{ bautismo.pagina}}</strong> y con el numero: <strong>{{ bautismo.numero_acta }}</strong> </br>
+			se encuentra la Partida Bautismal de: <strong>{{ bautismo.bautizado}}</strong> <br/>
 			{%if "m" in bautismo.bautizado.sexo%}
-			Hijo de: {{ bautismo.bautizado.padre}} <br/>
-			y de: {{ bautismo.bautizado.madre}} <br/>
-			Nacido el: {{bautismo.bautizado.fecha_nacimiento}}<br/>
-			y bautizado el: {{bautismo.fecha_sacramento}}<br/>
+			Hijo de: <strong>{{ bautismo.bautizado.padre}}</strong> <br/>
+			y de: <strong>{{ bautismo.bautizado.madre}}</strong> <br/>
+			Nacido el: <strong>{{bautismo.bautizado.fecha_nacimiento}}</strong><br/>
+			y bautizado el: <strong>{{bautismo.fecha_sacramento}}</strong><br/>
 			{%else%}
-			Hija de: {{ bautismo.bautizado.padre}} <br/>
-			y de: {{ bautismo.bautizado.madre}} <br/>
-			Nacida el: {{bautismo.bautizado.fecha_nacimiento}}<br/>
-			y bautizada el: {{bautismo.fecha_sacramento}}<br/>
+			Hija de: <strong>{{ bautismo.bautizado.padre}}</strong> <br/>
+			y de: <strong>{{ bautismo.bautizado.madre}}</strong> <br/>
+			Nacida el: <strong>{{bautismo.bautizado.fecha_nacimiento}}</strong><br/>
+			y bautizada el: <strong>{{bautismo.fecha_sacramento}}</strong><br/>
 			{%endif%}
-			Bautizante:  {{bautismo.celebrante}}<br/>
+			Bautizante:  <strong>{{bautismo.celebrante}}</strong><br/>
 
 			{%if bautismo.padrino and bautismo.madrina%}
-			Padrinos: {{ bautismo.padrino}} y {{ bautismo.madrina}} <br/><br/>
+			Padrinos: <strong>{{ bautismo.padrino}}</strong> y <strong>{{ bautismo.madrina}}</strong> <br/><br/>
 			{%endif%}	
 			{%if bautismo.padrino and  not bautismo.madrina%}
-			Padrino: {{ bautismo.padrino}}<br/><br/>
+			Padrino: <strong>{{ bautismo.padrino}}</strong><br/><br/>
 			{%endif%}	
 			{%if not bautismo.padrino and  bautismo.madrina%}
-			Madrina: {{ bautismo.madrina}}<br/><br/>
+			Madrina: <strong>{{ bautismo.madrina}}</strong><br/><br/>
 			{%endif%}	
 			
 			Datos fidedignos tomados del archivo parroquial<br/><br/>
@@ -70,7 +70,7 @@ body {
 
 
 
-			Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}<br/><br/><br/><br/><br/><br/>
+			<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong><br/><br/><br/><br/><br/><br/>
 			
 			<table align='center'>
 				<tbody>
@@ -79,14 +79,14 @@ body {
 							
 							
 							---------------------------------------------------<br/>
-							P.{{cura}} 
+							<strong>P.{{cura}}</strong> 
 							
 						</td>
 						<td style="text-align: center;">
 							
 							
 							---------------------------------------------------<br/>
-							{{"SECRETARIO"}}
+							<strong>{{"SECRETARIO"}}</strong>
 							
 
 						</td>
@@ -102,15 +102,17 @@ body {
 			Observaciones:<br/>
 
 			{%for n in notas%}
-			{{n.fecha|date:"SHORT_DATE_FORMAT"}}{{": "}}{{n.descripcion}}<br/>
+			<strong>{{n.fecha|date:"SHORT_DATE_FORMAT"}}{{": "}}{{n.descripcion}}</strong><br/>
 			{%endfor%}
 
 
 
-			<div id="pagina">
-				Pagina Nro: <pdf:pagenumber>
+			<div id="footer">
+				<p>Sistema de Gestion Sacramental Ekkelsia - Reporte generado por:{{"Secretario/a"}}</p>
+				
 			</div>
 
-
 		</body>
-		</html>
+		
+	</body>
+	</html>

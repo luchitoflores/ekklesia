@@ -10,11 +10,11 @@
 	size: a4; 
 	margin: 3cm 3cm 3cm 3cm;
 	@frame footer {
-		-pdf-frame-content: pagina;
-		bottom: 2cm;
-		margin-left: 1cm;
-		margin-right: 1cm;
-		height: 1cm;
+		-pdf-frame-content: footer;
+		bottom: 0.5cm;
+		margin-left: 3cm;
+		margin-right: 3cm;
+		height: 3cm;
 	}
 }
 body {
@@ -32,9 +32,9 @@ body {
 		<tbody>
 			<tr>
 				<td>
-					Num: {{bautismo.numero_acta}}<br/>
+					Num: <strong>{{bautismo.numero_acta}}<br/>
 					{{bautismo.bautizado.user.first_name}}<br/>
-					{{bautismo.bautizado.user.last_name}}<br/>
+					{{bautismo.bautizado.user.last_name}}</strong><br/>
 				</td>
 				<td>
 					<p align="justify"> 
@@ -77,6 +77,7 @@ body {
 						Fue su Madrina <strong>{{ bautismo.madrina}}</strong>, a quien advertí de su parentezco espiritual y obligaciones. Y para que conste lo firmo.<br/>
 						{%endif%}
 						<br/><br/><br/>
+
 						<p align='center'>
 							-----------------------------------------------------<br/><br/>
 							<strong>{{"PARROCO"}}</strong>
@@ -94,5 +95,10 @@ body {
 	<br/>
 	<br/>
 
+	<div id="footer">
+		<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong>
+		<p>Sistema de Gestion Sacramental Ekkelsia - Reporte generado por:{{"Secretario/a"}}</p>
+		<p></p>
+	</div>
 </body>
 </html>

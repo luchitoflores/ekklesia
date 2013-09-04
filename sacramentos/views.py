@@ -30,7 +30,7 @@ from .models import (PerfilUsuario,
 	)
 
 from .forms import (
-	UsuarioForm, PerfilUsuarioForm, PadreForm, UsuarioPadreForm,
+	UsuarioForm, UsuarioPadreForm, UsuarioSacerdoteForm, PerfilUsuarioForm, PadreForm, SacerdoteForm, 
 	MatrimonioForm,MatrimonioFormEditar,
 	BautismoForm,BautismoFormEditar,
 	EucaristiaForm,EucaristiaFormEditar,
@@ -39,7 +39,6 @@ from .forms import (
 	DivErrorList,
 	IntencionForm,
 	ParroquiaForm, 
-	SacerdoteForm,
 	AsignarParroquiaForm,
 	AsignarSecretariaForm,
 	)
@@ -185,7 +184,7 @@ def sacerdote_create_view(request):
 	success_url = '/sacerdote/'
 	if request.method == 'POST':
 		form_sacerdote = SacerdoteForm(request.POST)
-		form_usuario = UsuarioForm(request.POST)
+		form_usuario = UsuarioSacerdoteForm(request.POST)
 		if form_sacerdote.is_valid() and form_usuario.is_valid():
 			sacerdotes, created = Group.objects.get_or_create(name='Sacerdote')
 			usuario = form_usuario.save(commit= False) 
@@ -208,7 +207,7 @@ def sacerdote_create_view(request):
 
 	else:
 		form_sacerdote = SacerdoteForm()
-		form_usuario = UsuarioForm()
+		form_usuario = UsuarioSacerdoteForm()
 		ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario}
 		return render(request, template_name, ctx)
 
@@ -222,7 +221,7 @@ def sacerdote_update_view(request, pk):
 		success_url = '/sacerdote/'
 		if request.method == 'POST':
 			form_sacerdote = SacerdoteForm(request.POST, instance=sacerdote)
-			form_usuario = UsuarioForm(request.POST, instance=sacerdote.user)
+			form_usuario = UsuarioSacerdoteForm(request.POST, instance=sacerdote.user)
 			if form_sacerdote.is_valid() and form_usuario.is_valid():
 				usuario = form_usuario.save() 
 				sacerdote = form_sacerdote.save()
@@ -237,7 +236,7 @@ def sacerdote_update_view(request, pk):
 
 		else:
 			form_sacerdote = SacerdoteForm(instance=sacerdote)
-			form_usuario = UsuarioForm(instance=sacerdote.user)
+			form_usuario = UsuarioSacerdoteForm(instance=sacerdote.user)
 			ctx = {'form_sacerdote': form_sacerdote, 'form_usuario':form_usuario, 'object': sacerdote}
 			return render(request, template_name, ctx)
 
@@ -1044,12 +1043,12 @@ def intencion_create_view(request):
 		if form_intencion.is_valid():
 			intencion = form_intencion.save(commit=False)
 			try:
-				asignacion = AsignacionParroquia.objects.filter(persona__user=request.user)[:1]
+				asignacion = AsignacionParroquia.objects.get(persona__user=request.user, estado=True)
 				intencion.parroquia = asignacion.parroquia
 				intencion.save()
 				messages.success(request, 'Creado exitosamente')
 				return HttpResponseRedirect(success_url)
-			except:
+			except ObjectDoesNotExist:
 				raise Http404
 		else:
 			messages.error(request, u'Uno o más campos no son incorrectos: %s' % form_intencion.errors)
@@ -1156,6 +1155,44 @@ class AsignarSecretariaCreate(CreateView):
 			user.save()
 		
 		return super(AsignarParroquiaCreate, self).form_valid(form)
+
+@login_required
+def asignar_secretaria_create(request):
+	template_name = "parroquia/asignar_secretaria_form.html"
+	success_url = '/asignar/secretaria/'
+	usuario = request.user
+	if request.method == 'POST':
+		form = AsignarSecretariaForm(usuario, request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(success_url)
+		else:
+			messages.error(request, 'Uno o más cámpos son inválidos')
+			ctx = {'form': form}
+			# return render(request, template_name, ctx)
+	else:
+		form = AsignarSecretariaForm(usuario)
+		ctx = {'form': form}
+	return render(request, template_name, ctx)
+
+@login_required
+def asignar_secretaria_update(request, pk):
+	asignacion = AsignacionParroquia.objects.get(pk=pk)
+	template_name = "parroquia/asignar_secretaria_form.html"
+	success_url = '/asignar/secretaria/'
+	if request.method == 'POST':
+		form = AsignarSecretariaForm(request.user, request.POST, instance=asignacion)
+		if form.is_valid():
+			return HttpResponseRedirect(success_url)
+		else:
+			messages.error(request, 'Uno o más cámpos son inválidos')
+			ctx = {'form': form}
+			return render(request, template_name, ctx)
+	else:
+		form = AsignarSecretariaForm(instance=asignacion)
+		ctx = {'form': form}
+		return render(request, template_name, ctx)
+
 
 
 class AsignarSecretariaUpdate(UpdateView):

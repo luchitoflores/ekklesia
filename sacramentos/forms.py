@@ -30,15 +30,13 @@ class UsuarioForm(ModelForm):
 		widget=forms.TextInput(attrs={'required': ''}))
 	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
-	groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all(),widget=forms.CheckboxSelectMultiple())
-
+	groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all(),
+		help_text = 'Los grupos a los que este usuario pertenece. Un usuario obtendrá todos los permisos concedidos a cada uno sus grupos. Ud. puede seleccionar más de una opción.', widget=forms.CheckboxSelectMultiple())
+	email = forms.EmailField(label='Email', help_text='Ingrese una dirección de correo electrónico. Ej: diocesisloja@gmail.com', required=False)
 	class Meta():
 		model = User
 		fields= ('first_name', 'last_name', 'email', 'groups')
-		# widgets = {
-		# 	'groups': forms.CheckboxSelectMultiple(attrs={'required':''})
-		# }
-
+		
 
 class UsuarioPadreForm(ModelForm):
 	first_name = forms.CharField(required=True, label='Nombres', help_text='Ingrese los nombres completos. Ej: Juan José',
@@ -49,6 +47,18 @@ class UsuarioPadreForm(ModelForm):
 	class Meta():
 		model = User
 		fields= ('first_name', 'last_name')
+
+class UsuarioSacerdoteForm(ModelForm):
+	first_name = forms.CharField(required=True, label='Nombres', help_text='Ingrese los nombres completos. Ej: Juan José',
+		widget=forms.TextInput(attrs={'required': ''}))
+	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+		widget=forms.TextInput(attrs={'required': ''}))
+	groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all().exclude(name='Feligres'),
+		help_text = 'Los grupos a los que este usuario pertenece. Un usuario obtendrá todos los permisos concedidos a cada uno sus grupos. Ud. puede seleccionar más de una opción.', widget=forms.CheckboxSelectMultiple())
+	email = forms.EmailField(required=True, label='Email', help_text='Ingrese una dirección de correo electrónico. Ej: diocesisloja@gmail.com')
+	class Meta():
+		model = User
+		fields= ('first_name', 'last_name', 'email', 'groups')
 		
 
 class PerfilUsuarioForm(ModelForm):
@@ -707,7 +717,7 @@ class AsignarParroquiaForm(ModelForm):
 		model = AsignacionParroquia
 		widgets = {
 		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
-		'fin': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		'fin': forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
 		}
 
 #Form para asignar una secretaria a una parroquia
@@ -715,9 +725,10 @@ class AsignarSecretariaForm(ModelForm):
 	persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.none()) 
 	# parroquia = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.filter()) 
 	
-	# def __init__(self, *args, **kwargs):
-	# 	super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
-	# 	self.fields['parroquia']=forms.ModelChoiceField(queryset=PerfilUsuario.objects.get(user=self.request.user).parroquias, empty_label='-- Seleccione --',
+	def __init__(self, user, *args, **kwargs):
+		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
+		parroquia = AsignacionParroquia.objects.get(persona__user=user, estado=True).parroquia
+		self.fields['parroquia']=forms.ModelChoiceField(queryset=Parroquia.objects.filter(id=parroquia.id), empty_label='-- Seleccione --')
 
 	class Meta:
 		model = AsignacionParroquia

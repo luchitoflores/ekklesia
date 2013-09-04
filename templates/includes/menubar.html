@@ -20,7 +20,14 @@
 						<li><a href="{% url 'parroquiacivil_list'%}">Parroquias</a></li>
 					</ul>
 				</li>
-				<li><a href="{%url 'parroquia_list'%}">Parroquias</a></li>
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Parroquias<b class="caret"></b></a>
+					<ul class="dropdown-menu">
+						<li><a href="{%url 'parroquia_list'%}">Parroquias</a></li>
+						<li><a href="{%url 'asignar_parroquia_list'%}">Asignar Administrador</a></li>
+						<li><a href="{%url 'asignar_secretaria_list'%}">Asignar Secretaria</a></li>
+					</ul>
+				</li>
 				<li><a href="{%url 'group_list'%}">Grupos y Permisos</a></li>
 				<li><a href="{%url 'log_list'%}">Logs</a></li>
 			</ul>

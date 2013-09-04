@@ -1331,4 +1331,9 @@ def eucaristia_reporte(request, pk):
 		'cura':cura},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
-
+def usuario_reporte_honorabilidad(request,pk):
+	perfil=get_object_or_404(PerfilUsuario,pk=pk)
+	cura=AsignacionParroquia.objects.get(persona__user=request.user)
+	html = render_to_string('usuario/certificado_honorabilidad.html', {'pagesize':'A4', 'perfil':perfil,
+		'cura':cura},context_instance=RequestContext(request))
+	return generar_pdf(html)

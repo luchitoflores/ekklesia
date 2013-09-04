@@ -33,7 +33,21 @@ Agregar Feligrés
 	<li class='active'><a href="#id_datos_personales" data-toggle='tab'>Datos Personales</a></li>
 </ul>
 -->
-<div class="tab-content">
+{%if perfil.id%}
+<div class="btn-toolbar pull-right">
+<div class="btn-group">
+    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+        <i class='icon-print'></i>  Reportes <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu pull-right" >
+        <li>
+            <a href="{%url 'usuario_certificado' pk=perfil.id%}" target="_blank"><i class='icon-file-text-alt'></i> Certificado Honorabilidad</a>
+        </li>
+     </ul>
+  </div>
+</div>
+{%endif%}
+
 	<!--<div id='id_datos_personales' class='tab-pane active'>-->
 	<form id='id_form_usuario_create' method='POST' class='form-horizontal'>
 		{%csrf_token%}
@@ -316,7 +330,7 @@ Agregar Feligrés
 
 		</form>
 
-	</div>
+
 
 	<!--<a href="#id_modal_direccion" class='btn btn-primary' data-toggle='modal'>Nueva Dirección</a> -->
 

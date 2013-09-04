@@ -42,8 +42,7 @@ function check(input) {
     </button>
     <ul class="dropdown-menu pull-right" >
         <li>
-            <a href="{%url 'matrimonio_acta' pk=object.id%}" target="_blank"><i class='icon-book '></i> Acta</a>
-            <a href="{%url 'matrimonio_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Certificado</a>
+            <a href="{%url 'matrimonio_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Partida Matrimonial</a>
         </li>
      </ul>
   </div>
@@ -159,6 +158,17 @@ function check(input) {
 								{{form_matrimonio.testigo_novio.help_text}}</div>
 						</div>
 						<div class='control-group'>
+							<label for="id_testigo_novia" class='control-label'>{{form_matrimonio.testigo_novia.label}}</label>
+							<div class='controls'>
+								{{form_matrimonio.testigo_novia}}
+							</div>
+							<div class="controls help-text">
+								{{form_matrimonio.testigo_novia.help_text}}</div>
+						</div>
+						
+					</div>
+					<div class="span4">
+						<div class='control-group'>
 							<label for="id_celebrante" class='control-label'>
 								{{form_matrimonio.celebrante.label}}</label>
 							<div class='controls'>
@@ -168,16 +178,7 @@ function check(input) {
 							{{form_matrimonio.celebrante.help_text}}
 							</div>
 						</div>
-					</div>
-					<div class="span4">
-						<div class='control-group'>
-							<label for="id_testigo_novia" class='control-label'>{{form_matrimonio.testigo_novia.label}}</label>
-							<div class='controls'>
-								{{form_matrimonio.testigo_novia}}
-							</div>
-							<div class="controls help-text">
-								{{form_matrimonio.testigo_novia.help_text}}</div>
-						</div>
+						
 						<div class='control-group'>
 							<label for="id_padrino" class='control-label'>{{form_matrimonio.padrino.label}}</label>
 							<div class='controls'>

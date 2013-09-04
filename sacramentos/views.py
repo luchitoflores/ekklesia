@@ -1214,7 +1214,8 @@ class AsignarSecretariaUpdate(UpdateView):
 	model = AsignacionParroquia
 	form_class = AsignarSecretariaForm
 	template_name = 'parroquia/asignar_secretaria_form.html'
-	success_url = '/asignar/secretaria/'	
+	success_url = '/asignar/secretaria/'
+
 
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, *args, **kwargs):
@@ -1237,7 +1238,8 @@ class AsignarSecretariaUpdate(UpdateView):
 class AsignarSecretariaList(ListView):
 	model = AsignacionParroquia
 	template_name = 'parroquia/asignar_secretaria_list.html'
-
+	queryset = AsignacionParroquia.objects.exclude(persona__profesion='Sacerdote')	
+	
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, *args, **kwargs):
 		return super(AsignarSecretariaList, self).dispatch(*args, **kwargs)

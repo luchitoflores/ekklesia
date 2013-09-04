@@ -3,6 +3,7 @@ from django.contrib import messages
 from datetime import datetime, date
 from django import forms
 from django.contrib.auth.models import User, Group
+from django.core.exceptions import ObjectDoesNotExist
 from django.forms import ModelForm
 from django.forms.util import ErrorList
 from django.forms.widgets import RadioSelect
@@ -722,9 +723,15 @@ class AsignarParroquiaForm(ModelForm):
 
 #Form para asignar una secretaria a una parroquia
 class AsignarSecretariaForm(ModelForm):
-	# persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=persona) 
-	# parroquia = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.filter()) 
 	
+	def clean_persona(self):
+		data = self.cleaned_data['persona']
+		try: 
+			asignacion = AsignacionParroquia.objects.get(persona=data)
+			raise forms.ValidationError('el perfil seleccionado ya tiene una asignación activa')
+		except ObjectDoesNotExist:
+			return data
+		
 	def __init__(self, user, persona = PerfilUsuario.objects.none(), *args, **kwargs):
 		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
 		self.fields['persona']=forms.ModelChoiceField(label = 'Secretario/a', queryset=persona, empty_label='-- Seleccione --')

@@ -192,7 +192,45 @@ def buscar_usuarios(request):
 	return HttpResponse(json.dumps(ctx), content_type='application/json')
 
 
+def buscar_sacerdotes(request):
+	nombres = request.GET.get('nombres')
+	apellidos = request.GET.get('apellidos')
+	cedula = request.GET.get('cedula')
+	lista = list()
+	bandera = False
+	
+	if cedula:
+		try:
+			perfil = PerfilUsuario.objects.get(dni=cedula,profesion='Sacerdote')
+			bandera = True
+			lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href=".">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, "DT_RowId":perfil.id})
+			ctx={'perfiles':lista, 'bandera': bandera}
+			
+		except Exception:
+			bandera=False
+			ctx={'perfiles':lista, 'bandera': bandera}
 
+	elif nombres or apellidos:
+		try:
+			bandera = True
+			perfiles = PerfilUsuario.objects.filter(user__last_name__contains= apellidos, user__first_name__contains=nombres,profesion='Sacerdote')
+			if len(perfiles) > 0:
+				perfiles.distinct().order_by('user__last_name', 'user__first_name' )
+				for perfil in perfiles:
+					lista.append({'id': perfil.id , 'dni': perfil.dni, 'link': '<a id="id_click" href=".">'+perfil.user.first_name+'</a>', 'nombres': perfil.user.first_name, 'apellidos': perfil.user.last_name, 'lugar_nacimiento': perfil.lugar_nacimiento, 'profesion':perfil.profesion, 'estado_civil': perfil.estado_civil, 'sexo': perfil.sexo, "DT_RowId":perfil.id})
+				ctx={'perfiles':lista, 'bandera': bandera}
+			else:
+				bandera = False
+				ctx={'perfiles':lista, 'bandera': bandera}
+			
+		except Exception:
+			bandera=False
+			ctx={'perfiles': lista, 'bandera': bandera}
+
+	else:
+		bandera=False
+		ctx={'perfiles':lista, 'bandera': bandera}
+	return HttpResponse(json.dumps(ctx), content_type='application/json')
 
 # Esta funcion estaba funcionando con el plugin de datatables
 

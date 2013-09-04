@@ -45,6 +45,7 @@ urlpatterns = patterns('',
 
 	#urls del api rest usuarios
 	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
+	url(r'^api/sacerdote/$', 'sacramentos.rest.buscar_sacerdotes', name='api_sacerdote_list'),
 	url(r'^api/asignarpadre/$', 'sacramentos.rest.edit_padre_viewapi', 
 		name='api_setear_padre'),
 	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', 

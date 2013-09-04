@@ -18,8 +18,8 @@ function inicio(){
 	radio_button();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
 	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
-	
 	cargar_tabla_usuarios_en_modal();
+	cargar_tabla_sacerdotes_en_modal();
 	verificar_select_seleccionado();
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
@@ -126,7 +126,8 @@ function radio_button(){
 		}
 		if ($(this).attr('id')=='id_button_cedula'){
 			$(this).addClass('btn btn-primary');
-			$('#id_button_nombres').removeClass('btn btn-primary').addClass('btn');
+			$('#id_button_nombres').removeClass('btn btn-primary');
+			$('#id_button_nombres').addClass('btn');
 			$('#id_div_form_buscar').attr('style', 'display:auto; margin-top:20px');
 			$('#id_div_busqueda_cedula').attr('style', 'display:inline-block');
 			$('#id_div_mensaje').attr('style', 'display:none');
@@ -135,7 +136,8 @@ function radio_button(){
 		}
 		if ($(this).attr('id')=='id_button_nombres'){
 			$(this).addClass('btn btn-primary');
-			$('#id_button_cedula').removeClass('btn btn-primary').addClass('btn');
+			$('#id_button_cedula').removeClass('btn btn-primary');
+			$('#id_button_cedula').addClass('btn');
 			$('#id_div_form_buscar').attr('style', 'display:auto; margin-top:20px');
 			$('#id_div_busqueda_nombres').attr('style', 'display:inline-block');
 			$('#id_div_mensaje').attr('style', 'display:none');
@@ -144,6 +146,8 @@ function radio_button(){
 		}
 	});
 }
+
+
 
 // function crear_nota(identificador, idnota,idnota2, idmodal){
 // 	$(identificador).on('submit', function(e){
@@ -243,25 +247,23 @@ function cargar_tabla_usuarios_en_modal(){
 }
 
 function cargar_tabla_sacerdotes_en_modal(){
-	$('#id_form_busqueda').on('submit', function(e){
+	$('#id_form_busqueda_sacerdotes').on('submit', function(e){
 		e.preventDefault();
 		var url= '/api/sacerdote/';
 		var nombres = $('#id_query_nombres').val();
 		var apellidos = $('#id_query_apellidos').val();
 		var cedula = $('#id_query_cedula').val();
-		mostrar_html("#id_table_busqueda_usuarios");
+		mostrar_html("#id_table_busqueda_sacerdotes");
 		var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
 		var columnas = [
 		{ "mData" : "link", "bSortable": true},
 		{ "mData" : "apellidos", "bSortable": true},
 		{ "mData" : "dni", "bSortable": true }];
 		$.get(url, ctx, function(data){
-			tablas_busqueda_ajax("#id_table_busqueda_usuarios", columnas, data.perfiles);
+			tablas_busqueda_ajax("#id_table_busqueda_sacerdotes", columnas, data.perfiles);
 			var map = almacenar_busqueda_en_map(data.perfiles);
-			
 			devolver_campos_a_sacerdote(map,'#id_celebrante');
 
-			
 		});
 	});
 }
@@ -297,21 +299,17 @@ function devolver_campos_de_lista(map,id_male,id_female){
 	});
 }
 
-function devolver_campos_a_sacerdote(map,id_male,id_female){
+function devolver_campos_a_sacerdote(map, id_sacerdote){
 	$('a#id_click').on('click', function(e){
 		// alert('estoy aqui');
 		e.preventDefault();
 		$("#id_buscar_sacerdotes").modal('hide');  		
 		var id =  $(this).parents('tr').attr('id');
 		var objeto = map[id];
-		if(objeto.sexo =='m'){
-			$(id_male+' option').remove();
-			$(id_male).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
-		} 
-		if (objeto.sexo =='f') {
-			$(id_female+' option').remove();
-			$(id_female).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
-		}
+		$(id_sacerdote+' option').remove();
+		$(id_sacerdote).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
+
+		
 	});
 }
 

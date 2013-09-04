@@ -251,7 +251,7 @@ class BautismoForm(ModelForm):
 		required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
 	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+		queryset=PerfilUsuario.objects.none(),
 		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
 		queryset=Libro.objects.none(),empty_label=None)
@@ -267,6 +267,10 @@ class BautismoForm(ModelForm):
 			estado='Abierto',tipo_libro='Bautismo',parroquia=parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
 			 empty_label='-- Seleccione --')
+
+		self.fields['celebrante']=forms.ModelChoiceField(required=True, queryset=bautizado,
+			 empty_label='-- Seleccione --')
+
 		      	
 	class Meta():
 		model=Bautismo
@@ -319,6 +323,10 @@ class BautismoFormEditar(ModelForm):
 			tipo_libro='Bautismo',parroquia=parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
 			 empty_label='-- Seleccione --')
+		celebrante=Bautismo.objects.get(bautizado=bautizado)
+		self.fields['celebrante'].queryset=PerfilUsuario.objects.filter(id=celebrante.id)
+			 
+
       
 	
 	class Meta():
@@ -494,7 +502,7 @@ class ConfirmacionForm(ModelForm):
 
 class ConfirmacionFormEditar(ModelForm):
 	def clean_fecha_sacramento(self):
-		data = self.cleaned_data['fecha_nacimiento']
+		data = self.cleaned_data['fecha_sacramento']
 		if data > date.today():
 			raise forms.ValidationError('La fecha de la Confirmacion no puede ser mayor a la fecha actual')
 		return data

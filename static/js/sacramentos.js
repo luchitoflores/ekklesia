@@ -234,7 +234,8 @@ function cargar_tabla_usuarios_en_modal(){
 			devolver_campos_a_sacramento(map,'#id_bautizado');
 			devolver_campos_a_sacramento(map,'#id_feligres');
 			devolver_campos_a_sacramento(map,'#id_confirmado');
-			devolver_campos_a_sacerdote(map,'#id_celebrante');
+			devolver_campos_a_secretaria(map, '#id_persona');
+
 
 			
 		});
@@ -313,6 +314,20 @@ function devolver_campos_a_sacerdote(map,id_male,id_female){
 		}
 	});
 }
+
+function devolver_campos_a_secretaria(map, id_persona){
+	$('a#id_click').on('click', function(e){
+		e.preventDefault();
+		$("#id_buscar_secretaria").modal('hide');  		
+		var id =  $(this).parents('tr').attr('id');
+		var objeto = map[id];
+		$(id_persona+' option').remove();
+		$(id_persona).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres + " " + objeto.apellidos+'</option>')
+		
+	});
+}
+
+
 // function devolver_campos_a_matrimonio(map,id_male,id_female){
 // 	$('a#id_click').on('click', function(e){
 // 		// alert('estoy aqui');
@@ -498,13 +513,13 @@ function verificar_select_seleccionado(){
 	}
 }
 
-function verificar_select_padre(id_etiqueta){
-	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){
-		$(id_etiqueta).prop('disabled', false);
-	} else {
-		$(id_etiqueta).prop('disabled', true);
-	}
-}
+// function verificar_select_padre(id_etiqueta){
+// 	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){
+// 		$(id_etiqueta).prop('disabled', false);
+// 	} else {
+// 		$(id_etiqueta).prop('disabled', true);
+// 	}
+// }
 
 function verificar_select_bautizado(id_etiqueta){
 	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){

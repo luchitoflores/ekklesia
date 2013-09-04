@@ -36,11 +36,11 @@ class PersonaManager(models.Manager):
 	def todos(self):
 		return self.model.objects.all()
 
-	def sacerdotes(self):
+	def sacerdote(self):
 		return self.model.objects.filter(user__groups__name='Sacerdote', profesion='Sacerdote')
 
-	def feligreses(self):
-		return self.model.objects.filter(user__groups__name='Feligres')
+	# def feligres(self):
+	# 	return self.model.objects.filter(user__groups__name='Feligres', profesion='-Sacerdote')
 
 	def username_disponible(self, username):
 		try:

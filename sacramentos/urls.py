@@ -18,7 +18,7 @@ from .views import (
 	parroquia_create_view, parroquia_update_view, ParroquiaListView,
 	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
 	AsignarSecretariaCreate, AsignarSecretariaUpdate, AsignarSecretariaList,
-	asignar_secretaria_create,
+	asignar_secretaria_create, asignar_secretaria_update, 
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	LogListView,
 	)
@@ -116,8 +116,9 @@ urlpatterns = patterns('',
 
 	#urls para asignación de parroquias a los párrocos
 	# url(r'^asignar/secretaria/add/$', AsignarSecretariaCreate.as_view() , name='asignar_secretaria_create'),
+	# url(r'^asignar/secretaria/(?P<pk>\d+)/$', AsignarSecretariaUpdate.as_view() , name='asignar_secretaria_update'),
 	url(r'^asignar/secretaria/add/$', asignar_secretaria_create , name='asignar_secretaria_create'),
-	url(r'^asignar/secretaria/(?P<pk>\d+)/$', AsignarSecretariaUpdate.as_view() , name='asignar_secretaria_update'),
+	url(r'^asignar/secretaria/(?P<pk>\d+)/$', asignar_secretaria_update , name='asignar_secretaria_update'),
 	url(r'^asignar/secretaria/$', AsignarSecretariaList.as_view() , name='asignar_secretaria_list'),
 	
 

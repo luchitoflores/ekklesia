@@ -460,7 +460,7 @@ class NotaMarginal(TimeStampedModel):
 class AsignacionParroquia(TimeStampedModel):
 	persona = models.ForeignKey('PerfilUsuario')
 	parroquia = models.ForeignKey('Parroquia')
-	inicio = models.DateField()
+	inicio = models.DateField(null=True, blank=True)
 	fin = models.DateField(null=True, blank=True)	
 	estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que es el párroco actual')
 

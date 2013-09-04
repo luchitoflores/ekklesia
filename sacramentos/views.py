@@ -140,7 +140,7 @@ class UsuarioListView(ListView):
 	model=User
 	model=PerfilUsuario
 	template_name="usuario/usuario_list.html"
-	queryset = PerfilUsuario.objects.feligreses()
+	queryset = PerfilUsuario.objects.feligres()
 
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, *args, **kwargs):
@@ -244,7 +244,7 @@ def sacerdote_update_view(request, pk):
 class SacerdoteListView(ListView):
 	model = PerfilUsuario
 	template_name = 'usuario/sacerdote_list.html'
-	queryset = PerfilUsuario.objects.sacerdotes()
+	queryset = PerfilUsuario.objects.sacerdote()
 
 	@method_decorator(login_required(login_url='/login/'))
 	@method_decorator(permission_required('sacramentos.can_change', login_url='/login/'))
@@ -1162,7 +1162,8 @@ def asignar_secretaria_create(request):
 	success_url = '/asignar/secretaria/'
 	usuario = request.user
 	if request.method == 'POST':
-		form = AsignarSecretariaForm(usuario, request.POST)
+		persona = PerfilUsuario.objects.feligres()
+		form = AsignarSecretariaForm(usuario, persona,  request.POST)
 		if form.is_valid():
 			form.save()
 			return HttpResponseRedirect(success_url)
@@ -1177,19 +1178,33 @@ def asignar_secretaria_create(request):
 
 @login_required
 def asignar_secretaria_update(request, pk):
-	asignacion = AsignacionParroquia.objects.get(pk=pk)
+	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
 	template_name = "parroquia/asignar_secretaria_form.html"
 	success_url = '/asignar/secretaria/'
+	usuario = request.user
 	if request.method == 'POST':
-		form = AsignarSecretariaForm(request.user, request.POST, instance=asignacion)
+		persona = PerfilUsuario.objects.feligres()
+		form = AsignarSecretariaForm(usuario, persona,  request.POST, instance=asignacion)
 		if form.is_valid():
+			form.save()
 			return HttpResponseRedirect(success_url)
 		else:
 			messages.error(request, 'Uno o más cámpos son inválidos')
+			if asignacion.persona:
+				persona = PerfilUsuario.objects.filter(user__id=asignacion.persona.user.id)
+				form = AsignarSecretariaForm(usuario, persona, request.POST, instance=asignacion)
+			else:
+				form = AsignarSecretariaForm(usuario, request.POST,  instance=asignacion)
+
 			ctx = {'form': form}
 			return render(request, template_name, ctx)
 	else:
-		form = AsignarSecretariaForm(instance=asignacion)
+		if asignacion.persona:
+			persona = PerfilUsuario.objects.filter(user__id=asignacion.persona.user.id)
+			form = AsignarSecretariaForm(usuario, persona, instance=asignacion)
+		else:
+			form = AsignarSecretariaForm(usuario, instance=asignacion)
+		
 		ctx = {'form': form}
 		return render(request, template_name, ctx)
 

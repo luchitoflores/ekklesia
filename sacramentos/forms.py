@@ -112,9 +112,9 @@ class PerfilUsuarioForm(ModelForm):
 	def __init__(self, padre = PerfilUsuario.objects.none() , madre = PerfilUsuario.objects.none(), *args, **kwargs):
 		super(PerfilUsuarioForm, self).__init__(*args, **kwargs)
 		self.fields['padre']=forms.ModelChoiceField(required=False, queryset=padre, 
-			empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+			empty_label='-- Seleccione --')
 		self.fields['madre']=forms.ModelChoiceField(required=False, queryset=madre, 
-			empty_label='-- Seleccione --', widget=forms.Select(attrs={'disabled':''}))
+			empty_label='-- Seleccione --')
 
 	class Meta():
 		model = PerfilUsuario
@@ -694,7 +694,7 @@ class ParroquiaForm(ModelForm):
 
 #Form para asignar parroquia
 class AsignarParroquiaForm(ModelForm):
-	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdotes()) 
+	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdote()) 
 	class Meta:
 		model = AsignacionParroquia
 		widgets = {
@@ -704,17 +704,21 @@ class AsignarParroquiaForm(ModelForm):
 
 #Form para asignar una secretaria a una parroquia
 class AsignarSecretariaForm(ModelForm):
-	persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.none()) 
+	# persona = forms.ModelChoiceField(label = 'Secretario/a', queryset=persona) 
 	# parroquia = forms.ModelChoiceField(label = 'Secretario/a', queryset=PerfilUsuario.objects.filter()) 
 	
-	def __init__(self, user, *args, **kwargs):
+	def __init__(self, user, persona = PerfilUsuario.objects.none(), *args, **kwargs):
 		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
+		self.fields['persona']=forms.ModelChoiceField(label = 'Secretario/a', queryset=persona, empty_label='-- Seleccione --')
 		parroquia = AsignacionParroquia.objects.get(persona__user=user, estado=True).parroquia
 		self.fields['parroquia']=forms.ModelChoiceField(queryset=Parroquia.objects.filter(id=parroquia.id), empty_label='-- Seleccione --')
 
 	class Meta:
 		model = AsignacionParroquia
-		fields = ('persona', 'parroquia')
+		fields = ('persona', 'parroquia', 'estado')
+		# widgets = {
+		# 	'persona': forms.ModelChoiceField(queryset=)
+		# }
 
 
 #Form para Intenciones de Misa - Funcionando

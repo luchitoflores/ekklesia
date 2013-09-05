@@ -1284,16 +1284,20 @@ def libro_pdf(request, pk):
 
 def matrimonio_certificado(request, pk):
 	matrimonio=get_object_or_404(Matrimonio, pk=pk)
-	cura=AsignacionParroquia.objects.get(parroquia=matrimonio.parroquia).persona
+	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
+		parroquia=secretaria.parroquia,estado=True)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
 	html = render_to_string('matrimonio/matrimonio_certificado.html', {'pagesize':'A4', 
-		'matrimonio':matrimonio,'cura':cura,'notas':notas},
+		'matrimonio':matrimonio,'cura':cura,'notas':notas,'secretaria':secretaria},
 		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def matrimonio_acta(request, pk):
 	matrimonio=get_object_or_404(Matrimonio, pk=pk)
-	cura=AsignacionParroquia.objects.get(parroquia=matrimonio.parroquia).persona
+	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
+		parroquia=secretaria.parroquia,estado=True)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
 	html = render_to_string('matrimonio/matrimonio_acta.html', {'pagesize':'A4', 
 		'matrimonio':matrimonio,'cura':cura,'notas':notas},
@@ -1302,40 +1306,51 @@ def matrimonio_acta(request, pk):
 
 def bautismo_certificado(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
-	cura=AsignacionParroquia.objects.get(parroquia=bautismo.parroquia).persona
+	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
+		parroquia=secretaria.parroquia,estado=True)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	html = render_to_string('bautismo/bautismo_certificado.html', {'pagesize':'A4', 'bautismo':bautismo,
-		'cura':cura,'notas':notas},context_instance=RequestContext(request))
+		'cura':cura,'notas':notas,'secretaria':secretaria},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def bautismo_acta(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
-	cura=AsignacionParroquia.objects.get(parroquia=bautismo.parroquia).persona
+	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
+		parroquia=secretaria.parroquia,estado=True)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	html = render_to_string('bautismo/bautismo_acta.html', {'pagesize':'A4', 'bautismo':bautismo,
-		'cura':cura,'notas':notas},context_instance=RequestContext(request))
+		'cura':cura,'notas':notas,'secretaria':secretaria},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def confirmacion_reporte(request, pk):
 	confirmacion=get_object_or_404(Confirmacion, pk=pk)
-	cura=AsignacionParroquia.objects.get(parroquia=confirmacion.parroquia).persona
-	# notas=NotaMarginal.objects.filter(bautismo=bautismo)
+	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
+		parroquia=secretaria.parroquia,estado=True)
 	html = render_to_string('confirmacion/confirmacion_reporte.html', 
-		{'pagesize':'A4', 'confirmacion':confirmacion,'cura':cura},context_instance=RequestContext(request))
+		{'pagesize':'A4', 'confirmacion':confirmacion,'cura':cura,'secretaria':secretaria},
+		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 
 def eucaristia_reporte(request, pk):
 	eucaristia=get_object_or_404(Eucaristia, pk=pk)
-	cura=AsignacionParroquia.objects.get(parroquia=eucaristia.parroquia).persona
+	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
+		parroquia=secretaria.parroquia,estado=True)
 	# notas=NotaMarginal.objects.filter()
 	html = render_to_string('eucaristia/eucaristia_reporte.html', {'pagesize':'A4', 'eucaristia':eucaristia,
-		'cura':cura},context_instance=RequestContext(request))
+		'cura':cura,'secretaria':secretaria},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def usuario_reporte_honorabilidad(request,pk):
 	perfil=get_object_or_404(PerfilUsuario,pk=pk)
-	cura=AsignacionParroquia.objects.get(persona__user=request.user)
+	# parroquia=AsignacionParroquia.objects.get(persona__user=request.user).parroquia
+	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
+		parroquia=secretaria.parroquia,estado=True)
 	html = render_to_string('usuario/certificado_honorabilidad.html', {'pagesize':'A4', 'perfil':perfil,
-		'cura':cura},context_instance=RequestContext(request))
+		'cura':cura,'secretaria':secretaria},context_instance=RequestContext(request))
 	return generar_pdf(html)

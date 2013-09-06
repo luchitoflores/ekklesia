@@ -22,9 +22,9 @@ Lista de Asignaciones de Parroquia
 		<tr>
 			<td><a href="{{o.get_absolute_url}}">{{o.persona}}</a></td>
 			<td>{{o.parroquia}}</td>
-			<td>{{o.inicio}}</td>
-			<td>{{o.fin}}</td>
-			<td>{{o.estado}}</td>
+			<td>{{o.periodo.inicio}}</td>
+			<td>{{o.periodo.fin}}</td>
+			<td>{%if o.periodo.estado%}<i class='icon-check'>{%else%}<i class=' icon-minus-sign'>{%endif%}</i> </td>
 		</tr>
 		{%endfor%}
 	</tbody>

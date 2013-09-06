@@ -26,7 +26,7 @@ import cgi
 from .models import (PerfilUsuario,
 	Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,NotaMarginal,
 	Parroquia, Intenciones,
-	AsignacionParroquia,
+	AsignacionParroquia, PeriodoAsignacionParroquia,
 	)
 
 from .forms import (
@@ -39,7 +39,7 @@ from .forms import (
 	DivErrorList,
 	IntencionForm,
 	ParroquiaForm, 
-	AsignarParroquiaForm,
+	AsignarParroquiaForm, PeriodoAsignacionParroquiaForm, 
 	AsignarSecretariaForm,
 	)
 
@@ -54,6 +54,7 @@ def usuarioCreateView(request):
 		padre = PerfilUsuario.objects.padre()
 		madre =  PerfilUsuario.objects.madre()
 		form_perfil = PerfilUsuarioForm(padre, madre, request.POST)
+		
 		if form_usuario.is_valid() and form_perfil.is_valid():
 			feligres, created = Group.objects.get_or_create(name='Feligres')
 			usuario = form_usuario.save(commit=False)
@@ -67,6 +68,27 @@ def usuarioCreateView(request):
 			return HttpResponseRedirect('/usuario')
 			
 		else:
+			padre = request.POST.get('padre')
+			madre =  request.POST.get('madre')
+
+			if padre and madre:
+				padre = PerfilUsuario.objects.filter(id=padre)
+				madre = PerfilUsuario.objects.filter(id=madre)
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST)
+			elif padre and not madre:
+				padre = PerfilUsuario.objects.filter(id=padre)
+				madre = PerfilUsuario.objects.none()
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST)
+			elif not padre and madre:
+				madre = PerfilUsuario.objects.filter(id=madre)
+				padre= PerfilUsuario.objects.none()
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST)
+
+			else:
+				padre = PerfilUsuario.objects.none()
+				madre = PerfilUsuario.objects.none()
+				form_perfil = PerfilUsuarioForm(padre, madre, request.POST)
+			
 			messages.error(request, 'Uno o más datos no son válidos')
 			ctx = {'form_usuario': form_usuario , 'form_perfil': form_perfil}
 			return render (request, 'usuario/usuario_form.html', ctx)
@@ -1077,6 +1099,71 @@ class IntencionUpdateView(UpdateView):
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, *args, **kwargs):
 		return super(IntencionUpdateView, self).dispatch(*args, **kwargs)
+
+@login_required(login_url='/login/')
+def asignar_parroquia_create(request):
+	template_name = "parroquia/asignar_parroquia_form.html"
+	success_url = '/asignar/parroquia/'
+	parroquia = request.POST.get('parroquia')
+	persona = request.POST.get('persona')
+	print persona
+
+
+	if request.method == 'POST':
+		form = AsignarParroquiaForm(request.POST)
+		form_periodo = PeriodoAsignacionParroquiaForm(request.POST)
+		if form.is_valid() and form_periodo.is_valid():
+			try: 
+				asignacion = AsignacionParroquia.objects.get(persona__id = persona, parroquia__id = parroquia)
+				periodo = form_periodo.save(commit=False)
+				periodo.asignacion = asignacion
+				periodo.save()
+				return HttpResponseRedirect(success_url)
+
+			except:
+				asignacion = form.save()
+				periodo = form_periodo.save(commit=False)
+				periodo.asignacion = asignacion
+				periodo.save()
+				return HttpResponseRedirect(success_url)
+
+		else:
+			messages.error(request, 'Uno o más cámpos son inválidos')
+			ctx = {'form': form, 'form_periodo': form_periodo}
+			# return render(request, template_name, ctx)
+	else:
+		form_periodo = PeriodoAsignacionParroquiaForm()
+		form = AsignarParroquiaForm()
+		ctx = {'form': form, 'form_periodo': form_periodo}
+	return render(request, template_name, ctx)
+
+
+@login_required(login_url='/login/')
+def asignar_parroquia_update(request, pk):
+	template_name = "parroquia/asignar_parroquia_form.html"
+	success_url = '/asignar/parroquia/'
+	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
+	periodos = PeriodoAsignacionParroquia.objects.filter(asignacion__id=asignacion.id)
+
+	if request.method == 'POST':
+		persona = PerfilUsuario.objects.feligres()
+		form = AsignarParroquiaForm(request.POST, instance=asignacion)
+		form_periodo = periodos
+		if form.is_valid() and form_periodo.is_valid():
+			asignacion = form.save(commit=False)
+			periodo = form_periodo.save()
+			asignacion.periodo = periodo
+			form.save()
+			return HttpResponseRedirect(success_url)
+		else:
+			messages.error(request, 'Uno o más cámpos son inválidos')
+			ctx = {'form': form, 'form_periodo': form_periodo, 'object': asignacion}
+			# return render(request, template_name, ctx)
+	else:
+		form_periodo = periodos
+		form = AsignarParroquiaForm(instance=asignacion)
+		ctx = {'form': form, 'form_periodo': form_periodo, 'object': asignacion}
+	return render(request, template_name, ctx)
 
 
 class AsignarParroquiaCreate(CreateView):

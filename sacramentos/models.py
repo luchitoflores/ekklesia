@@ -460,10 +460,8 @@ class NotaMarginal(TimeStampedModel):
 class AsignacionParroquia(TimeStampedModel):
 	persona = models.ForeignKey('PerfilUsuario')
 	parroquia = models.ForeignKey('Parroquia')
-	inicio = models.DateField(null=True, blank=True)
-	fin = models.DateField(null=True, blank=True)	
-	estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que es el párroco actual')
-
+	# periodo = models.ForeignKey('PeriodoAsignacionParroquia')
+	
 	def __unicode__(self):
 		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 
@@ -472,6 +470,13 @@ class AsignacionParroquia(TimeStampedModel):
 
     	# class Meta:
      #    	db_table = u'sacramentos_perfilusuario_parroquias'
+
+class PeriodoAsignacionParroquia(TimeStampedModel):
+    inicio = models.DateField(null=True, blank=True)
+    fin = models.DateField(null=True, blank=True) 
+    presente = models.BooleanField('Al presente', help_text='Marque la casilla para indicar que el periodo de asignación está vigente')  
+    estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que es el párroco actual')
+    asignacion = models.ForeignKey('AsignacionParroquia')
 
         
 class Intenciones(TimeStampedModel):

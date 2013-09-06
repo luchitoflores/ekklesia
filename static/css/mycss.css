@@ -46,12 +46,13 @@ legend.scheduler-border {
     font-family: 'Viga', sans-serif;
 }
 
-ul {
-	list-style-type: none !important;
-}
+/*ul {
+	
+}*/
 
-div.errors {
+div.errors ul {
 	color: red;
+	list-style-type: none !important;
 }
 
 #id_container{

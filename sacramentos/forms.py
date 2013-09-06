@@ -3,14 +3,16 @@ from django.contrib import messages
 from datetime import datetime, date
 from django import forms
 from django.contrib.auth.models import User, Group
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.forms import ModelForm
 from django.forms.util import ErrorList
 from django.forms.widgets import RadioSelect
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseForbidden
+
 
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
-					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia)
+					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia, PeriodoAsignacionParroquia, )
 from .validators import validate_cedula
 
 
@@ -724,10 +726,11 @@ class AsignarParroquiaForm(ModelForm):
 	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdote()) 
 	class Meta:
 		model = AsignacionParroquia
-		widgets = {
-		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
-		'fin': forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
-		}
+		fields = ('persona', 'parroquia')
+		# widgets = {
+		# 'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		# 'fin': forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		# }
 
 #Form para asignar una secretaria a una parroquia
 class AsignarSecretariaForm(ModelForm):
@@ -736,23 +739,40 @@ class AsignarSecretariaForm(ModelForm):
 		data = self.cleaned_data['persona']
 		try: 
 			asignacion = AsignacionParroquia.objects.get(persona=data)
-			raise forms.ValidationError('el perfil seleccionado ya tiene una asignación activa')
+			
+			if asignacion.id:
+				raise forms.ValidationError('el perfil seleccionado ya tiene una asignación activa')
 		except ObjectDoesNotExist:
 			return data
+
+		return data
 		
 	def __init__(self, user, persona = PerfilUsuario.objects.none(), *args, **kwargs):
 		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
 		self.fields['persona']=forms.ModelChoiceField(label = 'Secretario/a', queryset=persona, empty_label='-- Seleccione --')
-		parroquia = AsignacionParroquia.objects.get(persona__user=user, estado=True).parroquia
+		try:
+			parroquia = AsignacionParroquia.objects.get(persona__user=user, estado=True).parroquia
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+
 		self.fields['parroquia']=forms.ModelChoiceField(queryset=Parroquia.objects.filter(id=parroquia.id), empty_label='-- Seleccione --')
 
 	class Meta:
 		model = AsignacionParroquia
-		fields = ('persona', 'parroquia', 'estado')
+		fields = ('persona', 'parroquia')
 		# widgets = {
 		# 	'persona': forms.ModelChoiceField(queryset=)
 		# }
 
+
+class PeriodoAsignacionParroquiaForm(ModelForm):
+	class Meta:
+		model = PeriodoAsignacionParroquia
+		fields = ('inicio', 'fin', 'presente', 'estado')
+		widgets = {
+		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		'fin': forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		}
 
 #Form para Intenciones de Misa - Funcionando
 class IntencionForm(ModelForm):

@@ -17,6 +17,7 @@ from .views import (
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,confirmacion_reporte,
 	parroquia_create_view, parroquia_update_view, ParroquiaListView,
 	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
+	asignar_parroquia_create, asignar_parroquia_update, 
 	AsignarSecretariaCreate, AsignarSecretariaUpdate, AsignarSecretariaList,
 	asignar_secretaria_create, asignar_secretaria_update, 
 	intencion_create_view, IntencionListView, IntencionUpdateView,
@@ -110,8 +111,10 @@ urlpatterns = patterns('',
 	url(r'^parroquia/(?P<pk>\d+)/$', parroquia_update_view, name='parroquia_update'),
 	
 	#urls para asignación de parroquias a los párrocos
-	url(r'^asignar/parroquia/add/$', AsignarParroquiaCreate.as_view() , name='asignar_parroquia_create'),
-	url(r'^asignar/parroquia/(?P<pk>\d+)/$', AsignarParroquiaUpdate.as_view() , name='asignar_parroquia_update'),
+	# url(r'^asignar/parroquia/add/$', AsignarParroquiaCreate.as_view() , name='asignar_parroquia_create'),
+	# url(r'^asignar/parroquia/(?P<pk>\d+)/$', AsignarParroquiaUpdate.as_view() , name='asignar_parroquia_update'),
+	url(r'^asignar/parroquia/add/$', asignar_parroquia_create , name='asignar_parroquia_create'),
+	url(r'^asignar/parroquia/(?P<pk>\d+)/$', asignar_parroquia_update , name='asignar_parroquia_update'),
 	url(r'^asignar/parroquia/$', AsignarParroquiaList.as_view() , name='asignar_parroquia_list'),
 
 	#urls para asignación de parroquias a los párrocos

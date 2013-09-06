@@ -20,8 +20,9 @@ body {
 	font-family: Helvetica, Arial, Sans;
 	font-size: 14px;
 }
-
-
+#id_direccion{
+	font-size: 10px;
+}
 </style>    
 <body>
 	<center>
@@ -30,13 +31,17 @@ body {
 			{{ "Diocesis de Loja"|upper }}  <br/>
 			Parroquia Eclesiastica {{confirmacion.parroquia|upper}} <br/>
 			{{"Loja - Ecuador" | upper}} <br/>
-
-			{{"Direccion: "}}{{ confirmacion.parroquia.direccion }} {{"Tel: "}}{{confirmacion.parroquia.direccion.telefono}}<br/><br/>
-			{{"Partida de Confirmación"|upper}}
 		</h1>
+
+		<h3>
+			<div id='id_direccion'>{{"Direccion: "}}{{ confirmacion.parroquia.direccion }} {{"Tel: "}}{{confirmacion.parroquia.direccion.telefono}}
+			</div>
+		</h3><br/>
+		<h1>{{"Partida de Confirmación"|upper}}</h1>
+
 	</center>
 	<h2> <p>El suscrito Párroco de <strong>{{confirmacion.parroquia|upper}}</strong> CERTIFICA:</h2>
-	Que en el libro: <strong>{{ confirmacion.libro.numero_libro}}</strong>, pagina: <strong>{{ confirmacion.pagina}}</strong> y con el numero: <strong>{{ confirmacion.numero_acta }}</strong> </br>
+	Que en el libro: <strong>{{ confirmacion.libro.numero_libro}}</strong>, pagina: <strong>{{ confirmacion.pagina}}</strong> y con el numero: <strong>{{ confirmacion.numero_acta }}</strong> <br/>
 	se encuentra la partida de Confirmación de: <strong>{{ confirmacion.confirmado}}</strong> <br/>
 	{%if "m" in confirmacion.confirmado.sexo%}
 	hijo de: <strong>{{ confirmacion.confirmado.padre}}</strong> <br/>
@@ -61,24 +66,32 @@ body {
 
 
 
-	<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong><br/><br/><br/>
+	<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong><br/><br/><br/><br/><br/>
 
 	<table align='center'>
 		<tbody>
 			<tr>
-				<td>
-					<p align='center'>
+				<td style="text-align: center;">
 
-						---------------------------------------------------<br/>
-						<strong>P.{{cura}}</strong> 
-					</p>
+
+					---------------------------------------------------<br/>
+					P. {{cura.persona.user.get_full_name}}<br/>
+					<strong>{{"PARROCO"}}</strong> 
+
 				</td>
-				<td>
-					<p align='center'>
+				<td style="text-align: center;">
 
-						-----------------------------------------<br/>
-						<strong>{{"SECRETARIO"}}</strong>
-					</p>
+
+					---------------------------------------------------<br/>
+					{{secretaria.persona.user.get_full_name}}<br/>
+					<strong>
+						{%if 'f' in secretaria.persona.sexo %}
+						{{"SECRETARIA"}}
+						{%else%}
+						{{"SECRETARIO"}}
+						{%endif%}
+					</strong>
+
 
 				</td>
 			</tr>
@@ -86,15 +99,14 @@ body {
 
 		</tbody>
 	</table>
-
+	<br/>
 	Observaciones:<br/>
 
 
-
 	<div id="footer">
-		<p>Sistema de Gestion Sacramental Ekkelsia - Reporte generado por:{{"Secretario/a"}}</p>
-	</div>
+		<p>Sistema de Gestion Sacramental <strong>Ekkelsia</strong> - Reporte generado por: <strong>{{secretaria.persona.user.get_full_name}} </strong></p>
 
+	</div>
 
 </body>
 </html>

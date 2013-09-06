@@ -33,7 +33,7 @@ body {
 		<h1> 
 			
 			{{ "Diocesis de Loja"|upper }}  <br/>
-			Parroquia Eclesiastica {{cura.parroquia.nombre|upper}} <br/>
+			Parroquia Eclesiastica {{cura.parroquia|upper}} <br/>
 			{{"Loja - Ecuador" | upper}} <br/>
 
 			<div id='id_direccion'>{{"Direccion: "}}{{ cura.parroquia.direccion }} {{"Tel: "}}{{cura.parroquia.direccion.telefono}}<br/></div>
@@ -41,7 +41,7 @@ body {
 			{{"Certicado"|upper}}<p/></h4></h1></center><br/>
 			<p align='right'> <strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong></p><br/>
 			<p align="justify">
-				Rvdo <strong>{{cura.persona}}</strong> Párroco de <strong>{{cura.parroquia.nombre|upper}}</strong> certifica conocer personalmente  
+				Rvdo <strong>{{cura.persona.user.get_full_name}}</strong> Párroco de <strong>{{cura.parroquia.nombre|upper}}</strong> certifica conocer personalmente  
 				{%if 's' in perfil.estado_civil and 'f' in perfil.sexo%}
 				a la Srta:<br/><br/>
 				{%endif%}
@@ -64,15 +64,15 @@ body {
 
 				<center>
 				 <strong>---------------------------------------------------------------<br/></strong>
-				 	P.{{cura.persona}}<br/>
-				 <strong>{{"PARROCO DE"}} {{cura.parroquia.nombre|upper}}</strong>
+				 	P. {{cura.persona.user.get_full_name}}<br/>
+				 <strong>{{"PARROCO DE"}} {{cura.parroquia|upper}}</strong>
 				</center>
 
 				<br/><br/><br/><br/>
 		
 
 				<div id="footer">
-					<p>Sistema de Gestion Sacramental Ekklesia - Reporte generado por:{{"Secretario/a"}}</p>
+					<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>{{secretaria.persona.user.get_full_name}}</strong></p>
 
 				</div>
 

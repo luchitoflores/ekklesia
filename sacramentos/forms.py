@@ -253,7 +253,7 @@ class BautismoForm(ModelForm):
 		required=True,label='Iglesia',
 		widget=forms.TextInput(attrs={'required':''}))
 	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.none(),
+		queryset=PerfilUsuario.objects.filter(user__groups__name='Sacerdote', profesion='Sacerdote'),
 		empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
 		queryset=Libro.objects.none(),empty_label=None)
@@ -270,8 +270,7 @@ class BautismoForm(ModelForm):
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
 			 empty_label='-- Seleccione --')
 
-		self.fields['celebrante']=forms.ModelChoiceField(required=True, queryset=bautizado,
-			 empty_label='-- Seleccione --')
+		
 
 		      	
 	class Meta():

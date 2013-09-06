@@ -5,8 +5,9 @@
 </head> 
 <style>
 @page {
-	margin: 1cm;
 	margin-bottom: 2.5cm;
+	size: a4; 
+	margin: 3cm 3cm 3cm 3cm;
 	@frame footer {
 		-pdf-frame-content: footer;
 		bottom: 0cm;
@@ -15,6 +16,13 @@
 		height: 3cm;
 	}
 }
+body {
+	font-family: Helvetica, Arial, Sans;
+	font-size: 14px;
+}
+#id_direccion{
+	font-size: 10px;
+}
 </style>   
 <body>
 	<center>
@@ -22,69 +30,73 @@
 		<h1> 
 			{{ "Diocesis de Loja"|upper }}  <br/>
 			Parroquia Eclesiastica {{eucaristia.parroquia|upper}} <br/>
-			{{"Loja - Ecuador" | upper}} <br/>
+			{{"Loja - Ecuador" | upper}} </h1>
 
-			{{"Direccion: "}}{{ eucaristia.parroquia.direccion }} {{"Tel: "}}{{eucaristia.parroquia.direccion.telefono}}<br/><br/>
-		</h1>
-		{{"Certificado de Primera Comunión"|upper}}<p/></h4></center></h1>
-		<h2> <p>El suscrito Párroco de <strong>{{eucaristia.parroquia|upper}}</strong> CERTIFICA:</h2>
-		Que en el libro: <strong>{{ eucaristia.libro.numero_libro}}</strong>, pagina: <strong>{{ eucaristia.pagina}}</strong> y con el numero: <strong>{{ eucaristia.numero_acta }}</strong> </br>
-		se registra el nombre de: <strong>{{ eucaristia.feligres}}</strong> <br/>
-		Nombre del Padre: <strong>{{ eucaristia.feligres.padre}}</strong> <br/>
-		Nombre de la Madre: <strong>{{ eucaristia.feligres.madre}}</strong> <br/>
-		{%if eucaristia.padrino and eucaristia.madrina%}
-		Padrinos: <strong>{{ eucaristia.padrino}}</strong> y <strong>{{ eucaristia.madrina}}</strong> <br/>
-		{%endif%}
-		{%if eucaristia.padrino and not eucaristia.madrina%}
-		Padrino: <strong>{{ eucaristia.padrino}}</strong> <br/>
-		{%endif%}
-		{%if not eucaristia.padrino and eucaristia.madrina%}
-		Madrina: <strong>{{ eucaristia.madrina}}</strong> <br/>
-		{%endif%}
-		Recibió el Sacramento: <strong>{{eucaristia.fecha_sacramento}}</strong>
-		en la iglesia de: <strong>{{ eucaristia.iglesia}}</strong> </p>
-
+			<h3><div id='id_direccion'>{{"Direccion: "}}{{ eucaristia.parroquia.direccion }} {{"Tel: "}}{{eucaristia.parroquia.direccion.telefono}}</div></h3><br/>
+			<h1>{{"Certificado de Primera Comunión"|upper}}<p/></h1></center>
+			<h2> <p>El suscrito Párroco de <strong>{{eucaristia.parroquia|upper}}</strong> CERTIFICA:</h2>
+			Que en el libro: <strong>{{ eucaristia.libro.numero_libro}}</strong>, pagina: <strong>{{ eucaristia.pagina}}</strong> y con el numero: <strong>{{ eucaristia.numero_acta }}</strong> </br>
+			se registra el nombre de: <strong>{{ eucaristia.feligres}}</strong> <br/>
+			Nombre del Padre: <strong>{{ eucaristia.feligres.padre}}</strong> <br/>
+			Nombre de la Madre: <strong>{{ eucaristia.feligres.madre}}</strong> <br/>
+			{%if eucaristia.padrino and eucaristia.madrina%}
+			Padrinos: <strong>{{ eucaristia.padrino}}</strong> y <strong>{{ eucaristia.madrina}}</strong> <br/>
+			{%endif%}
+			{%if eucaristia.padrino and not eucaristia.madrina%}
+			Padrino: <strong>{{ eucaristia.padrino}}</strong> <br/>
+			{%endif%}
+			{%if not eucaristia.padrino and eucaristia.madrina%}
+			Madrina: <strong>{{ eucaristia.madrina}}</strong> <br/>
+			{%endif%}
+			Recibió el Sacramento: <strong>{{eucaristia.fecha_sacramento}}</strong>
+			en la iglesia de: <strong>{{ eucaristia.iglesia}}</strong> <br/></p>
 
 
 
-		<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong><br/><br/><br/>
-		
 
-		<table align='center'>
-			<tbody>
-				<tr>
-					<td>
-						<p align='center'>
-							
+			<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong><br/><br/><br/><br/><br/>
+
+			<table align='center'>
+				<tbody>
+					<tr>
+						<td style="text-align: center;">
+
+
 							---------------------------------------------------<br/>
-							<strong>P.{{cura}}</strong> 
-						</p>
-					</td>
-					<td>
-						<p align='center'>
-							
-							-----------------------------------------<br/>
-							<strong>{{"SECRETARIO"}}</strong>
-						</p>
-						
-						
+							P. {{cura.persona.user.get_full_name}}<br/>
+							<strong>{{"PARROCO"}}</strong> 
+
+						</td>
+						<td style="text-align: center;">
 
 
-						
-					</td>
-				</tr>
+							---------------------------------------------------<br/>
+							{{secretaria.persona.user.get_full_name}}<br/>
+							<strong>
+								{%if 'f' in secretaria.persona.sexo %}
+								{{"SECRETARIA"}}
+								{%else%}
+								{{"SECRETARIO"}}
+								{%endif%}
+							</strong>
 
 
-			</tbody>
-		</table>
-		Observaciones:<br/>
+						</td>
+					</tr>
+
+
+				</tbody>
+			</table>
+			<br/>
+			Observaciones:<br/>
+
+
+			<div id="footer">
+				<p>Sistema de Gestion Sacramental <strong>Ekkelsia</strong> - Reporte generado por: <strong>{{secretaria.persona.user.get_full_name}} </strong></p>
+
+			</div>
 
 
 
-		<div id="footer">
-			<p>Sistema de Gestion Sacramental Ekkelsia - Reporte generado por:{{"Secretario/a"}}</p>
-		</div>
-
-
-	</body>
-	</html>
+		</body>
+		</html>

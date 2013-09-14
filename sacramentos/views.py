@@ -1451,25 +1451,6 @@ def asignar_parroco_a_parroquia(request, pk):
 
 
 
-def nuevo_periodo_asignacion(request, pk):
-	template_name = 'parroquia/periodo_asignacion_form.html'
-	asignacion = AsignacionParroquia.objects.get(id=pk)
-	success_url = '/parroco/periodos/asignacion/%s/' % asignacion.id
-	if request.method == 'POST':
-		form = PeriodoAsignacionParroquiaForm(request.POST)
-		if form.is_valid():
-			periodo = form.save(commit=False)
-			periodo.asignacion = asignacion
-			periodo.save()
-			return HttpResponseRedirect(success_url)
-		else:
-			ctx = {'form': form, 'object':asignacion}
-			return render(request, template_name, ctx)
-
-	else:
-		form = PeriodoAsignacionParroquiaForm()
-		ctx = {'form': form, 'object':asignacion}
-		return render(request, template_name, ctx)
 
 
 @login_required(login_url='/login/')
@@ -1501,16 +1482,6 @@ def asignar_parroquia_update(request, pk):
 
 
 
-# El pk que recibe es el id de una asignación
-@login_required(login_url='/login/')
-def parroco_periodos_asignacion_list(request, pk):
-	template_name = "parroquia/parroco_periodos_asignacion_list.html"
-	success_url = '/asignar/parroquia/'
-	# parroquia = get_object_or_404(Parroquia, pk=pk)
-	periodos = PeriodoAsignacionParroquia.objects.filter(asignacion__id=pk)
-	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
-	ctx = {'object_list': periodos, 'asignacion': asignacion}
-	return render(request, template_name, ctx)
 
 # def parroco_periodos_asignacion_update(request, periodo_id):
 # 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = periodo_id)
@@ -1542,6 +1513,33 @@ def parroco_periodos_asignacion_list(request, pk):
 # 		ctx = {'form': form, 'form_periodo': form_periodo}
 # 		return render(request, template_name, ctx)
 
+def nuevo_periodo_asignacion(request, pk):
+	template_name = 'parroquia/periodo_asignacion_form.html'
+	asignacion = AsignacionParroquia.objects.get(id=pk)
+	success_url = '/parroco/periodos/asignacion/%s/' % asignacion.id
+	if request.method == 'POST':
+		form = PeriodoAsignacionParroquiaForm(request.POST)
+		if form.is_valid():
+			periodo_activo= PeriodoAsignacionParroquia.objects.filter(asignacion=asignacion, estado=True)
+			
+			if not periodo_activo:
+				periodo = form.save(commit=False)
+				periodo.asignacion = asignacion
+				periodo.save()
+				return HttpResponseRedirect(success_url)
+			else:
+				messages.error(request, 'Existen periodos activos')
+				ctx = {'form': form, 'object':asignacion}
+				return render(request, template_name, ctx)
+
+		else:
+			ctx = {'form': form, 'object':asignacion}
+			return render(request, template_name, ctx)
+
+	else:
+		form = PeriodoAsignacionParroquiaForm()
+		ctx = {'form': form, 'object':asignacion}
+		return render(request, template_name, ctx)
 
 def parroco_periodos_asignacion_update(request, pk):
 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = pk)
@@ -1580,6 +1578,16 @@ def parroco_periodos_asignacion_update(request, pk):
 		return render(request, template_name, ctx)
 
 
+# El pk que recibe es el id de una asignación
+@login_required(login_url='/login/')
+def parroco_periodos_asignacion_list(request, pk):
+	template_name = "parroquia/parroco_periodos_asignacion_list.html"
+	success_url = '/asignar/parroquia/'
+	# parroquia = get_object_or_404(Parroquia, pk=pk)
+	periodos = PeriodoAsignacionParroquia.objects.filter(asignacion__id=pk)
+	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
+	ctx = {'object_list': periodos, 'asignacion': asignacion}
+	return render(request, template_name, ctx)
 
 def asignar_parroco_list(request, pk):
 	template_name = 'parroquia/asignar_parroquia_list.html'

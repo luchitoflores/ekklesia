@@ -3,14 +3,16 @@ from django.contrib import messages
 from datetime import datetime, date
 from django import forms
 from django.contrib.auth.models import User, Group
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.forms import ModelForm
 from django.forms.util import ErrorList
 from django.forms.widgets import RadioSelect
+from django.http import HttpResponseRedirect, HttpResponse, Http404, HttpResponseForbidden
+
 
 from .models import (PerfilUsuario, 
 					Libro,Matrimonio,Bautismo,Eucaristia,Confirmacion,Bautismo,
-					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia)
+					Direccion, Intenciones,NotaMarginal,Parroquia,AsignacionParroquia, PeriodoAsignacionParroquia, )
 from .validators import validate_cedula
 
 
@@ -840,37 +842,115 @@ class ParroquiaForm(ModelForm):
 #Form para asignar parroquia
 class AsignarParroquiaForm(ModelForm):
 	persona = forms.ModelChoiceField(label = 'Sacerdote', queryset=PerfilUsuario.objects.sacerdote()) 
+	
+
+	def __init__(self, parroquia = Parroquia.objects.all(), *args, **kwargs):
+		super(AsignarParroquiaForm, self).__init__(*args, **kwargs)
+		self.fields['parroquia']=forms.ModelChoiceField(required=True, queryset=parroquia, 
+			empty_label='-- Seleccione --')
+
 	class Meta:
 		model = AsignacionParroquia
-		widgets = {
-		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
-		'fin': forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
-		}
+		fields = ('persona', 'parroquia')
+			
+	def clean(self):
+		cleaned_data = super(AsignarParroquiaForm, self).clean()
+		persona = cleaned_data.get("persona")
+		parroquia = cleaned_data.get("parroquia")
+		
+		try:
+			esta_activo= PeriodoAsignacionParroquia.objects.get(asignacion__persona=persona, asignacion__parroquia=parroquia, estado=True)
+			if esta_activo:
+				print esta_activo
+				msg = u"El sacerdote ya tiene un periodo activo en la parroquia elegida"
+				self._errors["persona"] = self.error_class([msg])
+		except ObjectDoesNotExist:
+			esta_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(asignacion__persona=persona, estado=True).exclude(asignacion__parroquia=parroquia)
+			if esta_activo_otra_parroquia:
+				msg = u"El sacerdote ya tiene una asignación activa en otra parroquia"
+				self._errors["persona"] = self.error_class([msg])
+     
+		periodo_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(asignacion__parroquia=parroquia, estado=True).exclude(asignacion__persona=persona)
+		if periodo_activo_otra_parroquia:
+			msg = u"La parroquia elegida ya tiene asignado un párroco con estado activo"
+			self._errors["parroquia"] = self.error_class([msg])
+		return cleaned_data
 
 #Form para asignar una secretaria a una parroquia
 class AsignarSecretariaForm(ModelForm):
 	
-	def clean_persona(self):
-		data = self.cleaned_data['persona']
-		try: 
-			asignacion = AsignacionParroquia.objects.get(persona=data)
-			raise forms.ValidationError('el perfil seleccionado ya tiene una asignación activa')
-		except ObjectDoesNotExist:
-			return data
+	# def clean_persona(self):
+	# 	data = self.cleaned_data['persona']
+	# 	try: 
+	# 		asignacion = AsignacionParroquia.objects.get(persona=data)
+			
+	# 		if asignacion.id:
+	# 			raise forms.ValidationError('el perfil seleccionado ya tiene una asignación activa')
+	# 	except ObjectDoesNotExist:
+	# 		return data
+
+	# 	return data
 		
-	def __init__(self, user, persona = PerfilUsuario.objects.none(), *args, **kwargs):
+
+	def __init__(self, user, persona = PerfilUsuario.objects.none(), estado=False, *args, **kwargs):
 		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
 		self.fields['persona']=forms.ModelChoiceField(label = 'Secretario/a', queryset=persona, empty_label='-- Seleccione --')
-		parroquia = AsignacionParroquia.objects.get(persona__user=user, estado=True).parroquia
+		try:
+			parroquia = AsignacionParroquia.objects.get(persona__user=user).parroquia
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+
 		self.fields['parroquia']=forms.ModelChoiceField(queryset=Parroquia.objects.filter(id=parroquia.id), empty_label='-- Seleccione --')
 
+		self.fields['estado']=forms.BooleanField(label='Está activo?', required=False, initial=estado)
 	class Meta:
 		model = AsignacionParroquia
-		fields = ('persona', 'parroquia', 'estado')
-		# widgets = {
-		# 	'persona': forms.ModelChoiceField(queryset=)
-		# }
+		fields = ('persona', 'parroquia')
+		
 
+
+class PeriodoAsignacionParroquiaForm(ModelForm):
+	
+	def clean(self):
+		cleaned_data = super(PeriodoAsignacionParroquiaForm, self).clean()
+		inicio = self.cleaned_data.get('inicio')
+		fin = self.cleaned_data.get('fin')
+		presente = self.cleaned_data.get('presente')
+		estado = self.cleaned_data.get('estado')
+		print presente
+
+		if inicio < date.today():
+			msg = u"La fecha inicial no puede ser menor a la fecha actual"
+			self._errors["inicio"] = self.error_class([msg])
+		if fin:
+			if fin < inicio:
+				msg = u"La fecha final no puede ser menor que la fecha inicial"
+				self._errors["fin"] = self.error_class([msg])
+
+		# if estado:
+			
+		# 	msg = u"Ud ya tiene un estado activo en esta parroquia"
+		# 	self._errors["fin"] = self.error_class([msg])
+
+
+		return cleaned_data	
+
+
+	# def clean_fin(self):
+	# 	inicio = clean_inicio(self)
+	# 	fin = self.cleaned_data['fin']
+
+	# 	if inicio >= fin:
+	# 		raise forms.ValidationError('La fecha final no puede ser menor que la fecha inicial')
+	# 	return fin
+
+	class Meta:
+		model = PeriodoAsignacionParroquia
+		fields = ('inicio', 'fin', 'presente', 'estado')
+		widgets = {
+		'inicio': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		'fin': forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'}),
+		}
 
 #Form para Intenciones de Misa - Funcionando
 class IntencionForm(ModelForm):

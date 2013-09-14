@@ -17,7 +17,8 @@ from .views import (
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,confirmacion_reporte,
 	parroquia_create_view, parroquia_update_view, ParroquiaListView,
 	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
-	AsignarSecretariaCreate, AsignarSecretariaUpdate, AsignarSecretariaList,
+	asignar_parroquia_create, asignar_parroco_a_parroquia, asignar_parroquia_update, asignar_parroco_list, parroco_periodos_asignacion_list, parroco_periodos_asignacion_update, nuevo_periodo_asignacion,
+	AsignarSecretariaList,
 	asignar_secretaria_create, asignar_secretaria_update, 
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	LogListView,exportar_csv_logs,
@@ -112,15 +113,24 @@ urlpatterns = patterns('',
 	url(r'^parroquia/(?P<pk>\d+)/$', parroquia_update_view, name='parroquia_update'),
 	
 	#urls para asignación de parroquias a los párrocos
-	url(r'^asignar/parroquia/add/$', AsignarParroquiaCreate.as_view() , name='asignar_parroquia_create'),
-	url(r'^asignar/parroquia/(?P<pk>\d+)/$', AsignarParroquiaUpdate.as_view() , name='asignar_parroquia_update'),
-	url(r'^asignar/parroquia/$', AsignarParroquiaList.as_view() , name='asignar_parroquia_list'),
+	# Permite agregar un nuevo párroco a una nueva parroquia
+	url(r'^asignar/parroquia/parroco/add/$', asignar_parroquia_create , name='asignar_parroco'),
+	# Permite agregar un párroco a una parroquia preestablecida
+	url(r'^asignar/parroquia/(?P<pk>\d+)/parroco/add/$', asignar_parroco_a_parroquia , name='asignar_parroco_a_parroquia'),
+	#Permite editar y ver todas las asignaciones de un sacerdote en una parroquia
+	url(r'^asignar/parroquia/parroco/(?P<pk>\d+)/$', asignar_parroquia_update , name='asignar_parroco_update'),
+	# Lista de los periodos de asignación de un párroco a una parroquia
+	url(r'^parroco/periodos/asignacion/(?P<pk>\d+)/$', parroco_periodos_asignacion_list , name='parroco_periodos_asignacion_list'),
+	url(r'^parroco/periodo/add/asignacion/(?P<pk>\d+)/$', nuevo_periodo_asignacion , name='nuevo_periodo_asignacion'),
+	# Edición de los periodos de asignación de un párroco a una parroquia
+	url(r'^parroco/periodos/(?P<pk>\d+)/asignacion/$', parroco_periodos_asignacion_update , name='parroco_periodos_asignacion_update'),
+	#Muestra los párrocos que están asignados a una parroquia
+	url(r'^parrocos/parroquia/(?P<pk>\d+)/$', asignar_parroco_list , name='asignar_parroco_list'),
+	
 
-	#urls para asignación de parroquias a los párrocos
-	# url(r'^asignar/secretaria/add/$', AsignarSecretariaCreate.as_view() , name='asignar_secretaria_create'),
-	# url(r'^asignar/secretaria/(?P<pk>\d+)/$', AsignarSecretariaUpdate.as_view() , name='asignar_secretaria_update'),
+	#urls para asignar secretarias
 	url(r'^asignar/secretaria/add/$', asignar_secretaria_create , name='asignar_secretaria_create'),
-	url(r'^asignar/secretaria/(?P<pk>\d+)/$', asignar_secretaria_update , name='asignar_secretaria_update'),
+	url(r'^secretaria/(?P<pk>\d+)/$', asignar_secretaria_update , name='asignar_secretaria_update'),
 	url(r'^asignar/secretaria/$', AsignarSecretariaList.as_view() , name='asignar_secretaria_list'),
 	
 

@@ -456,19 +456,26 @@ class NotaMarginal(TimeStampedModel):
 class AsignacionParroquia(TimeStampedModel):
 	persona = models.ForeignKey('PerfilUsuario')
 	parroquia = models.ForeignKey('Parroquia')
-	inicio = models.DateField(null=True, blank=True)
-	fin = models.DateField(null=True, blank=True)	
-	estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que es el párroco actual')
-
+	# periodo = models.ForeignKey('PeriodoAsignacionParroquia')
+	
 	def __unicode__(self):
 		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 
         def get_absolute_url(self):
-		return '/asignar/parroquia/%i' % self.id
+		return '/asignar/parroquia/parroco/%i' % self.id
 
     	# class Meta:
      #    	db_table = u'sacramentos_perfilusuario_parroquias'
 
+class PeriodoAsignacionParroquia(TimeStampedModel):
+    inicio = models.DateField(null=True, blank=True)
+    fin = models.DateField(null=True, blank=True) 
+    presente = models.BooleanField('Al presente', help_text='Marque la casilla para indicar que el periodo de asignación está vigente')  
+    estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que es el párroco actual')
+    asignacion = models.ForeignKey('AsignacionParroquia')
+
+    def __unicode__(self):
+        return u'%s - %s : %s' % (self.asignacion.persona, self.asignacion.parroquia, self.estado)
         
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200, 
@@ -498,7 +505,7 @@ class Parroquia(TimeStampedModel):
 	direccion=models.ForeignKey(Direccion, related_name='direccion', verbose_name=u'Prueba')
 
 	def __unicode__(self):
-		return self.nombre
+		return u'%s.- %s' % (self.id, self.nombre)
 
 	def get_absolute_url(self):
 		return '/parroquia/%s' %(self.id)

@@ -16,6 +16,14 @@ h2{
 	font-size: 9px;
 	color: #808080;
 }
+.errors {
+	font-size: 9px;
+	color: #808080;
+}
+.error{
+	font-size: 9px;
+	color: red;
+}
 
 /*fieldset.scheduler-border {
 	border: 1px solid #DDD;

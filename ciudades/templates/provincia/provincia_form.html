@@ -2,9 +2,18 @@
 
 
 {% block title%}
-Añadir Provincia
+{%if object.id%} 
+Editar Provincia
+{%else%}
+Agregar Provincia
+{%endif%}{%endblock%}
+{%block content_title%}
+{%if object.id%} 
+Editar Provincia
+{%else%}
+Agregar Provincia
+{%endif%}
 {%endblock%}
-
 
 {%block content%}
 
@@ -12,16 +21,37 @@ Añadir Provincia
 
 <form action="" method='POST' class='form-horizontal'>
 	{%csrf_token%}
-	{% for f in form %}
-	
-	<div class="control-label">
-		{{f.label}}
-	</div>
+	<div class="control-group">
+		<div class="control-label">
+			{{form.nombre.label}} *
+		</div>
 
-	<div class="controls">{{f}}</div>
-	<div class="controls help-text">{{f.help_text}}</div>
-	<div class="controls errors">{{f.errors}}</div>	
-	{% endfor %}
+		<div class="controls">
+			{{form.nombre}}
+		</div>
+		<div class="controls help-text">
+			{{form.nombre.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form.nombre.errors}}
+		</div>	
+	</div>
+	<div class="control-group">
+		<div class="control-label">
+			{{form.abreviatura.label}} * 
+		</div>
+
+		<div class="controls">
+			{{form.abreviatura}}
+		</div>
+		<div class="controls help-text">
+			{{form.abreviatura.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form.abreviatura.errors}}
+		</div>	
+	</div>
+	
 
 	<div class="form-actions">
 		<input type="submit" class='btn btn-primary'>

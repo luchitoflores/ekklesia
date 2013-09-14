@@ -7,7 +7,7 @@ from .views import (
 	usuarioCreateView, UsuarioListView,padre_create_view, feligres_create_view,edit_usuario_view,
 	usuario_reporte_honorabilidad,
 	sacerdote_create_view, SacerdoteListView,  sacerdote_update_view,
-	libro_create_view, libro_update_view ,LibroListView,libro_pdf,
+	libro_create_view, libro_update_view ,LibroListView,libro_pdf,LibroListJson,
 	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,matrimonio_vigencia_view,
 	matrimonio_ajax_view,MatrimonioNoVigenteListView,
 	matrimonio_acta,matrimonio_certificado,
@@ -21,7 +21,8 @@ from .views import (
 	AsignarSecretariaList,
 	asignar_secretaria_create, asignar_secretaria_update, 
 	intencion_create_view, IntencionListView, IntencionUpdateView,
-	LogListView,
+	LogListView,exportar_csv_logs,
+	reporte_anual_sacramentos,reporte_intenciones,reporte_permisos,
 	)
 from .rest import ParroquiaResource
 
@@ -55,6 +56,7 @@ urlpatterns = patterns('',
 
 	# urls de libro
 	url(r'^libro/$',LibroListView.as_view(),name='libro_list'),
+	url(r'^libro/json/$',LibroListJson.as_view(),name='libro_json'),
 	url(r'^libro/add/$',libro_create_view, name='libro_create'),
 	url(r'^libro/(?P<pk>\d+)/$',libro_update_view, name='libro_update'),
 	# url(r'^libro/(?P<pk>\d+)/$',libro_pdf, name='libro_update'),
@@ -151,5 +153,12 @@ urlpatterns = patterns('',
 
 	# urls de los logs de ekklesia
 	url(r'^log/$', LogListView.as_view(), name='log_list'),
+	url(r'^log/csv/$', exportar_csv_logs, name='logs_csv'),
+
+	#reportes
+	
+	url(r'^reporte/anual/$', reporte_anual_sacramentos, name='reporte_anual'),
+	url(r'^reporte/intenciones/$', reporte_intenciones, name='reporte_intenciones'),
+	url(r'^reporte/permisos/$', reporte_permisos, name='reporte_permiso'),
 
 	)

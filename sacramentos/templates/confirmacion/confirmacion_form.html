@@ -55,7 +55,13 @@ Agregar Confirmacion
 								{{form_confirmacion.libro}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.libro.help_text}}</div>
+								{{form_confirmacion.libro.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.libro.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_pagina" class='control-label'>{{form_confirmacion.pagina.label}}</label>
@@ -64,6 +70,11 @@ Agregar Confirmacion
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.pagina.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.pagina.errors}}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="span4">
@@ -74,14 +85,24 @@ Agregar Confirmacion
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.numero_acta.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.numero_acta.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{form_confirmacion.fecha_sacramento.label}}</label>
+							<label for="id_fecha_sacramento" class='control-label'>{{form_confirmacion.fecha_sacramento.label}} *</label>
 							<div class='controls'>
 								{{form_confirmacion.fecha_sacramento}}
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.fecha_sacramento.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.fecha_sacramento.errors}}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="span8">
@@ -93,7 +114,13 @@ Agregar Confirmacion
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.confirmado.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.confirmado.errors}}
+								</div>
+							</div>
 						</div>
+
 
 					</div>
 					
@@ -102,23 +129,7 @@ Agregar Confirmacion
 			<fieldset class='scheduler-border'>
 				<legend class='scheduler-border'>Mas Datos del Sacramento</legend>
 				<div class="row">
-					<div class="span4">
-						<div class='control-group'>
-							<label for="id_lugar_sacramento" class='control-label'>{{form_confirmacion.lugar_sacramento.label}}</label>
-							<div class='controls'>
-								{{form_confirmacion.lugar_sacramento}}
-							</div>
-							<div class="controls help-text">
-								{{form_confirmacion.lugar_sacramento.help_text}}</div>
-						</div>
-						<div class='control-group'>
-							<label for="id_iglesia" class='control-label'>{{form_confirmacion.iglesia.label}}</label>
-							<div class='controls'>
-								{{form_confirmacion.iglesia}}
-							</div>
-							<div class="controls help-text">
-								{{form_confirmacion.iglesia.help_text}}</div>
-						</div>
+					<div class="span8">
 						<div class='control-group'>
 							<label for="id_celebrante" class='control-label'>{{form_confirmacion.celebrante.label}}</label>
 							<div class='controls'>
@@ -127,7 +138,41 @@ Agregar Confirmacion
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.celebrante.help_text}}</div>
+							<div class="controls">
+								<div class="errors">								
+								{{form_confirmacion.celebrante.errors}}
+								</div>
+							</div>
 						</div>
+					</div>
+					<div class="span4">
+						<div class='control-group'>
+							<label for="id_lugar_sacramento" class='control-label'>{{form_confirmacion.lugar_sacramento.label}}</label>
+							<div class='controls'>
+								{{form_confirmacion.lugar_sacramento}}
+							</div>
+							<div class="controls help-text">
+								{{form_confirmacion.lugar_sacramento.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.lugar_sacramento.errors}}
+								</div>
+							</div>
+						</div>
+						<div class='control-group'>
+							<label for="id_iglesia" class='control-label'>{{form_confirmacion.iglesia.label}}</label>
+							<div class='controls'>
+								{{form_confirmacion.iglesia}}
+							</div>
+							<div class="controls help-text">
+								{{form_confirmacion.iglesia.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.iglesia.errors}}
+								</div>
+							</div>
+						</div>
+						
 					</div>
 
 					<div class="span4">
@@ -138,6 +183,11 @@ Agregar Confirmacion
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.padrino.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.padrino.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_madrina" class='control-label'>{{form_confirmacion.madrina.label}}</label>
@@ -146,13 +196,18 @@ Agregar Confirmacion
 							</div>
 							<div class="controls help-text">
 								{{form_confirmacion.madrina.help_text}}</div>
+								<div class="controls">
+								<div class="errors">								
+									{{form_confirmacion.madrina.errors}}
+								</div>
+							</div>
 						</div>
 						
 					</div>
 				</fieldset>
 			</div>
 		</div>
-	</div>
+
 
 		<div class="form-actions">
 			<input type="submit" value="Enviar" class='btn btn-primary'/>
@@ -160,6 +215,7 @@ Agregar Confirmacion
 		</div>
 
 	</form>
+
 
 	
 	{%include 'modal.html'%}

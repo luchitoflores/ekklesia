@@ -15,8 +15,17 @@ Editar Bautismo
 Agregar Bautismo
 {%endif%}
 {%endblock%}
+{%block extrascript%}
+<script>
+// funcion para obtener los nombres de los novios t¿y mostrarlos en el modal
+$(document).ready(function(){
+	
 
+});
 
+</script>
+
+{%endblock%}
 {%block content%}
 
 
@@ -59,14 +68,23 @@ Agregar Bautismo
 				<div class='row'>
 					<div class="span4">
 						<div class='control-group'>
-							<label for="id_libro" class='control-label'>{{formBautismo.libro.label}}</label>
+							<label for="id_libro" class='control-label'>
+								{{formBautismo.libro.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.libro}}
 								
 							</div>
 							<div class="controls help-text">
-									{{formBautismo.libro.help_text}}
+								{{formBautismo.libro.help_text}}
+								
 							</div>
+							<div class="controls">
+									<div class="errors">								
+										{{formBautismo.libro.errors}}
+									</div>
+							</div>
+							
 							
 						</div>
 					</div>
@@ -78,6 +96,11 @@ Agregar Bautismo
 							</div>
 							<div class="controls help-text">
 								{{formBautismo.pagina.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.pagina.errors}}
+								</div>
 							</div>
 							
 						</div>
@@ -91,29 +114,47 @@ Agregar Bautismo
 							<div class="controls help-text">
 								{{formBautismo.numero_acta.help_text}}
 							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.numero_acta.errors}}
+								</div>
+							</div>
 						</div>
 
 					</div>
 					<div class="span4">
 						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{formBautismo.fecha_sacramento.label}}</label>
+							<label for="id_fecha_sacramento" class='control-label'>{{formBautismo.fecha_sacramento.label}} *</label>
 							<div class='controls'>
 								{{formBautismo.fecha_sacramento}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.fecha_sacramento.help_text}}</div>
+								{{formBautismo.fecha_sacramento.help_text}}
+								<span class="errors" style='color: red'>
+									{{formBautismo.fecha_sacramento.errors}}
+								</span>
+							</div>
+							
 						</div>
 
 					</div>
-					<div class="span8">
+					<div class="span10">
 						<div class='control-group'>
 							<label for="id_bautizado" class='control-label'>{{formBautismo.bautizado.label}}</label>
 							<div class='controls'>
 								{{formBautismo.bautizado}}
+								<span>
 								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								</span>
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.bautizado.help_text}}</div>
+								{{formBautismo.bautizado.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.bautizado.errors}}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="span4">
@@ -123,7 +164,13 @@ Agregar Bautismo
 								{{formBautismo.lugar_sacramento}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.lugar_sacramento.help_text}}</div>
+								{{formBautismo.lugar_sacramento.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.lugar_sacramento.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_iglesia" class='control-label'>
@@ -132,7 +179,13 @@ Agregar Bautismo
 								{{formBautismo.iglesia}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.iglesia.help_text}}</div>
+								{{formBautismo.iglesia.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.iglesia.errors}}
+								</div>
+							</div>
 						</div>
 					</div>
 						<div class="span8">		
@@ -146,6 +199,11 @@ Agregar Bautismo
 								<div class="controls help-text">
 								{{formBautismo.celebrante.help_text}}
 								</div>
+								<div class="controls">
+								<div class="errors">								
+									{{formBautismo.celebrante.errors}}
+								</div>
+							</div>
 							</div>
 						</div>
 		
@@ -165,7 +223,13 @@ Agregar Bautismo
 								{{formBautismo.padrino}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.padrino.help_text}}</div>
+								{{formBautismo.padrino.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.padrino.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_madrina" class='control-label'>
@@ -174,7 +238,13 @@ Agregar Bautismo
 								{{formBautismo.madrina}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.madrina.help_text}}</div>
+								{{formBautismo.madrina.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.madrina.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_abuelo_paterno" class='control-label'>
@@ -183,16 +253,29 @@ Agregar Bautismo
 								{{formBautismo.abuelo_paterno}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.abuelo_paterno.help_text}}</div>
+								{{formBautismo.abuelo_paterno.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.abuelo_paterno.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_abuela_paterna" class='control-label'>
-								{{formBautismo.abuela_paterna.label}}</label>
+								{{formBautismo.abuela_paterna.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.abuela_paterna}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.abuela_paterna.help_text}}</div>
+								{{formBautismo.abuela_paterna.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.abuela_paterna.errors}}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="span4">
@@ -203,7 +286,13 @@ Agregar Bautismo
 								{{formBautismo.abuelo_materno}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.abuelo_materno.help_text}}</div>
+								{{formBautismo.abuelo_materno.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.abuelo_materno.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_abuela_materna" class='control-label'>
@@ -212,7 +301,13 @@ Agregar Bautismo
 								{{formBautismo.abuela_materna}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.abuela_materna.help_text}}</div>
+								{{formBautismo.abuela_materna.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.abuela_materna.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_vecinos_paternos" class='control-label'>
@@ -221,7 +316,13 @@ Agregar Bautismo
 								{{formBautismo.vecinos_paternos}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.vecinos_paternos.help_text}}</div>
+								{{formBautismo.vecinos_paternos.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.vecinos_paternos.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_vecinos_maternos" class='control-label'>
@@ -230,7 +331,13 @@ Agregar Bautismo
 								{{formBautismo.vecinos_maternos}}
 							</div>
 							<div class="controls help-text">
-								{{formBautismo.vecinos_maternos.help_text}}</div>
+								{{formBautismo.vecinos_maternos.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.vecinos_maternos.errors}}
+								</div>
+							</div>
 						</div>
 
 					</div>
@@ -296,7 +403,7 @@ Agregar Bautismo
 	</div>
 </div>
 
-{%include 'modal.html'%}
 {%include 'buscar_sacerdotes.html'%}
+{%include 'modal.html'%}
 
 {% endblock%}

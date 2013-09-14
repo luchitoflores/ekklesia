@@ -1,10 +1,37 @@
 {%csrf_token%}
-{% for f in form_nota%}
+
 <div class="control-group">
-	<label class="control-label">{{f.label}}</label>
-	<div class="controls">{{f}}</div>
-	<div class="controls help_text">{{f.help_text}}</div>
+	<label class="control-label">
+		{{form_nota.fecha.label}}
+	</label>
+	<div class="controls">
+		{{form_nota.fecha}}
+	</div>
+	<div class="controls help_text">
+		{{form_nota.fecha.help_text}}
+	</div>
+	<div class="controls">
+		<div class="errors">								
+			{{form_nota.fecha.errors}}
+		</div>
+	</div>
 </div>
-{%endfor%}
+<div class="control-group">
+	<label class="control-label">
+		{{form_nota.descripcion.label}}
+	</label>
+	<div class="controls">
+		{{form_nota.descripcion}}
+	</div>
+	<div class="controls help_text">
+		{{form_nota.descripcion.help_text}}
+	</div>
+	<div class="controls">
+		<div class="errors">								
+			{{form_nota.descripcion.errors}}
+		</div>
+	</div>
+</div>
+
 
 

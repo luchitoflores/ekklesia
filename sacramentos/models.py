@@ -41,17 +41,12 @@ class Libro(TimeStampedModel):
 		)
 	numero_libro=models.PositiveIntegerField()
 	tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES)
-	fecha_apertura=models.DateField()
-	fecha_cierre=models.DateField(null=True,blank=True)
+	fecha_apertura=models.DateField(help_text='Ingrese una fecha Ej:22/07/2010')
+	fecha_cierre=models.DateField(null=True,blank=True,help_text='Ingrese una fecha Ej:22/07/2010')
 	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
 	numero_maximo_actas=models.PositiveIntegerField()
 	parroquia = models.ForeignKey('Parroquia', related_name='parroquia', help_text='Seleccione una parroquia')
 
-	def fecha_cierre_mayor(self):
-		if (self.fecha_apertura < self.fecha_cierre):
-			return True
-		else:
-			return False
 
 	def __unicode__(self):
 		return '%d %s' %(self.numero_libro,self.tipo_libro)
@@ -306,7 +301,8 @@ class PerfilUsuario(TimeStampedModel):
     nacionalidad = models.CharField(max_length=2, help_text='Escoja la nacionalidad. Ej: Ecuador', choices=NACIONALIDAD_CHOICES)
     padre = models.ForeignKey('PerfilUsuario', related_name='Padre', null=True, blank=True, limit_choices_to={'sexo':'m'}, help_text='Presione buscar, si no está en la lista, presione crear')
     madre = models.ForeignKey('PerfilUsuario', related_name='Madre', null=True, blank=True, limit_choices_to={'sexo':'f'}, help_text='Presione buscar, si no está en la lista, presione crear')
-    fecha_nacimiento = models.DateField(null=True, blank=True, help_text='Ingrese la fecha de nacimiento con formato dd/mm/yyyy')
+    fecha_nacimiento = models.DateField(null=True, blank=True, 
+        help_text='Ingrese la fecha de nacimiento Ej: dd/mm/yyyy')
     lugar_nacimiento = models.CharField(max_length=100, null=True, blank=True, help_text='Ingrese el lugar de Nacimiento. Ej: Amaluza')
     sexo = models.CharField(max_length=10, choices=SEXO_CHOICES,
 		help_text='Elija el sexo de la persona. Ej: Masculino')
@@ -483,13 +479,18 @@ class PeriodoAsignacionParroquia(TimeStampedModel):
         
 class Intenciones(TimeStampedModel):
 	intencion = models.CharField(max_length=200, 
-		help_text='Ingrese hacia quien va dirigida la intención. Ej: A las almas de los fieles difuntos')
-	fecha = models.DateField(help_text='Ingrese la fecha de la intención con el siguiente formato: dia/mes/año')
-	hora = models.TimeField(help_text='Ingrese la hora de celebración de la intención con el siguiente formato: hora:minutos')
-	oferente = models.CharField(max_length=200, help_text='Ingrese el nombre de la persona que ofrece la intención. Ej: La familia Flores, Un devoto')
-	ofrenda = models.PositiveIntegerField(help_text='Ingrese el monto de la ofrenda recibida por la intención. Ej: 5')
+		help_text='Ingrese la intención. Ej: Aniversario de fallecimiento')
+	fecha = models.DateField(help_text=
+        'Ingrese la fecha de la intención Ej: dd/mm/yyyy')
+	hora = models.TimeField(help_text=
+        'Ingrese la hora de celebración de la intención Ej: 17:00')
+	oferente = models.CharField(max_length=200, 
+        help_text='Ingrese quien ofrece la intención. Ej: La Flia Flores')
+	ofrenda = models.PositiveIntegerField(
+        help_text='Ingrese el valor de la ofrenda por la intención. Ej: 5')
 	parroquia = models.ForeignKey('Parroquia')
-	individual = models.BooleanField('Es única?', help_text='Marque la casilla para indicar que la intención será la única que se celebrará durante la misa')
+	individual = models.BooleanField('Es única?', 
+        help_text='Marque para indicar que la intención será la única en la misa')
 
 
 	def __unicode__(self):
@@ -500,7 +501,7 @@ class Intenciones(TimeStampedModel):
 
 
 class Parroquia(TimeStampedModel):
-	nombre=models.CharField('Nombre de la Parroquia',max_length=100)
+	nombre=models.CharField('Nombre de Parroquia',max_length=100)
 	direccion=models.ForeignKey(Direccion, related_name='direccion', verbose_name=u'Prueba')
 
 	def __unicode__(self):

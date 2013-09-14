@@ -18,40 +18,53 @@ Agregar Intenciones de Misa
 	{% if f.label == form.ofrenda.label%}
 
 	<div class="control-group">
-		<label for="" class="control-label">{{f.label}}</label>
+		<label for="" class="control-label">
+			{{f.label}} *
+		</label>
 		<div class="controls">
 			<div class="input-append">
 				{{f}}
-				<span class="add-on"><i class='icon-dollar'></i></span>
+				<span class="add-on"><i class='icon-dollar'></i>
+				</span>
 			</div>
 		</div>
 		<div class="controls help-text">
 			{{f.help_text}}
 		</div>
 		<div class="controls">
-			{{f.errors}}
+			<div class="errors">								
+				{{form.errors}}
+			</div>
 		</div>
 	</div>
 
-
+	
 	{%else%}
+
 	<div class="control-group">
-		<label for="" class="control-label">{{f.label}}</label>
+		<label for="" class="control-label">
+			{{f.label}} *
+		</label>
 		<div class="controls">
 			{{f}}
 		</div>
 		<div class="controls help-text">
 			{{f.help_text}}
 
+		</div>
 		<div class="controls">
-			{{f.errors}}
+			<div class="errors">								
+				{{form.errors}}
+			</div>
 		</div>
 	</div>
+	
 	{%endif%}
 	{%endfor%}
 	<div class="form-actions">
 		<input class='btn btn-primary' type="submit" value='Enviar'>
 		<a href="{%url 'intencion_list'%}" class='btn btn-primary'>Cancelar</a>
+		
 	</div>
 </form>
 

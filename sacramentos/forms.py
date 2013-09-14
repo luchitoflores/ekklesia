@@ -29,22 +29,29 @@ class DivErrorList(ErrorList):
 
 #forms para manejo de usuarios
 class UsuarioForm(ModelForm):
-	first_name = forms.CharField(required=True, label='Nombres', help_text='Ingrese los nombres completos. Ej: Juan José',
+	first_name = forms.CharField(required=True, label='Nombres *', 
+		help_text='Ingrese los nombres completos. Ej: Juan José',
 		widget=forms.TextInput(attrs={'required': ''}))
-	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+	last_name = forms.CharField(required=True, label='Apellidos *', 
+		help_text='Ingrese los nombres completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
 	groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all(),
-		help_text = 'Los grupos a los que este usuario pertenece. Un usuario obtendrá todos los permisos concedidos a cada uno sus grupos. Ud. puede seleccionar más de una opción.', widget=forms.CheckboxSelectMultiple())
-	email = forms.EmailField(label='Email', help_text='Ingrese una dirección de correo electrónico. Ej: diocesisloja@gmail.com', required=False)
+		help_text = 'Los grupos a los que este usuario pertenece. Un usuario obtendrá'+
+		' todos los permisos concedidos a cada uno sus grupos. Ud. puede seleccionar más de una opción.',
+		 widget=forms.CheckboxSelectMultiple())
+	email = forms.EmailField(label='Email', 
+		help_text='Ingrese correo electrónico. Ej: diocesisloja@gmail.com', required=False)
 	class Meta():
 		model = User
 		fields= ('first_name', 'last_name', 'email', 'groups')
 		
 
 class UsuarioPadreForm(ModelForm):
-	first_name = forms.CharField(required=True, label='Nombres', help_text='Ingrese los nombres completos. Ej: Juan José',
+	first_name = forms.CharField(required=True, label='Nombres *',
+	 help_text='Ingrese los nombres completos. Ej: Juan José',
 		widget=forms.TextInput(attrs={'required': ''}))
-	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+	last_name = forms.CharField(required=True, label='Apellidos *', 
+		help_text='Ingrese los nombres completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
 
 	class Meta():
@@ -52,13 +59,19 @@ class UsuarioPadreForm(ModelForm):
 		fields= ('first_name', 'last_name')
 
 class UsuarioSacerdoteForm(ModelForm):
-	first_name = forms.CharField(required=True, label='Nombres', help_text='Ingrese los nombres completos. Ej: Juan José',
+	first_name = forms.CharField(required=True, label='Nombres *', 
+		help_text='Ingrese los nombres completos. Ej: Juan José',
 		widget=forms.TextInput(attrs={'required': ''}))
-	last_name = forms.CharField(required=True, label='Apellidos', help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+	last_name = forms.CharField(required=True, label='Apellidos *', 
+		help_text='Ingrese los nombres completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
 	groups = forms.ModelMultipleChoiceField(queryset= Group.objects.all().exclude(name='Feligres'),
-		help_text = 'Los grupos a los que este usuario pertenece. Un usuario obtendrá todos los permisos concedidos a cada uno sus grupos. Ud. puede seleccionar más de una opción.', widget=forms.CheckboxSelectMultiple())
-	email = forms.EmailField(required=True, label='Email', help_text='Ingrese una dirección de correo electrónico. Ej: diocesisloja@gmail.com')
+		help_text = 'Los grupos a los que este usuario pertenece. '+
+		'Un usuario obtendrá todos los permisos concedidos a cada uno sus grupos.'+
+		' Ud. puede seleccionar más de una opción.', widget=forms.CheckboxSelectMultiple())
+	email = forms.EmailField(required=True, label='Email *', 
+		help_text='Ingrese el email. Ej: juan_salinas12@gmail.com',
+		widget=forms.TextInput(attrs={'required': ''}))
 	class Meta():
 		model = User
 		fields= ('first_name', 'last_name', 'email', 'groups')
@@ -106,11 +119,12 @@ class PerfilUsuarioForm(ModelForm):
 		)
 	
 	
-	sexo = forms.TypedChoiceField(label=u'Sexo', help_text='Elija el sexo de la persona. Ej: Masculino', 
+	sexo = forms.TypedChoiceField(label=u'Sexo *', help_text='Elija el sexo de la persona. Ej: Masculino', 
 		choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
-	estado_civil = forms.TypedChoiceField(label=u'Estado Civil', 
+	estado_civil = forms.TypedChoiceField(label=u'Estado Civil *', 
 		help_text='Elija el estado civil. Ej: Soltero/a', choices=ESTADO_CIVIL_CHOICES, 
 		required=True, widget=forms.Select(attrs={'required':''}))
+
 	
 	def __init__(self, padre = PerfilUsuario.objects.none() , madre = PerfilUsuario.objects.none(), *args, **kwargs):
 		super(PerfilUsuarioForm, self).__init__(*args, **kwargs)
@@ -127,6 +141,8 @@ class PerfilUsuarioForm(ModelForm):
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
 			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
+
+
 			}
 		
 class PadreForm(ModelForm):
@@ -135,7 +151,20 @@ class PadreForm(ModelForm):
 		if data > date.today():
 			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
 		return data
+	ESTADO_CIVIL_CHOICES    = (
+		('', '--- Seleccione ---'),
+		('s','Soltero/a'),
+		('c','Casado/a'),
+		('d','Divorciado/a'),
+		('v','Viudo/a')
+		)
+	estado_civil = forms.TypedChoiceField(label=u'Estado Civil *', 
+		help_text='Elija el estado civil. Ej: Soltero/a', choices=ESTADO_CIVIL_CHOICES, 
+		required=True, widget=forms.Select(attrs={'required':''}))
 
+	lugar_nacimiento = forms.CharField(help_text='Ingrese el lugar de  nacimiento ej: Loja ', 
+		required=True,label='Lugar de Nacimiento *',
+		widget=forms.TextInput(attrs={'required':''}))
 	class Meta(): 
 		model = PerfilUsuario
 		fields = ('nacionalidad','dni', 'fecha_nacimiento', 'lugar_nacimiento', 'estado_civil',
@@ -143,7 +172,7 @@ class PadreForm(ModelForm):
 		widgets = {
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
-			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
+			
 			}
 
 
@@ -191,6 +220,24 @@ class SacerdoteForm(ModelForm):
 # forms para sacramentos
 
 class LibroForm(ModelForm):
+	def clean_fecha_apertura(self):
+		data = self.cleaned_data['fecha_apertura']
+		if data > date.today():
+			raise forms.ValidationError('La fecha de apertura no puede ser mayor o menor a la fecha actual')
+		return data
+
+	def clean_fecha_cierre(self):
+		data = self.cleaned_data['fecha_cierre']
+		if (data):
+			if data <= date.today() :
+				raise forms.ValidationError('La fecha de cierre no puede ser menor o igual a la fecha actual')
+			return data
+		else:
+			return data
+
+	
+			
+
 	TIPO_LIBRO_CHOICES = (
 		('', '--- Seleccione ---'),
 		('Bautismo','Bautismo'),
@@ -203,22 +250,22 @@ class LibroForm(ModelForm):
 		('Abierto','Abierto'),
 		('Cerrado','Cerrado'),
 		)
-	numero_libro=forms.IntegerField(required=True, label='Numero Libro', 
+	numero_libro=forms.IntegerField(required=True, label='Numero Libro *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese un numero para libro ej:1,35')
 
-	tipo_libro= forms.TypedChoiceField(label=u'Tipo de Libro', choices=TIPO_LIBRO_CHOICES, 
+	tipo_libro= forms.TypedChoiceField(label=u'Tipo de Libro *', choices=TIPO_LIBRO_CHOICES, 
 		required=True, widget=forms.Select(attrs={'required':''}),
 		help_text='Seleccione un tipo de libro')
 
-	estado=forms.ChoiceField(required=True,choices=ESTADO_CHOICES,label='Estado', 
+	estado=forms.ChoiceField(required=True,choices=ESTADO_CHOICES,label='Estado *', 
 		widget=RadioSelect(attrs={'required':''}))
-	fecha_apertura = forms.CharField(label=u'Fecha de Apertura', initial=date.today(),
-		widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}),help_text='Seleccione una fecha ej:17/12/2010')
-	fecha_cierre = forms.CharField(required=False,label=u'Fecha de Cierre', 
-		widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'
-			}),help_text='Seleccione una fecha ej:17/12/2010')
+	# fecha_apertura = forms.CharField(label=u'Fecha de Apertura', initial=date.today(),
+	# 	widget=forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 
+	# 		'type':'date'}),help_text='Seleccione una fecha ej:17/12/2010')
+	# fecha_cierre = forms.CharField(required=False,label=u'Fecha de Cierre', 
+	# 	widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'
+	# 		}),help_text='Seleccione una fecha ej:17/12/2010')
 	numero_maximo_actas=forms.IntegerField(required=True, label='Maximo Actas', 
 		widget=forms.TextInput(attrs={'required': '','type':'number','value':'35',
 			'max':'40'}),help_text='Ingrese el numero maximo de actas ej:50') 
@@ -227,6 +274,13 @@ class LibroForm(ModelForm):
 		model=Libro
 		fields = ('numero_libro', 'tipo_libro', 'fecha_apertura', 'fecha_cierre', 
 			'estado', 'numero_maximo_actas')
+		widgets = {
+			'fecha_apertura': forms.TextInput(attrs={'required':'', 'data-date-format': 
+				'dd/mm/yyyy', 'type':'date'}),
+			'fecha_cierre': forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date',
+				'label':'Fecha Cierre *'}),
+			
+			}
 
 
 
@@ -242,23 +296,26 @@ class BautismoForm(ModelForm):
 	# 	queryset=PerfilUsuario.objects.none(),	required=True,	empty_label='--- Seleccione ---',
 	# 	widget=forms.Select(attrs={'required':''}))
 	pagina=forms.IntegerField(required=True,help_text='Ingrese el numero de pagina ej:5,67', 
-		label='Pagina', widget=forms.TextInput(attrs={'required': ''}))
+		label='Pagina *', 
+		widget=forms.TextInput(attrs={'required': ''}))
 	numero_acta=forms.IntegerField(help_text='Ingrese el numero del acta ej:3,25',
 		required=True, 
-		label='Numero Acta', widget=forms.TextInput(attrs={'required': ''}))
+		label='Numero acta *', widget=forms.TextInput(attrs={'required': ''}))
+	
 	lugar_sacramento = forms.CharField(help_text='Ingrese el lugar del sacramento ej: Loja ', 
-		required=True,label='Lugar del Sacramento',
+		required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(help_text='Ingrese el nombre de la iglesia: San Jose',
-		required=True,label='Iglesia',
+		required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}))
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(user__groups__name='Sacerdote', profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.filter(user__groups__name='Sacerdote', profesion='Sacerdote'),
+	# 	empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(help_text='Seleccione un libro para el Bautismo',
 		queryset=Libro.objects.none(),empty_label=None)
 
-	def __init__(self,user, bautizado=PerfilUsuario.objects.none(),*args, **kwargs):
+	def __init__(self,user, bautizado=PerfilUsuario.objects.none(),celebrante=PerfilUsuario.objects.none(),
+		*args, **kwargs):
 
 		super(BautismoForm, self).__init__(*args, **kwargs)
 		
@@ -268,7 +325,13 @@ class BautismoForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Bautismo',parroquia=parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
-			 empty_label='-- Seleccione --')
+			 empty_label='-- Seleccione --',label='Feligres *',
+			 help_text='Presione buscar para encontrar un feligres',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante']=forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label='-- Seleccione --',label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			widget=forms.Select(attrs={'required':''}))
 
 		
 
@@ -296,26 +359,28 @@ class BautismoFormEditar(ModelForm):
 	# 	help_text='Presione buscar para encontrar un feligres',
 	# 	queryset=PerfilUsuario.objects.todos(),	required=True,	empty_label='--- Seleccione ---',
 	# 	widget=forms.Select(attrs={'required':''}))
-	pagina=forms.IntegerField(required=True,help_text='Ingrese el numero de pagina ej:5,67', label='Pagina', 
+	pagina=forms.IntegerField(required=True,help_text='Ingrese el numero de pagina ej:5,67', 
+		label='Pagina *', 
 		widget=forms.TextInput(attrs={'required': ''}))
 	numero_acta=forms.IntegerField(help_text='Ingrese el numero del acta ej:3,25',
 		required=True, 
-		label='Numero Acta', widget=forms.TextInput(attrs={'required': ''}))
+		label='Numero acta *', widget=forms.TextInput(attrs={'required': ''}))
 	
 	lugar_sacramento = forms.CharField(help_text='Ingrese el lugar del sacramento ej: Loja ', 
-		required=True,label='Lugar del Sacramento',
+		required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}))
 	iglesia = forms.CharField(help_text='Ingrese el nombre de la iglesia: San Jose',
-		required=True,label='Iglesia',
+		required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}))
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.none(),
+	# 	empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para el Bautismo')
 
 
-	def __init__(self,user,bautizado=PerfilUsuario.objects.none(), *args, **kwargs):
+	def __init__(self,user,bautizado=PerfilUsuario.objects.none(),celebrante=PerfilUsuario.objects.none(),
+	 *args, **kwargs):
 
 		super(BautismoFormEditar, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
@@ -323,9 +388,13 @@ class BautismoFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Bautismo',parroquia=parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
-			 empty_label='-- Seleccione --')
-		celebrante=Bautismo.objects.get(bautizado=bautizado)
-		self.fields['celebrante'].queryset=PerfilUsuario.objects.filter(id=celebrante.id)
+			 empty_label=None,label='Feligres *',
+			 help_text='Presione buscar para encontrar un feligres',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante']=forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label=None,label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			 widget=forms.Select(attrs={'required':''}))
 			 
 
       
@@ -353,27 +422,28 @@ class EucaristiaForm(ModelForm):
 	# feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
 	# empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
 	# help_text='Presione buscar para encontrar al feligres')
-	pagina=forms.IntegerField(required=True, label='Pagina', 
+	pagina=forms.IntegerField(required=True, label='Pagina *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero de pagina ej:5,67')
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+	numero_acta=forms.IntegerField(required=True, label='Numero acta *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
 	
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
-	iglesia = forms.CharField(required=True,label='Iglesia',
+	iglesia = forms.CharField(required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+	# 	empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Eucaristia')
 
-	def __init__(self,user, feligres=PerfilUsuario.objects.none(),*args, **kwargs):
+	def __init__(self,user, feligres=PerfilUsuario.objects.none(),celebrante=PerfilUsuario.objects.none(),
+		*args, **kwargs):
 		
 		super(EucaristiaForm, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
@@ -381,7 +451,13 @@ class EucaristiaForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Eucaristia',parroquia=parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
-			 empty_label='-- Seleccione --')
+			 empty_label='--Seleccione --',label='Feligres *',
+			 help_text='Presione buscar para encontrar un feligres',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante']=forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label='-- Seleccione --',label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			 widget=forms.Select(attrs={'required':''}))
 
 
 	class Meta():
@@ -404,27 +480,28 @@ class EucaristiaFormEditar(ModelForm):
 	# feligres=forms.ModelChoiceField(queryset=PerfilUsuario.objects.todos(),required=True,
 	# empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
 	# help_text='Presione buscar para encontrar al feligres')
-	pagina=forms.IntegerField(required=True, label='Pagina', 
+	pagina=forms.IntegerField(required=True, label='Pagina *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero de pagina ej:5,67')
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+	numero_acta=forms.IntegerField(required=True, label='Numero acta *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
 	
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
-	iglesia = forms.CharField(required=True,label='Iglesia',
+	iglesia = forms.CharField(required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+	# 	empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Eucaristia')
 
-	def __init__(self,user,feligres=PerfilUsuario.objects.none(), *args, **kwargs):
+	def __init__(self,user,feligres=PerfilUsuario.objects.none(),celebrante=PerfilUsuario.objects.none(),
+	 *args, **kwargs):
 		
 		super(EucaristiaFormEditar, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
@@ -432,7 +509,13 @@ class EucaristiaFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Eucaristia',parroquia=parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
-			 empty_label='-- Seleccione --')
+			 empty_label=None,label='Feligres *',
+			 help_text='Presione buscar para encontrar un feligres',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante']=forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label=None,label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			 widget=forms.Select(attrs={'required':''}))
 
 
 	class Meta():
@@ -457,27 +540,28 @@ class ConfirmacionForm(ModelForm):
 	# 	required=True,label='Feligres',
 	# empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
 	# help_text='Presione buscar para encontrar al feligres')
-	pagina=forms.IntegerField(required=True, label='Pagina', 
+	pagina=forms.IntegerField(required=True, label='Pagina *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero de pagina ej:5,67')
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+	numero_acta=forms.IntegerField(required=True, label='Numero acta *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
 	
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
-	iglesia = forms.CharField(required=True,label='Iglesia',
+	iglesia = forms.CharField(required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+	# 	empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
 
-	def __init__(self,user, confirmado=PerfilUsuario.objects.none(),*args, **kwargs):
+	def __init__(self,user, confirmado=PerfilUsuario.objects.none(),celebrante=PerfilUsuario.objects.none(),
+		*args, **kwargs):
 		
 		super(ConfirmacionForm, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
@@ -485,7 +569,13 @@ class ConfirmacionForm(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Confirmacion',parroquia=parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
-			 empty_label='-- Seleccione --')
+			 empty_label='-- Seleccione --',label='Feligres *',
+			 help_text='Presione buscar para encontrar un feligres',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante']=forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label='-- Seleccione --',label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			 widget=forms.Select(attrs={'required':''}))
 
 
 
@@ -511,27 +601,28 @@ class ConfirmacionFormEditar(ModelForm):
 	# 	required=True,label='Feligres',
 	# empty_label='--- Seleccione ---',widget=forms.Select(attrs={'required':''}),
 	# help_text='Presione buscar para encontrar al feligres')
-	pagina=forms.IntegerField(required=True, label='Pagina', 
+	pagina=forms.IntegerField(required=True, label='Pagina *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero de pagina ej:5,67')
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+	numero_acta=forms.IntegerField(required=True, label='Numero acta *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
 	
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
-	iglesia = forms.CharField(required=True,label='Iglesia',
+	iglesia = forms.CharField(required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+	# 	empty_label='-- Seleccione --')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
 
-	def __init__(self,user, confirmado=PerfilUsuario.objects.none(),*args, **kwargs):
+	def __init__(self,user, confirmado=PerfilUsuario.objects.none(),celebrante=PerfilUsuario.objects.none(),
+		*args, **kwargs):
 		
 		super(ConfirmacionFormEditar, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
@@ -539,7 +630,13 @@ class ConfirmacionFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Confirmacion',parroquia=parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
-			 empty_label='-- Seleccione --')
+			 empty_label=None,label='Feligres *',
+			 help_text='Presione buscar para encontrar un feligres',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante']=forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label=None,label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			 widget=forms.Select(attrs={'required':''}))
 
 
 	class Meta():
@@ -560,12 +657,13 @@ class MatrimonioForm(ModelForm):
 		if data > date.today():
 			raise forms.ValidationError('La fecha del Matrimonio no puede ser mayor a la fecha actual')
 		return data
+
 	TIPO_MATRIMONIO_CHOICES=(
 		('', '--- Seleccione ---'),
         ('Catolico','Catolico'),
         ('Mixto','Mixto'),
         )
-	pagina=forms.IntegerField(required=True, label='Pagina', 
+	pagina=forms.IntegerField(required=True, label='Pagina *', 
 		widget=forms.TextInput(attrs={'required': '','pattern':'[0-9]+'}),
 		help_text='Ingrese el numero de pagina ej:5,67')
 	# novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
@@ -576,45 +674,54 @@ class MatrimonioForm(ModelForm):
 	# 	required=True, empty_label='--- Seleccione ---', 
 	# 	widget=forms.Select(attrs={'required':''}),
 	# 	help_text='Presione buscar para encontrar la novia')
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+	numero_acta=forms.IntegerField(required=True, label='Numero Acta *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
 	
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
-	tipo_matrimonio = forms.TypedChoiceField(label=u'Tipo Matrimonio', 
+	tipo_matrimonio = forms.TypedChoiceField(label=u'Tipo Matrimonio *', 
 		help_text='Elija tipo de matrimonio Ej: Catolico o Mixto', 
 		choices=TIPO_MATRIMONIO_CHOICES, required=True, 
 		widget=forms.Select(attrs={'required':''}))
 
-	iglesia = forms.CharField(required=True,label='Iglesia',
+	iglesia = forms.CharField(required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
-	testigo_novio= forms.CharField(required=True,label='Testigo',
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+	# 	empty_label='-- Seleccione --')
+	testigo_novio= forms.CharField(required=True,label='Testigo *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de testigo ej: Pablo Robles')
-	testigo_novia= forms.CharField(required=True,label='Testiga',
+	testigo_novia= forms.CharField(required=True,label='Testiga *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de testiga ej:Maria Pincay')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),help_text='Seleccione un libro para el Matrimonio')
 
 
-	def __init__(self,user,novio=PerfilUsuario.objects.none(),novia=PerfilUsuario.objects.none(), *args, **kwargs):
+	def __init__(self,user,novio=PerfilUsuario.objects.none(),novia=PerfilUsuario.objects.none(),
+	celebrante=PerfilUsuario.objects.none(), *args, **kwargs):
 		
 		super(MatrimonioForm, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
 			persona__user=user,estado=True).parroquia
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Matrimonio',parroquia=parroquia)
-		self.fields['novio']=forms.ModelChoiceField(required=False, queryset=novio, 
-			empty_label='-- Seleccione --')
-		self.fields['novia']=forms.ModelChoiceField(required=False, queryset=novia, 
-			empty_label='-- Seleccione --')
+		self.fields['novio']=forms.ModelChoiceField(required=True, queryset=novio, 
+			empty_label='-- Seleccione --',label='Novio *',
+			 help_text='Presione buscar para encontrar un novio',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['novia']=forms.ModelChoiceField(required=True, queryset=novia, 
+			empty_label='-- Seleccione --',label='Novia *',
+			 help_text='Presione buscar para encontrar una novia',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante'] = forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label='-- Seleccione --',label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			 widget=forms.Select(attrs={'required':''}))
 
 	class Meta():
 		model=Matrimonio
@@ -639,43 +746,44 @@ class MatrimonioFormEditar(ModelForm):
         ('Catolico','Catolico'),
         ('Mixto','Mixto'),
         )
-	pagina=forms.IntegerField(required=True, label='Pagina', 
+	pagina=forms.IntegerField(required=True, label='Pagina *', 
 		widget=forms.TextInput(attrs={'required': '','pattern':'[0-9]+'}),
 		help_text='Ingrese el numero de pagina ej:5,67')
-	novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
-		required=True, empty_label='--- Seleccione ---', 
-		widget=forms.Select(attrs={'required':''}),
-		help_text='Presione buscar para encontrar el novio')
-	novia=forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), 
-		required=True, empty_label='--- Seleccione ---', 
-		widget=forms.Select(attrs={'required':''}),
-		help_text='Presione buscar para encontrar la novia')
-	numero_acta=forms.IntegerField(required=True, label='Numero Acta', 
+	# novio=forms.ModelChoiceField(queryset=PerfilUsuario.objects.male(), 
+	# 	required=True, empty_label='--- Seleccione ---', 
+	# 	widget=forms.Select(attrs={'required':''}),
+	# 	help_text='Presione buscar para encontrar el novio')
+	# novia=forms.ModelChoiceField(queryset=PerfilUsuario.objects.female(), 
+	# 	required=True, empty_label='--- Seleccione ---', 
+	# 	widget=forms.Select(attrs={'required':''}),
+	# 	help_text='Presione buscar para encontrar la novia')
+	numero_acta=forms.IntegerField(required=True, label='Numero acta *', 
 		widget=forms.TextInput(attrs={'required': ''}),
 		help_text='Ingrese el numero del acta ej:3,25')
-	tipo_matrimonio = forms.TypedChoiceField(label=u'Tipo Matrimonio', 
+	tipo_matrimonio = forms.TypedChoiceField(label=u'Tipo Matrimonio *', 
 		help_text='Elija tipo de matrimonio Ej: Catolico o Mixto', 
 		choices=TIPO_MATRIMONIO_CHOICES, required=True, 
 		widget=forms.Select(attrs={'required':''}))
-	celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
-		queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
-		empty_label='-- Seleccione --')
-	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento',
+	# celebrante = forms.ModelChoiceField(help_text='Seleccione un celebrante',
+	# 	queryset=PerfilUsuario.objects.filter(profesion='Sacerdote'),
+	# 	empty_label='-- Seleccione --')
+	lugar_sacramento = forms.CharField(required=True,label='Lugar del Sacramento *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el lugar del sacramento ej: Loja ')
-	iglesia = forms.CharField(required=True,label='Iglesia',
+	iglesia = forms.CharField(required=True,label='Iglesia *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de la iglesia: San Jose')
-	testigo_novio= forms.CharField(required=True,label='Testigo',
+	testigo_novio= forms.CharField(required=True,label='Testigo *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de testigo ej: Pablo Robles')
-	testigo_novia= forms.CharField(required=True,label='Testiga',
+	testigo_novia= forms.CharField(required=True,label='Testiga *',
 		widget=forms.TextInput(attrs={'required':''}),
 		help_text='Ingrese el nombre de testiga ej:Maria Pincay')
 	libro=forms.ModelChoiceField(empty_label=None,label='Libro',
 		queryset=Libro.objects.none(),help_text='Seleccione un libro para el Matrimonio')
 
-	def __init__(self,user,novio=PerfilUsuario.objects.none(),novia=PerfilUsuario.objects.none(), *args, **kwargs):
+	def __init__(self,user,novio=PerfilUsuario.objects.none(),novia=PerfilUsuario.objects.none(), 
+		celebrante=PerfilUsuario.objects.none(),*args, **kwargs):
 		
 		super(MatrimonioFormEditar, self).__init__(*args, **kwargs)
 		parroquia = AsignacionParroquia.objects.get(
@@ -683,9 +791,17 @@ class MatrimonioFormEditar(ModelForm):
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Matrimonio',parroquia=parroquia)
 		self.fields['novio']=forms.ModelChoiceField(required=False, queryset=novio, 
-			empty_label='-- Seleccione --')
+			empty_label=None,label='Novio *',
+			 help_text='Presione buscar para encontrar un novio',
+			 widget=forms.Select(attrs={'required':''}))
 		self.fields['novia']=forms.ModelChoiceField(required=False, queryset=novia, 
-			empty_label='-- Seleccione --')
+			empty_label=None,label='Novia *',
+			 help_text='Presione buscar para encontrar una novia',
+			 widget=forms.Select(attrs={'required':''}))
+		self.fields['celebrante']=forms.ModelChoiceField(required=True,queryset=celebrante,
+			empty_label=None,label='Celebrante *',
+			 help_text='Presione buscar para encontrar un sacerdote',
+			 widget=forms.Select(attrs={'required':''}))
 
 
 	class Meta():
@@ -703,12 +819,12 @@ class MatrimonioFormEditar(ModelForm):
 # Forms para Notas Marginals
 class NotaMarginalForm(ModelForm):
 	fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
-		required=True,label='Fecha',
+		required=True,label='Fecha *',
 		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
 			'type':'date'}))
-	descripcion=forms.CharField(required=True,label='Descripcion',
+	descripcion=forms.CharField(required=True,label='Descripcion *',
 		widget=forms.Textarea(attrs={'required':''}),
-		help_text='Ingrese una descripcion ej: saco para casarse')
+		help_text='Ingrese una descripcion ej: di copia para matrimonio')
 	class Meta():
 		model= NotaMarginal
 		fields=('fecha','descripcion')
@@ -716,6 +832,9 @@ class NotaMarginalForm(ModelForm):
 
 #Forms para Parroquia - Funcionando
 class ParroquiaForm(ModelForm):
+	nombre=forms.CharField(required=True,label='Nombre de parroquia',
+		widget=forms.TextInput(attrs={'required':''}),
+		help_text='Ingrese nombre de la parroquia ej: El Sagrario')
 	class Meta:
 		model = Parroquia
 		fields = ('nombre',)
@@ -855,7 +974,49 @@ class IntencionForm(ModelForm):
 			'fecha': forms.TextInput(attrs={'required':'', 'type': 'date'}),
 			'hora': forms.TextInput(attrs={'required':'', 'type':'time'}),			
 		}
-		
 
-		
+class ReporteIntencionesForm(forms.Form):
+   	TIPO_REPORTE = (
+		('', '--- Seleccione ---'),
+		('d','Diario'),
+		('m','Mensual'),
+		('a','Anual'),
+	)
+   	tipo = forms.TypedChoiceField(label=u'Tipo Reporte *', 
+		help_text='Seleccione un tipo de reporte Ej: Diario', choices=TIPO_REPORTE, 
+		required=True, widget=forms.Select(attrs={'required':''}))
 
+   	fecha=forms.DateField(help_text='Seleccione una fecha ej:18/07/2000',
+		required=True,label='Fecha *',
+		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+			'type':'date'}))
+
+   	hora=forms.CharField(required=False,help_text='Ingrese una hora ej: 8:00 - 17:00',
+    	label='Hora',widget=forms.TextInput(attrs={'type':'time'}))
+
+class ReporteSacramentosAnualForm(forms.Form):
+	anio=forms.CharField(help_text='Ingrese un año para generar el reporte',label='Año *',
+		widget=forms.TextInput(attrs={'required':''}))
+
+class ReportePermisoForm(forms.Form):
+	TIPO_SACRAMENTO = (
+		('', '--- Seleccione ---'),
+		('Bautismo','Bautismo'),
+		('Eucaristia','Eucaristia'),
+		('Confirmacion','Confirmacion'),
+		('Matrimonio','Matrimonio'),
+	)
+	# feligres=forms.ModelChoiceField(required=True,empty_label='-- Seleccione --',label='Feligres',
+	# 	queryset=PerfilUsuario.objects.feligres(),help_text='Seleccione un Feligres',
+	# 	widget=forms.Select(attrs={'required':''}))
+   	tipo = forms.TypedChoiceField(label=u'Tipo Sacramento *', 
+		help_text='Seleccione un tipo de sacramento', choices=TIPO_SACRAMENTO, 
+		required=True, widget=forms.Select(attrs={'required':''}))
+
+   	def __init__(self,feligres = PerfilUsuario.objects.none(), *args, **kwargs):
+		super(ReportePermisoForm, self).__init__(*args, **kwargs)
+		self.fields['feligres']=forms.ModelChoiceField(label = 'Feligres *', 
+			queryset=feligres, empty_label='-- Seleccione --',
+			widget=forms.Select(attrs={'required':''}))
+		
+		

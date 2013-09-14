@@ -52,7 +52,13 @@ Agregar Primera Comunión
 						{{form_eucaristia.libro}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.libro.help_text}}</div>
+						{{form_eucaristia.libro.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.libro.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
 					<label for="id_pagina" class='control-label'>
@@ -61,7 +67,13 @@ Agregar Primera Comunión
 						{{form_eucaristia.pagina}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.pagina.help_text}}</div>
+						{{form_eucaristia.pagina.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.pagina.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
 					<label for="id_numero_acta" class='control-label'>
@@ -70,7 +82,13 @@ Agregar Primera Comunión
 						{{form_eucaristia.numero_acta}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.numero_acta.help_text}}</div>
+						{{form_eucaristia.numero_acta.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.numero_acta.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
 					<label for="id_feligres" class='control-label'>
@@ -80,15 +98,28 @@ Agregar Primera Comunión
 						<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.feligres.help_text}}</div>
+						{{form_eucaristia.feligres.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.feligres.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
-					<label for="id_fecha_sacramento" class='control-label'>{{form_eucaristia.fecha_sacramento.label}}</label>
+					<label for="id_fecha_sacramento" class='control-label'>{{form_eucaristia.fecha_sacramento.label}} *</label>
 					<div class='controls'>
 						{{form_eucaristia.fecha_sacramento}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.fecha_sacramento.help_text}}</div>
+						{{form_eucaristia.fecha_sacramento.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.fecha_sacramento.errors}}
+						</div>
+					</div>
+
 				</div>
 				<div class='control-group'>
 					<label for="id_lugar_sacramento" class='control-label'>{{form_eucaristia.lugar_sacramento.label}}</label>
@@ -96,7 +127,13 @@ Agregar Primera Comunión
 						{{form_eucaristia.lugar_sacramento}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.lugar_sacramento.help_text}}</div>
+						{{form_eucaristia.lugar_sacramento.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.lugar_sacramento.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
 					<label for="id_padrino" class='control-label'>
@@ -105,7 +142,13 @@ Agregar Primera Comunión
 						{{form_eucaristia.padrino}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.padrino.help_text}}</div>
+						{{form_eucaristia.padrino.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.padrino.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
 					<label for="id_madrina" class='control-label'>
@@ -114,7 +157,13 @@ Agregar Primera Comunión
 						{{form_eucaristia.madrina}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.madrina.help_text}}</div>
+						{{form_eucaristia.madrina.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.madrina.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
 					<label for="id_iglesia" class='control-label'>
@@ -123,7 +172,13 @@ Agregar Primera Comunión
 						{{form_eucaristia.iglesia}}
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.iglesia.help_text}}</div>
+						{{form_eucaristia.iglesia.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.iglesia.errors}}
+						</div>
+					</div>
 				</div>
 				<div class='control-group'>
 					<label for="id_celebrante" class='control-label'>
@@ -131,9 +186,16 @@ Agregar Primera Comunión
 					<div class='controls'>
 						{{form_eucaristia.celebrante}}
 						<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+						
 					</div>
 					<div class="controls help-text">
-						{{form_eucaristia.celebrante.help_text}}</div>
+						{{form_eucaristia.celebrante.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_eucaristia.celebrante.errors}}
+						</div>
+					</div>
 				</div>
 			</fieldset>
 			<div class="form-actions">

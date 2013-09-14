@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	
+</head> 
+<style>
+@page {
+	margin-bottom: 2.5cm;
+	size: a4; 
+	margin: 3cm 3cm 3cm 3cm;
+	@frame footer {
+		-pdf-frame-content: footer;
+		bottom: 1.5cm;
+		margin-left: 2cm;
+		margin-right: 2cm;
+		height: 1cm;
+	}
+}
+body {
+	font-family: Helvetica, Arial, Sans;
+	font-size: 12px;
+}
+
+#footer{
+	text-align:center;
+	font-size: 9px; 
+	color: #666666;
+}
+
+</style> 
+<body >
+	<center>
+		
+		
+		<h2> 
+			{{ "Diocesis de Loja"|upper }}  <br/>
+			Parroquia Eclesiastica {{parroquia.parroquia|upper}} <br/>
+			{{"Loja - Ecuador" | upper}}
+			<hr style="margin-bottom: 1px;"/>
+			<small>{{"Direccion: "}}{{ parroquia.parroquia.direccion }} {{"Tel: "}}{{parroquia.parroquia.direccion.telefono}}</small><br/>
+		</h2>
+		
+	</center>
+	<br/>
+	<p align='right'> <strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong></p><br/>
+	{{"Yo, "}} <strong>{{cura.persona.user.get_full_name}}</strong> {{"parroco de "}} <strong>{{parroquia.parroquia|upper}}</strong> {{"concedo el permiso para que"}} 
+	{%if 'm' in feligres.sexo%}
+	{{"el Sr. "}}
+	
+	{%elif 'f' in feligres.sexo and 's' in feligres.estado_civil%}
+	{{"la Srta. "}}
+	{%else%}
+	{{"la Sra. "}}
+	{%endif%}
+	<strong>{{feligres}}</strong> {{"realice el sacramento de "}} <strong>{{tipo}}</strong> {{"en cualquier parroquia"}} <br>
+
+	<br><br><br>
+
+
+	
+
+	<table align='center'>
+		<tbody>
+			<tr>
+				<td style="text-align: center;">
+
+
+					-------------------------------------------------------------------<br/>
+					P. {{cura.persona.user.get_full_name}}<br/>
+					<strong>{{"PARROCO"}}</strong> 
+
+				</td>
+
+			</tr>
+
+
+		</tbody>
+	</table>
+
+	
+	
+	
+	
+	
+
+	
+
+	<div id="footer">
+		<hr style="margin-bottom: 1px;"/>
+		<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>
+			{{parroquia.persona.user.get_full_name}}
+		</p>
+
+	</div>
+
+</body>
+</html>

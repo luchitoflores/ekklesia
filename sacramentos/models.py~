@@ -48,10 +48,14 @@ class Libro(TimeStampedModel):
 	parroquia = models.ForeignKey('Parroquia', related_name='parroquia', help_text='Seleccione una parroquia')
 
 	def fecha_cierre_mayor(self):
-		if (self.fecha_apertura < self.fecha_cierre):
-			return True
-		else:
-			return False
+
+	    if (self.fecha_cierre):
+                if (self.fecha_apertura < self.fecha_cierre):
+                    return True
+                else:
+                    return False
+        
+
 
 	def __unicode__(self):
 		return '%d %s' %(self.numero_libro,self.tipo_libro)
@@ -460,8 +464,15 @@ class NotaMarginal(TimeStampedModel):
 class AsignacionParroquia(TimeStampedModel):
 	persona = models.ForeignKey('PerfilUsuario')
 	parroquia = models.ForeignKey('Parroquia')
+<<<<<<< HEAD
+	inicio = models.DateField(null=True, blank=True)
+	fin = models.DateField(null=True, blank=True)	
+	estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que es el párroco actual')
+
+=======
 	periodo = models.ForeignKey('PeriodoAsignacionParroquia')
 	
+>>>>>>> 682d18649be619c2c669498bb6870a6ed3c48a9d
 	def __unicode__(self):
 		return u'Párroco: %s - Parroquia: %s' % (self.persona.user.get_full_name(), self.parroquia.nombre) 
 

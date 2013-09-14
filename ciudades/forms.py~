@@ -46,36 +46,35 @@ class ParroquiaForm(ModelForm):
 	# 	empty_label='-- Seleccione --' ,queryset=None, help_text='Ingrese los nombres completos.'+
 	# 	' Ej: Juan José',
 	# 	widget=forms.TextInput(attrs={'required': ''}))
-	class Meta:
-		model = Parroquia
-		fields = ('nombre','abreviatura','canton')
+	# class Meta:
+	# 	model = Parroquia
+	# 	fields = ('nombre','abreviatura','canton')
        
 # Forms para dirección
 
 class DireccionForm(ModelForm):
-	
-    domicilio=forms.CharField(label='Domicilio', max_length=200, required=True,
+	domicilio=forms.CharField(label='Domicilio', max_length=200, required=True,
 		help_text='Ingrese la direccion Ej: Bernardo 17-19 y Bolivar',
 		widget=forms.TextInput(attrs={'required': ''}))
 	# provincia=forms.ModelChoiceField(queryset=Provincia.objects.all(), empty_label='-- Seleccione --',
 	# 	help_text='Seleccione una provincia',
 	# 	widget=forms.Select(attrs={'required':''}))
-    telefono=forms.CharField(label='Telefono', help_text='Ingrese un telefono convencional'+
+	telefono=forms.CharField(label='Telefono', help_text='Ingrese un telefono convencional'+
 		' Ej: 072588278')
 		
-    queryset_canton = Canton.objects.all()
-    queryset_parroquia = Parroquia.objects.all()
-    def __init__(self, canton = queryset_canton, parroquia = queryset_parroquia, *args, **kwargs):
-	super(DireccionForm, self).__init__(*args, **kwargs)	
-	self.fields['canton']=forms.ModelChoiceField(queryset=canton, empty_label='-- Seleccione --',
-		help_text='Seleccione un canton Ej: Loja - El Oro', 
-		widget=forms.Select(attrs={'required':'', 'disabled':''}))
-	self.fields['parroquia']= forms.ModelChoiceField(queryset=parroquia,
-		empty_label='-- Seleccione --', help_text='Seleccione una parroquia Ej: El Sagrario',
-		widget=forms.Select(attrs={'required':'', 'disabled':''}))
+	queryset_canton = Canton.objects.all()
+	queryset_parroquia = Parroquia.objects.all()
+	def __init__(self, canton = queryset_canton, parroquia = queryset_parroquia, *args, **kwargs):
+		super(DireccionForm, self).__init__(*args, **kwargs)	
+		self.fields['canton']=forms.ModelChoiceField(queryset=canton, empty_label='-- Seleccione --',
+			help_text='Seleccione un canton Ej: Loja - El Oro', 
+			widget=forms.Select(attrs={'required':'', 'disabled':''}))
+		self.fields['parroquia']= forms.ModelChoiceField(queryset=parroquia,
+			empty_label='-- Seleccione --', help_text='Seleccione una parroquia Ej: El Sagrario',
+			widget=forms.Select(attrs={'required':'', 'disabled':''}))
 		
 
 
-    class Meta:
-	model = Direccion
+	class Meta:
+		model = Direccion
 

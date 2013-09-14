@@ -21,13 +21,31 @@ Lista de Logs
 		<tr>
 			<td>{{o.user}}</td>
 			<td>{{o.object_repr}}</td>
-			<td>{{o.action_flag}}</td>
+			{%if o.action_flag == 1%}
+			
+			<td>{{'Creacion'}}</td>
+			{%endif%}
+			{%if o.action_flag == 2%}
+			
+			<td>{{'Actualizacion'}}</td>
+			{%endif%}
+			{%if o.action_flag == 3%}
+			
+			<td>{{'Dar de Baja'}}</td>
+			{%endif%}
+			
 			<td>{{o.change_message}}</td>
 			
 		</tr>
 		{%endfor%}
 	</tbody>
 </table>
+<!--{%if user.is_superuser%}
+<a href="{% url 'logs_csv' %}" class='btn btn-primary'>Exportar a Csv</a>
+{%endif%}-->
+<a href="{% url 'logs_csv' %}" class='btn btn-primary'>Exportar a CSV</a>
+
+
 
 
 

@@ -82,7 +82,15 @@
 				</li>
 				<li><a href="#">Agenda</a></li>
 				<li><a href="{%url 'intencion_list'%}">Intenciones de Misa</a></li>
-				<li><a href="#">Reportes</a></li>
+				<li class='dropdown'>
+					<a class='dropdown-toggle' data-toggle='dropdown' href="#">Reportes<b class="caret"></b></a>
+					<ul class='dropdown-menu'>
+						<li><a href="{%url 'reporte_anual'%}" > Anual Sacramentos</a></li>
+						<li><a href="{%url 'reporte_intenciones'%}" >Intenciones</a></li>
+						<li><a href="{%url 'reporte_permiso'%}" >Permisos</a></li>
+						
+					</ul>
+				</li>
 				<li><a href="{%url 'log_list'%}">Logs</a></li>
 			</ul>
 			{%endif%}

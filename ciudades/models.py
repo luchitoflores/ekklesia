@@ -5,8 +5,10 @@ from django.db import models
 # Create your models here.
 
 class Provincia(models.Model):
-	nombre=models.CharField(max_length=100,help_text='Ingrese una Provincia Ej: Loja, El Oro')
-	abreviatura=models.CharField(max_length=2,help_text='Ingrese una abreviatura Ej:lo, el,p')
+	nombre=models.CharField(max_length=100,help_text='Ingrese el nombre de una Provincia Ej: Loja,'
+		+' El Oro')
+	abreviatura=models.CharField(max_length=2,help_text='Ingrese una abreviatura para la Provincia'+
+		' Ej:lo, el, p')
 
 
 	def __unicode__(self):

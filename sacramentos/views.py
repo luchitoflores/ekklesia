@@ -302,7 +302,8 @@ def libro_create_view(request):
 
 			try:
 
-				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,parroquia=asignacion.parroquia)
+				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,
+					parroquia=asignacion.parroquia)
 				if(estado != consulta.estado and tipo!=consulta.tipo_libro):
 					libro.save()
 					LogEntry.objects.log_action(
@@ -372,10 +373,11 @@ def libro_update_view(request,pk):
 			libro=form_libro.save(commit=False)
 			estado=libro.estado
 			tipo=libro.tipo_libro
-			parroquia = AsignacionParroquia.objects.get(
-				persona__user=request.user,estado=True).parroquia
+			asignacion = AsignacionParroquia.objects.get(
+				persona__user=request.user)
 			try:
-				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,parroquia=parroquia)
+				consulta=Libro.objects.get(estado='Abierto',tipo_libro=tipo,
+					parroquia=asignacion.parroquia)
 				if (libro.id == consulta.id):
 					if libro.estado == consulta.estado:
 						libro.save()
@@ -465,8 +467,8 @@ class LibroListView(ListView):
 
 	def get_queryset(self):
 		try:
-			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
-			queryset = Libro.objects.filter(parroquia=parroquia)
+			asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
+			queryset = Libro.objects.filter(parroquia=asignacion.parroquia)
 			return queryset
 		except: 
 			return [];
@@ -544,9 +546,9 @@ def matrimonio_create_view(request):
 					novia.save()
 					matrimonio.novio=novio
 					matrimonio.novia=novia
-					parroquia = AsignacionParroquia.objects.get(
-							persona__user=request.user,estado=True).parroquia
-					matrimonio.parroquia = parroquia
+					asignacion = AsignacionParroquia.objects.get(
+							persona__user=request.user)
+					matrimonio.parroquia = asignacion.parroquia
 					matrimonio.vigente=True
 					matrimonio.save()
 					LogEntry.objects.log_action(
@@ -638,7 +640,8 @@ def matrimonio_update_view(request,pk):
 		novio = PerfilUsuario.objects.padre()
 		novia = PerfilUsuario.objects.madre()
 		celebrante=PerfilUsuario.objects.sacerdote()
-		form_matrimonio = MatrimonioFormEditar(usuario,novio,novia,celebrante,request.POST,instance=matrimonio)
+		form_matrimonio = MatrimonioFormEditar(usuario,novio,novia,celebrante,request.POST,
+			instance=matrimonio)
 		if form_matrimonio.is_valid():
 			matrimonio=form_matrimonio.save(commit=False)
 			novio=matrimonio.novio
@@ -650,9 +653,9 @@ def matrimonio_update_view(request,pk):
 				novia.save()
 				matrimonio.novio=novio
 				matrimonio.novia=novia
-				parroquia = AsignacionParroquia.objects.get(
-						persona__user=request.user,estado=True).parroquia
-				matrimonio.parroquia = parroquia
+				asignacion = AsignacionParroquia.objects.get(
+						persona__user=request.user)
+				matrimonio.parroquia = asignacion.parroquia
 				matrimonio.vigente=True
 				matrimonio.save()
 				LogEntry.objects.log_action(
@@ -773,10 +776,9 @@ class MatrimonioNoVigenteListView(ListView):
 
 	def get_queryset(self):
 		try:
-			parroquia = AsignacionParroquia.objects.get(
-				persona__user=self.request.user).parroquia
-
-			queryset = Matrimonio.objects.filter(parroquia=parroquia,vigente=False)
+			asignacion = AsignacionParroquia.objects.get(
+				persona__user=self.request.user)
+			queryset = Matrimonio.objects.filter(parroquia=asignacion.parroquia,vigente=False)
 			return queryset
 		except: 
 			return [];
@@ -788,10 +790,10 @@ class MatrimonioListView(ListView):
 
 	def get_queryset(self):
 		try:
-			parroquia = AsignacionParroquia.objects.get(
-				persona__user=self.request.user).parroquia
+			asignacion = AsignacionParroquia.objects.get(
+				persona__user=self.request.user)
 
-			queryset = Matrimonio.objects.filter(parroquia=parroquia,vigente=True)
+			queryset = Matrimonio.objects.filter(parroquia=asignacion.parroquia,vigente=True)
 			return queryset
 		except: 
 			return [];
@@ -816,9 +818,9 @@ def bautismo_create_view(request):
 			bautismo.tipo_sacramento =  u'Bautismo'
 			# nota.save()
 			# bautismo.nota_marginal=nota
-			parroquia = AsignacionParroquia.objects.get(
-				persona__user=request.user,estado=True).parroquia
-			bautismo.parroquia = parroquia
+			asignacion = AsignacionParroquia.objects.get(
+				persona__user=request.user)
+			bautismo.parroquia = asignacion.parroquia
 			bautismo.save()
 			LogEntry.objects.log_action(
 				user_id=request.user.id,
@@ -956,8 +958,8 @@ class BautismoListView(ListView):
 	template_name='bautismo/bautismo_list.html'
 	def get_queryset(self):
 		try:
-			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
-			queryset = Bautismo.objects.filter(parroquia=parroquia)
+			asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
+			queryset = Bautismo.objects.filter(parroquia=asignacion.parroquia)
 			return queryset
 		except: 
 			return [];
@@ -981,9 +983,9 @@ def eucaristia_create_view(request):
 			eucaristia=form_eucaristia.save(commit=False)
 			tipo_sacramento=u'Eucaristia'
 			eucaristia.tipo_sacramento=tipo_sacramento
-			parroquia = AsignacionParroquia.objects.get(
-				persona__user=request.user,estado=True).parroquia
-			eucaristia.parroquia = parroquia
+			asignacion = AsignacionParroquia.objects.get(
+				persona__user=request.user)
+			eucaristia.parroquia = asignacion.parroquia
 			eucaristia.save()
 			LogEntry.objects.log_action(
 				user_id=request.user.id,
@@ -1097,8 +1099,8 @@ class EucaristiaListView(ListView):
 	template_name='eucaristia/eucaristia_list.html'
 	def get_queryset(self):
 		try:
-			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
-			queryset = Eucaristia.objects.filter(parroquia=parroquia)
+			asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
+			queryset = Eucaristia.objects.filter(parroquia=asignacion.parroquia)
 			return queryset
 		except: 
 			return [];
@@ -1119,9 +1121,9 @@ def confirmacion_create_view(request):
 		if(form_confirmacion.is_valid()):
 			confirmacion=form_confirmacion.save(commit=False)
 			confirmacion.tipo_sacramento='Confirmacion'
-			parroquia = AsignacionParroquia.objects.get(
-				persona__user=request.user,estado=True).parroquia
-			confirmacion.parroquia = parroquia
+			asignacion = AsignacionParroquia.objects.get(
+				persona__user=request.user)
+			confirmacion.parroquia = asignacion.parroquia
 			confirmacion.save()
 			LogEntry.objects.log_action(
 				user_id=request.user.id,
@@ -1178,7 +1180,8 @@ def confirmacion_update_view(request,pk):
 	if(request.method == 'POST'):
 		confirmado=PerfilUsuario.objects.feligres()
 		celebrante=PerfilUsuario.objects.sacerdote()
-		form_confirmacion=ConfirmacionFormEditar(usuario,confirmado,celebrante,request.POST,instance=confirmacion)
+		form_confirmacion=ConfirmacionFormEditar(usuario,confirmado,celebrante,request.POST,
+			instance=confirmacion)
 		if(form_confirmacion.is_valid()):
 			form_confirmacion.save()
 			LogEntry.objects.log_action(
@@ -1238,8 +1241,8 @@ class ConfirmacionListView(ListView):
 
 	def get_queryset(self):
 		try:
-			parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
-			queryset = Confirmacion.objects.filter(parroquia=parroquia)
+			asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
+			queryset = Confirmacion.objects.filter(parroquia=asignacion.parroquia)
 			return queryset
 		except: 
 			return [];
@@ -1319,7 +1322,7 @@ def intencion_create_view(request):
 		if form_intencion.is_valid():
 			intencion = form_intencion.save(commit=False)
 			try:
-				asignacion = AsignacionParroquia.objects.get(persona__user=request.user, estado=True)
+				asignacion = AsignacionParroquia.objects.get(persona__user=request.user)
 				intencion.parroquia = asignacion.parroquia
 				intencion.save()
 				messages.success(request, 'Creado exitosamente')
@@ -1782,7 +1785,7 @@ def matrimonio_certificado(request, pk):
 	matrimonio=get_object_or_404(Matrimonio, pk=pk)
 	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,estado=True)
+		parroquia=secretaria.parroquia,asignacion=secretaria)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
 	html = render_to_string('matrimonio/matrimonio_certificado.html', {'pagesize':'A4', 
 		'matrimonio':matrimonio,'cura':cura,'notas':notas,'secretaria':secretaria},

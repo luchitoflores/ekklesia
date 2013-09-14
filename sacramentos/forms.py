@@ -892,7 +892,22 @@ class AsignarSecretariaForm(ModelForm):
 	# 		return data
 
 	# 	return data
+	def clean(self):
+		cleaned_data = super(AsignarSecretariaForm, self).clean()
+		persona = cleaned_data.get("persona")
+		parroquia = cleaned_data.get("parroquia")
 		
+		if not persona.user.email:
+			msg = u"La persona elegida no tiene registrado un email, proceda a asignarle uno"
+			self._errors["persona"] = self.error_class([msg])
+
+		esta_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(asignacion__persona=persona, estado=True).exclude(asignacion__parroquia=parroquia)
+		if esta_activo_otra_parroquia:
+			msg = u"La persona elegida ya tiene una asignación activa en otra parroquia"
+			self._errors["persona"] = self.error_class([msg])
+     
+		return cleaned_data
+
 
 	def __init__(self, user, persona = PerfilUsuario.objects.none(), estado=False, *args, **kwargs):
 		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)

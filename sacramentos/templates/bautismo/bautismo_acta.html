@@ -11,19 +11,20 @@
 	margin: 3cm 3cm 3cm 3cm;
 	@frame footer {
 		-pdf-frame-content: footer;
-		bottom: 0.5cm;
-		margin-left: 3cm;
-		margin-right: 3cm;
-		height: 3cm;
+		bottom: 1.5cm;
+		margin-left: 2cm;
+		margin-right: 2cm;
+		height: 1cm;
 	}
 }
 body {
 	font-family: Helvetica, Arial, Sans;
 	font-size: 14px;
 }
-#tabla-informacion tr td{
-	margin: 0;
-	padding: 0;
+#footer{
+	text-align:center;
+	font-size: 9px; 
+	color: #666666;
 }
 
 </style> 
@@ -43,10 +44,10 @@ body {
 						a <strong>{{bautismo.fecha_sacramento|date:'d'}}</strong> dias del mes de <strong>{{bautismo.fecha_sacramento|date:'F'}}</strong>, del año del Señor del <strong>{{bautismo.fecha_sacramento|date:'Y'}}</strong>.<br/>
 						Yo, <strong>{{bautismo.celebrante}}</strong>, Cura-Párroco de la misma,
 						bauticé solemnemente a 
-						<strong>{% if "m" in bautismo.bautizado.sexo%}</strong>
-						un niño 
+						{% if "m" in bautismo.bautizado.sexo%}
+						un <strong>niño</strong>
 						{%else%}
-						una niña
+						una <strong>niña</strong>
 						{%endif%}
 						que nació el día  <strong>{{bautismo.bautizado.fecha_nacimiento|date:'d'}}</strong>
 						del mes de <strong>{{bautismo.bautizado.fecha_nacimiento|date:'F'}}</strong> del año <strong>{{bautismo.bautizado.fecha_nacimiento|date:'Y'}}</strong> y a quién
@@ -54,14 +55,14 @@ body {
 
 						{% if "m" in bautismo.bautizado.sexo%}
 						Es hijo de <strong>{{ bautismo.bautizado.padre}}</strong>
-						feligrés de <strong>{{"Nose que va aqui"}}</strong>
+						feligrés de <strong>{{bautismo.lugar_sacramento}}</strong>
 						y de <strong>{{ bautismo.bautizado.madre}}</strong>
-						de la parroquia de <strong>{{"Nose que va aqui"}}</strong>, 
+						de la parroquia de <strong>{{bautismo.lugar_sacramento}}</strong>, 
 						{%else%}
 						Es hija de <strong>{{ bautismo.bautizado.padre}}</strong>
-						feligrés de <strong>{{"Nose que va aqui"}}</strong>
+						feligrés de <strong>{{bautismo.lugar_sacramento}}</strong>
 						y de <strong>{{ bautismo.bautizado.madre}}</strong>
-						de la parroquia de <strong>{{"Nose que va aqui"}}</strong>, 
+						de la parroquia de <strong>{{bautismo.lugar_sacramento}}</strong>, 
 						{%endif%}
 						siendo sus abuelos paternos <strong>{{bautismo.abuelo_paterno}}</strong> y <strong>{{bautismo.abuela_paterna}}</strong>
 						vecinos de <strong>{{bautismo.vecinos_paternos}}</strong> y los maternos
@@ -96,9 +97,10 @@ body {
 	<br/>
 
 	<div id="footer">
-		<strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong>
-		<p>Sistema de Gestion Sacramental Ekkelsia - Reporte generado por:{{"Secretario/a"}}</p>
-		<p></p>
+		<hr style="margin-bottom: 1px;"/>
+		<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>{{secretaria.persona.user.get_full_name}}</strong> el <strong>{%now "SHORT_DATE_FORMAT"%} </strong></p>
+
 	</div>
+
 </body>
 </html>

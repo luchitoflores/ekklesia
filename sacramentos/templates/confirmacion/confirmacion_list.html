@@ -22,7 +22,6 @@ Lista de Confirmados
 			<th>Fecha Sacramento</th>
 			<th>Papa</th>
 			<th>Mama</th>
-			<th>Reportes</th>
 			
 			
 		</tr>
@@ -36,7 +35,7 @@ Lista de Confirmados
 			<td id='id_fecha_sacramento'>{{o.fecha_sacramento}}</td>
 			<td>{{o.confirmado.padre.user.first_name}} {{o.confirmado.padre.user.last_name}}</td>
 			<td>{{o.confirmado.madre.user.first_name}} {{o.confirmado.madre.user.last_name}}</td>
-			<td><a href="{%url 'confirmacion_reporte' pk=o.id%}"> acta</a></td>
+			
 		</tr>
 		{% endfor %}
 	</tbody>

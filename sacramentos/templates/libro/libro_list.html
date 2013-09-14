@@ -8,6 +8,9 @@ Lista de Libros
 <script src='/static/js/acta.js'></script>
 
 {%endblock%}
+
+
+
 {%block content%}
 
 
@@ -28,7 +31,11 @@ Lista de Libros
 			<td><a href="{%url 'libro_update' pk=o.id%}">{{o.numero_libro}}</a></td>
 			<td >{{o.tipo_libro}}</td>
 			<td id='id_fecha_apertura'>{{o.fecha_apertura}}</td>
+			{%if o.fecha_cierre%}
 			<td id='id_fecha_cierre'>{{o.fecha_cierre}}</td>
+			{%else%}
+			<td id='id_fecha_cierre'>{{'No hay fecha'}}</td>
+			{%endif%}
 			<td>{{o.estado}}</td>
 			
 		</tr>
@@ -39,24 +46,7 @@ Lista de Libros
 
 <a href="{% url 'libro_create' %}" class='btn btn-primary'>Nuevo Libro</a>
 
-<div class="pagination">
-	<ul>
 
-		{% if page_obj.has_previous %}
-		<li><a href="?page={{page_obj.previous_page_number }}">Anterior</a>
-			{% endif %}
-		</li>
 
-		{%for p in lista%}
-		<li><a href="?page={{p}}">{{p}}</a></li>
-		{%endfor%}
-
-		<li>
-			{% if page_obj.has_next %}
-			<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-			{% endif %}
-		</li>
-	</ul>
-</div>
 
 {%endblock%}

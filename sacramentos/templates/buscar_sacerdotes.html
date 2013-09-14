@@ -5,27 +5,29 @@
 		<h3>Búsqueda de Sacerdotes</h3>
 	</div>
 	<div class="modal-body">
-		<div id='id_div_mensaje'>
+		<div id='id_div_mensaje_sacerdote'>
 			<p>Escoja un criterio de búsqueda, por cedula o por nombres y apellidos</p>
 		</div>
-		<div class="btn-group" data-toggle="buttons-radio">
-			<button id='id_button_cedula' type="button" class="btn">Cédula</button>
-			<button id='id_button_nombres' type="button" class="btn">Nombres/Apellidos</button>
-		</div>
+		
+			<div id='id_buscar_s' class="btn-group" data-toggle="buttons-radio">
+				<button id='id_button_cedula_s' type="button" class="btn">Cédula</button>
+				<button id='id_button_nombres_s' type="button" class="btn">Nombres/Apellidos</button>
+			</div>
+		
 
-		<div id='id_div_form_buscar' style='margin-top: 20px; display: none'>
+		<div id='id_div_form_buscar_s' style='margin-top: 20px; display: none'>
 			<form id='id_form_busqueda_sacerdotes' action="" method='GET' class='form-search'>
-				<div id='id_div_busqueda_nombres'style='display:none'>
+				<div id='id_div_busqueda_nombres_s'style='display:none'>
 
-					<input id='id_query_nombres' type="text" class='control-label input-medium search-query' name='nombres' placeholder='Nombres'>	
+					<input id='id_query_nombres_s' type="text" class='control-label input-medium search-query' name='nombres' placeholder='Nombres'>	
 
-					<input id='id_query_apellidos' type="text" class='control-label input-medium search-query' name='apellidos' placeholder='Apellidos'>	
+					<input id='id_query_apellidos_s' type="text" class='control-label input-medium search-query' name='apellidos' placeholder='Apellidos'>	
 				</div>
-				<div id='id_div_busqueda_cedula'style='display:none'>
+				<div id='id_div_busqueda_cedula_s'style='display:none'>
 
-					<input id='id_query_cedula' type="text" class='control-label input-medium search-query' name='cedula' placeholder='Cedula'>
+					<input id='id_query_cedula_s' type="text" class='control-label input-medium search-query' name='cedula' placeholder='Cedula'>
 				</div>
-				<input id='id_input_buscar' type="submit" value="Buscar" class="control-label btn btn-primary">
+				<input id='id_input_buscar_s' type="submit" value="Buscar" class="control-label btn btn-primary">
 
 			</form>
 		</div>

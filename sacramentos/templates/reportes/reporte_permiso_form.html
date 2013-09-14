@@ -1,0 +1,65 @@
+<!doctype html>
+{%extends 'base.html'%}
+{%block content%}
+<form action="." class='form-horizontal'>
+	<div class='row'>
+		<div class='span10'>
+			
+			<div class='row'>
+				<div class="span6">
+					<div class='control-group'>
+						<label class='control-label'>
+							{{form.tipo.label}}
+						</label>
+						<div class='controls'>
+							{{form.tipo}}
+
+						</div>
+						<div class="controls help-text">
+							{{form.tipo.help_text}}
+							<div class="controls">
+								<div class="errors">								
+									{{form.tipo.errors}}
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+				<div class="span6">
+					<div class='control-group'>
+						<label class='control-label'>
+							{{form.feligres.label}}
+						</label>
+						<div class='controls'>
+							{{form.feligres}}
+							<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+
+						</div>
+						<div class="controls help-text">
+							{{form.feligres.help_text}}
+							
+						</div>
+						<div class="controls">
+								<div class="errors">								
+									{{form.feligres.errors}}
+								</div>
+							</div>
+
+
+					</div>
+				</div>
+				
+				
+			</div>
+		</div>
+	</div>
+
+	<div class="form-actions">
+		<input type="submit" value="Enviar" target='_blank'class='btn btn-primary'>
+
+	</div>
+</form>
+{%include 'modal.html'%}
+{%endblock%}

@@ -19,11 +19,11 @@ Agregar Matrimonio
 <script>
 
 function check(input) {  
-    if(input.validity.typeMismatch){  
-        input.setCustomValidity("Dude '" + input.value + "' is not a valid email. Enter something nice!!");  
-    }else {  
-        input.setCustomValidity("");  
-    }                 
+	if(input.validity.typeMismatch){  
+		input.setCustomValidity("Dude '" + input.value + "' is not a valid email. Enter something nice!!");  
+	}else {  
+		input.setCustomValidity("");  
+	}                 
 }  
 </script>
 {%endblock%}
@@ -36,16 +36,16 @@ function check(input) {
 </div>
 {%if object.id%}
 <div class="btn-toolbar pull-right">
-<div class="btn-group">
-    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
-        <i class='icon-print'></i>  Reportes <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu pull-right" >
-        <li>
-            <a href="{%url 'matrimonio_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Partida Matrimonial</a>
-        </li>
-     </ul>
-  </div>
+	<div class="btn-group">
+		<button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+			<i class='icon-print'></i>  Reportes <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu pull-right" >
+			<li>
+				<a href="{%url 'matrimonio_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Partida Matrimonial</a>
+			</li>
+		</ul>
+	</div>
 </div>
 {%endif%}
 <!-- Pestañas para datos del feligres, y del bautizo -->
@@ -66,7 +66,13 @@ function check(input) {
 
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.libro.help_text}}</div>
+								{{form_matrimonio.libro.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.libro.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_pagina" class='control-label'>{{form_matrimonio.pagina.label}}</label>
@@ -74,7 +80,13 @@ function check(input) {
 								{{form_matrimonio.pagina}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.pagina.help_text}}</div>
+								{{form_matrimonio.pagina.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.pagina.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_tipo_matrimonio" class='control-label'>{{form_matrimonio.tipo_matrimonio.label}}</label>
@@ -82,7 +94,13 @@ function check(input) {
 								{{form_matrimonio.tipo_matrimonio}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.tipo_matrimonio.help_text}}</div>
+								{{form_matrimonio.tipo_matrimonio.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.tipo_matrimonio.errors}}
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="span4">
@@ -92,18 +110,54 @@ function check(input) {
 								{{form_matrimonio.numero_acta}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.numero_acta.help_text}}</div>
+								{{form_matrimonio.numero_acta.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.numero_acta.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{form_matrimonio.fecha_sacramento.label}}</label>
+							<label for="id_fecha_sacramento" class='control-label'>{{form_matrimonio.fecha_sacramento.label}} *</label>
 							<div class='controls'>
 								{{form_matrimonio.fecha_sacramento}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.fecha_sacramento.help_text}}</div>
+								{{form_matrimonio.fecha_sacramento.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.fecha_sacramento.errors}}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
+
+				<div class="row">
+					<div class="span8">
+						<div class='control-group'>
+							<label for="id_celebrante" class='control-label'>
+								{{form_matrimonio.celebrante.label}}
+							</label>
+							<div class='controls'>
+								{{form_matrimonio.celebrante}}
+								<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+							</div>
+							<div class="controls help-text">
+								{{form_matrimonio.celebrante.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.celebrante.errors}}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+
 			</fieldset>
 
 			<fieldset class='scheduler-border'>
@@ -115,7 +169,13 @@ function check(input) {
 						<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 					</div>
 					<div class="controls help-text">
-						{{form_matrimonio.novio.help_text}}</div>
+						{{form_matrimonio.novio.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_matrimonio.novio.errors}}
+						</div>
+					</div>
 				</div>
 
 				<div class='control-group'>
@@ -125,9 +185,16 @@ function check(input) {
 						<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 					</div>
 					<div class="controls help-text">
-						{{form_matrimonio.novia.help_text}}</div>
+						{{form_matrimonio.novia.help_text}}
+					</div>
+					<div class="controls">
+						<div class="errors">								
+							{{form_matrimonio.novia.errors}}
+						</div>
+					</div>
 				</div>
-				
+
+
 			</fieldset>
 			<fieldset class='scheduler-border'>
 				<legend class='scheduler-border'>Mas Datos del Sacramento</legend>
@@ -139,7 +206,13 @@ function check(input) {
 								{{form_matrimonio.lugar_sacramento}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.lugar_sacramento.help_text}}</div>
+								{{form_matrimonio.lugar_sacramento.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.lugar_sacramento.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_iglesia" class='control-label'>{{form_matrimonio.iglesia.label}}</label>
@@ -147,7 +220,13 @@ function check(input) {
 								{{form_matrimonio.iglesia}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.iglesia.help_text}}</div>
+								{{form_matrimonio.iglesia.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.iglesia.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_testigo_novio" class='control-label'>{{form_matrimonio.testigo_novio.label}}</label>
@@ -155,38 +234,46 @@ function check(input) {
 								{{form_matrimonio.testigo_novio}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.testigo_novio.help_text}}</div>
+								{{form_matrimonio.testigo_novio.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.testigo_novio.errors}}
+								</div>
+							</div>
 						</div>
+						
+
+					</div>
+					<div class="span4">
+
 						<div class='control-group'>
 							<label for="id_testigo_novia" class='control-label'>{{form_matrimonio.testigo_novia.label}}</label>
 							<div class='controls'>
 								{{form_matrimonio.testigo_novia}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.testigo_novia.help_text}}</div>
-						</div>
-						
-					</div>
-					<div class="span4">
-						<div class='control-group'>
-							<label for="id_celebrante" class='control-label'>
-								{{form_matrimonio.celebrante.label}}</label>
-							<div class='controls'>
-								{{form_matrimonio.celebrante}}
-								<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+								{{form_matrimonio.testigo_novia.help_text}}
 							</div>
-							<div class="controls help-text">
-							{{form_matrimonio.celebrante.help_text}}
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.testigo_novia.errors}}
+								</div>
 							</div>
 						</div>
-						
 						<div class='control-group'>
 							<label for="id_padrino" class='control-label'>{{form_matrimonio.padrino.label}}</label>
 							<div class='controls'>
 								{{form_matrimonio.padrino}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.padrino.help_text}}</div>
+								{{form_matrimonio.padrino.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.padrino.errors}}
+								</div>
+							</div>
 						</div>
 						<div class='control-group'>
 							<label for="id_madrina" class='control-label'>{{form_matrimonio.madrina.label}}</label>
@@ -194,17 +281,23 @@ function check(input) {
 								{{form_matrimonio.madrina}}
 							</div>
 							<div class="controls help-text">
-								{{form_matrimonio.madrina.help_text}}</div>
+								{{form_matrimonio.madrina.help_text}}
+							</div>
+							<div class="controls">
+								<div class="errors">								
+									{{form_matrimonio.madrina.errors}}
+								</div>
+							</div>
 						</div>
-						
-						
+
+
 					</div>
 
 				</div>
 			</fieldset>
 			{%if object.id %}
 			<fieldset id='id_fielset_tabla' class='scheduler-border'>
-				<legend class='scheduler-border'><a href="#id_crear_nota_matrimonio" data-toggle='modal'>Nota Marginal</a></legend>
+				<legend class='scheduler-border'><a href="#id_crear_nota_matrimonio" data-toggle='modal'>Agregar Nota Marginal</a></legend>
 				<table id='id_table_nota_matrimonio' class='table table-bordered table-striped'>
 					<thead>
 						<tr class='alert alert-info'>

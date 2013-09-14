@@ -3,6 +3,8 @@ document.write('<script src="/static/js/acta.js" type="text/javascript"></script
 
 function inicio(){
 	
+
+	
 	crear_padre($('#id_form_crear_padre'), '#id_padre','#id_crear_padre', 'm');
 	crear_padre($('#id_form_crear_madre'), '#id_madre','#id_crear_madre', 'f');
 	// crear_nota($('#id_form_crear_nota'), '#id_fecha','#id_descripcion', '#id_crear_nota');
@@ -13,9 +15,10 @@ function inicio(){
 	crear_nota_marginal($('#id_form_crear_nota_matrimonio'),'#id_crear_nota_matrimonio','/api/nota_matrimonio/add/');
 	tablas_estilo_bootstrap();
 
-	modelo_tablas('#id_table_secretaria, #id_table_asignar_parroquia, #id_table_log, #id_table_libro, #id_table_feligres, #id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_sacerdotes');
+	modelo_tablas('#id_table_secretaria, #id_table_asignar_parroquia, #id_table_libro,#id_table_log, #id_table_feligres, #id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_sacerdotes');
 	campos_con_fechas();
 	radio_button();
+	radio_button_sacerdotes();
 	deshabilitar_campos('#id_form_padre input:text, #id_form_padre select');
 	deshabilitar_campos('#id_form_bautizado input:text, #id_form_bautizado select');
 	cargar_tabla_usuarios_en_modal();
@@ -24,13 +27,162 @@ function inicio(){
 	seleccionar_cantones('#id_provincia');
 	seleccionar_parroquias('#id_canton');
 	crear_direccion('#id_form_direccion');
+	seleccionar_hora();
+	controles_sacramentos();
+	controles_feligres();	
+	controles_reportes();
+	controles_intenciones();
+	controles_provincias();
 	
-	
-
-	
+		
 }
+function tables(){
+
+	console.log('entre al tables');
+	var oTable = $('#id_table_libro').dataTable({
+        // ...
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "{% url libro_json %}",
+        "sPaginationType": "bootstrap",
+
+        // "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>",
+
+    });
+}
+// FUNCIONES PARA USAR CON JQUERY VALIDATE
 
 
+// function validacion_reporte_sacramentos(){
+	
+
+// 	$('#id_form_anio').validate({
+
+// 		rules:{
+// 			anio:{required:true}
+// 		},
+
+// 		messages:{
+// 			anio:{required:'Campo Año Obligatorio'}
+// 		},
+// 		errorElement:'div'
+// 	});
+// }
+
+// function validacion_sacramentos(){
+// 	$('#id_form_bautismo').validate({
+
+// 		rules:{
+// 			pagina:{required:true},
+// 			numero_acta:{required:true},
+// 			fecha_sacramento:{required:true},
+// 			bautizado:{required:true},
+// 			lugar_sacramento:{required:true},
+// 			iglesia:{required:true},
+// 			celebrante:{required:true},
+
+// 		},
+
+// 		messages:{
+// 			pagina:{required:'Campo pagina obligatorio'},
+// 			numero_acta:{required:'Campo numero acta obligatorio'},
+// 			fecha_sacramento:{required:'Campo fecha sacramento obligatorio'},
+// 			bautizado:{required:'Campo bautizado obligatorio'},
+// 			lugar_sacramento:{required:'Campo lugar sacramento obligatorio'},
+// 			iglesia:{required:'Campo iglesia obligatorio'},
+// 			celebrante:{required:'Campo celebrante obligatorio'},
+// 			// fecha_sacramento:{required:'Campo fecha sacramento Obligatorio'}
+// 		},
+// 		errorElement:'div'
+// 	});
+
+// 	$('#id_form_comunion').validate({
+
+// 		rules:{
+// 			pagina:{required:true},
+// 			numero_acta:{required:true},
+// 			fecha_sacramento:{required:true},
+// 			feligres:{required:true},
+// 			lugar_sacramento:{required:true},
+// 			iglesia:{required:true},
+// 			celebrante:{required:true},
+
+// 		},
+
+// 		messages:{
+// 			pagina:{required:'Campo pagina obligatorio'},
+// 			numero_acta:{required:'Campo numero acta obligatorio'},
+// 			fecha_sacramento:{required:'Campo fecha sacramento obligatorio'},
+// 			feligres:{required:'Campo feligres obligatorio'},
+// 			lugar_sacramento:{required:'Campo lugar sacramento obligatorio'},
+// 			iglesia:{required:'Campo iglesia obligatorio'},
+// 			celebrante:{required:'Campo celebrante obligatorio'},
+// 			// fecha_sacramento:{required:'Campo fecha sacramento Obligatorio'}
+// 		},
+// 		errorElement:'div'
+// 	});
+
+// 	$('#id_form_confirmacion').validate({
+
+// 		rules:{
+// 			pagina:{required:true},
+// 			numero_acta:{required:true},
+// 			fecha_sacramento:{required:true},
+// 			confirmado:{required:true},
+// 			lugar_sacramento:{required:true},
+// 			iglesia:{required:true},
+// 			celebrante:{required:true},
+
+// 		},
+
+// 		messages:{
+// 			pagina:{required:'Campo pagina obligatorio'},
+// 			numero_acta:{required:'Campo numero acta obligatorio'},
+// 			fecha_sacramento:{required:'Campo fecha sacramento obligatorio'},
+// 			confirmado:{required:'Campo confirmado obligatorio'},
+// 			lugar_sacramento:{required:'Campo lugar sacramento obligatorio'},
+// 			iglesia:{required:'Campo iglesia obligatorio'},
+// 			celebrante:{required:'Campo celebrante obligatorio'},
+// 			// fecha_sacramento:{required:'Campo fecha sacramento Obligatorio'}
+// 		},
+// 		errorElement:'div'
+// 	});
+
+// 	$('#id_form_matrimonio').validate({
+
+// 		rules:{
+// 			pagina:{required:true},
+// 			numero_acta:{required:true},
+// 			fecha_sacramento:{required:true},
+// 			tipo_matrimonio:{required:true},
+// 			novio:{required:true},
+// 			novia:{required:true},
+// 			lugar_sacramento:{required:true},
+// 			iglesia:{required:true},
+// 			celebrante:{required:true},
+// 			testigo_novio:{required:true},
+// 			testigo_novia:{required:true},
+
+// 		},
+
+// 		messages:{
+// 			pagina:{required:'Campo pagina obligatorio'},
+// 			numero_acta:{required:'Campo numero acta obligatorio'},
+// 			fecha_sacramento:{required:'Campo fecha sacramento obligatorio'},
+// 			tipo_matrimonio:{required:'Seleccione un valor'},
+// 			novio:{required:'Campo novio obligatorio'},
+// 			novia:{required:'Campo novia obligatorio'},
+// 			lugar_sacramento:{required:'Campo lugar sacramento obligatorio'},
+// 			iglesia:{required:'Campo iglesia obligatorio'},
+// 			celebrante:{required:'Campo celebrante obligatorio'},
+// 			testigo_novio:{required:'Campo testigo obligatorio'},
+// 			testigo_novia:{required:'Campo testiga obligatorio'},
+// 			// fecha_sacramento:{required:'Campo fecha sacramento Obligatorio'}
+// 		},
+// 		errorElement:'div'
+// 	});
+
+// }
 // Función para añadir el widget multiselect
 function widget_multiselect(identificador){
 	$(identificador).multiSelect({
@@ -55,6 +207,7 @@ function mostrar_nota_marginal(idFieldSet){
 	}
 
 }  
+
 
 function crear_nota_marginal(id_form,id_modal,url_rest){
 	$(id_form).on('submit', function(e){
@@ -118,12 +271,10 @@ function ocultar_html(identificadorhtml){
 
 
 function radio_button(){
+
 	$('div.btn-group button').on('click', function(e){
 		e.preventDefault();
-		$(this).prop("checked", true);
-		if($(this).is(":checked")){
-			$(this).addClass('btn-primary');
-		}
+		console.log($(this).parents('div').attr('id'));
 		if ($(this).attr('id')=='id_button_cedula'){
 			$(this).addClass('btn btn-primary');
 			$('#id_button_nombres').removeClass('btn btn-primary');
@@ -145,8 +296,37 @@ function radio_button(){
 			limpiar_campos('#id_query_cedula'); 
 		}
 	});
+
 }
 
+function radio_button_sacerdotes(){
+
+	$('div.btn-group button').on('click', function(e){
+		e.preventDefault();
+		console.log($(this).parents('div').attr('id'));
+		if ($(this).attr('id')=='id_button_cedula_s'){
+			$(this).addClass('btn btn-primary');
+			$('#id_button_nombres_s').removeClass('btn btn-primary');
+			$('#id_button_nombres_s').addClass('btn');
+			$('#id_div_form_buscar_s').attr('style', 'display:auto; margin-top:20px');
+			$('#id_div_busqueda_cedula_s').attr('style', 'display:inline-block');
+			$('#id_div_mensaje_sacerdote').attr('style', 'display:none');
+			$('#id_div_busqueda_nombres_s').attr('style', 'display:none');
+			limpiar_campos('#id_query_nombres_s, #id_query_apellidos_s'); 
+		}
+		if ($(this).attr('id')=='id_button_nombres_s'){
+			$(this).addClass('btn btn-primary');
+			$('#id_button_cedula_s').removeClass('btn btn-primary');
+			$('#id_button_cedula_s').addClass('btn');
+			$('#id_div_form_buscar_s').attr('style', 'display:auto; margin-top:20px');
+			$('#id_div_busqueda_nombres_s').attr('style', 'display:inline-block');
+			$('#id_div_mensaje_sacerdote').attr('style', 'display:none');
+			$('#id_div_busqueda_cedula_s').attr('style', 'display:none');
+			limpiar_campos('#id_query_cedula_s'); 
+		}
+	});
+
+}
 
 
 // function crear_nota(identificador, idnota,idnota2, idmodal){
@@ -250,9 +430,9 @@ function cargar_tabla_sacerdotes_en_modal(){
 	$('#id_form_busqueda_sacerdotes').on('submit', function(e){
 		e.preventDefault();
 		var url= '/api/sacerdote/';
-		var nombres = $('#id_query_nombres').val();
-		var apellidos = $('#id_query_apellidos').val();
-		var cedula = $('#id_query_cedula').val();
+		var nombres = $('#id_query_nombres_s').val();
+		var apellidos = $('#id_query_apellidos_s').val();
+		var cedula = $('#id_query_cedula_s').val();
 		mostrar_html("#id_table_busqueda_sacerdotes");
 		var ctx = {'nombres':nombres, 'apellidos':apellidos, 'cedula':cedula};
 		var columnas = [
@@ -309,7 +489,6 @@ function devolver_campos_a_sacerdote(map, id_sacerdote){
 		$(id_sacerdote+' option').remove();
 		$(id_sacerdote).append('<option value=""> -- Seleccione --</option><option value='+objeto.id+' selected>'+ objeto.nombres+" "+objeto.apellidos+'</option>')
 
-		
 	});
 }
 
@@ -511,6 +690,76 @@ function verificar_select_seleccionado(){
 	}
 }
 
+function seleccionar_hora(){
+	$('#id_tipo').on('change', function(e){
+		
+		console.log('Change de tipo')
+
+		if ($('#id_tipo option:selected').text()=='Diario') {
+			e.preventDefault();
+			console.log('Entre al If de cambio');
+			($('#id_div_hora')).css('display', 'inline-block');
+
+			
+		}else{
+			($('#id_div_hora')).css('display', 'none');
+
+		}
+		
+	});
+}
+
+function controles_sacramentos(){
+
+	($('#id_pagina').numeric());
+	($('#id_numero_acta').numeric());
+	($('#id_numero_libro').numeric());
+	($('#id_lugar_sacramento').alpha({allow:" "}));
+	($('#id_iglesia').alpha({allow:" "}));
+	($('#id_padrino').alpha({allow:" "}));
+	($('#id_madrina').alpha({allow:" "}));
+	($('#id_abuelo_paterno').alpha({allow:" "}));
+	($('#id_abuela_paterna').alpha({allow:" "}));
+	($('#id_abuelo_materno').alpha({allow:" "}));
+	($('#id_abuela_materna').alpha({allow:" "}));
+	($('#id_vecinos_paternos').alpha({allow:" "}));
+	($('#id_vecinos_maternos').alpha({allow:" "}));
+	// para nota marginal
+	($('#id_descripcion').alpha({allow:" "}));
+
+}
+
+function controles_feligres(){
+
+	($('#id_first_name').alpha({allow:" "}));
+	($('#id_last_name').alpha({allow:" "}));
+	($('#id_profesion').alpha({allow:" "}));
+	($('#id_dni').numeric());
+	($('#id_lugar_nacimiento').alpha({allow:" "}));
+	($('#id_celular').numeric());
+}
+function controles_intenciones(){
+	($('#id_intencion').alpha({allow:" "}));
+	($('#id_oferente').alpha({allow:" "}));
+	($('#id_ofrenda').numeric());
+
+}
+function controles_reportes(){
+	($('#id_form_anio #id_anio').numeric());
+}
+
+function controles_provincias(){
+
+	($('#id_nombre').alpha({allow:" "}));
+	($('#id_abreviatura').alphanumeric({allow:"-"}));
+
+	// para campo name de grupos
+
+	($('#id_name').alpha({allow:" "}));
+
+
+}
+
 // function verificar_select_padre(id_etiqueta){
 // 	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){
 // 		$(id_etiqueta).prop('disabled', false);
@@ -519,13 +768,7 @@ function verificar_select_seleccionado(){
 // 	}
 // }
 
-// function verificar_select_bautizado(id_etiqueta){
-// 	if($(id_etiqueta + " option:selected").text()!= '-- Seleccione --'){
-// 		$(id_etiqueta).prop('disabled', false);
-// 	} else {
-// 		$(id_etiqueta).prop('disabled', true);
-// 	}
-// }
+
 
 
 

@@ -18,29 +18,98 @@ Agregar Libro
 
 <form id='id_form_libro' action="." method='POST' class='form-horizontal'>
 	{% csrf_token%}
-	
-		{% for f in form_libro%}
-		<div class="control-group">
-			<label class='control-label'>
-				{{f.label}}
-			</label>
-			{% if f.name == 'estado' %}
-			{% for r in f%}
-			<div class="controls">{{r}}</div>
-			{% endfor %}
-			{% else %}
-			<div class="controls">
-				{{f}}
-			</div>
-			{% endif %}
-			<div class="controls help-text" >
-				{{f.help_text}}
-				<span class="errors" style='color: red'>
-					{{f.errors}}
-				</span>
-			</div>
+	<div class="control-group">
+		<label for="" class="control-label">
+			{{form_libro.numero_libro.label}}
+		</label>
+		<div class="controls">
+			{{form_libro.numero_libro}}
+
 		</div>
-		{%endfor%}
+		<div class="controls help-text">
+			{{form_libro.numero_libro.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form_libro.numero_libro.errors}}
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="" class="control-label">
+			{{form_libro.tipo_libro.label}}
+		</label>
+		<div class="controls">
+			{{form_libro.tipo_libro}}
+
+		</div>
+		<div class="controls help-text">
+			{{form_libro.tipo_libro.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form_libro.tipo_libro.errors}}
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="" class="control-label">
+			{{form_libro.fecha_apertura.label}} *
+		</label>
+		<div class="controls">
+			{{form_libro.fecha_apertura}}
+
+		</div>
+		<div class="controls help-text">
+			{{form_libro.fecha_apertura.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form_libro.fecha_apertura.errors}}
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="" class="control-label">
+			{{form_libro.fecha_cierre.label}}
+		</label>
+		<div class="controls">
+			{{form_libro.fecha_cierre}}
+
+		</div>
+		<div class="controls help-text">
+			{{form_libro.fecha_cierre.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form_libro.fecha_cierre.errors}}
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="" class="control-label">
+			{{form_libro.estado.label}}
+		</label>
+		<div class="controls">
+			{{form_libro.estado}}
+
+		</div>
+		<div class="controls help-text">
+			{{form_libro.estado.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form_libro.estado.errors}}
+		</div>
+	</div>
+	<div class="control-group">
+		<label for="" class="control-label">
+			{{form_libro.numero_maximo_actas.label}}
+		</label>
+		<div class="controls">
+			{{form_libro.numero_maximo_actas}}
+
+		</div>
+		<div class="controls help-text">
+			{{form_libro.numero_maximo_actas.help_text}}
+		</div>
+		<div class="controls errors">
+			{{form_libro.numero_maximo_actas.errors}}
+		</div>
+	</div>
+
+	
 	
 	<div class="form-actions">
 		<input type="submit" value="Enviar" class='btn btn-primary'/>

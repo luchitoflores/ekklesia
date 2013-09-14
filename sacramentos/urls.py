@@ -18,8 +18,7 @@ from .views import (
 	parroquia_create_view, parroquia_update_view, ParroquiaListView,
 	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
 	asignar_parroquia_create, asignar_parroco_a_parroquia, asignar_parroquia_update, asignar_parroco_list, parroco_periodos_asignacion_list, parroco_periodos_asignacion_update, nuevo_periodo_asignacion,
-	AsignarSecretariaList,
-	asignar_secretaria_create, asignar_secretaria_update, 
+	asignar_secretaria_create, asignar_secretaria_update, asignar_secretaria_list,
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	LogListView,exportar_csv_logs,
 	reporte_anual_sacramentos,reporte_intenciones,reporte_permisos,
@@ -131,7 +130,7 @@ urlpatterns = patterns('',
 	#urls para asignar secretarias
 	url(r'^asignar/secretaria/add/$', asignar_secretaria_create , name='asignar_secretaria_create'),
 	url(r'^secretaria/(?P<pk>\d+)/$', asignar_secretaria_update , name='asignar_secretaria_update'),
-	url(r'^asignar/secretaria/$', AsignarSecretariaList.as_view() , name='asignar_secretaria_list'),
+	url(r'^asignar/secretaria/$', asignar_secretaria_list , name='asignar_secretaria_list'),
 	
 
 	#urls para intenciones de misa

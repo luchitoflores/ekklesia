@@ -5,7 +5,7 @@ import csv
 from datetime import datetime
 from datetime import date
 from django import forms
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.contrib import messages
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required, permission_required
@@ -1484,16 +1484,22 @@ def nuevo_periodo_asignacion(request, pk):
 		form = PeriodoAsignacionParroquiaForm(request.POST)
 		if form.is_valid():
 			periodo_activo= PeriodoAsignacionParroquia.objects.filter(asignacion=asignacion, estado=True)
-			
-			if not periodo_activo:
+			periodo_activo_otra_parroquia = PeriodoAsignacionParroquia.objects.filter(asignacion__persona=asignacion.persona, estado=True).exclude(asignacion__parroquia=asignacion.parroquia)
+			if periodo_activo:
+				messages.error(request, 'El sacerdote ya posee un periodo activo')
+				ctx = {'form': form, 'object':asignacion}
+				return render(request, template_name, ctx)
+				
+			elif periodo_activo_otra_parroquia:
+				messages.error(request, 'El sacerdote tiene un periodo activo en otra parroquia')
+				ctx = {'form': form, 'object':asignacion}
+				return render(request, template_name, ctx)
+
+			else:
 				periodo = form.save(commit=False)
 				periodo.asignacion = asignacion
 				periodo.save()
 				return HttpResponseRedirect(success_url)
-			else:
-				messages.error(request, 'Existen periodos activos')
-				ctx = {'form': form, 'object':asignacion}
-				return render(request, template_name, ctx)
 
 		else:
 			ctx = {'form': form, 'object':asignacion}
@@ -1512,11 +1518,20 @@ def parroco_periodos_asignacion_update(request, pk):
 	if request.method == 'POST':
 		estado = request.POST.get('estado')
 		form = PeriodoAsignacionParroquiaForm(request.POST, instance=periodo)
-		periodo_activo= PeriodoAsignacionParroquia.objects.filter(asignacion=periodo.asignacion, estado=True).exclude(id=periodo.id)
 		if form.is_valid():
 			
-			if not periodo_activo:
+			periodo_activo= PeriodoAsignacionParroquia.objects.filter(asignacion=periodo.asignacion, estado=True).exclude(id=periodo.id)
+			periodo_activo_otra_parroquia = PeriodoAsignacionParroquia.objects.filter(asignacion__persona=periodo.asignacion.persona, estado=True).exclude(asignacion__parroquia=periodo.asignacion.parroquia)
+			if periodo_activo:
+				messages.error(request, 'Existen periodos activos')
+				ctx = {'form': form, 'object':periodo.asignacion}
+				return render(request, template_name, ctx)
+			elif  periodo_activo_otra_parroquia:
+				messages.error(request, 'El sacerdote tiene un periodo activo en otra parroquia')
+				ctx = {'form': form, 'object':periodo.asignacion}
+				return render(request, template_name, ctx)
 
+			else:
 				if estado:
 					user = PerfilUsuario.objects.get(pk=periodo.asignacion.persona.id).user
 					user.is_staff = True
@@ -1527,10 +1542,6 @@ def parroco_periodos_asignacion_update(request, pk):
 					user.save()
 				form.save() 
 				return HttpResponseRedirect(success_url)
-			else:
-				messages.error(request, 'Existen periodos activos')
-				ctx = {'form': form, 'object':periodo.asignacion}
-				return render(request, template_name, ctx)
 		else:
 			ctx = {'form': form, 'object':periodo.asignacion}
 			return render(request, template_name, ctx)
@@ -1708,14 +1719,26 @@ def asignar_secretaria_update(request, pk):
 		ctx = {'form': form}
 		return render(request, template_name, ctx)
 
-class AsignarSecretariaList(ListView):
-	model = AsignacionParroquia
-	template_name = 'parroquia/asignar_secretaria_list.html'
-	queryset = AsignacionParroquia.objects.exclude(persona__profesion='Sacerdote')	
+# class AsignarSecretariaList(ListView):
+# 	model = AsignacionParroquia
+# 	template_name = 'parroquia/asignar_secretaria_list.html'
+# 	queryset = AsignacionParroquia.objects.exclude(persona__profesion='Sacerdote')	
 	
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, *args, **kwargs):
-		return super(AsignarSecretariaList, self).dispatch(*args, **kwargs)
+# 	@method_decorator(login_required(login_url='/login/'))
+# 	def dispatch(self, *args, **kwargs):
+# 		return super(AsignarSecretariaList, self).dispatch(*args, **kwargs)
+
+
+def asignar_secretaria_list(request):
+	template_name = 'parroquia/asignar_secretaria_list.html'
+	try:
+		parroquia  = PeriodoAsignacionParroquia.objects.get(estado=True, asignacion__persona__user=request.user).asignacion.parroquia
+		object_list= AsignacionParroquia.objects.filter(parroquia=parroquia, periodoasignacionparroquia=None)
+		ctx = {'object_list': object_list, 'parroquia':parroquia}
+		return render(request, template_name, ctx)
+	except ObjectDoesNotExist:
+		raise PermissionDenied
+	
 
 # views para los LOGS del ekklesia
 

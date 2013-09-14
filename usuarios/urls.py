@@ -1,16 +1,15 @@
 from django.conf.urls import url, patterns
-from .views import GroupList, GroupCreate, GroupUpdate
-from .views import login, logout, login_view, logout_view, change_password_view, send_email_view
+from .views import (GroupList, GroupCreate, GroupUpdate, 
+login_view, logout_view, change_password_view, send_email_view)
 from django.views.generic import TemplateView 
-from django.utils.functional import curry
-from django.views.defaults import *
+
 
 
 urlpatterns = patterns ('',
 	# url(r'^loginajax/$', loginajax_view),
     # url(r'^login/$', 'django.contrib.auth.views.login'),
-    # url(r'^login/$', 'login_view'),
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name='login'),
+    url(r'^login/$', login_view, name='login'),
+    # url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}, name='login'),
     # url(r'^permission_denied/$', TemplateView.as_view(template_name='permission_denied.html'), name='permission_denied'),
     url(r'^logout/$', logout_view , name='logout'), 
     url(r'^password_change/$', change_password_view , name='password_change'),

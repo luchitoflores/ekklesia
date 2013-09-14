@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 # Create your views here.
 import json
-
 from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required, permission_required
@@ -9,7 +8,7 @@ from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm, Passw
 from django.contrib.auth.models import Group, User
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render_to_response, render
+from django.shortcuts import render_to_response, render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
@@ -37,7 +36,7 @@ from .forms import SendEmailForm
 #Login con AthenticateForm	
 def login_view(request):
 	if request.user.is_authenticated():
-		return HttpResponseRedirect('/')
+		return HttpResponseRedirect('/home/')
 	else:
 		if request.method == 'POST':		
 			form = AuthenticationForm(data=request.POST)
@@ -46,11 +45,11 @@ def login_view(request):
 				password = request.POST['password']
 				user = authenticate(username=username, password=password)
 
-				if user is not None and user.is_active:
+				if user is not None and user.is_active and user.is_staff:
 					login(request, user)
-					return HttpResponseRedirect('/')
+					return redirect('/login/?next=%s' % request.path)
 				else:
-					messages.add_message(request, messages.ERROR, 'El user is None')
+					messages.add_message(request, messages.ERROR, 'Ud. no tiene permisos para acceder al sistema')
 			else:
 				messages.add_message(request, messages.ERROR, 'El form no es válido')
 		else:

@@ -1,7 +1,7 @@
 {%extends 'base.html'%}
-{%block title%}Lista de Asignaciones de Parroquia{%endblock%}
+{%block title%}Lista de Párrocos{%endblock%}
 {%block content_title%}
-Lista de Asignaciones de Parroquia
+Párrocos - Parroquia {{parroquia.nombre}}
 {%endblock%}
 
 
@@ -12,24 +12,21 @@ Lista de Asignaciones de Parroquia
 		<tr>
 			<th>Sacerdote</th>
 			<th>Parroquia</th>
-			<th>Fecha de Inicio</th>
-			<th>Fecha de Final</th>
-			<th>Estado</th>
+			<th>Acciones</th>
 		</tr>
 	</thead>
 	<tbody>
 		{% for o in object_list%}
 		<tr>
-			<td><a href="{{o.get_absolute_url}}">{{o.persona}}</a></td>
+			<td>{{o.persona}}</td>
 			<td>{{o.parroquia}}</td>
-			<td>{{o.periodo.inicio}}</td>
-			<td>{{o.periodo.fin}}</td>
-			<td>{%if o.periodo.estado%}<i class='icon-check'>{%else%}<i class=' icon-minus-sign'>{%endif%}</i> </td>
+			{# <!--<td>{%if o.periodo.estado%}<i class='icon-check'>{%else%}<i class=' icon-minus-sign'>{%endif%}</i> </td>--> #}
+			<td><a href="{%url 'parroco_periodos_asignacion_list' pk=o.id%}">Ver Asignaciones</a></td>
 		</tr>
 		{%endfor%}
 	</tbody>
 </table>
-
-<a href="{%url 'asignar_parroquia_create'%}" class='btn btn-primary'>Nueva Asignación</a>
+<a href="{%url 'asignar_parroco_a_parroquia' pk=parroquia.id%}" class='btn btn-primary'>Nueva Asignación</a>
+<a href="{%url 'parroquia_list'%}" class='btn btn-primary'>Cancelar</a>
 
 {% endblock%}

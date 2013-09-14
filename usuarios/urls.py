@@ -5,7 +5,6 @@ from django.views.generic import TemplateView
 from django.utils.functional import curry
 from django.views.defaults import *
 
-handler403 = curry(permission_denied, template_name='403.html')
 
 urlpatterns = patterns ('',
 	# url(r'^loginajax/$', loginajax_view),

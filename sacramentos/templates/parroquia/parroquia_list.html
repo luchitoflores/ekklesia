@@ -9,9 +9,10 @@ Lista de Parroquias Eclesiásticas
 	<thead>
 		<tr>
 			<th>Nombre</th>
+			<th>Lugar</th>
 			<th>Direccion</th>
-			<th>Telefono</th>
-			<th>Celular</th>
+			<th>Teléfono</th>
+			<th>Historial Párrocos</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -19,11 +20,13 @@ Lista de Parroquias Eclesiásticas
 		{%for o in object_list%}
 		<tr>
 			<td>
-				<a href="{{o.get_absolute_url}}">{{o.nombre}}</a>
+				<a href="{{o.get_absolute_url}}">{{o}}</a>
 			</td>
+			<td>{{o.direccion.parroquia}}</td>
 			<td>{{o.direccion.domicilio}}</td>
 			<td>{{o.direccion.telefono}}</td>
-			<td>{{o.direccion.celular}}</td>
+			<td><a href="{%url 'asignar_parroco_list' pk=o.id%}">Párrocos</a></td>
+			
 		</tr>
 		{%endfor%}
 	</tbody>

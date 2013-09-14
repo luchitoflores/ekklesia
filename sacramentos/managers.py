@@ -58,3 +58,6 @@ class NotaMarginalManager(models.Manager):
 	
 	pass
 
+
+class AsignacionParroquiaManager(models.Manager):
+	pass

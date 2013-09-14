@@ -319,11 +319,11 @@ class BautismoForm(ModelForm):
 
 		super(BautismoForm, self).__init__(*args, **kwargs)
 		
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		
 		self.fields['libro'].queryset = Libro.objects.filter(
-			estado='Abierto',tipo_libro='Bautismo',parroquia=parroquia)
+			estado='Abierto',tipo_libro='Bautismo',parroquia=asignacion.parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
 			 empty_label='-- Seleccione --',label='Feligres *',
 			 help_text='Presione buscar para encontrar un feligres',
@@ -383,10 +383,10 @@ class BautismoFormEditar(ModelForm):
 	 *args, **kwargs):
 
 		super(BautismoFormEditar, self).__init__(*args, **kwargs)
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
-			tipo_libro='Bautismo',parroquia=parroquia)
+			tipo_libro='Bautismo',parroquia=asignacion.parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
 			 empty_label=None,label='Feligres *',
 			 help_text='Presione buscar para encontrar un feligres',
@@ -446,10 +446,10 @@ class EucaristiaForm(ModelForm):
 		*args, **kwargs):
 		
 		super(EucaristiaForm, self).__init__(*args, **kwargs)
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
-			estado='Abierto',tipo_libro='Eucaristia',parroquia=parroquia)
+			estado='Abierto',tipo_libro='Eucaristia',parroquia=asignacion.parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
 			 empty_label='--Seleccione --',label='Feligres *',
 			 help_text='Presione buscar para encontrar un feligres',
@@ -504,10 +504,10 @@ class EucaristiaFormEditar(ModelForm):
 	 *args, **kwargs):
 		
 		super(EucaristiaFormEditar, self).__init__(*args, **kwargs)
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
-			tipo_libro='Eucaristia',parroquia=parroquia)
+			tipo_libro='Eucaristia',parroquia=asignacion.parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
 			 empty_label=None,label='Feligres *',
 			 help_text='Presione buscar para encontrar un feligres',
@@ -564,10 +564,10 @@ class ConfirmacionForm(ModelForm):
 		*args, **kwargs):
 		
 		super(ConfirmacionForm, self).__init__(*args, **kwargs)
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
-			estado='Abierto',tipo_libro='Confirmacion',parroquia=parroquia)
+			estado='Abierto',tipo_libro='Confirmacion',parroquia=asignacion.parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
 			 empty_label='-- Seleccione --',label='Feligres *',
 			 help_text='Presione buscar para encontrar un feligres',
@@ -621,14 +621,14 @@ class ConfirmacionFormEditar(ModelForm):
 		queryset=Libro.objects.none(),
 		help_text='Seleccione un libro para la Confirmacion')
 
-	def __init__(self,user, confirmado=PerfilUsuario.objects.none(),celebrante=PerfilUsuario.objects.none(),
-		*args, **kwargs):
+	def __init__(self,user, confirmado=PerfilUsuario.objects.none(),
+		celebrante=PerfilUsuario.objects.none(),*args, **kwargs):
 		
 		super(ConfirmacionFormEditar, self).__init__(*args, **kwargs)
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
-			tipo_libro='Confirmacion',parroquia=parroquia)
+			tipo_libro='Confirmacion',parroquia=asignacion.parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
 			 empty_label=None,label='Feligres *',
 			 help_text='Presione buscar para encontrar un feligres',
@@ -706,10 +706,10 @@ class MatrimonioForm(ModelForm):
 	celebrante=PerfilUsuario.objects.none(), *args, **kwargs):
 		
 		super(MatrimonioForm, self).__init__(*args, **kwargs)
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
-			estado='Abierto',tipo_libro='Matrimonio',parroquia=parroquia)
+			estado='Abierto',tipo_libro='Matrimonio',parroquia=asignacion.parroquia)
 		self.fields['novio']=forms.ModelChoiceField(required=True, queryset=novio, 
 			empty_label='-- Seleccione --',label='Novio *',
 			 help_text='Presione buscar para encontrar un novio',
@@ -786,10 +786,10 @@ class MatrimonioFormEditar(ModelForm):
 		celebrante=PerfilUsuario.objects.none(),*args, **kwargs):
 		
 		super(MatrimonioFormEditar, self).__init__(*args, **kwargs)
-		parroquia = AsignacionParroquia.objects.get(
-			persona__user=user,estado=True).parroquia
+		asignacion = AsignacionParroquia.objects.get(
+			persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
-			tipo_libro='Matrimonio',parroquia=parroquia)
+			tipo_libro='Matrimonio',parroquia=asignacion.parroquia)
 		self.fields['novio']=forms.ModelChoiceField(required=False, queryset=novio, 
 			empty_label=None,label='Novio *',
 			 help_text='Presione buscar para encontrar un novio',
@@ -859,7 +859,8 @@ class AsignarParroquiaForm(ModelForm):
 		parroquia = cleaned_data.get("parroquia")
 		
 		try:
-			esta_activo= PeriodoAsignacionParroquia.objects.get(asignacion__persona=persona, asignacion__parroquia=parroquia, estado=True)
+			esta_activo= PeriodoAsignacionParroquia.objects.get(asignacion__persona=persona, 
+				asignacion__parroquia=parroquia, estado=True)
 			if esta_activo:
 				print esta_activo
 				msg = u"El sacerdote ya tiene un periodo activo en la parroquia elegida"

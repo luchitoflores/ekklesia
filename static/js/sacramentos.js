@@ -15,7 +15,7 @@ function inicio(){
 	crear_nota_marginal($('#id_form_crear_nota_matrimonio'),'#id_crear_nota_matrimonio','/api/nota_matrimonio/add/');
 	tablas_estilo_bootstrap();
 
-	modelo_tablas('#id_table_secretaria, #id_table_asignar_parroquia, #id_table_libro,#id_table_log, #id_table_feligres, #id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_sacerdotes');
+	modelo_tablas('#id_table_secretaria, #id_table_libro,#id_table_asignar_parroquia,#id_table_log, #id_table_feligres, #id_table_matrimonio,#id_table_bautismo,#id_table_eucaristia,#id_table_confirmacion, #id_table_group, #id_table_parroquia, #id_table_provincia, #id_table_canton, #id_table_parroquia_civil, #id_table_sacerdotes');
 	campos_con_fechas();
 	radio_button();
 	radio_button_sacerdotes();
@@ -33,6 +33,7 @@ function inicio(){
 	controles_reportes();
 	controles_intenciones();
 	controles_provincias();
+	
 	
 		
 }

@@ -48,7 +48,7 @@ h1{
 	</center><br/>
 	<p align='right'> <strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong></p><br/>
 	<p align="justify">
-		Rvdo <strong>{{cura.persona.user.get_full_name}}</strong> Párroco de <strong>{{cura.parroquia.nombre|upper}}</strong> certifica conocer personalmente  
+		Rvdo <strong>{{cura.persona.user.get_full_name}}</strong> Párroco de <strong>{{asignacion.parroquia.nombre|upper}}</strong> certifica conocer personalmente  
 		{%if 's' in perfil.estado_civil and 'f' in perfil.sexo%}
 		a la Srta:<br/><br/>
 		{%endif%}
@@ -80,7 +80,7 @@ h1{
 
 		<div id="footer">
 			<hr style="margin-bottom: 1px;"/>
-			<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>{{secretaria.persona.user.get_full_name}}</strong></p>
+			<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>{{asignacion.persona.user.get_full_name}}</strong></p>
 
 		</div>
 

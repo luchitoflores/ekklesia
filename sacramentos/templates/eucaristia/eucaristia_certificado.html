@@ -75,9 +75,9 @@ body {
 
 
 						---------------------------------------------------<br/>
-						{{secretaria.persona.user.get_full_name}}<br/>
+						{{asignacion.persona.user.get_full_name}}<br/>
 						<strong>
-							{%if 'f' in secretaria.persona.sexo %}
+							{%if 'f' in asignacion.persona.sexo %}
 							{{"SECRETARIA"}}
 							{%else%}
 							{{"SECRETARIO"}}
@@ -97,7 +97,7 @@ body {
 
 		<div id="footer">
 			<hr style="margin-bottom: 1px;"/>
-			<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>{{secretaria.persona.user.get_full_name}} </strong></p>
+			<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>{{asignacion.persona.user.get_full_name}} </strong></p>
 
 		</div>
 

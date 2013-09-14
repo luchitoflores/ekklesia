@@ -48,10 +48,10 @@ body {
 		
 		<h2> 
 			{{ "Diocesis de Loja"|upper }}  <br/>
-			Parroquia Eclesiastica {{parroquia.parroquia|upper}} <br/>
+			Parroquia Eclesiastica {{asignacion.parroquia|upper}} <br/>
 			{{"Loja - Ecuador" | upper}}
 			<hr style="margin-bottom: 1px;"/>
-			<small>{{"Direccion: "}}{{ parroquia.parroquia.direccion }} {{"Tel: "}}{{parroquia.parroquia.direccion.telefono}}</small><br/>
+			<small>{{"Direccion: "}}{{ asignacion.parroquia.direccion }} {{"Tel: "}}{{asignacion.parroquia.direccion.telefono}}</small><br/>
 		</h2>
 		
 	</center>
@@ -96,7 +96,7 @@ body {
 		<div id="footer">
 			<hr style="margin-bottom: 6px;"/>
 			<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>
-				{{parroquia.persona.user.get_full_name}}
+				{{asignacion.persona.user.get_full_name}}
 			</p>
 
 		</div>

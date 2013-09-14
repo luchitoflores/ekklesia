@@ -866,7 +866,8 @@ class AsignarParroquiaForm(ModelForm):
 				msg = u"El sacerdote ya tiene un periodo activo en la parroquia elegida"
 				self._errors["persona"] = self.error_class([msg])
 		except ObjectDoesNotExist:
-			esta_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(asignacion__persona=persona, estado=True).exclude(asignacion__parroquia=parroquia)
+			esta_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(
+				asignacion__persona=persona, estado=True).exclude(asignacion__parroquia=parroquia)
 			if esta_activo_otra_parroquia:
 				msg = u"El sacerdote ya tiene una asignación activa en otra parroquia"
 				self._errors["persona"] = self.error_class([msg])

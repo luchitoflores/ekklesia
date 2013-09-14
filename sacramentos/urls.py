@@ -10,7 +10,7 @@ from .views import (
 	libro_create_view, libro_update_view ,LibroListView,libro_pdf,LibroListJson,
 	matrimonio_create_view,MatrimonioListView,matrimonio_update_view,matrimonio_vigencia_view,
 	matrimonio_ajax_view,MatrimonioNoVigenteListView,
-	matrimonio_acta,matrimonio_certificado,
+	matrimonio_certificado,
 	bautismo_update_view, BautismoListView, bautismo_create_view,
 	bautismo_acta,bautismo_certificado,
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,eucaristia_reporte,
@@ -71,7 +71,6 @@ urlpatterns = patterns('',
 	url(r'^matrimonio/(?P<pk>\d+)/$',matrimonio_update_view, name='matrimonio_update'),
 	url(r'^matrimonio/ajax/$',matrimonio_ajax_view, name='matrimonio_ajax'),
 	url(r'^matrimonio/(?P<pk>\d+)/vigencia/$',matrimonio_vigencia_view, name='matrimonio_vigencia'),
-	url(r'^matrimonio_acta/(?P<pk>\d+)/$',matrimonio_acta, name='matrimonio_acta'),
 	url(r'^matrimonio_certificado/(?P<pk>\d+)/$',matrimonio_certificado, name='matrimonio_certificado'),
 
 	#urls de Nota Marginal para crear con bautismo y matrimonios

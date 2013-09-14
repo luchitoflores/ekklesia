@@ -465,32 +465,42 @@ class LibroListView(ListView):
 	model = Libro
 	template_name = 'libro/libro_list.html'
 
-	def get_queryset(self):
-		try:
-			asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
-			queryset = Libro.objects.filter(parroquia=asignacion.parroquia)
-			return queryset
-		except: 
-			return [];
+	# def get_queryset(self):
+	# 	try:
+	# 		asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
+	# 		queryset = Libro.objects.filter(parroquia=asignacion.parroquia)
+	# 		return queryset
+	# 	except: 
+	# 		return [];
 	
 class LibroListJson(BaseDatatableView):
-	# order_columns = ['numero_libro', 'tipo_libro', 'fecha_apertura']
+	order_columns = ['numero_libro', 'tipo_libro', 'fecha_apertura']
 	
 	# def render_column(self, row, column):
 	# 	if column == 'numero_libro':
 	# 		return '%s %s' % (row.tipo_libro, row.numero_libro)
 	# 	else:
 	# 		return super(Libro, self).render_column(row, column)
-	
+	def get_initial_queryset(self):
+		return Libro.objects.all()
+
 	def filter_queryset(self, qs):
 		parroquia = AsignacionParroquia.objects.get(persona__user=self.request.user).parroquia
-		print(parroquia)
-		sSearch = self.request.POST.get('sSearch', None)
+		# print(parroquia)
+		# sSearch = self.request.POST.get('sSearch', None)
+		# if sSearch:
+		# 	qs = qs.filter(Q(numero_libro__contains=sSearch,parroquia=parroquia)|
+		# 		Q(tipo_libro__contains=sSearch,parroquia=parroquia))
+		# return qs
+		# print(qs)
+	
+		sSearch = self.request.GET.get('sSearch', None)
 		if sSearch:
-			qs = qs.filter(Q(numero_libro__contains=sSearch,parroquia=parroquia)|
-				Q(tipo_libro__contains=sSearch,parroquia=parroquia))
+			qs = qs.filter(Q(tipo_libro__icontains=sSearch,parroquia=parroquia) |
+				Q(numero_libro__icontains=sSearch,parroquia=parroquia) |
+				Q(fecha_apertura__icontains=sSearch,parroquia=parroquia) |
+				Q(fecha_cierre__icontains=sSearch,parroquia=parroquia))
 		return qs
-		print(qs)
 
 	def prepare_results(self, qs):
 		json_data = []
@@ -1780,75 +1790,65 @@ def libro_pdf(request, pk):
 
 def matrimonio_certificado(request, pk):
 	matrimonio=get_object_or_404(Matrimonio, pk=pk)
-	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,asignacion=secretaria)
+		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
 	html = render_to_string('matrimonio/matrimonio_certificado.html', {'pagesize':'A4', 
-		'matrimonio':matrimonio,'cura':cura,'notas':notas,'secretaria':secretaria},
+		'matrimonio':matrimonio,'cura':cura,'notas':notas,'asignacion':asignacion},
 		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
-def matrimonio_acta(request, pk):
-	matrimonio=get_object_or_404(Matrimonio, pk=pk)
-	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
-	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,estado=True)
-	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
-	html = render_to_string('matrimonio/matrimonio_acta.html', {'pagesize':'A4', 
-		'matrimonio':matrimonio,'cura':cura,'notas':notas},
-		context_instance=RequestContext(request))
-	return generar_pdf(html)
 
 def bautismo_certificado(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
-	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,estado=True)
+		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	html = render_to_string('bautismo/bautismo_certificado.html', {'pagesize':'A4', 'bautismo':bautismo,
-		'cura':cura,'notas':notas,'secretaria':secretaria},context_instance=RequestContext(request))
+		'cura':cura,'notas':notas,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def bautismo_acta(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
-	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,estado=True)
+		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	html = render_to_string('bautismo/bautismo_acta.html', {'pagesize':'A4', 'bautismo':bautismo,
-		'cura':cura,'notas':notas,'secretaria':secretaria},context_instance=RequestContext(request))
+		'cura':cura,'notas':notas,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def confirmacion_reporte(request, pk):
 	confirmacion=get_object_or_404(Confirmacion, pk=pk)
-	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,estado=True)
+		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	html = render_to_string('confirmacion/confirmacion_certificado.html', 
-		{'pagesize':'A4', 'confirmacion':confirmacion,'cura':cura,'secretaria':secretaria},
+		{'pagesize':'A4', 'confirmacion':confirmacion,'cura':cura,'asignacion':asignacion},
 		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 
 def eucaristia_reporte(request, pk):
 	eucaristia=get_object_or_404(Eucaristia, pk=pk)
-	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,estado=True)
+		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	# notas=NotaMarginal.objects.filter()
 	html = render_to_string('eucaristia/eucaristia_certificado.html', {'pagesize':'A4', 'eucaristia':eucaristia,
-		'cura':cura,'secretaria':secretaria},context_instance=RequestContext(request))
+		'cura':cura,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def usuario_reporte_honorabilidad(request,pk):
 	perfil=get_object_or_404(PerfilUsuario,pk=pk)
 	# parroquia=AsignacionParroquia.objects.get(persona__user=request.user).parroquia
-	secretaria=AsignacionParroquia.objects.get(persona__user=request.user)
+	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=secretaria.parroquia,estado=True)
+		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	html = render_to_string('usuario/certificado_honorabilidad.html', {'pagesize':'A4', 'perfil':perfil,
-		'cura':cura,'secretaria':secretaria},context_instance=RequestContext(request))
+		'cura':cura,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
 def reporte_anual_sacramentos(request):
@@ -1861,8 +1861,9 @@ def reporte_anual_sacramentos(request):
 			ninios1=0
 			ninios7=0
 			ninios=0
-			parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
-			bautismos=Bautismo.objects.filter(fecha_sacramento__year=anio_actual,parroquia=parroquia.parroquia)
+			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+			bautismos=Bautismo.objects.filter(fecha_sacramento__year=anio_actual,
+				parroquia=asignacion.parroquia)
 			num_bautizos=len(bautismos)
 			for b in bautismos:
 				print("Bautismos en 2013 son: %s" %(len(bautismos)))
@@ -1881,16 +1882,16 @@ def reporte_anual_sacramentos(request):
 					print('Niños mayores de 7: %s' % ninios)
 
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-				parroquia=parroquia.parroquia,estado=True)
+				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			# bautismos=Bautismo.objects.filter(fecha_sacramento__year=anio_actual).count()
 			eucaristias=Eucaristia.objects.filter(fecha_sacramento__year=anio_actual,
-				parroquia=parroquia.parroquia).count()
+				parroquia=asignacion.parroquia).count()
 			confirmaciones=Confirmacion.objects.filter(fecha_sacramento__year=anio_actual,
-				parroquia=parroquia.parroquia).count()
+				parroquia=asignacion.parroquia).count()
 			catolicos=Matrimonio.objects.filter(fecha_sacramento__year=anio_actual,
-				tipo_matrimonio='Catolico',parroquia=parroquia.parroquia).count()
+				tipo_matrimonio='Catolico',parroquia=asignacion.parroquia).count()
 			mixtos=Matrimonio.objects.filter(fecha_sacramento__year=anio_actual,tipo_matrimonio='Mixto',
-				parroquia=parroquia.parroquia).count()
+				parroquia=asignacion.parroquia).count()
 			matrimonios=catolicos+mixtos
 			
 			form = ReporteSacramentosAnualForm(request.GET)
@@ -1898,7 +1899,7 @@ def reporte_anual_sacramentos(request):
 				html=render_to_string('reportes/reporte_anual_sacramentos.html',
 				{'pagesize':'A4','num_bautizos':num_bautizos,'ninios1':ninios1,'ninios7':ninios7,
 				'ninios':ninios,'eucaristias':eucaristias,'confirmaciones':confirmaciones,
-				'catolicos':catolicos,'mixtos':mixtos,'parroquia':parroquia,'cura':cura,
+				'catolicos':catolicos,'mixtos':mixtos,'asignacion':asignacion,'cura':cura,
 				'anio_actual':anio_actual,'matrimonios':matrimonios},
 				context_instance=RequestContext(request))
 				return generar_pdf(html)
@@ -1928,15 +1929,15 @@ def reporte_intenciones(request):
 	if tipo=='d':
 		if fecha and not hora:
 
-			parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
 			intenciones=Intenciones.objects.filter(fecha=fecha,
-				parroquia=parroquia.parroquia).order_by('hora')
+				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-				parroquia=parroquia.parroquia,estado=True)
+				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
 			if form.is_valid():
 				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'parroquia':parroquia,'cura':cura},
+				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
 				context_instance=RequestContext(request))
 				return generar_pdf(html)
 			
@@ -1947,15 +1948,15 @@ def reporte_intenciones(request):
 			# return render(request, template_name, ctx)
 
 		if fecha and hora:
-			parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
 			intenciones=Intenciones.objects.filter(fecha=fecha,hora=hora,
-				parroquia=parroquia.parroquia).order_by('hora')
+				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-				parroquia=parroquia.parroquia,estado=True)
+				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
 			if form.is_valid():
 				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'parroquia':parroquia,'cura':cura},
+				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
 				context_instance=RequestContext(request))
 				return generar_pdf(html)
 			
@@ -1970,15 +1971,15 @@ def reporte_intenciones(request):
 			mes=fecha[5:7]
 			anio=fecha[:4]
 			
-			parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
 			intenciones=Intenciones.objects.filter(fecha__year=anio,fecha__month=mes,
-				parroquia=parroquia.parroquia).order_by('hora')
+				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-				parroquia=parroquia.parroquia,estado=True)
+				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
 			if form.is_valid():
 				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'parroquia':parroquia,'cura':cura},
+				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
 				context_instance=RequestContext(request))
 				return generar_pdf(html)
 			
@@ -1992,15 +1993,15 @@ def reporte_intenciones(request):
 			fecha=fecha
 			anio=fecha[:4]
 			print('el año es %s'%int(anio))
-			parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
 			intenciones=Intenciones.objects.filter(fecha__year=anio,
-				parroquia=parroquia.parroquia).order_by('hora')
+				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-				parroquia=parroquia.parroquia,estado=True)
+				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
 			if form.is_valid():
 				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'parroquia':parroquia,'cura':cura},
+				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
 				context_instance=RequestContext(request))
 				return generar_pdf(html)
 			
@@ -2026,13 +2027,13 @@ def reporte_permisos(request):
 		
 		feligres=PerfilUsuario.objects.get(pk=feligres)
 		print(feligres)
-		parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+		asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-			parroquia=parroquia.parroquia,estado=True)
+			parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 		form = ReportePermisoForm(request.GET)
 		# if form.is_valid():
 		html=render_to_string('reportes/reporte_permiso.html',
-		{'pagesize':'A4','feligres':feligres,'parroquia':parroquia,'cura':cura,
+		{'pagesize':'A4','feligres':feligres,'asignacion':asignacion,'cura':cura,
 		'tipo':tipo},
 		context_instance=RequestContext(request))
 		return generar_pdf(html)
@@ -2046,7 +2047,7 @@ def reporte_permisos(request):
 		feligres=PerfilUsuario.objects.get(id=feligres)
 		parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-			parroquia=parroquia.parroquia,estado=True)
+			parroquia=parroquia.parroquia,periodoasignacionparroquia__estado=Trues)
 		form = ReportePermisoForm(request.GET)
 		print('despues del form')
 		# if form.is_valid():
@@ -2068,7 +2069,7 @@ def reporte_permisos(request):
 		
 		parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-			parroquia=parroquia.parroquia,estado=True)
+			parroquia=parroquia.parroquia,periodoasignacionparroquia__estado=True)
 		form = ReportePermisoForm(request.GET)
 		# if form.is_valid():
 		html=render_to_string('reportes/reporte_permiso.html',
@@ -2088,7 +2089,7 @@ def reporte_permisos(request):
 		feligres=PerfilUsuario.objects.get(id=feligres)
 		parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-			parroquia=parroquia.parroquia,estado=True)
+			parroquia=parroquia.parroquia,periodoasignacionparroquia__estado=True)
 		# if form.is_valid():
 		html=render_to_string('reportes/reporte_permiso.html',
 		{'pagesize':'A4','feligres':feligres,'parroquia':parroquia,'cura':cura,

@@ -35,16 +35,16 @@ body {
 		
 		<h2> 
 			{{ "Diocesis de Loja"|upper }}  <br/>
-			Parroquia Eclesiastica {{parroquia.parroquia|upper}} <br/>
+			Parroquia Eclesiastica {{asignacion.parroquia|upper}} <br/>
 			{{"Loja - Ecuador" | upper}}
 			<hr style="margin-bottom: 1px;"/>
-			<small>{{"Direccion: "}}{{ parroquia.parroquia.direccion }} {{"Tel: "}}{{parroquia.parroquia.direccion.telefono}}</small><br/>
+			<small>{{"Direccion: "}}{{ asignacion.parroquia.direccion }} {{"Tel: "}}{{asignacion.parroquia.direccion.telefono}}</small><br/>
 		</h2>
 		
 	</center>
 	<br/>
 	<p align='right'> <strong>Loja, {%now "d"%} de {%now "F"%} del {%now "Y"%}</strong></p><br/>
-	{{"El suscrito parroco de "}} <strong>{{parroquia.parroquia|upper}}</strong> {{"CERTIFICA:"}}<br/><br/>
+	{{"El suscrito parroco de "}} <strong>{{asignacion.parroquia|upper}}</strong> {{"CERTIFICA:"}}<br/><br/>
 	{{"Que en el año "}} <strong>{{anio_actual}}</strong> {{"se realizaron los siguientes sacramentos:"}}<br/><br/>
 	<ol>
 		<li>{{"Bautizados durante el año: "}} <strong>{{num_bautizos}}</strong></li>
@@ -104,7 +104,7 @@ body {
 	<div id="footer">
 		<hr style="margin-bottom: 1px;"/>
 		<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>
-			{{parroquia.persona.user.get_full_name}}
+			{{asignacion.persona.user.get_full_name}}
 		</p>
 
 	</div>

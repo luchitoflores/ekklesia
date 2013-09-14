@@ -1449,10 +1449,6 @@ def asignar_parroco_a_parroquia(request, pk):
 		ctx = {'form': form, 'form_periodo': form_periodo, 'object': parroquia}
 		return render(request, template_name, ctx)
 
-
-
-
-
 @login_required(login_url='/login/')
 def asignar_parroquia_update(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
@@ -1479,39 +1475,6 @@ def asignar_parroquia_update(request, pk):
 		form = AsignarParroquiaForm(instance=asignacion)
 		ctx = {'form': form, 'form_periodo': form_periodo, 'object': asignacion.parroquia}
 	return render(request, template_name, ctx)
-
-
-
-
-# def parroco_periodos_asignacion_update(request, periodo_id):
-# 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = periodo_id)
-# 	template_name = 'parroquia/asignar_parroquia_form.html'
-# 	success_url = u'/parroco/periodos/asignacion/%s/' % periodo.asignacion.id
-
-# 	if request.method == 'POST':
-# 		estado = request.POST.get('estado')
-# 		form = AsignarParroquiaForm(request.POST, instance=periodo.asignacion) 
-# 		form_periodo = PeriodoAsignacionParroquiaForm(request.POST, instance=periodo)
-# 		if form_periodo.is_valid() and form.is_valid():
-# 			if estado:
-# 				user = PerfilUsuario.objects.get(pk=periodo.asignacion.persona.id).user
-# 				user.is_staff = True
-# 				user.save()
-# 			else: 
-# 				user = PerfilUsuario.objects.get(pk=periodo.asignacion.persona.id).user
-# 				user.is_staff = False
-# 				user.save()
-# 			form_perfil.save() 
-# 			return HttpResponseRedirect(success_url)
-# 		else:
-# 			ctx = {'form': form, 'form_periodo': form_periodo}
-# 			return render(request, template_name, ctx)
-
-# 	else:
-# 		form_periodo = PeriodoAsignacionParroquiaForm(instance=periodo)
-# 		form = AsignarParroquiaForm(instance=periodo.asignacion) 
-# 		ctx = {'form': form, 'form_periodo': form_periodo}
-# 		return render(request, template_name, ctx)
 
 def nuevo_periodo_asignacion(request, pk):
 	template_name = 'parroquia/periodo_asignacion_form.html'
@@ -1591,7 +1554,7 @@ def parroco_periodos_asignacion_list(request, pk):
 
 def asignar_parroco_list(request, pk):
 	template_name = 'parroquia/asignar_parroquia_list.html'
-	object_list = AsignacionParroquia.objects.filter(parroquia__id=pk)
+	object_list = AsignacionParroquia.objects.filter(parroquia__id=pk).exclude(periodoasignacionparroquia=None)
 	parroquia = get_object_or_404(Parroquia, pk=pk)
 	ctx = {'object_list': object_list, 'parroquia':parroquia}
 	return render(request, template_name, ctx)
@@ -1662,7 +1625,7 @@ def asignar_secretaria_create(request):
 	usuario = request.user
 	if request.method == 'POST':
 		persona = PerfilUsuario.objects.feligres()
-		form = AsignarSecretariaForm(usuario, persona,  request.POST)
+		form = AsignarSecretariaForm(usuario, persona, request.POST.get('estado'), request.POST)
 		if form.is_valid():
 			try:
 				asignacion = AsignacionParroquia.objects.get(persona=request.POST.get('persona'))
@@ -1683,15 +1646,18 @@ def asignar_secretaria_create(request):
 					user.save()
 				return HttpResponseRedirect(success_url)
 		else:
+			messages.error(request, 'Uno o más cámpos son inválidos')
 			if request.POST.get('persona'):
-				form = AsignarSecretariaForm(usuario, request.POST.get('persona'), request.POST.get('estado'), request.POST)
+				personas = PerfilUsuario.objects.filter(id=request.POST.get('persona'))
+				form = AsignarSecretariaForm(usuario, personas, request.POST.get('estado'), request.POST)
 				ctx = {'form': form}
+				
 			else: 
 				persona = PerfilUsuario.objects.none()
 				form = AsignarSecretariaForm(usuario, persona, request.POST.get('estado'), request.POST)
 				ctx = {'form': form}
-			# return render(request, template_name, ctx)
-			messages.error(request, 'Uno o más cámpos son inválidos')
+			return render(request, template_name, ctx)
+			
 	else:
 		form = AsignarSecretariaForm(usuario)
 		ctx = {'form': form}

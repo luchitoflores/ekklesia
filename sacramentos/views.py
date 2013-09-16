@@ -68,6 +68,14 @@ def usuarioCreateView(request):
 			usuario.groups.add(feligres)
 			perfil.user = usuario
 			perfil.save()
+			LogEntry.objects.log_action(
+				user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(perfil).pk,
+            	object_id=perfil.id,
+            	object_repr=unicode(perfil),
+            	action_flag=ADDITION,
+            	change_message="Creo un Usuario")
+			messages.success(request, 'Creado exitosamente')
 			return HttpResponseRedirect('/usuario')
 			
 		else:
@@ -115,6 +123,14 @@ def edit_usuario_view(request,pk):
 		if form_usuario.is_valid() and form_perfil.is_valid():
 			form_usuario.save()
 			form_perfil.save()
+			LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(perfil).pk,
+            	object_id=perfil.id,
+            	object_repr=unicode(perfil),
+            	action_flag=CHANGE,
+            	change_message="Usuario actualizado")
+			messages.success(request, 'Actualizado exitosamente')
 			return HttpResponseRedirect('/usuario')
 		else:
 			if perfil.padre and perfil.madre:
@@ -223,6 +239,14 @@ def sacerdote_create_view(request):
 			sacerdote.profesion = 'Sacerdote'
 			sacerdote.estado_civil = 's'
 			sacerdote.save()
+			LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(sacerdote).pk,
+            	object_id=sacerdote.id,
+            	object_repr=unicode(sacerdote),
+            	action_flag=ADDITION,
+            	change_message="Creo un sacerdote")
+			messages.success(request, 'Creado exitosamente')
 			return HttpResponseRedirect(success_url)
 
 		else:
@@ -252,6 +276,14 @@ def sacerdote_update_view(request, pk):
 				sacerdote = form_sacerdote.save()
 				# usuario.save()
 				# sacerdote.save()
+				LogEntry.objects.log_action(
+            		user_id=request.user.id,
+            		content_type_id=ContentType.objects.get_for_model(sacerdote).pk,
+            		object_id=sacerdote.id,
+            		object_repr=unicode(sacerdote),
+            		action_flag=CHANGE,
+            		change_message="Sacerdote actualizado")
+				messages.success(request, 'Actualizado exitosamente')
 				return HttpResponseRedirect(success_url)
 
 			else:
@@ -310,7 +342,7 @@ def libro_create_view(request):
             		user_id=request.user.id,
             		content_type_id=ContentType.objects.get_for_model(libro).pk,
             		object_id=libro.id,
-            		object_repr=unicode(libro.tipo_libro),
+            		object_repr=unicode(libro),
             		action_flag=ADDITION,
             		change_message="Creo un libro")
 					messages.success(request, 'Creado exitosamente')
@@ -342,7 +374,7 @@ def libro_create_view(request):
             			user_id=request.user.id,
             			content_type_id=ContentType.objects.get_for_model(libro).pk,
             			object_id=libro.id,
-            			object_repr=unicode(libro.tipo_libro),
+            			object_repr=unicode(libro),
             			action_flag=ADDITION,
             			change_message="Creo un libro")
 				messages.success(request, 'Creado exitosamente')
@@ -385,9 +417,9 @@ def libro_update_view(request,pk):
             			user_id=request.user.id,
             			content_type_id=ContentType.objects.get_for_model(libro).pk,
             			object_id=libro.id,
-            			object_repr=unicode(libro.tipo_libro),
+            			object_repr=unicode(libro),
             			action_flag=CHANGE,
-            			change_message="actualizo un libro")
+            			change_message="Libro actualizado")
 						messages.success(request, 'Actualizado exitosamente')
 						return HttpResponseRedirect('/libro')
 					else:
@@ -398,7 +430,7 @@ def libro_update_view(request,pk):
             			object_id=libro.id,
             			object_repr=unicode(libro.tipo_libro),
             			action_flag=CHANGE,
-            			change_message="actualizo un libro")
+            			change_message="Libro actualizado")
 						messages.success(request, 'Actualizado exitosamente')
 						return HttpResponseRedirect('/libro')
 						
@@ -413,7 +445,7 @@ def libro_update_view(request,pk):
             			object_id=libro.id,
             			object_repr=unicode(libro.tipo_libro),
             			action_flag=CHANGE,
-            			change_message="actualizo un libro")
+            			change_message="Libro actualizado")
 						messages.success(request, 'Actualizado exitosamente')
 						return HttpResponseRedirect('/libro')
 						
@@ -425,7 +457,7 @@ def libro_update_view(request,pk):
             			object_id=libro.id,
             			object_repr=unicode(libro.tipo_libro),
             			action_flag=CHANGE,
-            			change_message="actualizo un libro")
+            			change_message="Libro actualizado")
 						messages.success(request, 'Actualizado exitosamente')
 						return HttpResponseRedirect('/libro')
 													
@@ -445,7 +477,7 @@ def libro_update_view(request,pk):
             		object_id=libro.id,
             		object_repr=unicode(libro.tipo_libro),
             		action_flag=CHANGE,
-            		change_message="actualizo un libro")
+            		change_message="Libro actualizado")
 				messages.success(request, 'Actualizado exitosamente')
 				return HttpResponseRedirect('/libro')
 		else:
@@ -579,10 +611,6 @@ def matrimonio_create_view(request):
 			novio = request.POST.get('novio')
 			novia = request.POST.get('novia')
 			celebrante =  request.POST.get('celebrante')
-			print(novio)
-			print(novia)
-			print(celebrante)
-
 			if novio and novia and celebrante:
 			    novio = PerfilUsuario.objects.filter(id=novio)
 			    novia = PerfilUsuario.objects.filter(id=novia)
@@ -674,7 +702,7 @@ def matrimonio_update_view(request,pk):
 	            	object_id=matrimonio.id,
 	            	object_repr=unicode(matrimonio),
 	            	action_flag=CHANGE,
-	            	change_message='Se actualizo matrimonio')
+	            	change_message='Matrimonio actualizado')
 				messages.success(request,'Actualizado exitosamente')
 				return HttpResponseRedirect('/matrimonio')
 			else:
@@ -756,7 +784,7 @@ def matrimonio_vigencia_view(request,pk):
             object_id=matrimonio.id,
             object_repr=unicode(matrimonio),
             action_flag=DELETION,
-            change_message='Quitó vigencia del matrimonio')
+            change_message='Dado de baja matrimonio')
 		messages.success(usuario, 'Se ha quitado la vigencia con exito')
 		return HttpResponseRedirect('/matrimonio')
 
@@ -906,7 +934,7 @@ def bautismo_update_view(request,pk):
             	object_id=bautismo.id,
             	object_repr=unicode(bautismo),
             	action_flag=CHANGE,
-            	change_message='Se Modifico bautismo')
+            	change_message='Bautismo actualizado')
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/bautismo')
 		else:
@@ -1057,7 +1085,7 @@ def eucaristia_update_view(request,pk):
             	object_id=eucaristia.id,
             	object_repr=unicode(eucaristia),
             	action_flag=CHANGE,
-            	change_message='Se modifico eucaristia')
+            	change_message='Eucaristia actualizada')
 			messages.success(request,'Creado exitosamente')
 			return HttpResponseRedirect('/eucaristia')
 		else:
@@ -1200,7 +1228,7 @@ def confirmacion_update_view(request,pk):
             	object_id=confirmacion.id,
             	object_repr=unicode(confirmacion),
             	action_flag=CHANGE,
-            	change_message='Se modifico confirmacion')
+            	change_message='Confirmacion actualizado')
 			messages.success(request,'Actualizado exitosamente')
 			return HttpResponseRedirect('/confirmacion')
 		else:
@@ -1274,6 +1302,13 @@ def parroquia_create_view(request):
 			direccion = form_direccion.save()
 			parroquia.direccion = direccion
 			parroquia.save()
+			LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(parroquia).pk,
+            	object_id=parroquia.id,
+            	object_repr=unicode(parroquia),
+            	action_flag=ADDITION,
+            	change_message="Creo una parroquia")
 			return HttpResponseRedirect(success_url)
 		else:
 			ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
@@ -1301,6 +1336,13 @@ def parroquia_update_view(request, pk):
 		if form_parroquia.is_valid() and form_direccion.is_valid():
 			form_parroquia.save()
 			form_direccion.save()
+			LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(parroquia).pk,
+            	object_id=parroquia.id,
+            	object_repr=unicode(parroquia),
+            	action_flag=CHANGE,
+            	change_message="Parroquia actualizada")
 			# parroquia = form_parroquia.save(commit=False)
 			# direccion = form_direccion.save()
 			# parroquia.direccion = direccion
@@ -1315,7 +1357,7 @@ def parroquia_update_view(request, pk):
 		parroquia_civil = ParroquiaCivil.objects.filter(canton=canton)
 		form_parroquia = ParroquiaForm(instance=parroquia)
 		form_direccion = DireccionForm(instance=direccion, canton = canton, parroquia=parroquia_civil)
-		ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion}
+		ctx = {'form_parroquia': form_parroquia, 'form_direccion':form_direccion,'object':parroquia}
 		return render(request, template_name, ctx)
 
 class ParroquiaListView(ListView):
@@ -1335,6 +1377,13 @@ def intencion_create_view(request):
 				asignacion = AsignacionParroquia.objects.get(persona__user=request.user)
 				intencion.parroquia = asignacion.parroquia
 				intencion.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(intencion).pk,
+            	object_id=intencion.id,
+            	object_repr=unicode(intencion),
+            	action_flag=ADDITION,
+            	change_message="Creo una intencion")
 				messages.success(request, 'Creado exitosamente')
 				return HttpResponseRedirect(success_url)
 			except ObjectDoesNotExist:
@@ -1383,10 +1432,18 @@ def asignar_parroquia_create(request):
 		if form.is_valid() and form_periodo.is_valid():
 			
 			try: 
-				asignacion = AsignacionParroquia.objects.get(persona__id = persona, parroquia__id = parroquia)
+				asignacion = AsignacionParroquia.objects.get(persona__id = persona, 
+					parroquia__id = parroquia)
 				periodo = form_periodo.save(commit=False)
 				periodo.asignacion = asignacion
 				periodo.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(parroquia).pk,
+            	object_id=parroquia.id,
+            	object_repr=unicode(parroquia),
+            	action_flag=ADDITION,
+            	change_message="Asigno parroquia y sacerdote")
 				user = PerfilUsuario.objects.get(pk=persona).user
 				user.is_staff = True 
 				user.save()
@@ -1399,6 +1456,13 @@ def asignar_parroquia_create(request):
 				periodo = form_periodo.save(commit=False)
 				periodo.asignacion = asignacion
 				periodo.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(parroquia).pk,
+            	object_id=parroquia.id,
+            	object_repr=unicode(parroquia),
+            	action_flag=ADDITION,
+            	change_message="Asigno parroquia y sacerdote")
 				user = PerfilUsuario.objects.get(pk=persona).user
 				user.is_staff = True 
 				user.save()
@@ -1429,13 +1493,21 @@ def asignar_parroco_a_parroquia(request, pk):
 		form_periodo = PeriodoAsignacionParroquiaForm(request.POST)
 		if form.is_valid() and form_periodo.is_valid():
 			try: 
-				asignacion = AsignacionParroquia.objects.get(persona__id = persona, parroquia__id = parroquia.id)
+				asignacion = AsignacionParroquia.objects.get(persona__id = persona, 
+					parroquia__id = parroquia.id)
 				periodo = form_periodo.save(commit=False)
 				periodo.asignacion = asignacion
 				periodo.save()
 				user = PerfilUsuario.objects.get(pk=persona).user
 				user.is_staff = True 
 				user.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(parroquia).pk,
+            	object_id=parroquia.id,
+            	object_repr=unicode(parroquia),
+            	action_flag=ADDITION,
+            	change_message="Asigno parroquia y sacerdote")
 				return HttpResponseRedirect(success_url)
 
 			except ObjectDoesNotExist:
@@ -1446,6 +1518,13 @@ def asignar_parroco_a_parroquia(request, pk):
 				user = PerfilUsuario.objects.get(pk=persona).user
 				user.is_staff = True 
 				user.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(parroquia).pk,
+            	object_id=parroquia.id,
+            	object_repr=unicode(parroquia),
+            	action_flag=ADDITION,
+            	change_message="Asigno parroquia y sacerdote")
 				return HttpResponseRedirect(success_url)
 
 		else:
@@ -1475,6 +1554,13 @@ def asignar_parroquia_update(request, pk):
 			periodo = form_periodo.save()
 			asignacion.periodo = periodo
 			form.save()
+			LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(asignacion).pk,
+            	object_id=asignacion.id,
+            	object_repr=unicode(asignacion),
+            	action_flag=CHANGE,
+            	change_message="Actualizado asignacion parroquia y sacerdote")
 			return HttpResponseRedirect(success_url)
 		else:
 			messages.error(request, 'Uno o más cámpos son inválidos')
@@ -1509,6 +1595,13 @@ def nuevo_periodo_asignacion(request, pk):
 				periodo = form.save(commit=False)
 				periodo.asignacion = asignacion
 				periodo.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(periodo).pk,
+            	object_id=periodo.id,
+            	object_repr=unicode(periodo),
+            	action_flag=ADDITION,
+            	change_message="Creo periodo de asignacion")
 				return HttpResponseRedirect(success_url)
 
 		else:
@@ -1550,7 +1643,14 @@ def parroco_periodos_asignacion_update(request, pk):
 					user = PerfilUsuario.objects.get(pk=periodo.asignacion.persona.id).user
 					user.is_staff = False
 					user.save()
-				form.save() 
+				form.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(periodo).pk,
+            	object_id=periodo.id,
+            	object_repr=unicode(periodo),
+            	action_flag=CHANGE,
+            	change_message="Periodo asignacion actualizado") 
 				return HttpResponseRedirect(success_url)
 		else:
 			ctx = {'form': form, 'object':periodo.asignacion}
@@ -1655,6 +1755,13 @@ def asignar_secretaria_create(request):
 				return render(request, template_name, ctx)
 			except ObjectDoesNotExist:
 				form.save()
+				LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(asignacion).pk,
+            	object_id=asignacion.id,
+            	object_repr=unicode(asignacion),
+            	action_flag=ADDITION,
+            	change_message="Asigno parroquia y secretaria")
 				persona_id = request.POST['persona']
 				estado = request.POST.get('estado')
 				if estado:
@@ -1705,6 +1812,13 @@ def asignar_secretaria_update(request, pk):
 				user.is_staff = False
 				user.save()
 			form.save()
+			LogEntry.objects.log_action(
+            	user_id=request.user.id,
+            	content_type_id=ContentType.objects.get_for_model(asignacion).pk,
+            	object_id=asignacion.id,
+            	object_repr=unicode(asignacion),
+            	action_flag=ADDITION,
+            	change_message="Asignacion parroquia y secretaria actualizado")
 			return HttpResponseRedirect(success_url)
 		else:
 			if asignacion.persona:
@@ -2107,6 +2221,37 @@ def reporte_permisos(request):
 
 	ctx={'form':form}
 	return render(request, template_name, ctx)
+
+
+
+def reporte_parroquias_sacerdotes(request,pk):
+	persona=User.objects.get(pk=request.user.pk)
+	parroquia=get_object_or_404(Parroquia, pk=pk)
+	asignacion=AsignacionParroquia.objects.filter(parroquia=parroquia,
+		persona__user__groups__name='Sacerdote',
+		)
+	# curas=AsignacionParroquia.objects.filter(persona__user__groups__name='Sacerdote',
+	# 	parroquia=parroquia)
+	periodos=PeriodoAsignacionParroquia.objects.filter(asignacion__parroquia=parroquia)
+	print(periodos)
+	html = render_to_string('reportes/reporte_parroquia_sacerdote.html', {'pagesize':'A4',
+		'parroquia':parroquia,'periodos':periodos,'persona':persona},
+		context_instance=RequestContext(request))
+	return generar_pdf(html)
+
+
+def reporte_sacerdotes_parroquias(request,pk):
+	persona=User.objects.get(pk=request.user.pk)
+	cura=get_object_or_404(PerfilUsuario, pk=pk)
+	parroquias=AsignacionParroquia.objects.filter(persona=cura)
+	print(parroquias)
+	periodos=PeriodoAsignacionParroquia.objects.filter(asignacion__persona=cura)
+	print(periodos)
+	html = render_to_string('reportes/reporte_sacerdote_parroquia.html', {'pagesize':'A4',
+		'periodos':periodos,'persona':persona,'cura':cura},
+		context_instance=RequestContext(request))
+	return generar_pdf(html)
+
 
 # exportar a csv los logs
 

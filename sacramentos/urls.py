@@ -21,7 +21,8 @@ from .views import (
 	asignar_secretaria_create, asignar_secretaria_update, asignar_secretaria_list,
 	intencion_create_view, IntencionListView, IntencionUpdateView,
 	LogListView,exportar_csv_logs,
-	reporte_anual_sacramentos,reporte_intenciones,reporte_permisos,
+	reporte_anual_sacramentos,reporte_intenciones,reporte_permisos,reporte_parroquias_sacerdotes,
+	reporte_sacerdotes_parroquias,
 	)
 from .rest import ParroquiaResource
 
@@ -39,6 +40,7 @@ urlpatterns = patterns('',
 	url(r'^sacerdote/add/$', sacerdote_create_view, name='sacerdote_create'),
 	url(r'^sacerdote/$', SacerdoteListView.as_view(), name='sacerdote_list'),
 	url(r'^sacerdote/(?P<pk>\d+)/$', sacerdote_update_view, name='sacerdote_update'),
+	url(r'^reporte/sacerdote/(?P<pk>\d+)/$', reporte_sacerdotes_parroquias, name='reporte_sacerdotes'),
 	url(r'^usuario_certificado/(?P<pk>\d+)/$',usuario_reporte_honorabilidad, name='usuario_certificado'),
 
 	
@@ -109,6 +111,8 @@ urlpatterns = patterns('',
 	url(r'^parroquia/$', ParroquiaListView.as_view(), name='parroquia_list'),
 	url(r'^parroquia/add/$', parroquia_create_view, name='parroquia_create'),
 	url(r'^parroquia/(?P<pk>\d+)/$', parroquia_update_view, name='parroquia_update'),
+	url(r'^reporte/parroquia/(?P<pk>\d+)/$', reporte_parroquias_sacerdotes, 
+		name='reporte_parroquias_sacerdotes'),
 	
 	#urls para asignación de parroquias a los párrocos
 	# Permite agregar un nuevo párroco a una nueva parroquia
@@ -158,5 +162,6 @@ urlpatterns = patterns('',
 	url(r'^reporte/anual/$', reporte_anual_sacramentos, name='reporte_anual'),
 	url(r'^reporte/intenciones/$', reporte_intenciones, name='reporte_intenciones'),
 	url(r'^reporte/permisos/$', reporte_permisos, name='reporte_permiso'),
+
 
 	)

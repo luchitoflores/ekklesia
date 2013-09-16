@@ -17,6 +17,21 @@ Agregar Sacerdote
 {%endblock%}
 
 {% block content%}
+{%if object.id%}
+<div class="btn-toolbar pull-right">
+	<div class="btn-group">
+		<button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+			<i class='icon-print'></i>  Reportes <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu pull-right" >
+			<li>
+				<a href="{%url 'reporte_sacerdotes' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Asignaciones</a>
+			</li>
+		</ul>
+	</div>
+</div>
+{%endif%}
+
 <form action="." method='POST' class='form-horizontal'>
 	{% csrf_token%}
 

@@ -11,10 +11,26 @@ Agregar Parroquia
 {%endblock%}
 
 {%block content%}
+{%if object.id%}
+<div class="btn-toolbar pull-right">
+	<div class="btn-group">
+		<button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+			<i class='icon-print'></i>  Reportes <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu pull-right" >
+			<li>
 
+				<a href="{%url 'reporte_parroquias_sacerdotes' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Asignaciones</a>
+
+
+			</li>
+		</ul>
+	</div>
+</div>
+{%endif%}
 <form action="." method='POST' class="form-horizontal">
 	{%csrf_token%}
-	
+
 	<div class="control-group">
 		<div class='control-label'>
 			{{form_parroquia.nombre.label}} *
@@ -30,13 +46,13 @@ Agregar Parroquia
 		</div>
 	</div>
 
-	
-	
+
+
 	<div class='control-group'>
 		<div class='control-label'>
 			{{form_direccion.domicilio.label}} * 
 		</div>
-		
+
 		<div class='controls'>
 			{{form_direccion.domicilio}}
 		</div>
@@ -47,12 +63,12 @@ Agregar Parroquia
 			{{form_direccion.domicilio.errors}}
 		</div>
 	</div>
-	
+
 	<div class='control-group'>
 		<div class='control-label'>
 			{{form_direccion.provincia.label}} * 
 		</div>
-		
+
 		<div class='controls'>
 			{{form_direccion.provincia}}
 		</div>
@@ -67,7 +83,7 @@ Agregar Parroquia
 		<div class='control-label'>
 			{{form_direccion.canton.label}} * 
 		</div>
-		
+
 		<div class='controls'>
 			{{form_direccion.canton}}
 		</div>
@@ -82,7 +98,7 @@ Agregar Parroquia
 		<div class='control-label'>
 			{{form_direccion.parroquia.label}} * 
 		</div>
-		
+
 		<div class='controls'>
 			{{form_direccion.parroquia}}
 		</div>
@@ -97,7 +113,7 @@ Agregar Parroquia
 		<div class='control-label'>
 			{{form_direccion.telefono.label}}
 		</div>
-		
+
 		<div class='controls'>
 			{{form_direccion.telefono}}
 		</div>
@@ -108,7 +124,7 @@ Agregar Parroquia
 			{{form_direccion.telefono.errors}}
 		</div>
 	</div>
-	
+
 
 	<div class="form-actions">
 		<input class='btn btn-primary' type="submit" value='Enviar'>

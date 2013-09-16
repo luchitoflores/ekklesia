@@ -25,16 +25,16 @@ Agregar Confirmacion
 </div>
 {%if object.id%}
 <div class="btn-toolbar pull-right">
-<div class="btn-group">
-    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
-        <i class='icon-print'></i>  Reportes <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu pull-right" >
-        <li>
-            <a href="{%url 'confirmacion_reporte' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Partida de Confirmacion</a>
-        </li>
-     </ul>
-  </div>
+	<div class="btn-group">
+		<button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+			<i class='icon-print'></i>  Reportes <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu pull-right" >
+			<li>
+				<a href="{%url 'confirmacion_reporte' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Partida de Confirmacion</a>
+			</li>
+		</ul>
+	</div>
 </div>
 
 {%endif%}
@@ -69,8 +69,9 @@ Agregar Confirmacion
 								{{form_confirmacion.pagina}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.pagina.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.pagina.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.pagina.errors}}
 								</div>
@@ -79,26 +80,30 @@ Agregar Confirmacion
 					</div>
 					<div class="span4">
 						<div class='control-group'>
-							<label for="id_numero_acta" class='control-label'>{{form_confirmacion.numero_acta.label}}</label>
+							<label for="id_numero_acta" class='control-label'>{{form_confirmacion.numero_acta.label}}
+							</label>
 							<div class='controls'>
 								{{form_confirmacion.numero_acta}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.numero_acta.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.numero_acta.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.numero_acta.errors}}
 								</div>
 							</div>
 						</div>
 						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{form_confirmacion.fecha_sacramento.label}} *</label>
+							<label for="id_fecha_sacramento" class='control-label'>{{form_confirmacion.fecha_sacramento.label}} *
+							</label>
 							<div class='controls'>
 								{{form_confirmacion.fecha_sacramento}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.fecha_sacramento.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.fecha_sacramento.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.fecha_sacramento.errors}}
 								</div>
@@ -113,17 +118,17 @@ Agregar Confirmacion
 								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.confirmado.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.confirmado.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.confirmado.errors}}
 								</div>
 							</div>
 						</div>
 
-
 					</div>
-					
+
 				</div>
 			</fieldset>
 			<fieldset class='scheduler-border'>
@@ -137,10 +142,11 @@ Agregar Confirmacion
 								<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.celebrante.help_text}}</div>
+								{{form_confirmacion.celebrante.help_text}}
+							</div>
 							<div class="controls">
 								<div class="errors">								
-								{{form_confirmacion.celebrante.errors}}
+									{{form_confirmacion.celebrante.errors}}
 								</div>
 							</div>
 						</div>
@@ -152,8 +158,9 @@ Agregar Confirmacion
 								{{form_confirmacion.lugar_sacramento}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.lugar_sacramento.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.lugar_sacramento.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.lugar_sacramento.errors}}
 								</div>
@@ -165,14 +172,15 @@ Agregar Confirmacion
 								{{form_confirmacion.iglesia}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.iglesia.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.iglesia.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.iglesia.errors}}
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 
 					<div class="span4">
@@ -182,8 +190,9 @@ Agregar Confirmacion
 								{{form_confirmacion.padrino}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.padrino.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.padrino.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.padrino.errors}}
 								</div>
@@ -195,29 +204,30 @@ Agregar Confirmacion
 								{{form_confirmacion.madrina}}
 							</div>
 							<div class="controls help-text">
-								{{form_confirmacion.madrina.help_text}}</div>
-								<div class="controls">
+								{{form_confirmacion.madrina.help_text}}
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{form_confirmacion.madrina.errors}}
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
-				</fieldset>
-			</div>
+				</div>
+			</fieldset>
 		</div>
+	</div>
+
+	<div class="form-actions">
+		<input type="submit" value="Enviar" class='btn btn-primary'/>
+		<a href="{%url 'confirmacion_list'%}" class='btn btn-primary'>Cancelar</a>
+	</div>
+
+</form>
 
 
-		<div class="form-actions">
-			<input type="submit" value="Enviar" class='btn btn-primary'/>
-			<a href="{%url 'confirmacion_list'%}" class='btn btn-primary'>Cancelar</a>
-		</div>
 
-	</form>
-
-
-	
-	{%include 'modal.html'%}
-	{%include 'buscar_sacerdotes.html'%}
+{%include 'modal.html'%}
+{%include 'buscar_sacerdotes.html'%}
 {% endblock%}

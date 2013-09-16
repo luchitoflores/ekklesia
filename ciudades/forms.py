@@ -55,12 +55,12 @@ class ParroquiaForm(ModelForm):
 class DireccionForm(ModelForm):
 	
     domicilio=forms.CharField(label='Domicilio', max_length=200, required=True,
-		help_text='Ingrese la direccion Ej: Bernardo 17-19 y Bolivar',
+		help_text='Ingrese la direccion Ej: Sucre 7-19 y Lourdes',
 		widget=forms.TextInput(attrs={'required': ''}))
-	# provincia=forms.ModelChoiceField(queryset=Provincia.objects.all(), empty_label='-- Seleccione --',
-	# 	help_text='Seleccione una provincia',
-	# 	widget=forms.Select(attrs={'required':''}))
-    telefono=forms.CharField(label='Telefono', help_text='Ingrese un telefono convencional'+
+    provincia=forms.ModelChoiceField(queryset=Provincia.objects.all(), empty_label='-- Seleccione --',
+    	help_text='Seleccione una provincia Ej: Loja, El Oro',
+    	widget=forms.Select(attrs={'required':''}))
+    telefono=forms.CharField(label='Telefono', help_text='Ingrese un tel convencional'+
 		' Ej: 072588278')
 		
     queryset_canton = Canton.objects.all()
@@ -68,7 +68,7 @@ class DireccionForm(ModelForm):
     def __init__(self, canton = queryset_canton, parroquia = queryset_parroquia, *args, **kwargs):
 	super(DireccionForm, self).__init__(*args, **kwargs)	
 	self.fields['canton']=forms.ModelChoiceField(queryset=canton, empty_label='-- Seleccione --',
-		help_text='Seleccione un canton Ej: Loja - El Oro', 
+		help_text='Seleccione un canton Ej: Loja - Calvas', 
 		widget=forms.Select(attrs={'required':'', 'disabled':''}))
 	self.fields['parroquia']= forms.ModelChoiceField(queryset=parroquia,
 		empty_label='-- Seleccione --', help_text='Seleccione una parroquia Ej: El Sagrario',

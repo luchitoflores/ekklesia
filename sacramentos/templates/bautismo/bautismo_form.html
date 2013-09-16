@@ -35,32 +35,28 @@ $(document).ready(function(){
 </div>
 {%if object.id%}
 <div class="btn-toolbar pull-right">
-<div class="btn-group">
-    <button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
-        <i class='icon-print'></i>  Reportes <span class="caret"></span>
-    </button>
-    <ul class="dropdown-menu pull-right" >
-        <li>
-        	
-        	<a href="{%url 'bautismo_acta' pk=object.id%}" target="_blank"><i class='icon-book '></i> 
-        		Partida Integra</a>
-        	<a href="{%url 'bautismo_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Partida Bautismal</a>
+	<div class="btn-group">
+		<button data-toggle="dropdown" class=" btn btn-primary dropdown-toggle">
+			<i class='icon-print'></i>  Reportes <span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu pull-right" >
+			<li>
 
-            
-        </li>
-     </ul>
-  </div>
+				<a href="{%url 'bautismo_acta' pk=object.id%}" target="_blank"><i class='icon-book '></i> 
+					Partida Integra
+				</a>
+				<a href="{%url 'bautismo_certificado' pk=object.id%}" target="_blank"><i class='icon-file-text-alt'></i> Partida Bautismal
+				</a>
+			</li>
+		</ul>
+	</div>
 </div>
 {%endif%}
-
-
-<!-- Pestañas para datos del feligres, y del bautizo -->
-
 
 <input id='id_hidden' type="hidden" value='{{object.id}}'>
 <form id='id_form_bautismo' method='POST' class='form-horizontal'>
 	{% csrf_token%}
-	
+
 	<div class='row'>
 		<div class='span10'>
 			<fieldset class='scheduler-border'>
@@ -73,24 +69,23 @@ $(document).ready(function(){
 							</label>
 							<div class='controls'>
 								{{formBautismo.libro}}
-								
+
 							</div>
 							<div class="controls help-text">
 								{{formBautismo.libro.help_text}}
-								
+
 							</div>
 							<div class="controls">
-									<div class="errors">								
-										{{formBautismo.libro.errors}}
-									</div>
+								<div class="errors">								
+									{{formBautismo.libro.errors}}
+								</div>
 							</div>
-							
-							
 						</div>
-					</div>
-					<div class="span4">
+
 						<div class='control-group'>
-							<label for="id_pagina" class='control-label'>{{formBautismo.pagina.label}}</label>
+							<label for="id_pagina" class='control-label'>
+								{{formBautismo.pagina.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.pagina}}
 							</div>
@@ -102,7 +97,7 @@ $(document).ready(function(){
 									{{formBautismo.pagina.errors}}
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 					<div class="span4">
@@ -121,30 +116,32 @@ $(document).ready(function(){
 							</div>
 						</div>
 
-					</div>
-					<div class="span4">
 						<div class='control-group'>
-							<label for="id_fecha_sacramento" class='control-label'>{{formBautismo.fecha_sacramento.label}} *</label>
+							<label for="id_fecha_sacramento" class='control-label'>{{formBautismo.fecha_sacramento.label}} *
+							</label>
 							<div class='controls'>
 								{{formBautismo.fecha_sacramento}}
 							</div>
 							<div class="controls help-text">
 								{{formBautismo.fecha_sacramento.help_text}}
-								<span class="errors" style='color: red'>
-									{{formBautismo.fecha_sacramento.errors}}
-								</span>
+
 							</div>
-							
+							<div class="controls">
+								<div class="errors">								
+									{{formBautismo.fecha_sacramento.errors}}
+								</div>
+							</div>
+
 						</div>
 
 					</div>
-					<div class="span10">
+					<div class="span8">
 						<div class='control-group'>
 							<label for="id_bautizado" class='control-label'>{{formBautismo.bautizado.label}}</label>
 							<div class='controls'>
 								{{formBautismo.bautizado}}
 								<span>
-								<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+									<a href="#id_buscar_padre" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
 								</span>
 							</div>
 							<div class="controls help-text">
@@ -174,7 +171,8 @@ $(document).ready(function(){
 						</div>
 						<div class='control-group'>
 							<label for="id_iglesia" class='control-label'>
-								{{formBautismo.iglesia.label}}</label>
+								{{formBautismo.iglesia.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.iglesia}}
 							</div>
@@ -188,27 +186,26 @@ $(document).ready(function(){
 							</div>
 						</div>
 					</div>
-						<div class="span8">		
-							<div class='control-group'>
-								<label for="id_celebrante" class='control-label'>
-									{{formBautismo.celebrante.label}}</label>
-								<div class='controls'>
-									{{formBautismo.celebrante}}
-									<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
-								</div>
-								<div class="controls help-text">
+					<div class="span8">		
+						<div class='control-group'>
+							<label for="id_celebrante" class='control-label'>
+								{{formBautismo.celebrante.label}}
+							</label>
+							<div class='controls'>
+								{{formBautismo.celebrante}}
+								<a href="#id_buscar_sacerdotes" class='btn btn-primary' data-toggle='modal'><i class='icon-search'></i> Buscar</a>
+							</div>
+							<div class="controls help-text">
 								{{formBautismo.celebrante.help_text}}
-								</div>
-								<div class="controls">
+							</div>
+							<div class="controls">
 								<div class="errors">								
 									{{formBautismo.celebrante.errors}}
 								</div>
 							</div>
-							</div>
 						</div>
-		
-	
-					
+					</div>
+
 				</div>
 			</fieldset>
 
@@ -218,7 +215,8 @@ $(document).ready(function(){
 					<div class='span4'>
 						<div class='control-group'>
 							<label for="id_padrino" class='control-label'>
-								{{formBautismo.padrino.label}}</label>
+								{{formBautismo.padrino.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.padrino}}
 							</div>
@@ -233,7 +231,8 @@ $(document).ready(function(){
 						</div>
 						<div class='control-group'>
 							<label for="id_madrina" class='control-label'>
-								{{formBautismo.madrina.label}}</label>
+								{{formBautismo.madrina.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.madrina}}
 							</div>
@@ -248,7 +247,8 @@ $(document).ready(function(){
 						</div>
 						<div class='control-group'>
 							<label for="id_abuelo_paterno" class='control-label'>
-								{{formBautismo.abuelo_paterno.label}}</label>
+								{{formBautismo.abuelo_paterno.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.abuelo_paterno}}
 							</div>
@@ -281,7 +281,8 @@ $(document).ready(function(){
 					<div class="span4">
 						<div class='control-group'>
 							<label for="id_abuelo_materno" class='control-label'>
-								{{formBautismo.abuelo_materno.label}}</label>
+								{{formBautismo.abuelo_materno.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.abuelo_materno}}
 							</div>
@@ -296,7 +297,8 @@ $(document).ready(function(){
 						</div>
 						<div class='control-group'>
 							<label for="id_abuela_materna" class='control-label'>
-								{{formBautismo.abuela_materna.label}}</label>
+								{{formBautismo.abuela_materna.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.abuela_materna}}
 							</div>
@@ -311,7 +313,8 @@ $(document).ready(function(){
 						</div>
 						<div class='control-group'>
 							<label for="id_vecinos_paternos" class='control-label'>
-								{{formBautismo.vecinos_paternos.label}}</label>
+								{{formBautismo.vecinos_paternos.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.vecinos_paternos}}
 							</div>
@@ -326,7 +329,8 @@ $(document).ready(function(){
 						</div>
 						<div class='control-group'>
 							<label for="id_vecinos_maternos" class='control-label'>
-								{{formBautismo.vecinos_maternos.label}}</label>
+								{{formBautismo.vecinos_maternos.label}}
+							</label>
 							<div class='controls'>
 								{{formBautismo.vecinos_maternos}}
 							</div>
@@ -346,8 +350,9 @@ $(document).ready(function(){
 			</fieldset>
 			{%if object.id%}	
 			<fieldset id='id_fielset_tabla' class='scheduler-border'>
-				<legend class='scheduler-border'><a href="#id_crear_nota" data-toggle='modal'>Nota Marginal</a></legend>
-				
+				<legend class='scheduler-border'><a href="#id_crear_nota" data-toggle='modal'>Nota Marginal</a>
+				</legend>
+
 				<table id='id_table_nota_bautismo' class='table table-bordered table-striped'>
 					<thead>
 						<tr class='alert alert-info'>
@@ -382,7 +387,7 @@ $(document).ready(function(){
 <div id="id_crear_nota" class="modal hide fade">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-			
+
 		</button>
 		<h3>Crear Nota Marginal</h3>
 	</div>

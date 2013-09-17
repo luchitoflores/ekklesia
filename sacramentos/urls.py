@@ -145,6 +145,7 @@ urlpatterns = patterns('',
 	#urls del api rest usuarios
 	url(r'^api/usuario/$', 'sacramentos.rest.buscar_usuarios', name='api_usuario_list'),
 	url(r'^api/padre/add/$', 'sacramentos.rest.padre_create_ajax', name='api_create_padre'),
+	url(r'^api/secretaria/add/$', 'sacramentos.rest.secretaria_create_ajax', name='api_create_secretaria'),
 	
 	#urls del api rest parroquias
 	(r'^api/', include(entry_resource.urls)),

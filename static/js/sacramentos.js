@@ -2,11 +2,9 @@ $(document).on('ready', inicio);
 document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
 
 function inicio(){
-	
-
-	
 	crear_padre($('#id_form_crear_padre'), '#id_padre','#id_crear_padre', 'm');
 	crear_padre($('#id_form_crear_madre'), '#id_madre','#id_crear_madre', 'f');
+	crear_secretaria('#id_form_crear_secretaria', '#id_persona','#id_crear_secretaria');
 	// crear_nota($('#id_form_crear_nota'), '#id_fecha','#id_descripcion', '#id_crear_nota');
 	autocomplete('#id_padre');
 	asignar_padre();
@@ -33,10 +31,9 @@ function inicio(){
 	controles_reportes();
 	controles_intenciones();
 	controles_provincias();
-	
-	
-		
 }
+
+
 function tables(){
 
 	console.log('entre al tables');
@@ -613,6 +610,26 @@ function crear_padre(identificador, idpadre, idmodal, sexo){
 				console.log(data.errores_perfil);
 			}else{
 				$(idpadre).html('<option value="">-- Seleccione --</option><option value="'+ data.id+'" selected>'+data.full_name+'</option>');
+				$(idmodal).modal('hide');
+			}
+
+		});
+	});
+}
+
+
+//  Esta función llama a un modal para crear una secretaria
+function crear_secretaria(identificador, idsecretaria, idmodal){
+	$(identificador).on('submit', function(e){
+		e.preventDefault();
+		var url = '/api/secretaria/add/';
+		var json = $(this).serialize();
+		$.post(url, json , function(data){
+			if(!data.respuesta){
+				console.log(data.errores_usuario);
+				console.log(data.errores_perfil);
+			}else{
+				$(idsecretaria).html('<option value="">-- Seleccione --</option><option value="'+ data.id+'" selected>'+data.full_name+'</option>');
 				$(idmodal).modal('hide');
 			}
 

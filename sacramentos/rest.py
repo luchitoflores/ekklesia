@@ -13,7 +13,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from tastypie.resources import ModelResource
 
 # Librerías del proyecto
-from .forms import PerfilUsuarioForm, UsuarioForm, PadreForm,NotaMarginalForm, UsuarioPadreForm
+from .forms import PerfilUsuarioForm, UsuarioForm, PadreForm,NotaMarginalForm, UsuarioPadreForm, SecretariaForm, UsuarioSecretariaForm
 from .models import (PerfilUsuario,NotaMarginal,Bautismo,Matrimonio,
 	Parroquia)
 
@@ -60,6 +60,36 @@ def padre_create_ajax(request):
 			perfil.user = usuario
 			if sexo:
 				perfil.sexo = sexo
+			perfil.save()
+			respuesta = True
+			ctx = {'respuesta': respuesta, 'id': perfil.id, 
+			'full_name': perfil.user.get_full_name()}
+		else:
+			errores_usuario = usuario_form.errors
+			errores_perfil =  perfil_form.errors
+			ctx = {'respuesta': False, 'errores_usuario':errores_usuario,
+			 'errores_perfil': errores_perfil}
+
+	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
+
+# Método para crear el padre o madre de un feligres - está funcionando
+def secretaria_create_ajax(request):
+	if request.method == 'POST':
+		usuario_form = UsuarioSecretariaForm(request.POST)
+		perfil_form = SecretariaForm(request.POST)
+		
+		if usuario_form.is_valid() and perfil_form.is_valid():
+			perfil = perfil_form.save(commit=False)
+			usuario = usuario_form.save(commit=False)
+			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
+			usuario.set_password(usuario.username)
+			feligres, created = Group.objects.get_or_create(name='Feligres')
+			secretaria, created = Group.objects.get_or_create(name='Secretaria')
+			usuario.save()
+			usuario.groups.add(feligres)
+			usuario.groups.add(secretaria)
+			perfil.user = usuario
 			perfil.save()
 			respuesta = True
 			ctx = {'respuesta': respuesta, 'id': perfil.id, 

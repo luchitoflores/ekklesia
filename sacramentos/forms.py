@@ -191,6 +191,63 @@ class PadreForm(ModelForm):
 			}
 
 
+
+class SecretariaForm(ModelForm):
+	def clean_fecha_nacimiento(self):
+		data = self.cleaned_data['fecha_nacimiento']
+		if data > date.today():
+			raise forms.ValidationError('La fecha de nacimiento no puede ser mayor a la fecha actual')
+		return data
+
+	def clean_dni(self):
+		cedula = self.cleaned_data['dni']
+		nacionalidad = self.cleaned_data['nacionalidad']
+		if nacionalidad == 'EC' and cedula:
+			if not cedula.isdigit():
+				raise forms.ValidationError('El número de cédula no debe contener letras')
+				return cedula
+			if len(cedula)!=10:
+				raise forms.ValidationError('El número de cédula debe ser de 10 dígitos')
+				return cedula
+			valores = [ int(cedula[x]) * (2 - x % 2) for x in range(9) ]
+			suma = sum(map(lambda x: x > 9 and x - 9 or x, valores))
+			if int(cedula[9]) != 10 - int(str(suma)[-1:]):
+				raise forms.ValidationError('El número de cédula no es válido')
+				return cedula
+		return cedula
+
+	SEXO_CHOICES = (
+		('', '--- Seleccione ---'),
+		('m', 'Masculino'),
+		('f', 'Femenino'),
+		)
+
+	ESTADO_CIVIL_CHOICES    = (
+		('', '--- Seleccione ---'),
+		('s','Soltero/a'),
+		('c','Casado/a'),
+		('d','Divorciado/a'),
+		('v','Viudo/a')
+		)
+	
+	sexo = forms.TypedChoiceField(label=u'Sexo *', help_text='Elija el sexo de la persona. Ej: Masculino', 
+		choices=SEXO_CHOICES, required=True, widget=forms.Select(attrs={'required':''}))
+	estado_civil = forms.TypedChoiceField(label=u'Estado Civil *', 
+		help_text='Elija el estado civil. Ej: Soltero/a', choices=ESTADO_CIVIL_CHOICES, 
+		required=True, widget=forms.Select(attrs={'required':''}))
+
+	class Meta():
+		model = PerfilUsuario
+		fields = ('nacionalidad', 'dni', 'fecha_nacimiento', 'lugar_nacimiento', 'sexo', 'estado_civil');
+		widgets = {
+			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
+				'dd/mm/yyyy', 'type':'date'}),
+			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
+
+
+			}
+
+
 class SacerdoteForm(ModelForm):
 	def clean_fecha_nacimiento(self):
 		data = self.cleaned_data['fecha_nacimiento']
@@ -911,10 +968,12 @@ class AsignarSecretariaForm(ModelForm):
 		cleaned_data = super(AsignarSecretariaForm, self).clean()
 		persona = cleaned_data.get("persona")
 		parroquia = cleaned_data.get("parroquia")
+		print persona
+
 		
-		if not persona.user.email:
-			msg = u"La persona elegida no tiene registrado un email, proceda a asignarle uno"
-			self._errors["persona"] = self.error_class([msg])
+		# if not persona.user.email:
+		# 	msg = u"La persona elegida no tiene registrado un email, proceda a asignarle uno"
+		# 	self._errors["persona"] = self.error_class([msg])
 
 		esta_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(asignacion__persona=persona, estado=True).exclude(asignacion__parroquia=parroquia)
 		if esta_activo_otra_parroquia:

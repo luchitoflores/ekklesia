@@ -320,6 +320,7 @@ class SacerdoteListView(ListView):
 # 	form_class = LibroForm
 # 	template_name = 'libro/libro_form.html'
 # 	success_url= '/libro/'
+@login_required(login_url='/login/')
 def libro_create_view(request):
 	if(request.method=='POST'):
 		form_libro=LibroForm(request.POST)
@@ -396,6 +397,7 @@ def libro_create_view(request):
 # 	template_name = 'libro/libro_form.html'
 # 	success_url = '/libro/'
 
+@login_required(login_url='/login/')
 def libro_update_view(request,pk):
 	libros=get_object_or_404(Libro,pk=pk)
 	
@@ -566,6 +568,7 @@ class LibroListJson(BaseDatatableView):
 # 	template_name='matrimonio/matrimonio_form.html'
 # 	success_url='/matrimonio/'
 
+@login_required(login_url='/login/')
 def matrimonio_create_view(request):
 	usuario=request.user
 	
@@ -669,6 +672,7 @@ def matrimonio_create_view(request):
 # 	template_name='matrimonio/matrimonio_form.html'
 # 	success_url='/matrimonio/'
 
+@login_required(login_url='/login/')
 def matrimonio_update_view(request,pk):
 	usuario=request.user
 	matrimonio=get_object_or_404(Matrimonio,pk=pk)
@@ -766,6 +770,7 @@ def matrimonio_update_view(request,pk):
 	return render(request, 'matrimonio/matrimonio_form.html', ctx)
 
 
+@login_required(login_url='/login/')
 def matrimonio_vigencia_view(request,pk):
 	usuario = request.user
 	matrimonio=Matrimonio.objects.get(pk=pk)	
@@ -797,6 +802,7 @@ def matrimonio_vigencia_view(request,pk):
 	return render(request,'matrimonio/matrimonio_list.html', ctx)
 
 
+@login_required(login_url='/login/')
 def matrimonio_ajax_view(request):
 	exito = False
 	matrimonio=Matrimonio.objects.all()
@@ -841,6 +847,7 @@ class MatrimonioListView(ListView):
 
 # VISTAS PARA ADMIN DE BAUTISMO
 
+@login_required(login_url='/login/')
 def bautismo_create_view(request):
 	usuario=request.user
 	if(request.method == 'POST' ):
@@ -904,8 +911,8 @@ def bautismo_create_view(request):
 	return render (request,'bautismo/bautismo_form.html',ctx)
 
 
-def mostrar():
 
+def mostrar():
 	return self.model.objects.filter()
 
 # class BautismoCreateView(CreateView):
@@ -915,7 +922,7 @@ def mostrar():
 # 	success_url='/bautismo/'
 
 
-
+@login_required(login_url='/login/')
 def bautismo_update_view(request,pk):
 	usuario=request.user
 	bautismo= get_object_or_404(Bautismo, pk=pk)
@@ -1010,7 +1017,7 @@ class BautismoListView(ListView):
 # 	template_name='eucaristia/eucaristia_form.html'
 # 	success_url='/eucaristia/'
 
-
+@login_required(login_url='/login/')
 def eucaristia_create_view(request):
 	usuario=request.user
 	if request.method == 'POST':
@@ -1070,6 +1077,7 @@ def eucaristia_create_view(request):
 # 	template_name='eucaristia/eucaristia_form.html'
 # 	success_url='/eucaristia/'
 
+@login_required(login_url='/login/')
 def eucaristia_update_view(request,pk):
 	usuario=request.user
 	eucaristia=get_object_or_404(Eucaristia,pk=pk)
@@ -1150,6 +1158,7 @@ class EucaristiaListView(ListView):
 # 	template_name='confirmacion/confirmacion_form.html'
 # 	success_url='/confirmacion/'
 
+@login_required(login_url='/login/')
 def confirmacion_create_view(request):
 	usuario=request.user
 	confirmado=PerfilUsuario.objects.feligres()
@@ -1211,6 +1220,7 @@ def confirmacion_create_view(request):
 # 	template_name='confirmacion/confirmacion_form.html'
 # 	success_url='/confirmacion/'
 
+@login_required(login_url='/login/')
 def confirmacion_update_view(request,pk):
 	usuario=request.user
 	confirmacion=get_object_or_404(Confirmacion,pk=pk)
@@ -1423,7 +1433,7 @@ class IntencionUpdateView(UpdateView):
 	def dispatch(self, *args, **kwargs):
 		return super(IntencionUpdateView, self).dispatch(*args, **kwargs)
 
-
+@login_required(login_url='/login/')
 def intencion_list_view(request):
 	template_name= 'intencion/intencion_list.html'
 	parroquia = AsignacionParroquia.objects.get(persona__user=request.user).parroquia
@@ -1494,6 +1504,7 @@ def asignar_parroquia_create(request):
 		ctx = {'form': form, 'form_periodo': form_periodo}
 	return render(request, template_name, ctx)
 
+@login_required(login_url='/login/')
 def asignar_parroco_a_parroquia(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
 	success_url = '/parrocos/parroquia/%s/' % (pk)
@@ -1588,6 +1599,8 @@ def asignar_parroquia_update(request, pk):
 		ctx = {'form': form, 'form_periodo': form_periodo, 'object': asignacion.parroquia}
 	return render(request, template_name, ctx)
 
+
+@login_required(login_url='/login/')
 def nuevo_periodo_asignacion(request, pk):
 	template_name = 'parroquia/periodo_asignacion_form.html'
 	asignacion = AsignacionParroquia.objects.get(id=pk)
@@ -1629,6 +1642,8 @@ def nuevo_periodo_asignacion(request, pk):
 		ctx = {'form': form, 'object':asignacion}
 		return render(request, template_name, ctx)
 
+
+@login_required(login_url='/login/')
 def parroco_periodos_asignacion_update(request, pk):
 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = pk)
 	template_name = 'parroquia/periodo_asignacion_form.html'
@@ -1689,6 +1704,7 @@ def parroco_periodos_asignacion_list(request, pk):
 	ctx = {'object_list': periodos, 'asignacion': asignacion}
 	return render(request, template_name, ctx)
 
+@login_required(login_url='/login/')
 def asignar_parroco_list(request, pk):
 	template_name = 'parroquia/asignar_parroquia_list.html'
 	object_list = AsignacionParroquia.objects.filter(parroquia__id=pk).exclude(periodoasignacionparroquia=None)
@@ -1869,6 +1885,7 @@ def asignar_secretaria_update(request, pk):
 # 		return super(AsignarSecretariaList, self).dispatch(*args, **kwargs)
 
 
+@login_required(login_url='/login/')
 def asignar_secretaria_list(request):
 	template_name = 'parroquia/asignar_secretaria_list.html'
 	try:
@@ -1902,7 +1919,7 @@ class LogListView(ListView):
 
 # TODOS LOS REPORTES
 
-
+@login_required(login_url='/login/')
 def generar_pdf(html):
     # Función para generar el archivo PDF y devolverlo mediante HttpResponse
     result = StringIO.StringIO()
@@ -1911,13 +1928,14 @@ def generar_pdf(html):
         return HttpResponse(result.getvalue(), mimetype='application/pdf')
     return HttpResponse('Error al generar el PDF: %s' % cgi.escape(html))
 
+@login_required(login_url='/login/')
 def libro_pdf(request, pk):
 	libro=get_object_or_404(Libro, pk=pk)
 	html = render_to_string('libro/libro.html', {'pagesize':'A4', 'libro':libro}, 
 		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
-
+@login_required(login_url='/login/')
 def matrimonio_certificado(request, pk):
 	matrimonio=get_object_or_404(Matrimonio, pk=pk)
 	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
@@ -1929,7 +1947,7 @@ def matrimonio_certificado(request, pk):
 		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
-
+@login_required(login_url='/login/')
 def bautismo_certificado(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
 	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
@@ -1940,6 +1958,8 @@ def bautismo_certificado(request, pk):
 		'cura':cura,'notas':notas,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
+
+@login_required(login_url='/login/')
 def bautismo_acta(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
 	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
@@ -1950,6 +1970,8 @@ def bautismo_acta(request, pk):
 		'cura':cura,'notas':notas,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
+
+@login_required(login_url='/login/')
 def confirmacion_reporte(request, pk):
 	confirmacion=get_object_or_404(Confirmacion, pk=pk)
 	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
@@ -1960,7 +1982,7 @@ def confirmacion_reporte(request, pk):
 		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
-
+@login_required(login_url='/login/')
 def eucaristia_reporte(request, pk):
 	eucaristia=get_object_or_404(Eucaristia, pk=pk)
 	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
@@ -1971,6 +1993,7 @@ def eucaristia_reporte(request, pk):
 		'cura':cura,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
+@login_required(login_url='/login/')
 def usuario_reporte_honorabilidad(request,pk):
 	perfil=get_object_or_404(PerfilUsuario,pk=pk)
 	# parroquia=AsignacionParroquia.objects.get(persona__user=request.user).parroquia
@@ -1981,6 +2004,8 @@ def usuario_reporte_honorabilidad(request,pk):
 		'cura':cura,'asignacion':asignacion},context_instance=RequestContext(request))
 	return generar_pdf(html)
 
+
+@login_required(login_url='/login/')
 def reporte_anual_sacramentos(request):
 	anio_actual=request.GET.get('anio')
 	# print("El año ingresado es: %d"%anio_actual)
@@ -2049,7 +2074,9 @@ def reporte_anual_sacramentos(request):
 		
 	ctx={'form':form}
 	return render(request, template_name, ctx)
+
 	
+@login_required(login_url='/login/')
 def reporte_intenciones(request):
 	tipo=request.GET.get('tipo')
 	fecha=request.GET.get('fecha')
@@ -2149,6 +2176,7 @@ def reporte_intenciones(request):
 	return render(request, template_name, ctx)
 
 
+@login_required(login_url='/login/')
 def reporte_permisos(request):
 	feligres=request.GET.get('feligres')
 	tipo=request.GET.get('tipo')
@@ -2239,7 +2267,7 @@ def reporte_permisos(request):
 	return render(request, template_name, ctx)
 
 
-
+@login_required(login_url='/login/')
 def reporte_parroquias_sacerdotes(request,pk):
 	persona=User.objects.get(pk=request.user.pk)
 	parroquia=get_object_or_404(Parroquia, pk=pk)
@@ -2255,7 +2283,7 @@ def reporte_parroquias_sacerdotes(request,pk):
 		context_instance=RequestContext(request))
 	return generar_pdf(html)
 
-
+@login_required(login_url='/login/')
 def reporte_sacerdotes_parroquias(request,pk):
 	persona=User.objects.get(pk=request.user.pk)
 	cura=get_object_or_404(PerfilUsuario, pk=pk)
@@ -2271,6 +2299,7 @@ def reporte_sacerdotes_parroquias(request,pk):
 
 # exportar a csv los logs
 
+@login_required(login_url='/login/')
 def exportar_csv_logs(request):
 
     response = HttpResponse(mimetype='text/csv')
@@ -2283,10 +2312,12 @@ def exportar_csv_logs(request):
     return response
 
 # para poder exportar a csv con utf-8
+@login_required(login_url='/login/')
 def encode(text):
 	return text.encode('utf-8')
 
 # solo de prueba o modelo no funciona en nada
+@login_required(login_url='/login/')
 def report(request):
 	tipo=request.GET.get('tipo_sacramento')
 	anio=request.GET.get('anio')

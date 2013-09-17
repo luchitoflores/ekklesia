@@ -913,7 +913,7 @@ class AsignarSecretariaForm(ModelForm):
 		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
 		self.fields['persona']=forms.ModelChoiceField(label = 'Secretario/a', queryset=persona, empty_label='-- Seleccione --')
 		try:
-			parroquia = AsignacionParroquia.objects.get(persona__user=user).parroquia
+			parroquia = PeriodoAsignacionParroquia.objects.get(asignacion__persona__user=user, estado=True).asignacion.parroquia
 		except ObjectDoesNotExist:
 			raise PermissionDenied
 

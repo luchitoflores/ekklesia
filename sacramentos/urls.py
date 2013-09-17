@@ -16,10 +16,10 @@ from .views import (
 	eucaristia_create_view,eucaristia_update_view,EucaristiaListView,eucaristia_reporte,
 	confirmacion_create_view,confirmacion_update_view,ConfirmacionListView,confirmacion_reporte,
 	parroquia_create_view, parroquia_update_view, ParroquiaListView,
-	AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
+	# AsignarParroquiaCreate, AsignarParroquiaUpdate, AsignarParroquiaList,
 	asignar_parroquia_create, asignar_parroco_a_parroquia, asignar_parroquia_update, asignar_parroco_list, parroco_periodos_asignacion_list, parroco_periodos_asignacion_update, nuevo_periodo_asignacion,
 	asignar_secretaria_create, asignar_secretaria_update, asignar_secretaria_list,
-	intencion_create_view, IntencionListView, IntencionUpdateView,
+	intencion_create_view, intencion_list_view, IntencionUpdateView,
 	LogListView,exportar_csv_logs,
 	reporte_anual_sacramentos,reporte_intenciones,reporte_permisos,reporte_parroquias_sacerdotes,
 	reporte_sacerdotes_parroquias,
@@ -137,7 +137,7 @@ urlpatterns = patterns('',
 	
 
 	#urls para intenciones de misa
-	url(r'^intencion/$', IntencionListView.as_view(), name='intencion_list'),
+	url(r'^intencion/$', intencion_list_view, name='intencion_list'),
 	url(r'^intencion/add/$', intencion_create_view, name='intencion_create'),
 	url(r'^intencion/(?P<pk>\d+)/$', IntencionUpdateView.as_view(), name='intencion_update'),
 

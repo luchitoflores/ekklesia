@@ -1397,13 +1397,21 @@ def intencion_create_view(request):
 		ctx = {'form': form_intencion}
 		return render(request, template_name, ctx)
 
-class IntencionListView(ListView):
-	model= Intenciones
-	template_name = 'intencion/intencion_list.html'
+# class IntencionListView(ListView):
+# 	model= Intenciones
+# 	template_name = 'intencion/intencion_list.html'
+# 	queryset =  
 
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, *args, **kwargs):
-		return super(IntencionListView, self).dispatch(*args, **kwargs)
+# 	@method_decorator(login_required(login_url='/login/'))
+# 	def dispatch(self, *args, **kwargs):
+# 		return super(IntencionListView, self).dispatch(*args, **kwargs)
+
+def intencion_list_view(request):
+	template_name= 'intencion/intencion_list.html'
+	parroquia = AsignacionParroquia.objects.get(persona__user=request.user).parroquia
+	object_list = Intenciones.objects.filter(parroquia=parroquia)
+	ctx = {'object_list': object_list} 
+	return render(request, template_name, ctx)
 
 class IntencionUpdateView(UpdateView):
 	model= Intenciones
@@ -1682,61 +1690,61 @@ def asignar_parroco_list(request, pk):
 	
 
 
-class AsignarParroquiaCreate(CreateView):
-	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'
+# class AsignarParroquiaCreate(CreateView):
+# 	model = AsignacionParroquia
+# 	form_class = AsignarParroquiaForm
+# 	template_name = 'parroquia/asignar_parroquia_form.html'
+# 	success_url = '/asignar/parroquia/'
 	
 
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, *args, **kwargs):
-		return super(AsignarParroquiaCreate, self).dispatch(*args, **kwargs)
+# 	@method_decorator(login_required(login_url='/login/'))
+# 	def dispatch(self, *args, **kwargs):
+# 		return super(AsignarParroquiaCreate, self).dispatch(*args, **kwargs)
 
 
-	def form_valid(self, form):
-		persona_id = self.request.POST['persona']
-		estado = self.request.POST.get('estado')
-		if estado:
-			user = PerfilUsuario.objects.get(pk=persona_id).user
-			user.is_staff = True 
-			user.save()
+# 	def form_valid(self, form):
+# 		persona_id = self.request.POST['persona']
+# 		estado = self.request.POST.get('estado')
+# 		if estado:
+# 			user = PerfilUsuario.objects.get(pk=persona_id).user
+# 			user.is_staff = True 
+# 			user.save()
 		
-		return super(AsignarParroquiaCreate, self).form_valid(form)
+# 		return super(AsignarParroquiaCreate, self).form_valid(form)
 
 
-class AsignarParroquiaUpdate(UpdateView):
-	model = AsignacionParroquia
-	form_class = AsignarParroquiaForm
-	template_name = 'parroquia/asignar_parroquia_form.html'
-	success_url = '/asignar/parroquia/'	
+# class AsignarParroquiaUpdate(UpdateView):
+# 	model = AsignacionParroquia
+# 	form_class = AsignarParroquiaForm
+# 	template_name = 'parroquia/asignar_parroquia_form.html'
+# 	success_url = '/asignar/parroquia/'	
 
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, *args, **kwargs):
-		return super(AsignarParroquiaUpdate, self).dispatch(*args, **kwargs)
+# 	@method_decorator(login_required(login_url='/login/'))
+# 	def dispatch(self, *args, **kwargs):
+# 		return super(AsignarParroquiaUpdate, self).dispatch(*args, **kwargs)
 
-	def form_valid(self, form):
-		persona_id = self.request.POST['persona']
-		estado = self.request.POST.get('estado')
-		if estado:
-			user = PerfilUsuario.objects.get(pk=persona_id).user
-			user.is_staff = True 
-			user.save()
-		else:
-			user = PerfilUsuario.objects.get(pk=persona_id).user
-			user.is_staff = False
-			user.save()
+# 	def form_valid(self, form):
+# 		persona_id = self.request.POST['persona']
+# 		estado = self.request.POST.get('estado')
+# 		if estado:
+# 			user = PerfilUsuario.objects.get(pk=persona_id).user
+# 			user.is_staff = True 
+# 			user.save()
+# 		else:
+# 			user = PerfilUsuario.objects.get(pk=persona_id).user
+# 			user.is_staff = False
+# 			user.save()
 		
-		return super(AsignarParroquiaUpdate, self).form_valid(form)
+# 		return super(AsignarParroquiaUpdate, self).form_valid(form)
 
 
-class AsignarParroquiaList(ListView):
-	model = AsignacionParroquia
-	template_name = 'parroquia/asignar_parroquia_list.html'
+# class AsignarParroquiaList(ListView):
+# 	model = AsignacionParroquia
+# 	template_name = 'parroquia/asignar_parroquia_list.html'
 
-	@method_decorator(login_required(login_url='/login/'))
-	def dispatch(self, *args, **kwargs):
-		return super(AsignarParroquiaList, self).dispatch(*args, **kwargs)
+# 	@method_decorator(login_required(login_url='/login/'))
+# 	def dispatch(self, *args, **kwargs):
+# 		return super(AsignarParroquiaList, self).dispatch(*args, **kwargs)
 
 
 @login_required
@@ -1757,7 +1765,7 @@ def asignar_secretaria_create(request):
 				form.save()
 				LogEntry.objects.log_action(
             	user_id=request.user.id,
-            	content_type_id=ContentType.objects.get_for_model(asignacion).pk,
+            	# content_type_id=ContentType.objects.get_for_model(asignacion).pk,
             	object_id=asignacion.id,
             	object_repr=unicode(asignacion),
             	action_flag=ADDITION,

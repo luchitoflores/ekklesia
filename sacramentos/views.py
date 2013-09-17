@@ -497,13 +497,13 @@ class LibroListView(ListView):
 	model = Libro
 	template_name = 'libro/libro_list.html'
 
-	# def get_queryset(self):
-	# 	try:
-	# 		asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
-	# 		queryset = Libro.objects.filter(parroquia=asignacion.parroquia)
-	# 		return queryset
-	# 	except: 
-	# 		return [];
+	def get_queryset(self):
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=self.request.user)
+			queryset = Libro.objects.filter(parroquia=asignacion.parroquia)
+			return queryset
+		except: 
+			return [];
 	
 class LibroListJson(BaseDatatableView):
 	order_columns = ['numero_libro', 'tipo_libro', 'fecha_apertura']
@@ -1762,12 +1762,12 @@ def asignar_secretaria_create(request):
 				ctx = {'form': form}
 				return render(request, template_name, ctx)
 			except ObjectDoesNotExist:
-				form.save()
+				asig=form.save()
 				LogEntry.objects.log_action(
             	user_id=request.user.id,
-            	# content_type_id=ContentType.objects.get_for_model(asignacion).pk,
-            	object_id=asignacion.id,
-            	object_repr=unicode(asignacion),
+            	content_type_id=ContentType.objects.get_for_model(asig).pk,
+            	object_id=asig.id,
+            	object_repr=unicode(asig),
             	action_flag=ADDITION,
             	change_message="Asigno parroquia y secretaria")
 				persona_id = request.POST['persona']

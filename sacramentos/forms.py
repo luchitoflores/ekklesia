@@ -911,10 +911,12 @@ class AsignarSecretariaForm(ModelForm):
 		cleaned_data = super(AsignarSecretariaForm, self).clean()
 		persona = cleaned_data.get("persona")
 		parroquia = cleaned_data.get("parroquia")
+		print persona
+
 		
-		if not persona.user.email:
-			msg = u"La persona elegida no tiene registrado un email, proceda a asignarle uno"
-			self._errors["persona"] = self.error_class([msg])
+		# if not persona.user.email:
+		# 	msg = u"La persona elegida no tiene registrado un email, proceda a asignarle uno"
+		# 	self._errors["persona"] = self.error_class([msg])
 
 		esta_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(asignacion__persona=persona, estado=True).exclude(asignacion__parroquia=parroquia)
 		if esta_activo_otra_parroquia:

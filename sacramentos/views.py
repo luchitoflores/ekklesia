@@ -1290,6 +1290,11 @@ class ConfirmacionListView(ListView):
 #Vistas para crear una parroquia
 @login_required(login_url='/login/')
 def parroquia_create_view(request):
+	"""
+    Permite crear una parroquia con su respectiva direccion de domicilio,
+    provincia, canton y parroquia civil
+
+    """
 	template_name = 'parroquia/parroquia_form.html'
 	success_url = '/parroquia/'
 	if request.method== 'POST':

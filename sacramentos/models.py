@@ -27,7 +27,13 @@ class TimeStampedModel(models.Model):
 		abstract = True
 
 class Libro(TimeStampedModel):
-	TIPO_LIBRO_CHOICES = (
+    
+    """
+    Stores a single blog entry, related to :model:`blog.Blog` and
+    :model:`auth.User`.
+
+    """
+    TIPO_LIBRO_CHOICES = (
             ('Bautismo','Bautismo'),
             ('Eucaristia','Eucaristia'), 
             ('Confirmacion','Confirmacion'),
@@ -35,21 +41,21 @@ class Libro(TimeStampedModel):
                      
     	)
 
-	ESTADO_CHOICES=(
+    ESTADO_CHOICES=(
 		('Abierto','Abierto'),
 		('Cerrado','Cerrado'),
 		)
-	numero_libro=models.PositiveIntegerField()
-	tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES)
-	fecha_apertura=models.DateField(help_text='Ingrese una fecha Ej:22/07/2010')
-	fecha_cierre=models.DateField(null=True,blank=True,help_text='Ingrese una fecha Ej:22/07/2010')
-	estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
-	numero_maximo_actas=models.PositiveIntegerField()
-	parroquia = models.ForeignKey('Parroquia', related_name='parroquia', help_text='Seleccione una parroquia')
+    numero_libro=models.PositiveIntegerField()
+    tipo_libro=models.CharField(max_length=200, choices=TIPO_LIBRO_CHOICES)
+    fecha_apertura=models.DateField(help_text='Ingrese una fecha Ej:22/07/2010')
+    fecha_cierre=models.DateField(null=True,blank=True,help_text='Ingrese una fecha Ej:22/07/2010')
+    estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
+    numero_maximo_actas=models.PositiveIntegerField()
+    parroquia = models.ForeignKey('Parroquia', related_name='parroquia', help_text='Seleccione una parroquia')
 
 
-	def __unicode__(self):
-		return '%d %s' %(self.numero_libro,self.tipo_libro)
+    def __unicode__(self):
+        return '%d %s' %(self.numero_libro,self.tipo_libro)
 
 class PerfilUsuario(TimeStampedModel):
 	# p.f00_size

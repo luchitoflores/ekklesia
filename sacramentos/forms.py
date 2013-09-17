@@ -56,7 +56,22 @@ class UsuarioPadreForm(ModelForm):
 
 	class Meta():
 		model = User
-		fields= ('first_name', 'last_name')
+		fields= ('first_name', 'last_name', 'email')
+
+class UsuarioSecretariaForm(ModelForm):
+	first_name = forms.CharField(required=True, label='Nombres *',
+	 help_text='Ingrese los nombres completos. Ej: Juan José',
+		widget=forms.TextInput(attrs={'required': ''}))
+	last_name = forms.CharField(required=True, label='Apellidos *', 
+		help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+		widget=forms.TextInput(attrs={'required': ''}))
+	email = forms.EmailField(required=True, label='Email *', 
+		help_text='Ingrese su dirección de correo electrónico',
+		widget=forms.TextInput(attrs={'required': ''}))
+
+	class Meta():
+		model = User
+		fields= ('first_name', 'last_name', 'email')
 
 class UsuarioSacerdoteForm(ModelForm):
 	first_name = forms.CharField(required=True, label='Nombres *', 

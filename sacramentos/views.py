@@ -1406,12 +1406,6 @@ def intencion_create_view(request):
 # 	def dispatch(self, *args, **kwargs):
 # 		return super(IntencionListView, self).dispatch(*args, **kwargs)
 
-def intencion_list_view(request):
-	template_name= 'intencion/intencion_list.html'
-	parroquia = AsignacionParroquia.objects.get(persona__user=request.user).parroquia
-	object_list = Intenciones.objects.filter(parroquia=parroquia)
-	ctx = {'object_list': object_list} 
-	return render(request, template_name, ctx)
 
 class IntencionUpdateView(UpdateView):
 	model= Intenciones
@@ -1423,6 +1417,15 @@ class IntencionUpdateView(UpdateView):
 	@method_decorator(login_required(login_url='/login/'))
 	def dispatch(self, *args, **kwargs):
 		return super(IntencionUpdateView, self).dispatch(*args, **kwargs)
+
+
+def intencion_list_view(request):
+	template_name= 'intencion/intencion_list.html'
+	parroquia = AsignacionParroquia.objects.get(persona__user=request.user).parroquia
+	object_list = Intenciones.objects.filter(parroquia=parroquia)
+	ctx = {'object_list': object_list} 
+	return render(request, template_name, ctx)
+	
 
 @login_required(login_url='/login/')
 def asignar_parroquia_create(request):

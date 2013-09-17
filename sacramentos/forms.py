@@ -288,7 +288,7 @@ class LibroForm(ModelForm):
 	class Meta():
 		model=Libro
 		fields = ('numero_libro', 'tipo_libro', 'fecha_apertura', 'fecha_cierre', 
-			'estado', 'numero_maximo_actas')
+			'estado')
 		widgets = {
 			'fecha_apertura': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),

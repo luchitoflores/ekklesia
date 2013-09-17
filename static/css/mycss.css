@@ -62,6 +62,9 @@ div.errors ul {
 	color: red;
 	list-style-type: none !important;
 }
+div.controls ul {
+	list-style-type: none !important;
+}
 
 #id_container{
 	background: white;

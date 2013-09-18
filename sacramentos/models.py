@@ -50,7 +50,7 @@ class Libro(TimeStampedModel):
     fecha_apertura=models.DateField(help_text='Ingrese una fecha Ej:22/07/2010')
     fecha_cierre=models.DateField(null=True,blank=True,help_text='Ingrese una fecha Ej:22/07/2010')
     estado=models.CharField(max_length=20,choices=ESTADO_CHOICES)
-    numero_maximo_actas=models.PositiveIntegerField()
+    
     parroquia = models.ForeignKey('Parroquia', related_name='parroquia', help_text='Seleccione una parroquia')
 
 

@@ -8,7 +8,8 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth import login,logout,authenticate
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.views.generic import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -26,7 +27,12 @@ class ProvinciaList(ListView):
 	template_name         = 'provincia/provincia_list.html'
 	# context_object_name = 'list_parroquia'
 	# paginate_by = 5
-	
+
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.change_provincia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ProvinciaList, self).dispatch(*args, **kwargs)
 
 class ProvinciaCreate(CreateView):
 	model               = Provincia
@@ -42,6 +48,13 @@ class ProvinciaCreate(CreateView):
 		messages.add_message(self.request, messages.SUCCESS, 'Guardado exitosamente')
 		return super(ProvinciaCreate, self).form_valid(form)
 	
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.add_provincia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ProvinciaCreate, self).dispatch(*args, **kwargs)
+
+
 class ProvinciaUpdate(UpdateView):
 	model               = Provincia 
 	template_name       = 'provincia/provincia_form.html'
@@ -57,6 +70,13 @@ class ProvinciaUpdate(UpdateView):
 		messages.add_message(self.request, messages.ERROR, 'Datos incorrectos')
 		return super(ProvinciaUpdate, self).form_invalid(form)
 
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.change_provincia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ProvinciaUpdate, self).dispatch(*args, **kwargs)
+
+
 
 class ProvinciaDelete(DeleteView):
 	
@@ -68,7 +88,11 @@ class ProvinciaDelete(DeleteView):
 		messages.add_message(self.request, messages.ERROR, 'Eliminado Correctamente')
 		return super(ProvinciaDelete, self).delete(request, *args, **kwargs)
 
-
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.delete_provincia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ProvinciaDelete, self).dispatch(*args, **kwargs)
 
 
 class CantonList(ListView):
@@ -76,6 +100,13 @@ class CantonList(ListView):
 	template_name         = 'canton/canton_list.html'
 	# context_object_name = 'list_parroquia'
 	# paginate_by = 5
+
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.change_canton', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(CantonList, self).dispatch(*args, **kwargs)
+
 
 class CantonCreate(CreateView):
 	model               = Canton
@@ -91,6 +122,13 @@ class CantonCreate(CreateView):
 		messages.add_message(self.request, messages.SUCCESS, 'Guardado exitosamente')
 		return super(CantonCreate, self).form_valid(form)
 	
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.add_canton', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(CantonCreate, self).dispatch(*args, **kwargs)
+
+
 class CantonUpdate(UpdateView):
 	model               = Canton 
 	template_name       = 'canton/canton_form.html'
@@ -106,6 +144,13 @@ class CantonUpdate(UpdateView):
 		messages.add_message(self.request, messages.ERROR, 'Datos incorrectos')
 		return super(CantonUpdate, self).form_invalid(form)
 
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.change_canton', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(CantonUpdate, self).dispatch(*args, **kwargs)
+
+
 
 class CantonDelete(DeleteView):
 	
@@ -117,6 +162,11 @@ class CantonDelete(DeleteView):
 		messages.add_message(self.request, messages.ERROR, 'Eliminado Correctamente')
 		return super(CantonDelete, self).delete(request, *args, **kwargs)
 
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.delete_canton', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(CantonDelete, self).dispatch(*args, **kwargs)
 
 
 class ParroquiaList(ListView):
@@ -124,6 +174,13 @@ class ParroquiaList(ListView):
 	template_name         = 'parroquiacivil/parroquia_list.html'
 	# context_object_name = 'list_parroquia'
 	# paginate_by = 5
+
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.change_parroquia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ParroquiaList, self).dispatch(*args, **kwargs)
+
 
 class ParroquiaCreate(CreateView):
 	model               = Parroquia
@@ -139,6 +196,13 @@ class ParroquiaCreate(CreateView):
 		messages.add_message(self.request, messages.SUCCESS, 'Guardado exitosamente')
 		return super(ParroquiaCreate, self).form_valid(form)
 	
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.add_parroquia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ParroquiaCreate, self).dispatch(*args, **kwargs)
+
+
 class ParroquiaUpdate(UpdateView):
 	model               = Parroquia 
 	template_name       = 'parroquiacivil/parroquia_form.html'
@@ -154,6 +218,12 @@ class ParroquiaUpdate(UpdateView):
 		messages.add_message(self.request, messages.ERROR, 'Datos incorrectos')
 		return super(ParroquiaUpdate, self).form_invalid(form)
 
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.change_parroquia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ParroquiaUpdate, self).dispatch(*args, **kwargs)
+
 
 class ParroquiaDelete(DeleteView):
 	
@@ -165,3 +235,8 @@ class ParroquiaDelete(DeleteView):
 		messages.add_message(self.request, messages.ERROR, 'Eliminado Correctamente')
 		return super(ParroquiaDelete, self).delete(request, *args, **kwargs)
 
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('ciudades.delete_parroquia', login_url='/login/', 
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(ParroquiaDelete, self).dispatch(*args, **kwargs)

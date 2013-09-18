@@ -894,10 +894,6 @@ class NotaMarginalForm(ModelForm):
 			raise forms.ValidationError('La fecha no puede ser mayor o menor a la fecha actual')
 		return data
 
-	# fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
-	# 	required=True,label='Fecha *',
-	# 	widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-	# 		'type':'date'}))
 	descripcion=forms.CharField(required=True,label='Descripcion *',
 		widget=forms.Textarea(attrs={'required':''}),
 		help_text='Ingrese una descripcion ej: di copia para matrimonio')

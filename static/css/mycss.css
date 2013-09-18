@@ -18,7 +18,7 @@ h2{
 }
 .errors {
 	font-size: 9px;
-	color: #808080;
+	color: red;
 }
 .error{
 	font-size: 9px;
@@ -76,7 +76,7 @@ div.controls ul {
 
 #id_footer 
 {
-	background: rgb(22, 25, 225);
+	background: rgb(0, 68, 204);
 	color: rgb(225,225,225);
 	font-size: 0.5em;
 	height: 100px;

@@ -1,5 +1,5 @@
 $(document).on('ready', inicio);
-document.write('<script src="/static/js/acta.js" type="text/javascript"></script>');
+document.write('<script src="/static/js/tablas.js" type="text/javascript"></script>');
 
 function inicio(){
 	crear_padre($('#id_form_crear_padre'), '#id_padre','#id_crear_padre', 'm');
@@ -227,12 +227,11 @@ function crear_nota_marginal(id_form,id_modal,url_rest){
 				'<img src="/static/img/error.png" alt=""> Uno o más datos son invalidos </div>';
 				$('#id_mensaje_nota').html(mensaje);
 				$.each(data.errores_nota, function(index, element){
-					$("#id_"+index).addClass('invalid');
-					console.log("#id_"+index);
-					console.log("#id_"+element);
-					// $("#id_errors_"+index).remove();
+					// $("#id_"+index).addClass('invalid');
+					// console.log("#id_"+index);
+					// console.log("#id_"+element);
 					var mensajes_error = '<span>' + element+ '</span>';
-					console.log("Hay errores en nota: " + mensajes_error);
+					// console.log("Hay errores en nota: " + mensajes_error);
 					$("#id_errors_"+index).append(mensajes_error);
 
 				});

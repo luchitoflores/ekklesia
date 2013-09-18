@@ -51,6 +51,7 @@ from ciudades.models import Canton, Provincia, Parroquia as ParroquiaCivil
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_perfiluser', login_url='/login/', raise_exception=permission_required)
 def usuarioCreateView(request):
 	if request.method == 'POST':
 		form_usuario = UsuarioForm(request.POST)
@@ -112,6 +113,7 @@ def usuarioCreateView(request):
 		return render (request, 'usuario/usuario_form.html', ctx)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_perfiluser', login_url='/login/', raise_exception=permission_required)
 def edit_usuario_view(request,pk):
 	perfil= get_object_or_404(PerfilUsuario, pk=pk)
 	user= perfil.user	
@@ -188,38 +190,38 @@ class UsuarioListView(ListView):
 		return super(UsuarioListView, self).dispatch(*args, **kwargs)
 
 		
-@login_required
-def padre_create_view(request):
-	if request.is_ajax():
-		if request.method == 'POST':
-			usuario_form = UsuarioForm(request.POST)
-			perfil_padre_form = PadreForm(request.POST)
-			if usuario_form.is_valid() and perfil_padre_form.is_valid():
-				pass
-	else: 
-		usuario_form = UsuarioForm()
-		perfil_padre_form = PadreForm()
+# @login_required
+# def padre_create_view(request):
+# 	if request.is_ajax():
+# 		if request.method == 'POST':
+# 			usuario_form = UsuarioForm(request.POST)
+# 			perfil_padre_form = PadreForm(request.POST)
+# 			if usuario_form.is_valid() and perfil_padre_form.is_valid():
+# 				pass
+# 	else: 
+# 		usuario_form = UsuarioForm()
+# 		perfil_padre_form = PadreForm()
 
-	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_padre_form}
-	return render(request, 'usuario/padre_form.html', ctx) 
+# 	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_padre_form}
+# 	return render(request, 'usuario/padre_form.html', ctx) 
 
-@login_required
-def feligres_create_view(request):
-	if request.method == 'POST':
-		usuario_form = UsuarioPadreForm(request.POST)
-		perfil_form = PerfilUsuarioForm(request.POST)
-		if usuario_form.is_valid() and perfil_form.is_valid():
-			pass
-	else: 
-		usuario_form = UsuarioForm()
-		perfil_form = PerfilUsuarioForm()
+# @login_required
+# def feligres_create_view(request):
+# 	if request.method == 'POST':
+# 		usuario_form = UsuarioPadreForm(request.POST)
+# 		perfil_form = PerfilUsuarioForm(request.POST)
+# 		if usuario_form.is_valid() and perfil_form.is_valid():
+# 			pass
+# 	else: 
+# 		usuario_form = UsuarioForm()
+# 		perfil_form = PerfilUsuarioForm()
 
-	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
-	return render(request, 'usuario/feligres.html', ctx) 
+# 	ctx = {'usuario_form': usuario_form, 'perfil_form': perfil_form}
+# 	return render(request, 'usuario/feligres.html', ctx) 
 
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.can_change', login_url='/login/')
+@permission_required('sacramentos.add_perfiluser', login_url='/login/', raise_exception=permission_required)
 def sacerdote_create_view(request):
 	template_name = 'usuario/sacerdote_form.html' 
 	success_url = '/sacerdote/'
@@ -261,6 +263,7 @@ def sacerdote_create_view(request):
 		return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_perfiluser', login_url='/login/', raise_exception=permission_required)
 def sacerdote_update_view(request, pk):
 	sacerdote = get_object_or_404(PerfilUsuario, pk=pk)
 	if sacerdote.profesion != 'Sacerdote':
@@ -321,6 +324,7 @@ class SacerdoteListView(ListView):
 # 	template_name = 'libro/libro_form.html'
 # 	success_url= '/libro/'
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_libro', login_url='/login/', raise_exception=permission_required)
 def libro_create_view(request):
 	if(request.method=='POST'):
 		form_libro=LibroForm(request.POST)
@@ -398,6 +402,7 @@ def libro_create_view(request):
 # 	success_url = '/libro/'
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_libro', login_url='/login/', raise_exception=permission_required)
 def libro_update_view(request,pk):
 	libros=get_object_or_404(Libro,pk=pk)
 	
@@ -569,6 +574,8 @@ class LibroListJson(BaseDatatableView):
 # 	success_url='/matrimonio/'
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_matrimonio', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.add_sacramento', login_url='/login/', raise_exception=permission_required)
 def matrimonio_create_view(request):
 	usuario=request.user
 	
@@ -673,6 +680,8 @@ def matrimonio_create_view(request):
 # 	success_url='/matrimonio/'
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_matrimonio', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.change_sacramento', login_url='/login/', raise_exception=permission_required)
 def matrimonio_update_view(request,pk):
 	usuario=request.user
 	matrimonio=get_object_or_404(Matrimonio,pk=pk)
@@ -771,6 +780,8 @@ def matrimonio_update_view(request,pk):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_matrimonio', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.add_sacramento', login_url='/login/', raise_exception=permission_required)
 def matrimonio_vigencia_view(request,pk):
 	usuario = request.user
 	matrimonio=Matrimonio.objects.get(pk=pk)	
@@ -848,6 +859,8 @@ class MatrimonioListView(ListView):
 # VISTAS PARA ADMIN DE BAUTISMO
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_bautismo', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.add_sacramento', login_url='/login/', raise_exception=permission_required)
 def bautismo_create_view(request):
 	usuario=request.user
 	if(request.method == 'POST' ):
@@ -923,6 +936,8 @@ def mostrar():
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_bautismo', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.change_sacramento', login_url='/login/', raise_exception=permission_required)
 def bautismo_update_view(request,pk):
 	usuario=request.user
 	bautismo= get_object_or_404(Bautismo, pk=pk)
@@ -1018,6 +1033,8 @@ class BautismoListView(ListView):
 # 	success_url='/eucaristia/'
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_eucaristia', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.add_sacramento', login_url='/login/', raise_exception=permission_required)
 def eucaristia_create_view(request):
 	usuario=request.user
 	if request.method == 'POST':
@@ -1078,6 +1095,8 @@ def eucaristia_create_view(request):
 # 	success_url='/eucaristia/'
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_eucaristia', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.change_sacramento', login_url='/login/', raise_exception=permission_required)
 def eucaristia_update_view(request,pk):
 	usuario=request.user
 	eucaristia=get_object_or_404(Eucaristia,pk=pk)
@@ -1159,6 +1178,8 @@ class EucaristiaListView(ListView):
 # 	success_url='/confirmacion/'
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_confirmacion', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.add_sacramento', login_url='/login/', raise_exception=permission_required)
 def confirmacion_create_view(request):
 	usuario=request.user
 	confirmado=PerfilUsuario.objects.feligres()
@@ -1221,6 +1242,8 @@ def confirmacion_create_view(request):
 # 	success_url='/confirmacion/'
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_confirmacion', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.change_sacramento', login_url='/login/', raise_exception=permission_required)
 def confirmacion_update_view(request,pk):
 	usuario=request.user
 	confirmacion=get_object_or_404(Confirmacion,pk=pk)
@@ -1299,6 +1322,7 @@ class ConfirmacionListView(ListView):
 
 #Vistas para crear una parroquia
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_asignacionparroquia', login_url='/login/', raise_exception=permission_required)
 def parroquia_create_view(request):
 	"""
     Permite crear una parroquia con su respectiva direccion de domicilio,
@@ -1337,6 +1361,7 @@ def parroquia_create_view(request):
 		return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', raise_exception=permission_required)
 def parroquia_update_view(request, pk):
 	template_name = 'parroquia/parroquia_form.html'
 	success_url = '/parroquia/'
@@ -1381,6 +1406,7 @@ class ParroquiaListView(ListView):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_intenciones', login_url='/login/', raise_exception=permission_required)
 def intencion_create_view(request):
 	template_name = 'intencion/intencion_form.html'
 	success_url = '/intencion/'
@@ -1430,6 +1456,7 @@ class IntencionUpdateView(UpdateView):
 	context_object_name = 'form_intencion'
 
 	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('sacramentos.change_intenciones', login_url='/login/', raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(IntencionUpdateView, self).dispatch(*args, **kwargs)
 
@@ -1443,6 +1470,7 @@ def intencion_list_view(request):
 	
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_asignacionparroquia', login_url='/login/', raise_exception=permission_required)
 def asignar_parroquia_create(request):
 	template_name = "parroquia/asignar_parroquia_form.html"
 	success_url = '/parroquia/'
@@ -1505,6 +1533,8 @@ def asignar_parroquia_create(request):
 	return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_asignacionparroquia', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.add_periodoasignacion', login_url='/login/', raise_exception=permission_required)
 def asignar_parroco_a_parroquia(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
 	success_url = '/parrocos/parroquia/%s/' % (pk)
@@ -1566,6 +1596,8 @@ def asignar_parroco_a_parroquia(request, pk):
 		return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', raise_exception=permission_required)
 def asignar_parroquia_update(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
 	success_url = '/asignar/parroquia/'
@@ -1601,6 +1633,7 @@ def asignar_parroquia_update(request, pk):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', raise_exception=permission_required)
 def nuevo_periodo_asignacion(request, pk):
 	template_name = 'parroquia/periodo_asignacion_form.html'
 	asignacion = AsignacionParroquia.objects.get(id=pk)
@@ -1644,6 +1677,7 @@ def nuevo_periodo_asignacion(request, pk):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', raise_exception=permission_required)
 def parroco_periodos_asignacion_update(request, pk):
 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = pk)
 	template_name = 'parroquia/periodo_asignacion_form.html'
@@ -1771,7 +1805,8 @@ def asignar_parroco_list(request, pk):
 # 		return super(AsignarParroquiaList, self).dispatch(*args, **kwargs)
 
 
-@login_required
+@login_required(login_url='/login/')
+@permission_required('sacramentos.add_asignacionparroquia', login_url='/login/')
 def asignar_secretaria_create(request):
 	template_name = "parroquia/asignar_secretaria_form.html"
 	success_url = '/asignar/secretaria/'
@@ -1823,7 +1858,8 @@ def asignar_secretaria_create(request):
 		ctx = {'form': form}
 	return render(request, template_name, ctx)
 
-@login_required
+@login_required(login_url='/login/')
+@permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', raise_exception=permission_required)
 def asignar_secretaria_update(request, pk):
 	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
 	template_name = "parroquia/asignar_secretaria_form.html"

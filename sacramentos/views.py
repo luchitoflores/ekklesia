@@ -798,9 +798,9 @@ def matrimonio_update_view(request,pk):
 
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.add_matrimonio', login_url='/login/', 
+@permission_required('sacramentos.delete_matrimonio', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('sacramentos.add_sacramento', login_url='/login/', 
+@permission_required('sacramentos.delete_sacramento', login_url='/login/', 
 	raise_exception=permission_required)
 def matrimonio_vigencia_view(request,pk):
 	usuario = request.user

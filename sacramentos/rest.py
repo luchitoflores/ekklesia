@@ -6,9 +6,9 @@ import operator
 
 # Librerías de Django
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
 from django.http import HttpResponse, HttpResponseRedirect
-
 # Librerías de terceros
 from tastypie.resources import ModelResource
 
@@ -43,6 +43,10 @@ def usuarioCreateAjax(request):
 
 
 # Método para crear el padre o madre de un feligres - está funcionando
+@login_required(login_url='/login/')
+@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
 def padre_create_ajax(request):
 	sexo = request.POST.get('sexo')
 	if request.method == 'POST':
@@ -74,6 +78,10 @@ def padre_create_ajax(request):
 
 
 # Método para crear el padre o madre de un feligres - está funcionando
+@login_required(login_url='/login/')
+@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
 def secretaria_create_ajax(request):
 	if request.method == 'POST':
 		usuario_form = UsuarioSecretariaForm(request.POST)

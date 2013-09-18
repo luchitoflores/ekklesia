@@ -51,12 +51,8 @@ from ciudades.models import Canton, Provincia, Parroquia as ParroquiaCivil
 
 
 @login_required(login_url='/login/')
-<<<<<<< HEAD
 @permission_required('sacramentos.add_perfilusuario', login_url='/login/', raise_exception=permission_required)
-=======
-@permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
-	raise_exception=permission_required)
->>>>>>> 4e994cb779a5bdecbcb7d2a1a5354d883f584956
+@permission_required('auth.add_user', login_url='/login/', raise_exception=permission_required)
 def usuarioCreateView(request):
 	if request.method == 'POST':
 		form_usuario = UsuarioForm(request.POST)
@@ -118,12 +114,8 @@ def usuarioCreateView(request):
 		return render (request, 'usuario/usuario_form.html', ctx)
 
 @login_required(login_url='/login/')
-<<<<<<< HEAD
 @permission_required('sacramentos.change_perfilusuario', login_url='/login/', raise_exception=permission_required)
-=======
-@permission_required('sacramentos.change_perfilusuario', login_url='/login/',
- raise_exception=permission_required)
->>>>>>> 4e994cb779a5bdecbcb7d2a1a5354d883f584956
+@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
 def edit_usuario_view(request,pk):
 	perfil= get_object_or_404(PerfilUsuario, pk=pk)
 	user= perfil.user	
@@ -235,6 +227,7 @@ class UsuarioListView(ListView):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
+@permission_required('auth.add_user', login_url='/login/', raise_exception=permission_required)
 def sacerdote_create_view(request):
 	template_name = 'usuario/sacerdote_form.html' 
 	success_url = '/sacerdote/'
@@ -278,6 +271,7 @@ def sacerdote_create_view(request):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
+@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
 def sacerdote_update_view(request, pk):
 	sacerdote = get_object_or_404(PerfilUsuario, pk=pk)
 	if sacerdote.profesion != 'Sacerdote':

@@ -17,6 +17,9 @@ class Provincia(models.Model):
 	def get_absolute_url(self):
 		return '/ciudades/provincia/%i' %(self.id)
 
+	class Meta:
+		ordering = ('nombre',)
+
 
 class Canton(models.Model):
 	nombre=models.CharField(max_length=100,help_text='Ingrese un Canton Ej: Espíndola, Calvas')
@@ -25,20 +28,26 @@ class Canton(models.Model):
 
 
 	def __unicode__(self):
-		return self.nombre
+		return u'%s - %s' % (self.nombre, self.provincia.nombre)
 
 	def get_absolute_url(self):
 		return '/ciudades/canton/%i' %(self.id)
+
+	class Meta:
+		ordering = ('nombre',)
 
 class Parroquia(models.Model):
 	nombre=models.CharField(max_length=100,help_text='Ingrese Parroquia Ej: Catamayo, Cariamanga')
 	abreviatura=models.CharField(max_length=6, help_text='Ingrese una abreviatura Ej:ca, C-a')
 	canton=models.ForeignKey(Canton, related_name='canton')
 	def __unicode__(self):
-		return self.nombre
+		return u'%s - %s' % (self.nombre, self.canton.nombre)
 
 	def get_absolute_url(self):
 		return '/ciudades/parroquia/%i' %(self.id)
+
+	class Meta:
+		ordering = ('nombre',)
 
 
 class Direccion(models.Model):

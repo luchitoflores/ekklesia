@@ -18,7 +18,7 @@ Lista de Parroquias-Estados
 	<tbody>
 		{% for o in object_list %}
 		<tr>
-			<td><a href="{{o.get_absolute_url}}">{{o.nombre}}</a></td>
+			<td><a href="{{o.get_absolute_url}}">{{o}}</a></td>
 			<td>{{o.abreviatura}}</td>
 			<td><a href="{%url 'parroquiacivil_delete' o.id %}">Eliminar</a></td>
 		</tr>

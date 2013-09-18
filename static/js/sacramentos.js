@@ -230,9 +230,11 @@ function crear_nota_marginal(id_form,id_modal,url_rest){
 					$("#id_"+index).addClass('invalid');
 					console.log("#id_"+index);
 					console.log("#id_"+element);
+					// $("#id_errors_"+index).remove();
 					var mensajes_error = '<span>' + element+ '</span>';
 					console.log("Hay errores en nota: " + mensajes_error);
-					$("#id_errors").append(mensajes_error);
+					$("#id_errors_"+index).append(mensajes_error);
+
 				});
 				
 				

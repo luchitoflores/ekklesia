@@ -8,7 +8,7 @@ import operator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 # Librerías de terceros
 from tastypie.resources import ModelResource
 
@@ -44,44 +44,48 @@ def usuarioCreateAjax(request):
 
 # Método para crear el padre o madre de un feligres - está funcionando
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+@permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
+@permission_required('auth.add_user', login_url='/login/', raise_exception=permission_required)
 def padre_create_ajax(request):
-	sexo = request.POST.get('sexo')
-	if request.method == 'POST':
-		respuesta = False
-		usuario_form = UsuarioPadreForm(request.POST)
-		perfil_form = PadreForm(request.POST)
-		if usuario_form.is_valid() and perfil_form.is_valid():
-			perfil = perfil_form.save(commit=False)
-			usuario = usuario_form.save(commit=False)
-			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
-			usuario.set_password(usuario.username)
-			feligres, created = Group.objects.get_or_create(name='Feligres')
-			usuario.save()
-			usuario.groups.add(feligres)
-			perfil.user = usuario
-			if sexo:
-				perfil.sexo = sexo
-			perfil.save()
-			respuesta = True
-			ctx = {'respuesta': respuesta, 'id': perfil.id, 
-			'full_name': perfil.user.get_full_name()}
-		else:
-			errores_usuario = usuario_form.errors
-			errores_perfil =  perfil_form.errors
-			ctx = {'respuesta': False, 'errores_usuario':errores_usuario,
-			 'errores_perfil': errores_perfil}
+	if request.is_ajax():
+		sexo = request.POST.get('sexo')
+		if request.method == 'POST':
+			respuesta = False
+			usuario_form = UsuarioPadreForm(request.POST)
+			perfil_form = PadreForm(request.POST)
+			if usuario_form.is_valid() and perfil_form.is_valid():
+				perfil = perfil_form.save(commit=False)
+				usuario = usuario_form.save(commit=False)
+				usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
+				usuario.set_password(usuario.username)
+				feligres, created = Group.objects.get_or_create(name='Feligres')
+				usuario.save()
+				usuario.groups.add(feligres)
+				perfil.user = usuario
+				if sexo:
+					perfil.sexo = sexo
+				perfil.save()
+				respuesta = True
+				ctx = {'respuesta': respuesta, 'id': perfil.id, 
+				'full_name': perfil.user.get_full_name()}
+			else:
+				errores_usuario = usuario_form.errors
+				errores_perfil =  perfil_form.errors
+				ctx = {'respuesta': False, 'errores_usuario':errores_usuario,
+				 'errores_perfil': errores_perfil}
+		return HttpResponse(json.dumps(ctx), content_type='application/json')
+	else:
+		raise Http404
 
-	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
 
 
 # Método para crear el padre o madre de un feligres - está funcionando
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+@permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
+@permission_required('auth.add_user', login_url='/login/', raise_exception=permission_required)
 def secretaria_create_ajax(request):
 	if request.method == 'POST':
 		usuario_form = UsuarioSecretariaForm(request.POST)
@@ -112,56 +116,68 @@ def secretaria_create_ajax(request):
 
 
 # vista para crear una nota marginal a Bautismo con modal.....
+
+@login_required(login_url='/login/')
+@permission_required('sacramentos.add_notamarginal', login_url='/login/', 
+	raise_exception=permission_required)
 def nota_marginal_create_ajax(request):
-	
-	if request.method == 'POST':
-		respuesta = False
-		form_nota = NotaMarginalForm(request.POST)
-		bautismo_id=request.POST.get('id')
+	if request.is_ajax():
 
-		if bautismo_id!=None and form_nota.is_valid():
-			bautismo=Bautismo.objects.get(pk=bautismo_id)
-			nota=form_nota.save(commit=False)
-			nota.bautismo=bautismo
-			nota.save()
-			respuesta = True
-			notas=NotaMarginal.objects.filter(bautismo=bautismo).order_by('-fecha')
-			lista=list()
-			for nota in notas:
-				lista.append({'tabla':'<tr><th> %s</th><th> %s</th></tr>'%(nota.fecha ,nota.descripcion)})
-			ctx = {'respuesta': respuesta, 'tabla':lista}
-		else:
-			errores_nota = form_nota.errors
-			ctx = {'respuesta': False, 'errores_nota':errores_nota}
+		if request.method == 'POST':
+			respuesta = False
+			form_nota = NotaMarginalForm(request.POST)
+			bautismo_id=request.POST.get('id')
 
-	return HttpResponse(json.dumps(ctx), content_type='application/json')
+			if bautismo_id!=None and form_nota.is_valid():
+				bautismo=Bautismo.objects.get(pk=bautismo_id)
+				nota=form_nota.save(commit=False)
+				nota.bautismo=bautismo
+				nota.save()
+				respuesta = True
+				notas=NotaMarginal.objects.filter(bautismo=bautismo).order_by('-fecha')
+				lista=list()
+				for nota in notas:
+					lista.append({'tabla':'<tr><th> %s</th><th> %s</th></tr>'%(nota.fecha ,nota.descripcion)})
+				ctx = {'respuesta': respuesta, 'tabla':lista}
+			else:
+				errores_nota = form_nota.errors
+				ctx = {'respuesta': False, 'errores_nota':errores_nota}
+
+		return HttpResponse(json.dumps(ctx), content_type='application/json')
+	else:
+		Http404
 
 
 # vista para crear una nota marginal a Matrimonio con modal.....
-
+@login_required(login_url='/login/')
+@permission_required('sacramentos.add_notamarginal', login_url='/login/', 
+	raise_exception=permission_required)
 def nota_create_matrimonio_ajax(request):
-	
-	if request.method == 'POST':
-		respuesta = False
-		form_nota = NotaMarginalForm(request.POST)
-		matrimonio_id=request.POST.get('id')
+	if request.is_ajax():
 
-		if matrimonio_id!=None and form_nota.is_valid():
-			matrimonio=Matrimonio.objects.get(pk=matrimonio_id)
-			nota=form_nota.save(commit=False)
-			nota.matrimonio=matrimonio
-			nota.save()
-			respuesta = True
-			notas=NotaMarginal.objects.filter(matrimonio=matrimonio).order_by('-fecha')
-			lista=list()
-			for nota in notas:
-				lista.append({'tabla':'<tr><th> %s</th><th> %s</th></tr>'%(nota.fecha ,nota.descripcion)})
-			ctx = {'respuesta': respuesta, 'tabla':lista}
-		else:
-			errores_nota = form_nota.errors
-			ctx = {'respuesta': False, 'errores_nota':errores_nota}
+		if request.method == 'POST':
+			respuesta = False
+			form_nota = NotaMarginalForm(request.POST)
+			matrimonio_id=request.POST.get('id')
 
-	return HttpResponse(json.dumps(ctx), content_type='application/json')
+			if matrimonio_id!=None and form_nota.is_valid():
+				matrimonio=Matrimonio.objects.get(pk=matrimonio_id)
+				nota=form_nota.save(commit=False)
+				nota.matrimonio=matrimonio
+				nota.save()
+				respuesta = True
+				notas=NotaMarginal.objects.filter(matrimonio=matrimonio).order_by('-fecha')
+				lista=list()
+				for nota in notas:
+					lista.append({'tabla':'<tr><th> %s</th><th> %s</th></tr>'%(nota.fecha ,nota.descripcion)})
+				ctx = {'respuesta': respuesta, 'tabla':lista}
+			else:
+				errores_nota = form_nota.errors
+				ctx = {'respuesta': False, 'errores_nota':errores_nota}
+
+		return HttpResponse(json.dumps(ctx), content_type='application/json')
+	else:
+		Http404
 
 
 

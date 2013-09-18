@@ -51,8 +51,12 @@ from ciudades.models import Canton, Provincia, Parroquia as ParroquiaCivil
 
 
 @login_required(login_url='/login/')
+<<<<<<< HEAD
+@permission_required('sacramentos.add_perfilusuario', login_url='/login/', raise_exception=permission_required)
+=======
 @permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
+>>>>>>> 4e994cb779a5bdecbcb7d2a1a5354d883f584956
 def usuarioCreateView(request):
 	if request.method == 'POST':
 		form_usuario = UsuarioForm(request.POST)
@@ -114,8 +118,12 @@ def usuarioCreateView(request):
 		return render (request, 'usuario/usuario_form.html', ctx)
 
 @login_required(login_url='/login/')
+<<<<<<< HEAD
+@permission_required('sacramentos.change_perfilusuario', login_url='/login/', raise_exception=permission_required)
+=======
 @permission_required('sacramentos.change_perfilusuario', login_url='/login/',
  raise_exception=permission_required)
+>>>>>>> 4e994cb779a5bdecbcb7d2a1a5354d883f584956
 def edit_usuario_view(request,pk):
 	perfil= get_object_or_404(PerfilUsuario, pk=pk)
 	user= perfil.user	

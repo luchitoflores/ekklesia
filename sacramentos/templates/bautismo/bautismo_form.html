@@ -350,7 +350,7 @@ $(document).ready(function(){
 			</fieldset>
 			{%if object.id%}	
 			<fieldset id='id_fielset_tabla' class='scheduler-border'>
-				<legend class='scheduler-border'><a href="#id_crear_nota" data-toggle='modal'>Nota Marginal</a>
+				<legend class='scheduler-border'><a href="#id_crear_nota" data-toggle='modal'> Agregar Nota Marginal</a>
 				</legend>
 
 				<table id='id_table_nota_bautismo' class='table table-bordered table-striped'>
@@ -383,6 +383,7 @@ $(document).ready(function(){
 
 </form>
 
+
 <!--Modal para crear Notas Marginales -->
 <div id="id_crear_nota" class="modal hide fade">
 	<div class="modal-header">
@@ -390,6 +391,9 @@ $(document).ready(function(){
 
 		</button>
 		<h3>Crear Nota Marginal</h3>
+	</div>
+	<div id='id_mensaje_nota'>
+		
 	</div>
 	<div class="modal-body">
 		<form id='id_form_crear_nota' class='form-horizontal' method='POST'>

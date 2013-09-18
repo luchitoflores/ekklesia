@@ -216,15 +216,26 @@ function crear_nota_marginal(id_form,id_modal,url_rest){
 		$.post(url, json, function(data){
 			if(data.respuesta){
 				$(id_modal).modal('hide');
-				console.log(data.tabla);
 				$('tbody tr').remove();
 				$.each(data.tabla,function(index,element){
 					$('tbody').append(element.tabla);
 					habilitar_campos('#id_href');
 				});
 			} else{
-				console.log('Existen errores');
-				console.log(data.errores);
+				var mensaje = '<div class="alert alert-error">' + 
+				'<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>'+
+				'<img src="/static/img/error.png" alt=""> Uno o más datos son invalidos </div>';
+				$('#id_mensaje_nota').html(mensaje);
+				$.each(data.errores_nota, function(index, element){
+					$("#id_"+index).addClass('invalid');
+					console.log("#id_"+index);
+					console.log("#id_"+element);
+					var mensajes_error = '<span>' + element+ '</span>';
+					console.log("Hay errores en nota: " + mensajes_error);
+					$("#id_errors").append(mensajes_error);
+				});
+				
+				
 			}
 		});
 	})

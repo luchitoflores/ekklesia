@@ -114,8 +114,10 @@ def usuarioCreateView(request):
 		return render (request, 'usuario/usuario_form.html', ctx)
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_perfilusuario', login_url='/login/', raise_exception=permission_required)
-@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('auth.change_user', login_url='/login/', 
+	raise_exception=permission_required)
 def edit_usuario_view(request,pk):
 	perfil= get_object_or_404(PerfilUsuario, pk=pk)
 	user= perfil.user	

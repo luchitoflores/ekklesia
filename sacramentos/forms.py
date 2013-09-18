@@ -888,16 +888,26 @@ class MatrimonioFormEditar(ModelForm):
 
 # Forms para Notas Marginals
 class NotaMarginalForm(ModelForm):
-	fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
-		required=True,label='Fecha *',
-		widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
-			'type':'date'}))
+	def clean_fecha(self):
+		data = self.cleaned_data['fecha']
+		if data > date.today() or data<date.today():
+			raise forms.ValidationError('La fecha no puede ser mayor o menor a la fecha actual')
+		return data
+
+	# fecha = forms.CharField(help_text='Seleccione una fecha ej:18/07/2000',
+	# 	required=True,label='Fecha *',
+	# 	widget=forms.TextInput(attrs={'required':'','data-date-format': 'dd/mm/yyyy', 
+	# 		'type':'date'}))
 	descripcion=forms.CharField(required=True,label='Descripcion *',
 		widget=forms.Textarea(attrs={'required':''}),
 		help_text='Ingrese una descripcion ej: di copia para matrimonio')
 	class Meta():
 		model= NotaMarginal
 		fields=('fecha','descripcion')
+		widgets = {
+		'fecha': forms.TextInput(attrs={'required':'', 'data-date-format': 'dd/mm/yyyy', 'type':'date'})
+		
+		}
 
 
 #Forms para Parroquia - Funcionando

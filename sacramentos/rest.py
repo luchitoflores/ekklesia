@@ -8,7 +8,7 @@ import operator
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import Group
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 # Librerías de terceros
 from tastypie.resources import ModelResource
 
@@ -44,44 +44,48 @@ def usuarioCreateAjax(request):
 
 # Método para crear el padre o madre de un feligres - está funcionando
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+@permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
+@permission_required('auth.add_user', login_url='/login/', raise_exception=permission_required)
 def padre_create_ajax(request):
-	sexo = request.POST.get('sexo')
-	if request.method == 'POST':
-		respuesta = False
-		usuario_form = UsuarioPadreForm(request.POST)
-		perfil_form = PadreForm(request.POST)
-		if usuario_form.is_valid() and perfil_form.is_valid():
-			perfil = perfil_form.save(commit=False)
-			usuario = usuario_form.save(commit=False)
-			usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
-			usuario.set_password(usuario.username)
-			feligres, created = Group.objects.get_or_create(name='Feligres')
-			usuario.save()
-			usuario.groups.add(feligres)
-			perfil.user = usuario
-			if sexo:
-				perfil.sexo = sexo
-			perfil.save()
-			respuesta = True
-			ctx = {'respuesta': respuesta, 'id': perfil.id, 
-			'full_name': perfil.user.get_full_name()}
-		else:
-			errores_usuario = usuario_form.errors
-			errores_perfil =  perfil_form.errors
-			ctx = {'respuesta': False, 'errores_usuario':errores_usuario,
-			 'errores_perfil': errores_perfil}
+	if request.is_ajax():
+		sexo = request.POST.get('sexo')
+		if request.method == 'POST':
+			respuesta = False
+			usuario_form = UsuarioPadreForm(request.POST)
+			perfil_form = PadreForm(request.POST)
+			if usuario_form.is_valid() and perfil_form.is_valid():
+				perfil = perfil_form.save(commit=False)
+				usuario = usuario_form.save(commit=False)
+				usuario.username = perfil.crear_username(usuario.first_name, usuario.last_name)
+				usuario.set_password(usuario.username)
+				feligres, created = Group.objects.get_or_create(name='Feligres')
+				usuario.save()
+				usuario.groups.add(feligres)
+				perfil.user = usuario
+				if sexo:
+					perfil.sexo = sexo
+				perfil.save()
+				respuesta = True
+				ctx = {'respuesta': respuesta, 'id': perfil.id, 
+				'full_name': perfil.user.get_full_name()}
+			else:
+				errores_usuario = usuario_form.errors
+				errores_perfil =  perfil_form.errors
+				ctx = {'respuesta': False, 'errores_usuario':errores_usuario,
+				 'errores_perfil': errores_perfil}
+		return HttpResponse(json.dumps(ctx), content_type='application/json')
+	else:
+		raise Http404
 
-	return HttpResponse(json.dumps(ctx), content_type='application/json')
+
 
 
 # Método para crear el padre o madre de un feligres - está funcionando
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+@permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
+@permission_required('auth.add_user', login_url='/login/', raise_exception=permission_required)
 def secretaria_create_ajax(request):
 	if request.method == 'POST':
 		usuario_form = UsuarioSecretariaForm(request.POST)

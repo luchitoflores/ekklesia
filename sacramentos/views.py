@@ -1919,7 +1919,7 @@ class LogListView(ListView):
 
 # TODOS LOS REPORTES
 
-@login_required(login_url='/login/')
+
 def generar_pdf(html):
     # Función para generar el archivo PDF y devolverlo mediante HttpResponse
     result = StringIO.StringIO()

@@ -338,9 +338,7 @@ class LibroForm(ModelForm):
 	# fecha_cierre = forms.CharField(required=False,label=u'Fecha de Cierre', 
 	# 	widget=forms.TextInput(attrs={'data-date-format': 'dd/mm/yyyy', 'type':'date'
 	# 		}),help_text='Seleccione una fecha ej:17/12/2010')
-	numero_maximo_actas=forms.IntegerField(required=True, label='Maximo Actas', 
-		widget=forms.TextInput(attrs={'required': '','type':'number','value':'35',
-			'max':'40'}),help_text='Ingrese el numero maximo de actas ej:50') 
+	
 	
 	class Meta():
 		model=Libro

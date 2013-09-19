@@ -388,9 +388,10 @@ class BautismoForm(ModelForm):
 		*args, **kwargs):
 
 		super(BautismoForm, self).__init__(*args, **kwargs)
-		
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
 		
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Bautismo',parroquia=asignacion.parroquia)
@@ -453,8 +454,11 @@ class BautismoFormEditar(ModelForm):
 	 *args, **kwargs):
 
 		super(BautismoFormEditar, self).__init__(*args, **kwargs)
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Bautismo',parroquia=asignacion.parroquia)
 		self.fields['bautizado']=forms.ModelChoiceField(required=True, queryset=bautizado,
@@ -516,8 +520,12 @@ class EucaristiaForm(ModelForm):
 		*args, **kwargs):
 		
 		super(EucaristiaForm, self).__init__(*args, **kwargs)
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		# asignacion = AsignacionParroquia.objects.get(
+		# 	persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Eucaristia',parroquia=asignacion.parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
@@ -574,8 +582,11 @@ class EucaristiaFormEditar(ModelForm):
 	 *args, **kwargs):
 		
 		super(EucaristiaFormEditar, self).__init__(*args, **kwargs)
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		# asignacion = AsignacionParroquia.objects.get(persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Eucaristia',parroquia=asignacion.parroquia)
 		self.fields['feligres']=forms.ModelChoiceField(required=True, queryset=feligres,
@@ -634,8 +645,11 @@ class ConfirmacionForm(ModelForm):
 		*args, **kwargs):
 		
 		super(ConfirmacionForm, self).__init__(*args, **kwargs)
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		# asignacion = AsignacionParroquia.objects.get(persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Confirmacion',parroquia=asignacion.parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
@@ -695,8 +709,11 @@ class ConfirmacionFormEditar(ModelForm):
 		celebrante=PerfilUsuario.objects.none(),*args, **kwargs):
 		
 		super(ConfirmacionFormEditar, self).__init__(*args, **kwargs)
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		# asignacion = AsignacionParroquia.objects.get(persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Confirmacion',parroquia=asignacion.parroquia)
 		self.fields['confirmado']=forms.ModelChoiceField(required=True, queryset=confirmado,
@@ -776,8 +793,11 @@ class MatrimonioForm(ModelForm):
 	celebrante=PerfilUsuario.objects.none(), *args, **kwargs):
 		
 		super(MatrimonioForm, self).__init__(*args, **kwargs)
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		# asignacion = AsignacionParroquia.objects.get(persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
 			estado='Abierto',tipo_libro='Matrimonio',parroquia=asignacion.parroquia)
 		self.fields['novio']=forms.ModelChoiceField(required=True, queryset=novio, 
@@ -856,8 +876,11 @@ class MatrimonioFormEditar(ModelForm):
 		celebrante=PerfilUsuario.objects.none(),*args, **kwargs):
 		
 		super(MatrimonioFormEditar, self).__init__(*args, **kwargs)
-		asignacion = AsignacionParroquia.objects.get(
-			persona__user=user)
+		try:
+			asignacion = AsignacionParroquia.objects.get(persona__user=user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		# asignacion = AsignacionParroquia.objects.get(persona__user=user)
 		self.fields['libro'].queryset = Libro.objects.filter(
 			tipo_libro='Matrimonio',parroquia=asignacion.parroquia)
 		self.fields['novio']=forms.ModelChoiceField(required=False, queryset=novio, 

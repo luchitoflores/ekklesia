@@ -192,6 +192,9 @@ class UsuarioListView(ListView):
 	@method_decorator(login_required(login_url='/login/'))
 	@method_decorator(permission_required('sacramentos.change_perfilusuario', 
 		login_url='/login/', raise_exception=permission_required))
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('auth.change_user', 
+		login_url='/login/', raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(UsuarioListView, self).dispatch(*args, **kwargs)
 
@@ -335,7 +338,8 @@ class SacerdoteListView(ListView):
 # 	template_name = 'libro/libro_form.html'
 # 	success_url= '/libro/'
 @login_required(login_url='/login/')
-@permission_required('sacramentos.add_libro', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.add_libro', login_url='/login/', 
+	raise_exception=permission_required)
 def libro_create_view(request):
 	if(request.method=='POST'):
 		form_libro=LibroForm(request.POST)
@@ -413,7 +417,8 @@ def libro_create_view(request):
 # 	success_url = '/libro/'
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_libro', login_url='/login/', raise_exception=permission_required)
+@permission_required('sacramentos.change_libro', login_url='/login/', 
+	raise_exception=permission_required)
 def libro_update_view(request,pk):
 	libros=get_object_or_404(Libro,pk=pk)
 	
@@ -1615,7 +1620,7 @@ def asignar_parroquia_create(request):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.add_asignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('sacramentos.add_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.add_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def asignar_parroco_a_parroquia(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
@@ -1680,7 +1685,7 @@ def asignar_parroco_a_parroquia(request, pk):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def asignar_parroquia_update(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
@@ -1717,7 +1722,7 @@ def asignar_parroquia_update(request, pk):
 
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def nuevo_periodo_asignacion(request, pk):
 	template_name = 'parroquia/periodo_asignacion_form.html'
@@ -1762,7 +1767,7 @@ def nuevo_periodo_asignacion(request, pk):
 
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def parroco_periodos_asignacion_update(request, pk):
 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = pk)
@@ -2032,18 +2037,16 @@ class LogListView(ListView):
 
 	def get_queryset(self):
 		try:
-			if (self.request.user.is_superuser):
+			if not (self.request.user.is_superuser):
 
 				queryset = LogEntry.objects.all()
 				return queryset
-			else:
-				queryset=LogEntry.objects.filter(user=self.request.user)
-				return queryset
+			
 
 		except: 
 			return [];
 	@method_decorator(login_required(login_url='/login/'))
-	@method_decorator(permission_required('sacramentos.change_logentry', login_url='/login/', 
+	@method_decorator(permission_required('admin.change_logentry', login_url='/login/', 
 		raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(LogListView, self).dispatch(*args, **kwargs)
@@ -2068,9 +2071,17 @@ def libro_pdf(request, pk):
 	return generar_pdf(html)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_sacramento', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_matrimonio', login_url='/login/', 
+	raise_exception=permission_required)
 def matrimonio_certificado(request, pk):
 	matrimonio=get_object_or_404(Matrimonio, pk=pk)
-	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	try:
+		asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+
+	except ObjectDoesNotExist:
+		raise PermissionDenied
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	notas=NotaMarginal.objects.filter(matrimonio=matrimonio)
@@ -2080,9 +2091,17 @@ def matrimonio_certificado(request, pk):
 	return generar_pdf(html)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_sacramento', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_bautismo', login_url='/login/', 
+	raise_exception=permission_required)
 def bautismo_certificado(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
-	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	try:
+		asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	except ObjectDoesNotExist:
+		raise PermissionDenied
+	
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
@@ -2092,9 +2111,16 @@ def bautismo_certificado(request, pk):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_sacramento', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_bautismo', login_url='/login/', 
+	raise_exception=permission_required)
 def bautismo_acta(request, pk):
 	bautismo=get_object_or_404(Bautismo, pk=pk)
-	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	try:
+		asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	except ObjectDoesNotExist:
+		raise PermissionDenied
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
@@ -2104,9 +2130,17 @@ def bautismo_acta(request, pk):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_sacramento', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_confirmacion', login_url='/login/', 
+	raise_exception=permission_required)
 def confirmacion_reporte(request, pk):
 	confirmacion=get_object_or_404(Confirmacion, pk=pk)
-	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	try:
+		asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+		
+	except ObjectDoesNotExist:
+		raise PermissionDenied
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	html = render_to_string('confirmacion/confirmacion_certificado.html', 
@@ -2115,9 +2149,17 @@ def confirmacion_reporte(request, pk):
 	return generar_pdf(html)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_sacramento', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_eucaristia', login_url='/login/', 
+	raise_exception=permission_required)
 def eucaristia_reporte(request, pk):
 	eucaristia=get_object_or_404(Eucaristia, pk=pk)
-	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	try:
+		asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+		
+	except ObjectDoesNotExist:
+		raise PermissionDenied
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	# notas=NotaMarginal.objects.filter()
@@ -2126,10 +2168,18 @@ def eucaristia_reporte(request, pk):
 	return generar_pdf(html)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('auth.change_user', login_url='/login/', 
+	raise_exception=permission_required)
 def usuario_reporte_honorabilidad(request,pk):
 	perfil=get_object_or_404(PerfilUsuario,pk=pk)
 	# parroquia=AsignacionParroquia.objects.get(persona__user=request.user).parroquia
-	asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+	try:
+		asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+		
+	except ObjectDoesNotExist:
+		raise PermissionDenied
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	html = render_to_string('usuario/certificado_honorabilidad.html', {'pagesize':'A4', 'perfil':perfil,
@@ -2138,6 +2188,16 @@ def usuario_reporte_honorabilidad(request,pk):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_sacramento', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_matrimonio', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_bautismo', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_eucaristia', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_confirmacion', login_url='/login/', 
+	raise_exception=permission_required)
 def reporte_anual_sacramentos(request):
 	anio_actual=request.GET.get('anio')
 	# print("El año ingresado es: %d"%anio_actual)
@@ -2148,7 +2208,10 @@ def reporte_anual_sacramentos(request):
 			ninios1=0
 			ninios7=0
 			ninios=0
-			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+			try:
+				asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+			except ObjectDoesNotExist:
+				raise PermissionDenied
 			bautismos=Bautismo.objects.filter(fecha_sacramento__year=anio_actual,
 				parroquia=asignacion.parroquia)
 			num_bautizos=len(bautismos)
@@ -2193,7 +2256,7 @@ def reporte_anual_sacramentos(request):
 				
 				
 			else:
-				messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
+				messages.error(request, 'Uno o más cámpos son inválidos')
 				ctx = {'form': form}
 				# return render(request, template_name, ctx)
 		else:
@@ -2209,6 +2272,10 @@ def reporte_anual_sacramentos(request):
 
 	
 @login_required(login_url='/login/')
+@permission_required('sacramentos.add_intenciones', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_intenciones', login_url='/login/', 
+	raise_exception=permission_required)
 def reporte_intenciones(request):
 	tipo=request.GET.get('tipo')
 	fecha=request.GET.get('fecha')
@@ -2217,8 +2284,11 @@ def reporte_intenciones(request):
 	template_name = "reportes/reporte_intenciones_form.html"
 	if tipo=='d':
 		if fecha and not hora:
-
-			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+			try:
+				asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+			except ObjectDoesNotExist:
+				raise PermissionDenied
+			
 			intenciones=Intenciones.objects.filter(fecha=fecha,
 				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
@@ -2237,7 +2307,10 @@ def reporte_intenciones(request):
 			# return render(request, template_name, ctx)
 
 		if fecha and hora:
-			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+			try:
+				asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+			except ObjectDoesNotExist:
+				raise PermissionDenied
 			intenciones=Intenciones.objects.filter(fecha=fecha,hora=hora,
 				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
@@ -2259,8 +2332,10 @@ def reporte_intenciones(request):
 		if fecha :
 			mes=fecha[5:7]
 			anio=fecha[:4]
-			
-			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+			try:
+				asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+			except ObjectDoesNotExist:
+				raise PermissionDenied
 			intenciones=Intenciones.objects.filter(fecha__year=anio,fecha__month=mes,
 				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
@@ -2281,8 +2356,10 @@ def reporte_intenciones(request):
 		if fecha:
 			fecha=fecha
 			anio=fecha[:4]
-			print('el año es %s'%int(anio))
-			asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+			try:
+				asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+			except ObjectDoesNotExist:
+				raise PermissionDenied
 			intenciones=Intenciones.objects.filter(fecha__year=anio,
 				parroquia=asignacion.parroquia).order_by('hora')
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
@@ -2309,6 +2386,20 @@ def reporte_intenciones(request):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_sacramento', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_bautismo', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_matrimonio', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_eucaristia', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_confirmacion', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('auth.change_user', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+	raise_exception=permission_required)
 def reporte_permisos(request):
 	feligres=request.GET.get('feligres')
 	tipo=request.GET.get('tipo')
@@ -2317,80 +2408,75 @@ def reporte_permisos(request):
 		
 		feligres=PerfilUsuario.objects.get(pk=feligres)
 		print(feligres)
-		asignacion= AsignacionParroquia.objects.get(persona__user=request.user)
+		try:
+			asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 			parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 		form = ReportePermisoForm(request.GET)
-		# if form.is_valid():
 		html=render_to_string('reportes/reporte_permiso.html',
 		{'pagesize':'A4','feligres':feligres,'asignacion':asignacion,'cura':cura,
 		'tipo':tipo},
 		context_instance=RequestContext(request))
 		return generar_pdf(html)
 		
-		# else:
-			# messages.error(request, 'Uno o más cámpos son inválidos %s' % form.errors)
-			# ctx = {'form': form}
+		
 	if (tipo =='Eucaristia' and feligres):
 		
 		
 		feligres=PerfilUsuario.objects.get(id=feligres)
-		parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+		try:
+			asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
+		
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-			parroquia=parroquia.parroquia,periodoasignacionparroquia__estado=Trues)
+			parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=Trues)
 		form = ReportePermisoForm(request.GET)
 		print('despues del form')
-		# if form.is_valid():
 		html=render_to_string('reportes/reporte_permiso.html',
-		{'pagesize':'A4','feligres':feligres,'parroquia':parroquia,'cura':cura,
+		{'pagesize':'A4','feligres':feligres,'asignacion':asignacion,'cura':cura,
 		'tipo':tipo},
 		context_instance=RequestContext(request))
 		print('despues de renderizar el html')
 		return generar_pdf(html)
 			
-			
-		# else:
-			# messages.error(request, 'Uno o más cámpos son inválidos')
-			# ctx = {'form': form}
-
+		
 	if (tipo =='Confirmacion' and feligres):
 		
 		feligres=PerfilUsuario.objects.get(id=feligres)
-		
-		parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+		try:
+			asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-			parroquia=parroquia.parroquia,periodoasignacionparroquia__estado=True)
+			parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 		form = ReportePermisoForm(request.GET)
-		# if form.is_valid():
 		html=render_to_string('reportes/reporte_permiso.html',
-		{'pagesize':'A4','feligres':feligres,'parroquia':parroquia,'cura':cura,
+		{'pagesize':'A4','feligres':feligres,'asignacion':asignacion,'cura':cura,
 		'tipo':tipo},
 		context_instance=RequestContext(request))
 		return generar_pdf(html)
-			
-			
-		# else:
-			# messages.error(request, 'Uno o más cámpos son inválidos')
-			# ctx = {'form': form}
+		
 
 	if (tipo =='Matrimonio' and feligres):
 		
 		form = ReportePermisoForm(request.GET)
 		feligres=PerfilUsuario.objects.get(id=feligres)
-		parroquia= AsignacionParroquia.objects.get(persona__user=request.user)
+		try:
+			asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
+		except ObjectDoesNotExist:
+			raise PermissionDenied
 		cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-			parroquia=parroquia.parroquia,periodoasignacionparroquia__estado=True)
-		# if form.is_valid():
+			parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 		html=render_to_string('reportes/reporte_permiso.html',
-		{'pagesize':'A4','feligres':feligres,'parroquia':parroquia,'cura':cura,
+		{'pagesize':'A4','feligres':feligres,'asignacion':asignacion,'cura':cura,
 		'tipo':tipo},
 		context_instance=RequestContext(request))
 		return generar_pdf(html)
-		
-			
-		# else:
-			# messages.error(request, 'Uno o más cámpos son inválidos')
-			# ctx = {'form': form}
+				
 	else:
 		form = ReportePermisoForm()
 	
@@ -2400,14 +2486,14 @@ def reporte_permisos(request):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_parroquia', login_url='/login/', 
+	raise_exception=permission_required)
 def reporte_parroquias_sacerdotes(request,pk):
 	persona=User.objects.get(pk=request.user.pk)
 	parroquia=get_object_or_404(Parroquia, pk=pk)
 	asignacion=AsignacionParroquia.objects.filter(parroquia=parroquia,
 		persona__user__groups__name='Sacerdote',
 		)
-	# curas=AsignacionParroquia.objects.filter(persona__user__groups__name='Sacerdote',
-	# 	parroquia=parroquia)
 	periodos=PeriodoAsignacionParroquia.objects.filter(asignacion__parroquia=parroquia)
 	print(periodos)
 	html = render_to_string('reportes/reporte_parroquia_sacerdote.html', {'pagesize':'A4',
@@ -2416,11 +2502,13 @@ def reporte_parroquias_sacerdotes(request,pk):
 	return generar_pdf(html)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('auth.change_user', login_url='/login/', 
+	raise_exception=permission_required)
 def reporte_sacerdotes_parroquias(request,pk):
 	persona=User.objects.get(pk=request.user.pk)
 	cura=get_object_or_404(PerfilUsuario, pk=pk)
-	parroquias=AsignacionParroquia.objects.filter(persona=cura)
-	print(parroquias)
 	periodos=PeriodoAsignacionParroquia.objects.filter(asignacion__persona=cura)
 	print(periodos)
 	html = render_to_string('reportes/reporte_sacerdote_parroquia.html', {'pagesize':'A4',
@@ -2432,6 +2520,8 @@ def reporte_sacerdotes_parroquias(request,pk):
 # exportar a csv los logs
 
 @login_required(login_url='/login/')
+@permission_required('admin.change_logentry', login_url='/login/', 
+	raise_exception=permission_required)
 def exportar_csv_logs(request):
 
     response = HttpResponse(mimetype='text/csv')
@@ -2444,7 +2534,7 @@ def exportar_csv_logs(request):
     return response
 
 # para poder exportar a csv con utf-8
-@login_required(login_url='/login/')
+
 def encode(text):
 	return text.encode('utf-8')
 

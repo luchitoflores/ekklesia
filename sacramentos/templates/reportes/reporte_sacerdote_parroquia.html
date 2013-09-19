@@ -112,7 +112,7 @@ td {
 
 
 		-------------------------------------------------------------------<br/>
-		{%if persona.full_name%}
+		{%if persona.get_full_name%}
 		{{persona.get_full_name}} <br>
 		{%else%}
 		{{persona.username}} <br>
@@ -132,7 +132,7 @@ td {
 	<div id="footer">
 		<hr style="margin-bottom: 1px;"/>
 		<p>Sistema de Gestion Sacramental <strong>Ekklesia</strong> - Reporte generado por: <strong>
-			{%if persona.full_name%}
+			{%if persona.get_full_name%}
 			{{persona.get_full_name}}
 			{%else%}
 			{{persona.username}}

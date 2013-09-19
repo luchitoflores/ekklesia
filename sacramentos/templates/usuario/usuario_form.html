@@ -299,6 +299,7 @@ Agregar Feligrés
 						</div>
 					</fieldset>
 					
+					{%if user.is_superuser%}
 
 					<fieldset class="scheduler-border">
 						<legend class="scheduler-border">Grupos de Usuario</legend>
@@ -320,6 +321,8 @@ Agregar Feligrés
 							
 						</div> 
 					</fieldset>
+					
+					{%endif%}
 
 					<div class="form-actions">
 						<input type="submit" value='Enviar' class="btn btn-primary">

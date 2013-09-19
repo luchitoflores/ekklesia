@@ -1926,10 +1926,14 @@ def asignar_secretaria_create(request):
 					user = PerfilUsuario.objects.get(pk=persona_id).user
 					user.is_staff = True 
 					user.save()
+					secretaria, created = Group.objects.get_or_create(name='Secretaria')
+					user.groups.add(secretaria)
 				else:
 					user = PerfilUsuario.objects.get(pk=persona_id).user
 					user.is_staff = False
 					user.save()
+					ecretaria, created = Group.objects.get_or_create(name='Secretaria')
+					user.groups.add(secretaria)
 				return HttpResponseRedirect(success_url)
 		else:
 			messages.error(request, 'Uno o más cámpos son inválidos')

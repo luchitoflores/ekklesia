@@ -86,7 +86,8 @@
 					<a class='dropdown-toggle' data-toggle='dropdown' href="#">Reportes<b class="caret"></b></a>
 					<ul class='dropdown-menu'>
 						<li><a href="{%url 'reporte_anual'%}" > Anual Sacramentos</a></li>
-						<li><a href="{%url 'reporte_intenciones'%}" >Intenciones</a></li>
+						{% if sacramentos.add_matrimonio in perms%}
+						<li><a href="{%url 'reporte_intenciones'%}" >Intenciones</a></li>{%endif%}
 						<li><a href="{%url 'reporte_permiso'%}" >Permisos</a></li>
 						
 					</ul>

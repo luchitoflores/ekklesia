@@ -1089,6 +1089,8 @@ class ReporteIntencionesForm(forms.Form):
    	hora=forms.CharField(required=False,help_text='Ingrese una hora ej: 8:00 - 17:00',
     	label='Hora',widget=forms.TextInput(attrs={'type':'time'}))
 
+   
+
 class ReporteSacramentosAnualForm(forms.Form):
 	anio=forms.CharField(help_text='Ingrese un año para generar el reporte',label='Año *',
 		widget=forms.TextInput(attrs={'required':''}))

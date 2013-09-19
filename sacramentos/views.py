@@ -192,6 +192,9 @@ class UsuarioListView(ListView):
 	@method_decorator(login_required(login_url='/login/'))
 	@method_decorator(permission_required('sacramentos.change_perfilusuario', 
 		login_url='/login/', raise_exception=permission_required))
+	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('auth.change_user', 
+		login_url='/login/', raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(UsuarioListView, self).dispatch(*args, **kwargs)
 
@@ -1615,7 +1618,7 @@ def asignar_parroquia_create(request):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.add_asignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('sacramentos.add_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.add_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def asignar_parroco_a_parroquia(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
@@ -1680,7 +1683,7 @@ def asignar_parroco_a_parroquia(request, pk):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
-@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def asignar_parroquia_update(request, pk):
 	template_name = "parroquia/asignar_parroquia_form.html"
@@ -1717,7 +1720,7 @@ def asignar_parroquia_update(request, pk):
 
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def nuevo_periodo_asignacion(request, pk):
 	template_name = 'parroquia/periodo_asignacion_form.html'
@@ -1762,7 +1765,7 @@ def nuevo_periodo_asignacion(request, pk):
 
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_periodoasignacion', login_url='/login/', 
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def parroco_periodos_asignacion_update(request, pk):
 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = pk)
@@ -2028,18 +2031,16 @@ class LogListView(ListView):
 
 	def get_queryset(self):
 		try:
-			if (self.request.user.is_superuser):
+			if not (self.request.user.is_superuser):
 
 				queryset = LogEntry.objects.all()
 				return queryset
-			else:
-				queryset=LogEntry.objects.filter(user=self.request.user)
-				return queryset
+			
 
 		except: 
 			return [];
 	@method_decorator(login_required(login_url='/login/'))
-	@method_decorator(permission_required('sacramentos.change_logentry', login_url='/login/', 
+	@method_decorator(permission_required('admin.change_logentry', login_url='/login/', 
 		raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(LogListView, self).dispatch(*args, **kwargs)
@@ -2440,7 +2441,7 @@ def exportar_csv_logs(request):
     return response
 
 # para poder exportar a csv con utf-8
-@login_required(login_url='/login/')
+
 def encode(text):
 	return text.encode('utf-8')
 

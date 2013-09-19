@@ -41,7 +41,7 @@ from .forms import (
 	DivErrorList,
 	IntencionForm,
 	ParroquiaForm, 
-	AsignarParroquiaForm, PeriodoAsignacionParroquiaForm, 
+	AsignarParroquiaForm, PeriodoAsignacionParroquiaForm, PeriodoAsignacionParroquiaUpdateForm,
 	AsignarSecretariaForm,
 	ReporteIntencionesForm,ReporteSacramentosAnualForm,ReportePermisoForm,
 	)
@@ -1776,7 +1776,7 @@ def parroco_periodos_asignacion_update(request, pk):
 
 	if request.method == 'POST':
 		estado = request.POST.get('estado')
-		form = PeriodoAsignacionParroquiaForm(request.POST, instance=periodo)
+		form = PeriodoAsignacionParroquiaUpdateForm(request.POST, instance=periodo)
 		if form.is_valid():
 			
 			periodo_activo= PeriodoAsignacionParroquia.objects.filter(asignacion=periodo.asignacion, estado=True).exclude(id=periodo.id)
@@ -1813,7 +1813,7 @@ def parroco_periodos_asignacion_update(request, pk):
 			return render(request, template_name, ctx)
 
 	else:
-		form = PeriodoAsignacionParroquiaForm(instance=periodo)
+		form = PeriodoAsignacionParroquiaUpdateForm(instance=periodo)
 		ctx = {'form': form, 'object':periodo.asignacion}
 		return render(request, template_name, ctx)
 

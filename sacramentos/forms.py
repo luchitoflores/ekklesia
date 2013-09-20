@@ -979,36 +979,17 @@ class AsignarParroquiaForm(ModelForm):
 
 #Form para asignar una secretaria a una parroquia
 class AsignarSecretariaForm(ModelForm):
-	
-	# def clean_persona(self):
-	# 	data = self.cleaned_data['persona']
-	# 	try: 
-	# 		asignacion = AsignacionParroquia.objects.get(persona=data)
-			
-	# 		if asignacion.id:
-	# 			raise forms.ValidationError('el perfil seleccionado ya tiene una asignación activa')
-	# 	except ObjectDoesNotExist:
-	# 		return data
-
-	# 	return data
 	def clean(self):
 		cleaned_data = super(AsignarSecretariaForm, self).clean()
 		persona = cleaned_data.get("persona")
 		parroquia = cleaned_data.get("parroquia")
-		print persona
-
-		
-		# if not persona.user.email:
-		# 	msg = u"La persona elegida no tiene registrado un email, proceda a asignarle uno"
-		# 	self._errors["persona"] = self.error_class([msg])
-
+				
 		esta_activo_otra_parroquia= PeriodoAsignacionParroquia.objects.filter(asignacion__persona=persona, estado=True).exclude(asignacion__parroquia=parroquia)
 		if esta_activo_otra_parroquia:
 			msg = u"La persona elegida ya tiene una asignación activa en otra parroquia"
 			self._errors["persona"] = self.error_class([msg])
-     
-		return cleaned_data
 
+		return cleaned_data
 
 	def __init__(self, user, persona = PerfilUsuario.objects.none(), estado=False, *args, **kwargs):
 		super(AsignarSecretariaForm, self).__init__(*args, **kwargs)
@@ -1018,9 +999,8 @@ class AsignarSecretariaForm(ModelForm):
 		except ObjectDoesNotExist:
 			raise PermissionDenied
 
-		self.fields['parroquia']=forms.ModelChoiceField(queryset=Parroquia.objects.filter(id=parroquia.id), empty_label='-- Seleccione --')
+		self.fields['parroquia']=forms.ModelChoiceField(queryset=Parroquia.objects.filter(id=parroquia.id), empty_label=None)
 
-		self.fields['estado']=forms.BooleanField(label='Está activo?', required=False, initial=estado)
 	class Meta:
 		model = AsignacionParroquia
 		fields = ('persona', 'parroquia')

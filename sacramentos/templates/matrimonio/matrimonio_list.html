@@ -67,8 +67,12 @@ $(document).ready(function(){
 			<td>{{o.testigo_novio}}</td>
 			<td>{{o.testigo_novia}}</td>
 			{%if o.vigente%}
-					
-			<td><a class='id_delete' href="#id_vigencia" role="button" data-toggle="modal" name='{{o.id}}'>Quitar Vigencia</a>
+
+			<td>
+				{%if perms.sacramentos.delete_matrimonio %}
+				<a class='id_delete' href="#id_vigencia" role="button" data-toggle="modal" name='{{o.id}}'>Quitar Vigencia
+				</a>
+				{%endif%}
 			</td>
 			{%endif%}
 			
@@ -78,8 +82,10 @@ $(document).ready(function(){
 	</tbody>
 
 </table>
-
+{%if perms.sacramentos.add_matrimonio %}
 <a href="{% url 'matrimonio_create' %}" class='btn btn-primary'>Nueva Acta Matrimonial</a>
+{%endif%}
+
 
 <!-- Modal para quitar la vigencia de un matrimonio-->
 <div  id="id_vigencia" class="modal hide fade"  tabindex="5">
@@ -90,13 +96,13 @@ $(document).ready(function(){
 	<div class="modal-body">
 		<p>Está seguro de querer eliminar la vigencia del matrimonio de:</p>
 		<h5 id='id_novio'></h4> con 
-		<h5 id='id_novia'></h4> 
-	</div>
-	<div class="modal-footer">
-		<a href="." class="btn">Cancelar</a>
-		<a id='id_eliminar' href="." class="btn btn-danger">Eliminar</a>
-	</div>
-</div>
+			<h5 id='id_novia'></h4> 
+			</div>
+			<div class="modal-footer">
+				<a href="." class="btn">Cancelar</a>
+				<a id='id_eliminar' href="." class="btn btn-danger">Eliminar</a>
+			</div>
+		</div>
 
 
-{%endblock%}
+		{%endblock%}

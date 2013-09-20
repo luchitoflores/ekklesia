@@ -1479,6 +1479,8 @@ class ParroquiaListView(ListView):
 	template_name = 'parroquia/parroquia_list.html'
 
 	@method_decorator(login_required(login_url='/login/'))
+	@method_decorator(permission_required('sacramentos.change_parroquia', login_url='/login/',
+		raise_exception=permission_required))
 	@method_decorator(permission_required('sacramentos.change_asignacionparroquia', login_url='/login/',
 		raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):

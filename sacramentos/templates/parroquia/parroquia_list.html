@@ -25,13 +25,18 @@ Lista de Parroquias Eclesiásticas
 			<td>{{o.direccion.parroquia}}</td>
 			<td>{{o.direccion.domicilio}}</td>
 			<td>{{o.direccion.telefono}}</td>
-			<td><a href="{%url 'asignar_parroco_list' pk=o.id%}">Párrocos</a></td>
+			<td>
+				<a href="{%url 'asignar_parroco_list' pk=o.id%}">
+					Párrocos
+				</a>
+			</td>
 			
 		</tr>
 		{%endfor%}
 	</tbody>
 </table>
-
+{%if perms.sacramentos.add_parroquia %}
 <a href="{%url 'parroquia_create'%}" class='btn btn-primary'>Nueva Parroquia</a>
+{%endif%}
 
 {%endblock%}

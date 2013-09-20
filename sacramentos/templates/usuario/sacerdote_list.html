@@ -25,7 +25,8 @@ Lista de Sacerdotes
 		{%endfor%}
 	</tbody>
 </table>
-
+{%if perms.sacramentos.add_perfilusuario and perms.sacramentos.add_user %}
 <a href="{%url 'sacerdote_create'%}" class='btn btn-primary'>Nuevo Sacerdote</a>
+{%endif%}
 
 {% endblock%}

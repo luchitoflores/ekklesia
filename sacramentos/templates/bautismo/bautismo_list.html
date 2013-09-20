@@ -16,17 +16,12 @@ Lista de Bautizados
 	<thead>
 		<tr class='alert alert-info'>
 			
-			
-
 			<th>Bautizado</th>
 			<th>Fecha Nacimiento</th>
 			<th>Fecha Sacramento</th>
 			<th>Papa</th>
 			<th>Mama</th>
-			
-			
-			
-			
+						
 		</tr>
 		
 	</thead>
@@ -46,7 +41,8 @@ Lista de Bautizados
 	</tbody>
 
 </table>
-
+{%if perms.sacramentos.add_bautismo %}
 <a id='id_crear_bautismo' href="{% url 'bautismo_create' %}" class='btn btn-primary'>Nueva Acta Bautismal</a>
+{%endif%}
 
 {%endblock%}

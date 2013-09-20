@@ -1,4 +1,4 @@
-{%if user.is_superuser%}
+
 <div class="navbar navbar-inverse nav">
 	<div class="navbar-inner" datato>
 		<div class="container">
@@ -7,75 +7,47 @@
 				<li ><a  href="/home/"><i class="icon-home icon-white"></i> Inicio</a></li>
 				<li class="divider-vertical"></li>
 				<li class="dropdown">
+					{% if perms.sacramentos.change_perfilusuario and perms.auth.change_user%}
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Personas<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="{% url 'sacerdote_list'%}">Sacerdotes</a></li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ciudades<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="{% url 'provincia_list'%}">Provincias</a></li>
-						<li><a href="{% url 'canton_list'%}">Cantones</a></li>
-						<li><a href="{% url 'parroquiacivil_list'%}">Parroquias</a></li>
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Parroquias<b class="caret"></b></a>
-					<ul class="dropdown-menu">
-						<li><a href="{%url 'parroquia_list'%}">Parroquias</a></li>
-						{# <!--<li><a href="{%url 'asignar_parroquia_list'%}">Asignar Administrador</a></li> --> #}
-						<li><a href="{%url 'asignar_secretaria_list'%}">Asignar Secretaria</a></li>
-					</ul>
-				</li>
-				<li><a href="{%url 'group_list'%}">Grupos y Permisos</a></li>
-				<li><a href="{%url 'log_list'%}">Logs</a></li>
-			</ul>
-			{%endif%}
-			<div class='pull-right'>
-				<ul class="nav pull-right">
-					{% if user.is_authenticated%}
-					<li><a href="">{%if user.get_full_name%}{{ user.get_full_name }}{%else%}{{ user.username }}{%endif%}</a></li>
-					<li class="dropdown">
-						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-							<i class='icon-gear'></i><b class="caret"></b>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a href="{%url 'password_change'%}"><i class="icon-key"></i> Cambiar Clave</a></li>
-							<li><a href="{%url 'logout'%}"><i class="icon-power-off"></i> Cerrar Sesión</a></li>
-						</ul>
-					</li>
-					{%else%}
-					<li><a href='/login/'>Iniciar Sesión</a></li>
 					{%endif%}
-				</ul>
-			</div>
-		</div>
-	</div>
-</div>
-
-{%else%}
-
-<div class="navbar navbar-inverse nav">
-	<div class="navbar-inner" datato>
-		<div class="container">
-			{% if user.is_authenticated%}
-			<ul class="nav">
-				<li ><a  href="/home/"><i class="icon-home icon-white"></i> Inicio</a></li>
-				<li class="divider-vertical"></li>
-				<li><a href="{% url 'usuario_list'%}">Feligrés</a></li>
-				<li><a href="{%url 'libro_list'%}">Libros</a></li>
-				<li class="dropdown">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Sacramentos <b class="caret"></b></a>
 					<ul class="dropdown-menu">
+						{% if perms.sacramentos.change_perfilusuario and perms.auth.change_user%}
+						<li><a href="{% url 'sacerdote_list'%}">Sacerdotes</a></li>
+						{%endif%}
+						{% if perms.sacramentos.change_perfilusuario and perms.auth.change_user%}
+						<li><a href="{% url 'usuario_list'%}">Feligres</a></li>
+						{%endif%}
+					</ul>
+				</li>
+				
+				{%if perms.sacramentos.change_libro %}
+				<li><a href="{%url 'libro_list'%}">Libros</a></li>
+				{%endif%}
+				<li class="dropdown">
+					{% if perms.sacramentos.change_sacramento%}
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Sacramentos <b class="caret"></b></a>
+					{%endif%}
+					<ul class="dropdown-menu">
+						{% if perms.sacramentos.change_bautismo and perms.sacramentos.change_sacramento%}
 						<li><a href="{% url 'bautismo_list'%}">Bautismo</a></li>
+						{%endif%}
+						{% if perms.sacramentos.change_eucaristia and perms.sacramentos.change_sacramento%}
 						<li><a href="{% url 'eucaristia_list'%}">Primera Comunión</a></li>
+						{%endif%}
+						{% if perms.sacramentos.change_confirmacion and perms.sacramentos.change_sacramento%}
 						<li><a href="{% url 'confirmacion_list'%}">Corfirmación</a></li>
+						{%endif%}
 						<li class="dropdown-submenu" >
+							{% if perms.sacramentos.change_matrimonio and perms.sacramentos.change_sacramento%}
 							<a tabindex="-1" href="#">Matrimonio</a>
+							{%endif%}
 							<ul class="dropdown-menu">
+								{% if perms.sacramentos.change_matrimonio and perms.sacramentos.change_sacramento%}
 								<li><a href="{% url 'matrimonio_list'%}">Vigentes</a></li>
+								{%endif%}
+								{% if perms.sacramentos.change_bautismo and perms.sacramentos.change_sacramento%}
 								<li><a href="{% url 'matrimonio_list_no_vigentes'%}">No Vigentes</a></li>
+								{%endif%}
 							</ul>
 						</li>
 					</ul>
@@ -84,17 +56,61 @@
 				<li><a href="{%url 'intencion_list'%}">Intenciones de Misa</a></li>
 				{%endif%}
 				<li class='dropdown'>
+					{% if perms.sacramentos.change_sacramento%}
 					<a class='dropdown-toggle' data-toggle='dropdown' href="#">Reportes<b class="caret"></b></a>
+					{%endif%}
 					<ul class='dropdown-menu'>
+						{%if perms.sacramentos.change_sacramento %}
 						<li><a href="{%url 'reporte_anual'%}" > Anual Sacramentos</a></li>
-						
+						{%endif%}
+						{%if perms.sacramentos.change_intenciones %}
 						<li><a href="{%url 'reporte_intenciones'%}" >Intenciones</a></li>
-						
+						{%endif%}
+						{%if perms.sacramentos.change_sacramento %}
 						<li><a href="{%url 'reporte_permiso'%}" >Permisos</a></li>
+						{%endif%}
 						
 					</ul>
 				</li>
+				
+			</ul>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					{% if perms.ciudades%}
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Ciudades<b class="caret"></b></a>
+					{%endif%}
+					<ul class="dropdown-menu">
+						{% if perms.ciudades.change_provincia%}
+						<li><a href="{% url 'provincia_list'%}">Provincias</a></li>
+						{%endif%}
+						{% if perms.ciudades.change_canton%}
+						<li><a href="{% url 'canton_list'%}">Cantones</a></li>
+						{%endif%}
+						{% if perms.ciudades.change_parroquia%}
+						<li><a href="{% url 'parroquiacivil_list'%}">Parroquias</a></li>
+						{%endif%}
+					</ul>
+				</li>
+				<li class="dropdown">
+					{% if perms.sacramentos.change_asignacionparroquia%}
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Parroquias<b class="caret"></b></a>
+					{%endif%}
+					<ul class="dropdown-menu">
+						{% if perms.sacramentos.change_parroquia%}
+						<li><a href="{%url 'parroquia_list'%}">Parroquias</a></li>
+						{%endif%}
+						{% if perms.sacramentos.change_asignacionparroquia%}
+						<li><a href="{%url 'asignar_secretaria_list'%}">Asignar Secretaria</a></li>
+						{%endif%}
+					</ul>
+				</li>
+				{% if perms.auth.change_group and perms.auth.change_permission%}
+				<li><a href="{%url 'group_list'%}">Grupos y Permisos</a></li>
+				{%endif%}
+				{% if perms.admin.change_logentry%}
 				<li><a href="{%url 'log_list'%}">Logs</a></li>
+				{%endif%}
 			</ul>
 			{%endif%}
 			<div class='pull-right'>
@@ -119,4 +135,5 @@
 	</div>
 </div>
 
-{%endif%}
+
+

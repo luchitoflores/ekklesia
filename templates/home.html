@@ -6,7 +6,9 @@ Home
 {%block content%}
 <div class="row">
 	<div class="span10 offset1">
+
 		<ul class='thumbnails'>
+			{%if perms.sacramentos.change_perfilusuario and perms.auth.change_user%}
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -16,10 +18,17 @@ Home
 					<div class="caption">
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo, tempora, in, nostrum adipisci 
 						</p>
-						<p><a class='btn btn-primary' href="{%url 'usuario_list'%}">Ir</a></p>
+						<p>
+							
+							<a class='btn btn-primary' href="{%url 'usuario_list'%}">Ir
+							</a>
+						</p>
 					</div>
 				</div>
 			</li>
+			{%endif%}
+
+			{%if perms.sacramentos.change_libro%}
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -29,9 +38,33 @@ Home
 					<div class="caption">
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo, tempora, in, nostrum adipisci 
 						</p>
-						<p><a class='btn btn-primary' href="{%url 'libro_list'%}">Ir</a></p>
+						<p>
+							
+							<a class='btn btn-primary' href="{%url 'libro_list'%}">Ir</a>
+
+						</p>
 					</div>
 				</div>
+				{%endif%}
+			</li>
+			{%if perms.admin.change_logentry%}
+			<li class="span4">
+				<div class='thumbnail'>
+					<div style='text-align: center'>
+						<i class="icon-book icon-4x "></i>
+						<h2>Logs</h2>
+					</div>
+					<div class="caption">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo, tempora, in, nostrum adipisci 
+						</p>
+						<p>
+							
+							<a class='btn btn-primary' href="{%url 'log_list'%}">Ir</a>
+
+						</p>
+					</div>
+				</div>
+				{%endif%}
 			</li>
 			
 		</ul>
@@ -41,6 +74,7 @@ Home
 	
 	<div class="row">
 		<ul class="thumbnails">
+			{%if perms.sacramentos.change_sacramento%}
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -54,7 +88,8 @@ Home
 					</div>
 				</div>
 			</li>
-
+			{%endif%}
+			{%if perms.sacramentos.change_intenciones%}
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -69,22 +104,49 @@ Home
 				</div>
 
 			</li>
+			{%endif%}
 			
-			<!--<li class="span3">
+
+		</ul>
+	</div>
+</div>
+<div class="span10 offset1">
+	
+	<div class="row">
+		<ul class="thumbnails">
+			{%if perms.auth.change_group%}
+			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
-						<i class="icon-calendar icon-4x "></i>
-						<h2>Agenda</h2>
+						<i class="icon-file-text icon-4x"></i>
+						<h2>Grupos Y Permisos</h2>
 					</div>
-
 					<div class="caption">
 						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo, tempora, in, nostrum adipisci 
 						</p>
-						<p><a class='btn btn-primary' href="">Ir</a></p>
+						<p><a class='btn btn-primary' href="{%url 'group_list'%}">Ir</a></p>
+					</div>
+				</div>
+			</li>
+			{%endif%}
+			{%if perms.sacramentos.change_parroquia%}
+			<li class="span4">
+				<div class='thumbnail'>
+					<div style='text-align: center'>
+						<i class="icon-thumbs-up icon-4x "></i>
+						<h2>Parroquias</h2>
+					</div>
+					<div class="caption">
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, illo, tempora, in, nostrum adipisci 
+						</p>
+						<p><a class='btn btn-primary' href="{%url 'parroquia_list'%}">Ir</a></p>
 					</div>
 				</div>
 
-			</li>-->
+			</li>
+			{%endif%}
+			
+
 		</ul>
 	</div>
 </div>

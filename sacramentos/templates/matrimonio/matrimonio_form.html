@@ -297,7 +297,11 @@ function check(input) {
 			</fieldset>
 			{%if object.id %}
 			<fieldset id='id_fielset_tabla' class='scheduler-border'>
-				<legend class='scheduler-border'><a href="#id_crear_nota_matrimonio" data-toggle='modal'>Agregar Nota Marginal</a></legend>
+				<legend class='scheduler-border'>
+					{%if perms.sacramentos.add_notamarginal%}
+					<a href="#id_crear_nota_matrimonio" data-toggle='modal'>Agregar Nota Marginal</a>
+					{%endif%}
+				</legend>
 				<table id='id_table_nota_matrimonio' class='table table-bordered table-striped'>
 					<thead>
 						<tr class='alert alert-info'>

@@ -41,27 +41,7 @@ Lista de Confirmados
 	</tbody>
 
 </table>
-
+{%if perms.sacramentos.add_confirmacion %}
 <a href="{% url 'confirmacion_create' %}" class='btn btn-primary'>Nueva Confirmacion</a>
-
-<div class="pagination">
-	<ul>
-
-		{% if page_obj.has_previous %}
-		<li><a href="?page={{page_obj.previous_page_number }}">Anterior</a>
-			{% endif %}
-		</li>
-
-		{%for p in lista%}
-		<li><a href="?page={{p}}">{{p}}</a></li>
-		{%endfor%}
-
-		<li>
-			{% if page_obj.has_next %}
-			<a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
-			{% endif %}
-		</li>
-	</ul>
-</div>
-
+{%endif%}
 {%endblock%}

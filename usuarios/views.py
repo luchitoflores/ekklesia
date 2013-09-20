@@ -135,6 +135,8 @@ class GroupCreate(CreateView):
 	success_url = '/group/'
 
 	@method_decorator(login_required(login_url='login'))
+	@method_decorator(permission_required('auth.add_group', login_url='/login/',
+		raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(GroupCreate, self).dispatch(*args, **kwargs)
 
@@ -147,6 +149,8 @@ class GroupUpdate(UpdateView):
 	success_url = '/group/'
 
 	@method_decorator(login_required(login_url='login'))
+	@method_decorator(permission_required('auth.change_group', login_url='/login/',
+		raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(GroupUpdate, self).dispatch(*args, **kwargs)
 
@@ -154,6 +158,12 @@ class GroupList(ListView):
 	model = Group
 	context_object_name = 'object_list'
 	template_name = 'auth/group_list.html'
+
+	@method_decorator(login_required(login_url='login'))
+	@method_decorator(permission_required('auth.change_group', login_url='/login/',
+		raise_exception=permission_required))
+	def dispatch(self, *args, **kwargs):
+		return super(GroupList, self).dispatch(*args, **kwargs)
 
 	
 		

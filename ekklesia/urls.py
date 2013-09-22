@@ -7,13 +7,10 @@ from home import urls as home_urls
 from usuarios import urls as usuarios_urls
 from ciudades import urls as ciudades_urls
 from django.utils.functional import curry
-from django.views.defaults import *
+# from django.views.defaults import *
 
 admin.autodiscover()
 
-handler500 = curry(server_error, template_name='500.html')
-handler404 = curry(page_not_found, template_name='404.html')
-handler403 = curry(permission_denied, template_name='403.html')
 
 
 urlpatterns = patterns('',
@@ -31,3 +28,7 @@ urlpatterns = patterns('',
     url(r'^', include(usuarios_urls)),
     url(r'^', include(ciudades_urls)),
 )
+
+handler500 = curry(server_error, template_name='500.html')
+handler404 = curry(page_not_found, template_name='404.html')
+handler403 = curry(permission_denied, template_name='403.html')

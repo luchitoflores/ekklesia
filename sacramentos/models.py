@@ -473,8 +473,8 @@ class AsignacionParroquia(TimeStampedModel):
      #    	db_table = u'sacramentos_perfilusuario_parroquias'
 
 class PeriodoAsignacionParroquia(TimeStampedModel):
-    inicio = models.DateField(null=True, blank=True)
-    fin = models.DateField(null=True, blank=True) 
+    inicio = models.DateField(null=True, blank=True, help_text='Ingrese la fecha de inicial de asignación Ej: dd/mm/yyyy')
+    fin = models.DateField(null=True, blank=True, help_text='Ingrese la fecha final de asignación  Ej: dd/mm/yyyy') 
     presente = models.BooleanField('Al presente', help_text='Marque la casilla para indicar que el periodo de asignación está vigente')  
     estado = models.BooleanField('Activo?', help_text='Marque la casilla activo para indicar que el usuario puede acceder al sistema')
     asignacion = models.ForeignKey('AsignacionParroquia')

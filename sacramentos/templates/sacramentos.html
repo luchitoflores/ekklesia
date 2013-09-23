@@ -9,6 +9,7 @@ Sacramentos
 <div class="row">
 	<div class="span10 offset1">
 		<ul class="thumbnails">
+			{%if perms.sacramentos.change_bautismo and perms.change_sacramento%}
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -19,6 +20,8 @@ Sacramentos
 					<p><a href="{%url 'bautismo_list'%}" class='btn btn-primary'>Ir</a></p>
 				</div>
 			</li>
+			{%endif%}
+			{%if perms.sacramentos.change_eucaristia and perms.change_sacramento%}
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -29,12 +32,14 @@ Sacramentos
 					<p><a href="{%url 'eucaristia_list'%}" class='btn btn-primary'>Ir</a></p>
 				</div>
 			</li>
+			{%endif%}
 		</ul>
 	</div>
 </div>
 <div class="row">
 	<div class="span10 offset1">
 		<ul class="thumbnails">
+			{%if perms.sacramentos.change_confirmacion and perms.change_sacramento%}			
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -45,6 +50,8 @@ Sacramentos
 					<p><a href="{%url 'confirmacion_list'%}" class='btn btn-primary'>Ir</a></p>
 				</div>
 			</li>
+			{%endif%}
+			{%if perms.sacramentos.change_matrimonio and perms.change_sacramento%}
 			<li class="span4">
 				<div class='thumbnail'>
 					<div style='text-align: center'>
@@ -56,6 +63,8 @@ Sacramentos
 					<p><a href="{%url 'matrimonio_list'%}" class='btn btn-primary'>Ir</a></p>
 				</div>
 			</li>
+			{%endif%}
+
 		</ul>
 	</div>
 </div>

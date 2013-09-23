@@ -4,6 +4,13 @@ body
 	font-family: "Open Sans", Helvetica, Arial, sans-serif !important;
 	/*font-size: 16px;*/
 }
+/*media queries para h1*/
+/*@media all and (max-width: 480px){
+	.row-fluid h1{
+		font-size: 25px;
+		padding-bottom: 15px;
+	}
+}*/
 h1{
 	font-family: 'Droid Serif',Helvetica,Arial,sans-serif;
 }

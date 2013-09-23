@@ -51,7 +51,7 @@ def login_view(request):
 				else:
 					messages.add_message(request, messages.ERROR, 'Ud. no tiene permisos para acceder al sistema')
 			else:
-				messages.add_message(request, messages.ERROR, 'El form no es válido')
+				messages.add_message(request, messages.ERROR, 'El nombre de usuario o la contraseña están incorrectos')
 		else:
 			form = AuthenticationForm()
 	return render(request, 'login.html', {'form':form})

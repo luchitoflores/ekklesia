@@ -1,6 +1,7 @@
 # -*- coding:utf-8 -*-
 # Django settings for ekklesia project.
 
+# DEBUG = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -24,7 +25,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-# ALLOWED_HOSTS = ['127.0.0.1:8080']
+# ALLOWED_HOSTS = ['127.0.0.1']
 ALLOWED_HOSTS = []
 
 # Local time zone for this installation. Choices can be found here:

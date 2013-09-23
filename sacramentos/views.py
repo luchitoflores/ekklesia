@@ -1837,13 +1837,13 @@ def parroco_periodos_asignacion_list(request, pk):
 	# parroquia = get_object_or_404(Parroquia, pk=pk)
 	periodos = PeriodoAsignacionParroquia.objects.filter(asignacion__id=pk)
 	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
-	# messages.info(request, 'aqui estoy')
+	
 	ctx = {'object_list': periodos, 'asignacion': asignacion}
 	return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
 def asignar_parroco_list(request, pk):
-	messages.info(request, 'aqui estoy')
+	
 	template_name = 'parroquia/asignar_parroquia_list.html'
 	object_list = AsignacionParroquia.objects.filter(parroquia__id=pk, persona__user__groups__name='Sacerdote') 
 	parroquia = get_object_or_404(Parroquia, pk=pk)
@@ -2132,9 +2132,8 @@ def bautismo_certificado(request, pk):
 		asignacion=AsignacionParroquia.objects.get(persona__user=request.user)
 	except ObjectDoesNotExist:
 		raise PermissionDenied
-	
 	cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
-		parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
+			parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 	notas=NotaMarginal.objects.filter(bautismo=bautismo)
 	html = render_to_string('bautismo/bautismo_certificado.html', {'pagesize':'A4', 'bautismo':bautismo,
 		'cura':cura,'notas':notas,'asignacion':asignacion},context_instance=RequestContext(request))

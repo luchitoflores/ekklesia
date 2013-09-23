@@ -1,5 +1,12 @@
 <!doctype html>
 {%extends 'base.html'%}
+{%block title%}
+Reporte
+{%endblock%}
+{%block content_title%}
+Reporte de Permisos
+{%endblock%}
+
 {%block content%}
 <form action="." class='form-horizontal'>
 	<div class='row'>
@@ -42,10 +49,10 @@
 							
 						</div>
 						<div class="controls">
-								<div class="errors">								
-									{{form.feligres.errors}}
-								</div>
+							<div class="errors">								
+								{{form.feligres.errors}}
 							</div>
+						</div>
 
 
 					</div>

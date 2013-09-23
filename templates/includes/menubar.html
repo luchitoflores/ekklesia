@@ -11,7 +11,7 @@
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">Personas<b class="caret"></b></a>
 					{%endif%}
 					<ul class="dropdown-menu">
-						{% if perms.sacramentos.change_perfilusuario and perms.auth.change_user%}
+						{% if perms.sacramentos.change_perfilusuario and perms.auth.change_user and perms.ciudades%}
 						<li><a href="{% url 'sacerdote_list'%}">Sacerdotes</a></li>
 						{%endif%}
 						{% if perms.sacramentos.change_perfilusuario and perms.auth.change_user%}

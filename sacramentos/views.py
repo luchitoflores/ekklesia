@@ -2274,22 +2274,25 @@ def reporte_anual_sacramentos(request):
 			mixtos=Matrimonio.objects.filter(fecha_sacramento__year=anio_actual,tipo_matrimonio='Mixto',
 				parroquia=asignacion.parroquia).count()
 			matrimonios=catolicos+mixtos
-			
 			form = ReporteSacramentosAnualForm(request.GET)
-			if form.is_valid():
-				html=render_to_string('reportes/reporte_anual_sacramentos.html',
-				{'pagesize':'A4','num_bautizos':num_bautizos,'ninios1':ninios1,'ninios7':ninios7,
-				'ninios':ninios,'eucaristias':eucaristias,'confirmaciones':confirmaciones,
-				'catolicos':catolicos,'mixtos':mixtos,'asignacion':asignacion,'cura':cura,
-				'anio_actual':anio_actual,'matrimonios':matrimonios},
-				context_instance=RequestContext(request))
-				return generar_pdf(html)
-				
-				
+			if(bautismos and eucaristias and confirmaciones and matrimonios):
+				if form.is_valid():
+					html=render_to_string('reportes/reporte_anual_sacramentos.html',
+					{'pagesize':'A4','num_bautizos':num_bautizos,'ninios1':ninios1,'ninios7':ninios7,
+					'ninios':ninios,'eucaristias':eucaristias,'confirmaciones':confirmaciones,
+					'catolicos':catolicos,'mixtos':mixtos,'asignacion':asignacion,'cura':cura,
+					'anio_actual':anio_actual,'matrimonios':matrimonios},
+					context_instance=RequestContext(request))
+					return generar_pdf(html)
+					
+					
+				else:
+					messages.error(request, 'Uno o más cámpos son inválidos')
+					ctx = {'form': form}
+					# return render(request, template_name, ctx)
 			else:
-				messages.error(request, 'Uno o más cámpos son inválidos')
-				ctx = {'form': form}
-				# return render(request, template_name, ctx)
+				messages.error(request,'No hay sacramentos en este año')
+				ctx={'form':form}
 		else:
 			form = ReporteSacramentosAnualForm()
 	else:
@@ -2325,17 +2328,21 @@ def reporte_intenciones(request):
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
-			if form.is_valid():
-				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
-				context_instance=RequestContext(request))
-				return generar_pdf(html)
-			
-			
+			if (intenciones):
+				
+				if form.is_valid():
+					html=render_to_string('reportes/reporte_intenciones.html',
+					{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
+					context_instance=RequestContext(request))
+					return generar_pdf(html)
+				
+				
+				else:
+					messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
+					ctx = {'form': form}
 			else:
-				messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
-				ctx = {'form': form}
-			# return render(request, template_name, ctx)
+				messages.error(request,'No hay intenciones en ha fecha ingresada')
+				ctx={'form':form}
 
 		if fecha and hora:
 			try:
@@ -2347,16 +2354,21 @@ def reporte_intenciones(request):
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
-			if form.is_valid():
-				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
-				context_instance=RequestContext(request))
-				return generar_pdf(html)
-			
-			
+			if(intenciones):
+
+				if form.is_valid():
+					html=render_to_string('reportes/reporte_intenciones.html',
+					{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
+					context_instance=RequestContext(request))
+					return generar_pdf(html)
+				
+				
+				else:
+					messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
+					ctx = {'form': form}
 			else:
-				messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
-				ctx = {'form': form}
+				messages.error(request,'No hay intenciones en ha fecha ingresada')
+				ctx={'form':form}
 
 	if tipo=='m':
 		
@@ -2372,17 +2384,21 @@ def reporte_intenciones(request):
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
-			if form.is_valid():
-				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
-				context_instance=RequestContext(request))
-				return generar_pdf(html)
-			
-			
+			if(intenciones):
+				if form.is_valid():
+					html=render_to_string('reportes/reporte_intenciones.html',
+					{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
+					context_instance=RequestContext(request))
+					return generar_pdf(html)
+				
+				
+				else:
+					messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
+					ctx = {'form': form}
 			else:
-				messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
-				ctx = {'form': form}
-			# return render(request, template_name, ctx)
+				messages.error(request,'No hay intenciones en ha fecha ingresada')
+				ctx={'form':form}
+
 	if tipo=='a':
 		if fecha:
 			fecha=fecha
@@ -2396,16 +2412,19 @@ def reporte_intenciones(request):
 			cura=AsignacionParroquia.objects.get(persona__user__groups__name='Sacerdote',
 				parroquia=asignacion.parroquia,periodoasignacionparroquia__estado=True)
 			form = ReporteIntencionesForm(request.GET)
-			if form.is_valid():
-				html=render_to_string('reportes/reporte_intenciones.html',
-				{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
-				context_instance=RequestContext(request))
-				return generar_pdf(html)
-			
-			
+			if(intenciones):
+				if form.is_valid():
+					html=render_to_string('reportes/reporte_intenciones.html',
+					{'pagesize':'A4','intenciones':intenciones,'asignacion':asignacion,'cura':cura},
+					context_instance=RequestContext(request))
+					return generar_pdf(html)
+				
+				
+				else:
+					messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
+					ctx = {'form': form}
 			else:
-				messages.error(request, 'Uno o más cámpos son inválidos %s' % form)
-				ctx = {'form': form}
+				messages.error(request,'No hay intenciones en la fecha ingresada')
 	else:
 		form = ReporteIntencionesForm()
 	

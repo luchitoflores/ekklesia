@@ -1733,6 +1733,7 @@ def nuevo_periodo_asignacion(request, pk):
 	if request.method == 'POST':
 		form = PeriodoAsignacionParroquiaForm(request.POST)
 		if form.is_valid():
+			estado = request.POST.get('estado')
 			periodo_activo= PeriodoAsignacionParroquia.objects.filter(asignacion=asignacion, estado=True)
 			periodo_activo_otra_parroquia = PeriodoAsignacionParroquia.objects.filter(asignacion__persona=asignacion.persona, estado=True).exclude(asignacion__parroquia=asignacion.parroquia)
 			if periodo_activo:
@@ -1749,6 +1750,14 @@ def nuevo_periodo_asignacion(request, pk):
 				periodo = form.save(commit=False)
 				periodo.asignacion = asignacion
 				periodo.save()
+				if estado:
+					user = PerfilUsuario.objects.get(pk=periodo.asignacion.persona.id).user
+					user.is_staff = True
+					user.save()
+				else: 
+					user = PerfilUsuario.objects.get(pk=periodo.asignacion.persona.id).user
+					user.is_staff = False
+					user.save()
 				LogEntry.objects.log_action(
             	user_id=request.user.id,
             	content_type_id=ContentType.objects.get_for_model(periodo).pk,
@@ -1828,13 +1837,15 @@ def parroco_periodos_asignacion_list(request, pk):
 	# parroquia = get_object_or_404(Parroquia, pk=pk)
 	periodos = PeriodoAsignacionParroquia.objects.filter(asignacion__id=pk)
 	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
+	# messages.info(request, 'aqui estoy')
 	ctx = {'object_list': periodos, 'asignacion': asignacion}
 	return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
 def asignar_parroco_list(request, pk):
+	messages.info(request, 'aqui estoy')
 	template_name = 'parroquia/asignar_parroquia_list.html'
-	object_list = AsignacionParroquia.objects.filter(parroquia__id=pk).exclude(periodoasignacionparroquia=None)
+	object_list = AsignacionParroquia.objects.filter(parroquia__id=pk, persona__user__groups__name='Sacerdote') 
 	parroquia = get_object_or_404(Parroquia, pk=pk)
 	ctx = {'object_list': object_list, 'parroquia':parroquia}
 	return render(request, template_name, ctx)
@@ -1905,16 +1916,22 @@ def asignar_secretaria_create(request):
 	success_url = '/asignar/secretaria/'
 	usuario = request.user
 	if request.method == 'POST':
+		perfil = get_object_or_404(PerfilUsuario, pk= request.POST.get('persona'))
 		persona = PerfilUsuario.objects.feligres()
 		form = AsignarSecretariaForm(usuario, persona, request.POST.get('estado'), request.POST)
-		if form.is_valid():
+		form_periodo = PeriodoAsignacionParroquiaForm(request.POST)
+		
+		if form.is_valid() and form_periodo.is_valid():
 			try:
-				asignacion = AsignacionParroquia.objects.get(persona=request.POST.get('persona'))
-				messages.error(request, 'El usuario ya se encuentra asignado')
-				ctx = {'form': form}
+				asignacion =  PeriodoAsignacionParroquia.objects.get(asignacion__persona=request.POST.get('persona'), estado = True)
+				messages.error(request, 'El usuario %s ya tiene un periodo activo' % perfil)
+				ctx = {'form': form, 'form_periodo':form_periodo}
 				return render(request, template_name, ctx)
 			except ObjectDoesNotExist:
 				asig=form.save()
+				periodo = form_periodo.save(commit=False)
+				periodo.asignacion= asig
+				periodo.save()
 				LogEntry.objects.log_action(
             	user_id=request.user.id,
             	content_type_id=ContentType.objects.get_for_model(asig).pk,
@@ -1938,35 +1955,42 @@ def asignar_secretaria_create(request):
 					user.groups.add(secretaria)
 				return HttpResponseRedirect(success_url)
 		else:
-			messages.error(request, 'Uno o más cámpos son inválidos')
+			# messages.error(request, 'Uno o más cámpos son inválidos')
 			if request.POST.get('persona'):
+				messages.error(request, '1.- Uno o más cámpos son inválidos')
 				personas = PerfilUsuario.objects.filter(id=request.POST.get('persona'))
 				form = AsignarSecretariaForm(usuario, personas, request.POST.get('estado'), request.POST)
-				ctx = {'form': form}
+				ctx = {'form': form, 'form_periodo': form_periodo}
 				
 			else: 
+				messages.error(request, '2.- Uno o más cámpos son inválidos')
 				persona = PerfilUsuario.objects.none()
 				form = AsignarSecretariaForm(usuario, persona, request.POST.get('estado'), request.POST)
-				ctx = {'form': form}
+				ctx = {'form': form, 'form_periodo': form_periodo}
 			return render(request, template_name, ctx)
 			
 	else:
 		form = AsignarSecretariaForm(usuario)
-		ctx = {'form': form}
+		form_periodo = PeriodoAsignacionParroquiaForm()
+		ctx = {'form': form, 'form_periodo': form_periodo}
 	return render(request, template_name, ctx)
 
+#El parámetro pk es el id de un periodo
 @login_required(login_url='/login/')
 @permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def asignar_secretaria_update(request, pk):
-	asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
+	# asignacion = get_object_or_404(AsignacionParroquia, pk=pk)
+	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk=pk)
+	# periodo = PeriodoAsignacionParroquia.objects.get(asignacion= asignacion, estado=True)
 	template_name = "parroquia/asignar_secretaria_form.html"
 	success_url = '/asignar/secretaria/'
 	usuario = request.user
 	if request.method == 'POST':
 		persona = PerfilUsuario.objects.feligres()
-		form = AsignarSecretariaForm(usuario, persona, asignacion.persona.user.is_staff, request.POST, instance=asignacion)
-		if form.is_valid():
+		form = AsignarSecretariaForm(usuario, persona, periodo.asignacion.persona.user.is_staff, request.POST, instance=periodo.asignacion)
+		form_periodo = PeriodoAsignacionParroquiaUpdateForm(request.POST, instance=periodo)
+		if form.is_valid() and form_periodo.is_valid():
 			persona_id = request.POST['persona']
 			estado = request.POST.get('estado')
 			if estado:
@@ -1977,36 +2001,40 @@ def asignar_secretaria_update(request, pk):
 				user = PerfilUsuario.objects.get(pk=persona_id).user
 				user.is_staff = False
 				user.save()
-			form.save()
+			asig = form.save()
+			periodo = form_periodo.save(commit=False)
+			periodo.asignacion= asig
+			periodo.save()
 			LogEntry.objects.log_action(
             	user_id=request.user.id,
-            	content_type_id=ContentType.objects.get_for_model(asignacion).pk,
-            	object_id=asignacion.id,
-            	object_repr=unicode(asignacion),
+            	content_type_id=ContentType.objects.get_for_model(periodo.asignacion).pk,
+            	object_id=periodo.asignacion.id,
+            	object_repr=unicode(periodo.asignacion),
             	action_flag=ADDITION,
             	change_message="Asignacion parroquia y secretaria actualizado")
 			return HttpResponseRedirect(success_url)
 		else:
-			if asignacion.persona:
-				messages.error(request, '1.- Uno o más cámpos son inválidos %s' % form) 
-				persona = PerfilUsuario.objects.filter(user__id=asignacion.persona.user.id)
-				form = AsignarSecretariaForm(usuario, persona, asignacion.persona.user.is_staff, request.POST, instance=asignacion)
+			if periodo.asignacion.persona:
+				messages.error(request, '1.- Uno o más cámpos son inválidos') 
+				persona = PerfilUsuario.objects.filter(user__id=periodo.asignacion.persona.user.id)
+				form = AsignarSecretariaForm(usuario, persona, periodo.asignacion.persona.user.is_staff, request.POST, instance=periodo.asignacion)
 			else:
 				messages.error(request, '2.- Uno o más cámpos son inválidos %s' % form) 
 				persona = PerfilUsuario.objects.none()
-				form = AsignarSecretariaForm(usuario, persona, request.POST,  instance=asignacion)
+				form = AsignarSecretariaForm(usuario, persona, request.POST,  instance=periodo.asignacion)
 
-			ctx = {'form': form}
+			ctx = {'form': form, 'form_periodo': form_periodo}
 			return render(request, template_name, ctx)
 	else:
-		if asignacion.persona:
-			persona = PerfilUsuario.objects.filter(user__id=asignacion.persona.user.id)
-			form = AsignarSecretariaForm(usuario, persona, asignacion.persona.user.is_staff, instance=asignacion)
+		if periodo.asignacion.persona:
+			persona = PerfilUsuario.objects.filter(user__id=periodo.asignacion.persona.user.id)
+			form = AsignarSecretariaForm(usuario, persona, periodo.asignacion.persona.user.is_staff, instance=periodo.asignacion)
 		else:
 			persona = PerfilUsuario.objects.none()
-			form = AsignarSecretariaForm(usuario, persona, asignacion.persona.user.is_staff, instance=asignacion)
+			form = AsignarSecretariaForm(usuario, persona, asignacion.persona.user.is_staff, instance=periodo.asignacion)
 		
-		ctx = {'form': form}
+		form_periodo = PeriodoAsignacionParroquiaUpdateForm(instance=periodo)
+		ctx = {'form': form, 'form_periodo':form_periodo}
 		return render(request, template_name, ctx)
 
 # class AsignarSecretariaList(ListView):
@@ -2024,7 +2052,8 @@ def asignar_secretaria_list(request):
 	template_name = 'parroquia/asignar_secretaria_list.html'
 	try:
 		parroquia  = PeriodoAsignacionParroquia.objects.get(estado=True, asignacion__persona__user=request.user).asignacion.parroquia
-		object_list= AsignacionParroquia.objects.filter(parroquia=parroquia, periodoasignacionparroquia=None)
+		object_list = PeriodoAsignacionParroquia.objects.filter(asignacion__parroquia=parroquia).exclude(asignacion__persona__user__groups__name='Sacerdote')
+		# object_list= AsignacionParroquia.objects.filter(parroquia=parroquia).exclude(persona__user__groups__name='Sacerdote')
 		ctx = {'object_list': object_list, 'parroquia':parroquia}
 		return render(request, template_name, ctx)
 	except ObjectDoesNotExist:

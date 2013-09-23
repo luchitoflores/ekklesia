@@ -43,7 +43,11 @@ $(function(){
 	
 	<div class="control-group">
 		{%for f in form%}
+		{%if f.label == 'Nombre'%}
+		<label class="control-label">{{f.label}} *</label>
+		{%else%}
 		<label class="control-label">{{f.label}}</label>
+		{%endif%}
 		<div class="controls">{{f}}</div></br>
 		<div class="controls">{{f.help_text}}</div>
 		<div class="controls errors">{{f.errors}}</div>

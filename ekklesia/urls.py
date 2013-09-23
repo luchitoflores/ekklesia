@@ -7,7 +7,7 @@ from home import urls as home_urls
 from usuarios import urls as usuarios_urls
 from ciudades import urls as ciudades_urls
 from django.utils.functional import curry
-# from django.views.defaults import *
+from django.views.defaults import *
 
 admin.autodiscover()
 

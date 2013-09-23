@@ -100,7 +100,7 @@
 						{% if perms.sacramentos.change_parroquia%}
 						<li><a href="{%url 'parroquia_list'%}">Parroquias</a></li>
 						{%endif%}
-						{% if perms.sacramentos.change_asignacionparroquia%}
+						{% if perms.sacramentos.change_asignacionparroquia and not perms.sacramentos.change_parroquia%}
 						<li><a href="{%url 'asignar_secretaria_list'%}">Asignar Secretaria</a></li>
 						{%endif%}
 					</ul>

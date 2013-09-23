@@ -233,6 +233,9 @@ class UsuarioListView(ListView):
 @permission_required('sacramentos.add_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
 @permission_required('auth.add_user', login_url='/login/', raise_exception=permission_required)
+@permission_required('ciudades.change_provincia', login_url='/login/', 
+	raise_exception=permission_required)
+
 def sacerdote_create_view(request):
 	template_name = 'usuario/sacerdote_form.html' 
 	success_url = '/sacerdote/'
@@ -277,6 +280,9 @@ def sacerdote_create_view(request):
 @permission_required('sacramentos.change_perfilusuario', login_url='/login/', 
 	raise_exception=permission_required)
 @permission_required('auth.change_user', login_url='/login/', raise_exception=permission_required)
+@permission_required('ciudades.change_provincia', login_url='/login/', 
+	raise_exception=permission_required)
+
 def sacerdote_update_view(request, pk):
 	sacerdote = get_object_or_404(PerfilUsuario, pk=pk)
 	if sacerdote.profesion != 'Sacerdote':
@@ -321,6 +327,10 @@ class SacerdoteListView(ListView):
 
 	@method_decorator(login_required(login_url='/login/'))
 	@method_decorator(permission_required('sacramentos.change_perfilusuario', login_url='/login/',
+		raise_exception=permission_required))
+	@method_decorator(permission_required('auth.change_user', login_url='/login/',
+		raise_exception=permission_required))
+	@method_decorator(permission_required('ciudades.change_provincia', login_url='/login/',
 		raise_exception=permission_required))
 	def dispatch(self, *args, **kwargs):
 		return super(SacerdoteListView, self).dispatch(*args, **kwargs)
@@ -1394,7 +1404,7 @@ class ConfirmacionListView(ListView):
 
 #Vistas para crear una parroquia
 @login_required(login_url='/login/')
-@permission_required('sacramentos.add_asignacionparroquia', login_url='/login/', 
+@permission_required('sacramentos.add_parroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def parroquia_create_view(request):
 	"""
@@ -1434,7 +1444,7 @@ def parroquia_create_view(request):
 		return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
-@permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', 
+@permission_required('sacramentos.change_parroquia', login_url='/login/', 
 	raise_exception=permission_required)
 def parroquia_update_view(request, pk):
 	template_name = 'parroquia/parroquia_form.html'
@@ -1726,6 +1736,8 @@ def asignar_parroquia_update(request, pk):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
+@permission_required('sacramentos.change_parroquia', login_url='/login/', 
+	raise_exception=permission_required)
 def nuevo_periodo_asignacion(request, pk):
 	template_name = 'parroquia/periodo_asignacion_form.html'
 	asignacion = AsignacionParroquia.objects.get(id=pk)
@@ -1780,6 +1792,8 @@ def nuevo_periodo_asignacion(request, pk):
 @login_required(login_url='/login/')
 @permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
 	raise_exception=permission_required)
+@permission_required('sacramentos.change_parroquia', login_url='/login/', 
+	raise_exception=permission_required)
 def parroco_periodos_asignacion_update(request, pk):
 	periodo = get_object_or_404(PeriodoAsignacionParroquia, pk = pk)
 	template_name = 'parroquia/periodo_asignacion_form.html'
@@ -1830,7 +1844,14 @@ def parroco_periodos_asignacion_update(request, pk):
 
 
 # El pk que recibe es el id de una asignación
+
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_parroquia', login_url='/login/', 
+	raise_exception=permission_required)
 def parroco_periodos_asignacion_list(request, pk):
 	template_name = "parroquia/parroco_periodos_asignacion_list.html"
 	success_url = '/asignar/parroquia/'
@@ -1842,8 +1863,14 @@ def parroco_periodos_asignacion_list(request, pk):
 	return render(request, template_name, ctx)
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_parroquia', login_url='/login/', 
+	raise_exception=permission_required)
+
 def asignar_parroco_list(request, pk):
-	
 	template_name = 'parroquia/asignar_parroquia_list.html'
 	object_list = AsignacionParroquia.objects.filter(parroquia__id=pk, persona__user__groups__name='Sacerdote') 
 	parroquia = get_object_or_404(Parroquia, pk=pk)
@@ -2048,6 +2075,10 @@ def asignar_secretaria_update(request, pk):
 
 
 @login_required(login_url='/login/')
+@permission_required('sacramentos.change_asignacionparroquia', login_url='/login/', 
+	raise_exception=permission_required)
+@permission_required('sacramentos.change_periodoasignacionparroquia', login_url='/login/', 
+	raise_exception=permission_required)
 def asignar_secretaria_list(request):
 	template_name = 'parroquia/asignar_secretaria_list.html'
 	try:
@@ -2540,10 +2571,9 @@ def reporte_permisos(request):
 def reporte_parroquias_sacerdotes(request,pk):
 	persona=User.objects.get(pk=request.user.pk)
 	parroquia=get_object_or_404(Parroquia, pk=pk)
-	asignacion=AsignacionParroquia.objects.filter(parroquia=parroquia,
-		persona__user__groups__name='Sacerdote',
-		)
-	periodos=PeriodoAsignacionParroquia.objects.filter(asignacion__parroquia=parroquia)
+	
+	periodos=PeriodoAsignacionParroquia.objects.filter(asignacion__parroquia=parroquia,
+		asignacion__persona__user__groups__name='Sacerdote')
 	print(periodos)
 	html = render_to_string('reportes/reporte_parroquia_sacerdote.html', {'pagesize':'A4',
 		'parroquia':parroquia,'periodos':periodos,'persona':persona},

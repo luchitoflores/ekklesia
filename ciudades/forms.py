@@ -1,57 +1,50 @@
 # -*- coding:utf-8 -*-
-from django.forms import ModelForm
 from django import forms
-from .models import Provincia, Canton, Parroquia, Direccion
+from django.forms import ModelForm
 from django.forms.widgets import *
+from .models import Provincia, Canton, Parroquia, Direccion
 
 
 class ProvinciaForm(ModelForm):
-	# nombre = forms.CharField(required=True, label='Nombre', 
-	# 	help_text='Ingrese los nombres completos. Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
-	# abreviatura = forms.CharField(required=True, label='Abreviatura', 
-	# 	help_text='Ingrese los nombres completos. Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
+	nombre = forms.CharField(required=True, label='Nombre', 
+		help_text='Ingrese el nombre de la provincia. Ej: Loja',
+		widget=forms.TextInput(attrs={'required': ''}))
+	abreviatura = forms.CharField(required=True, label='Abreviatura', 
+		help_text='Ingrese una abreviatura. Ej: LO',
+		widget=forms.TextInput(attrs={'required': ''}))
 
 	class Meta:
 		model = Provincia
 		
-		
-
-
 class CantonForm(ModelForm):
-	# nombre = forms.CharField(required=True, label='Nombre', 
-	# 	help_text='Ingrese los nombres completos. Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
-	# abreviatura = forms.CharField(required=True, label='Abreviatura', 
-	# 	help_text='Ingrese los nombres completos. Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
-	# provincia = forms.ModelChoiceField(required=True, label='Abreviatura', 
-	# 	empty_label='-- Seleccione --' ,queryset=None, help_text='Ingrese los nombres completos.'+
-	# 	' Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
+	nombre = forms.CharField(required=True, label='Nombre', 
+		help_text='Ingrese el nombre del cantón. Ej: Espíndola',
+		widget=forms.TextInput(attrs={'required': ''}))
+	abreviatura = forms.CharField(required=True, label='Abreviatura', 
+		help_text='Ingrese una abreviatura. Ej: ES',
+		widget=forms.TextInput(attrs={'required': ''}))
+	provincia = forms.ModelChoiceField(required=True, label='Provincia', 
+		empty_label='-- Seleccione --' ,queryset=Provincia.objects.all(), help_text='Seleccione la provincia',
+		widget=forms.Select(attrs={'required':''}))
 
 	class Meta:
 		model = Canton
-       
-
+		
 class ParroquiaForm(ModelForm):
-	# nombre = forms.CharField(required=True, label='Nombre', 
-	# 	help_text='Ingrese los nombres completos. Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
-	# abreviatura = forms.CharField(required=True, label='Abreviatura', 
-	# 	help_text='Ingrese los nombres completos. Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
-	# canton = forms.ModelChoiceField(required=True, label='Abreviatura', 
-	# 	empty_label='-- Seleccione --' ,queryset=None, help_text='Ingrese los nombres completos.'+
-	# 	' Ej: Juan José',
-	# 	widget=forms.TextInput(attrs={'required': ''}))
+	nombre = forms.CharField(required=True, label='Nombre', 
+		help_text='Ingrese el nombre de la parroquia. Ej: Amaluza',
+		widget=forms.TextInput(attrs={'required': ''}))
+	abreviatura = forms.CharField(required=True, label='Abreviatura', 
+		help_text='Ingrese una abreviatura. Ej: AM',
+		widget=forms.TextInput(attrs={'required': ''}))
+	canton = forms.ModelChoiceField(required=True, label='Canton', 
+		empty_label='-- Seleccione --' ,queryset=Canton.objects.all(), help_text='Seleccione el cantón',
+		widget=forms.Select(attrs={'required':''}))
 	class Meta:
 		model = Parroquia
 		fields = ('nombre','abreviatura','canton')
        
 # Forms para dirección
-
 class DireccionForm(ModelForm):
 	
     domicilio=forms.CharField(label='Domicilio', max_length=200, required=True,
@@ -74,8 +67,8 @@ class DireccionForm(ModelForm):
 		empty_label='-- Seleccione --', help_text='Seleccione una parroquia Ej: El Sagrario',
 		widget=forms.Select(attrs={'required':'', 'disabled':''}))
 		
-
-
     class Meta:
-	model = Direccion
+		model = Direccion
+
+
 

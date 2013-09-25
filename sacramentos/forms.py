@@ -33,7 +33,7 @@ class UsuarioForm(ModelForm):
 		help_text='Ingrese los nombres completos. Ej: Juan José',
 		widget=forms.TextInput(attrs={'required': ''}))
 	last_name = forms.CharField(required=True, label='Apellidos *', 
-		help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+		help_text='Ingrese los apellidos completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
 	groups = forms.ModelMultipleChoiceField(required=False, queryset= Group.objects.all(),
 		help_text = 'Los grupos a los que este usuario pertenece. Un usuario obtendrá'+
@@ -51,8 +51,10 @@ class UsuarioPadreForm(ModelForm):
 	 help_text='Ingrese los nombres completos. Ej: Juan José',
 		widget=forms.TextInput(attrs={'required': ''}))
 	last_name = forms.CharField(required=True, label='Apellidos *', 
-		help_text='Ingrese los nombres completos. Ej: Castro Pardo',
+		help_text='Ingrese los apellidos completos. Ej: Castro Pardo',
 		widget=forms.TextInput(attrs={'required': ''}))
+	email = forms.EmailField(required=False, label='Email *', 
+		help_text='Ingrese su dirección de correo electrónico')
 
 	class Meta():
 		model = User
@@ -161,6 +163,25 @@ class PerfilUsuarioForm(ModelForm):
 			}
 		
 class PadreForm(ModelForm):
+
+	def clean_dni(self):
+		cedula = self.cleaned_data['dni']
+		nacionalidad = self.cleaned_data['nacionalidad']
+		if nacionalidad == 'EC' and cedula:
+			if not cedula.isdigit():
+				raise forms.ValidationError('El número de cédula no debe contener letras')
+				return cedula
+			if len(cedula)!=10:
+				raise forms.ValidationError('El número de cédula debe ser de 10 dígitos')
+				return cedula
+			valores = [ int(cedula[x]) * (2 - x % 2) for x in range(9) ]
+			suma = sum(map(lambda x: x > 9 and x - 9 or x, valores))
+			if int(cedula[9]) != 10 - int(str(suma)[-1:]):
+				raise forms.ValidationError('El número de cédula no es válido')
+				return cedula
+
+		return cedula
+
 	def clean_fecha_nacimiento(self):
 		data = self.cleaned_data['fecha_nacimiento']
 		if data > date.today():
@@ -187,6 +208,7 @@ class PadreForm(ModelForm):
 		widgets = {
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
+			'dni': forms.TextInput(attrs={'required':''}),
 			
 			}
 
@@ -243,6 +265,7 @@ class SecretariaForm(ModelForm):
 			'fecha_nacimiento': forms.TextInput(attrs={'required':'', 'data-date-format': 
 				'dd/mm/yyyy', 'type':'date'}),
 			'lugar_nacimiento': forms.TextInput(attrs={'required':''}),
+			'dni': forms.TextInput(attrs={'required':''}),
 
 
 			}

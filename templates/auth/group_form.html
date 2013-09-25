@@ -49,18 +49,23 @@ $(function(){
 		<label class="control-label">{{f.label}}</label>
 		{%endif%}
 		<div class="controls">{{f}}</div></br>
-		<div class="controls">{{f.help_text}}</div>
-		<div class="controls errors">{{f.errors}}</div>
-		{%endfor%}
-	</div>
-	<a href='#' id='id_select_all'>Seleccionar Todos</a>
-	<a href='#' id='id_delete_all'>Eliminar Todos</a>
-	
+		<div class="controls">
+			<div class="help-text">{{f.help_text}}</div></div>
+			<div class="controls"><div class="errors">{{f.errors}}</div></div>
+			{%endfor%}
+			<div class="controls">
+				<a href='#' id='id_select_all'>Seleccionar Todos</a>
+			</br>
+				<a href='#' id='id_delete_all'>Eliminar Todos</a>
+			</div>
+		</div>
 
-	<div class="form-actions">
-		<input type="submit" value="Guardar" class="btn btn-primary">
-		<a href="{%url 'group_list'%}" class='btn btn-primary'>Cancelar</a>
-	</div>
-</form>
 
-{%endblock%}
+
+		<div class="form-actions">
+			<input type="submit" value="Guardar" class="btn btn-primary">
+			<a href="{%url 'group_list'%}" class='btn btn-primary'>Cancelar</a>
+		</div>
+	</form>
+
+	{%endblock%}

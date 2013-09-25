@@ -5,6 +5,7 @@ from django.contrib.auth.models import Group, User
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashWidget, ReadOnlyPasswordHashField
 from django.core.exceptions import ObjectDoesNotExist
+from django.forms import ModelForm
 # from .models import Usuario
 
 # class UserCreationForm(forms.ModelForm):
@@ -50,3 +51,12 @@ class SendEmailForm(forms.Form):
 			return data
 
 	email = forms.EmailField(help_text='Ingresa tu dirección de correo electrónico ')
+
+
+
+class GruposForm(ModelForm):
+	class Meta:
+		model = Group
+		widgets = {
+			'name': forms.TextInput(attrs={'required':''}),
+			}

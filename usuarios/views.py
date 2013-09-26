@@ -13,7 +13,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import ListView
 
-from .forms import SendEmailForm
+from .forms import SendEmailForm, GruposForm
 
 
 #Login de usuarios sin utilizar ningún formulario preestablecido
@@ -133,6 +133,7 @@ def send_email_view(request):
 class GroupCreate(CreateView):
 	model = Group
 	success_url = '/group/'
+	form_class = GruposForm
 
 	@method_decorator(login_required(login_url='login'))
 	@method_decorator(permission_required('auth.add_group', login_url='/login/',
@@ -147,6 +148,7 @@ class GroupUpdate(UpdateView):
 	template_name       = 'auth/group_form.html'
 	context_object_name = 'form'
 	success_url = '/group/'
+	form_class = GruposForm
 
 	@method_decorator(login_required(login_url='login'))
 	@method_decorator(permission_required('auth.change_group', login_url='/login/',

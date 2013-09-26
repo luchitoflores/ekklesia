@@ -2,8 +2,8 @@ $(document).on('ready', inicio);
 document.write('<script src="/static/js/tablas.js" type="text/javascript"></script>');
 
 function inicio(){
-	crear_padre($('#id_form_crear_padre'), '#id_padre','#id_crear_padre', 'm');
-	crear_padre($('#id_form_crear_madre'), '#id_madre','#id_crear_madre', 'f');
+	crear_padre('#id_form_crear_padre', '#id_padre','#id_crear_padre', 'm');
+	crear_padre('#id_form_crear_madre', '#id_madre','#id_crear_madre', 'f');
 	crear_secretaria('#id_form_crear_secretaria', '#id_persona','#id_crear_secretaria');
 	// crear_nota($('#id_form_crear_nota'), '#id_fecha','#id_descripcion', '#id_crear_nota');
 	autocomplete('#id_padre');
@@ -227,16 +227,10 @@ function crear_nota_marginal(id_form,id_modal,url_rest){
 				'<img src="/static/img/error.png" alt=""> Uno o más datos son invalidos </div>';
 				$('#id_mensaje_nota').html(mensaje);
 				$.each(data.errores_nota, function(index, element){
-					// $("#id_"+index).addClass('invalid');
-					// console.log("#id_"+index);
-					// console.log("#id_"+element);
 					var mensajes_error = '<span>' + element+ '</span>';
-					// console.log("Hay errores en nota: " + mensajes_error);
 					$("#id_errors_"+index).append(mensajes_error);
-
 				});
-				
-				
+			
 			}
 		});
 	})
@@ -613,13 +607,26 @@ function autocomplete(identificador){
 //  Esta función llama a un modal para crear un padre para un feligrés
 function crear_padre(identificador, idpadre, idmodal, sexo){
 	$(identificador).on('submit', function(e){
+		$('span').remove();
+		$('.alert').remove();
+
 		e.preventDefault();
 		var url = '/api/padre/add/';
 		var json = $(this).serialize()+'&sexo='+sexo;
 		$.post(url, json , function(data){
 			if(!data.respuesta){
-				console.log(data.errores_usuario);
-				console.log(data.errores_perfil);
+				var mensaje = '<div class="alert alert-error">' + 
+				'<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>'+
+				'<img src="/static/img/error.png" alt=""> Uno o más datos son invalidos </div>';
+				$('.modal-header').append(mensaje);
+				$.each(data.errores_usuario, function(index, element){
+					var mensajes_error = '<span>' + element+ '</span>';
+					$(identificador+" #id_errors_"+index).append(mensajes_error);
+				});
+				$.each(data.errores_perfil, function(index, element){
+					var mensajes_error = '<span>' + element+ '</span>';
+					$(identificador + " #id_errors_"+index).append(mensajes_error);
+				});
 			}else{
 				$(idpadre).html('<option value="">-- Seleccione --</option><option value="'+ data.id+'" selected>'+data.full_name+'</option>');
 				$(idmodal).modal('hide');
@@ -633,13 +640,25 @@ function crear_padre(identificador, idpadre, idmodal, sexo){
 //  Esta función llama a un modal para crear una secretaria
 function crear_secretaria(identificador, idsecretaria, idmodal){
 	$(identificador).on('submit', function(e){
+		$('span').remove();
+		$('.alert').remove();
 		e.preventDefault();
 		var url = '/api/secretaria/add/';
 		var json = $(this).serialize();
 		$.post(url, json , function(data){
 			if(!data.respuesta){
-				console.log(data.errores_usuario);
-				console.log(data.errores_perfil);
+				var mensaje = '<div class="alert alert-error">' + 
+				'<button type="button" class="close" data-dismiss="alert"><i class="icon-remove"></i></button>'+
+				'<img src="/static/img/error.png" alt=""> Uno o más datos son invalidos </div>';
+				$('.modal-header').append(mensaje);
+				$.each(data.errores_usuario, function(index, element){
+					var mensajes_error = '<span>' + element+ '</span>';
+					$("#id_errors_"+index).append(mensajes_error);
+				});
+				$.each(data.errores_perfil, function(index, element){
+					var mensajes_error = '<span>' + element+ '</span>';
+					$("#id_errors_"+index).append(mensajes_error);
+				});
 			}else{
 				$(idsecretaria).html('<option value="">-- Seleccione --</option><option value="'+ data.id+'" selected>'+data.full_name+'</option>');
 				$(idmodal).modal('hide');

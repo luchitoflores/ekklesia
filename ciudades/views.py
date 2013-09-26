@@ -37,8 +37,9 @@ class ProvinciaList(ListView):
 class ProvinciaCreate(CreateView):
 	model               = Provincia
 	template_name       = 'provincia/provincia_form.html'
-	context_object_name = 'form'
+	# context_object_name = 'form'
 	success_url         = '/ciudades/provincia/'
+	form_class = ProvinciaForm
 	
 	def form_invalid(self, form):
 		messages.add_message(self.request, messages.ERROR, 'Datos incorrectos')
@@ -60,6 +61,8 @@ class ProvinciaUpdate(UpdateView):
 	template_name       = 'provincia/provincia_form.html'
 	context_object_name = 'form'
 	success_url         = '/ciudades/provincia/'
+	form_class = ProvinciaForm
+	
 	
 
 	def form_valid(self, form):
@@ -98,8 +101,8 @@ class ProvinciaDelete(DeleteView):
 class CantonList(ListView):
 	model                 = Canton 
 	template_name         = 'canton/canton_list.html'
-	# context_object_name = 'list_parroquia'
-	# paginate_by = 5
+	
+	
 
 	@method_decorator(login_required(login_url='/login/'))
 	@method_decorator(permission_required('ciudades.change_canton', login_url='/login/', 
@@ -113,6 +116,7 @@ class CantonCreate(CreateView):
 	template_name       = 'canton/canton_form.html'
 	context_object_name = 'form'
 	success_url         = '/ciudades/canton/'
+	form_class = CantonForm
 	
 	def form_invalid(self, form):
 		messages.add_message(self.request, messages.ERROR, 'Datos incorrectos')
@@ -134,6 +138,7 @@ class CantonUpdate(UpdateView):
 	template_name       = 'canton/canton_form.html'
 	context_object_name = 'form'
 	success_url         = '/ciudades/canton/'
+	form_class = CantonForm
 	
 
 	def form_valid(self, form):
@@ -187,6 +192,7 @@ class ParroquiaCreate(CreateView):
 	template_name       = 'parroquiacivil/parroquia_form.html'
 	context_object_name = 'form'
 	success_url         = '/ciudades/parroquia/'
+	form_class = ParroquiaForm
 	
 	def form_invalid(self, form):
 		messages.add_message(self.request, messages.ERROR, 'Datos incorrectos')
@@ -208,7 +214,7 @@ class ParroquiaUpdate(UpdateView):
 	template_name       = 'parroquiacivil/parroquia_form.html'
 	context_object_name = 'form'
 	success_url         = '/ciudades/parroquia/'
-	
+	form_class = ParroquiaForm
 
 	def form_valid(self, form):
 		messages.add_message(self.request, messages.WARNING, 'Objeto Actualizado')

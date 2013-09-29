@@ -1,5 +1,5 @@
 Django==1.5.1
-Pillow==2.1.0
+PIL==1.1.7
 South==0.8.1
 argparse==1.2.1
 django-datatables-view==1.6

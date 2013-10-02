@@ -209,6 +209,8 @@ function mostrar_nota_marginal(idFieldSet){
 
 function crear_nota_marginal(id_form,id_modal,url_rest){
 	$(id_form).on('submit', function(e){
+		$('span').remove();
+		$('.alert').remove();
 		e.preventDefault();
 		var id=$('#id_hidden').val();
 		var url = url_rest;
@@ -230,7 +232,7 @@ function crear_nota_marginal(id_form,id_modal,url_rest){
 					var mensajes_error = '<span>' + element+ '</span>';
 					$("#id_errors_"+index).append(mensajes_error);
 				});
-			
+				
 			}
 		});
 	})

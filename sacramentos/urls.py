@@ -66,7 +66,8 @@ urlpatterns = patterns('',
 	url(r'^sacramentos/$', TemplateView.as_view(template_name='sacramentos.html'), 
 		name='sacramentos'),
 
-	#urls de matrimonio
+	#urls de matrimonio y reporte
+	
 	url(r'^matrimonio/$',MatrimonioListView.as_view(),name='matrimonio_list'),
 	url(r'^matrimonio/no_vigentes/$',MatrimonioNoVigenteListView.as_view(),name='matrimonio_list_no_vigentes'),
 	url(r'^matrimonio/add/$',matrimonio_create_view, name='matrimonio_create'),

@@ -523,3 +523,9 @@ class Parroquia(TimeStampedModel):
 			)
 
 
+class ParametrizaDiocesis(TimeStampedModel):
+    diocesis=models.CharField('Nombre de la Diocesis',max_length=50)
+    obispo=models.CharField('Obispo',max_length=50)
+    direccion=models.ForeignKey(Direccion,related_name='direccionp')
+    def __unicode__(self):
+        return '%s'%(self.diocesis)
